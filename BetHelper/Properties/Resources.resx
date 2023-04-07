@@ -1,0 +1,1012 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ButtonAbort" xml:space="preserve">
+    <value>Abort</value>
+  </data>
+  <data name="ButtonAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="ButtonCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ButtonDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ButtonIgnore" xml:space="preserve">
+    <value>Ignore</value>
+  </data>
+  <data name="ButtonNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="ButtonOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ButtonRetry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="ButtonSkip" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="ButtonYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="CaptionError" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="CaptionHelp" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="CaptionInformation" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="CaptionWarning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="MenuItemAbout" xml:space="preserve">
+    <value>&amp;About...</value>
+  </data>
+  <data name="MenuItemExit" xml:space="preserve">
+    <value>E&amp;xit</value>
+  </data>
+  <data name="MenuItemFile" xml:space="preserve">
+    <value>&amp;File</value>
+  </data>
+  <data name="MenuItemHelp" xml:space="preserve">
+    <value>&amp;Help</value>
+  </data>
+  <data name="MenuItemOnlineHelp" xml:space="preserve">
+    <value>Online &amp;Help</value>
+  </data>
+  <data name="MenuItemPreferences" xml:space="preserve">
+    <value>&amp;Preferences...</value>
+  </data>
+  <data name="MessageApplicationCannotRun" xml:space="preserve">
+    <value>This applicacion cannot run on your system.</value>
+  </data>
+  <data name="MessageApplicationError" xml:space="preserve">
+    <value>An unexpected error has occured. Application will close now.</value>
+  </data>
+  <data name="MessageReady" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>https://fortsoft.eu/</value>
+  </data>
+  <data name="MenuItemApplicationReset" xml:space="preserve">
+    <value>Application &amp;Reset...</value>
+  </data>
+  <data name="MenuItemCheckForUpdates" xml:space="preserve">
+    <value>Check for &amp;Updates...</value>
+  </data>
+  <data name="MenuItemExport" xml:space="preserve">
+    <value>&amp;Export...</value>
+  </data>
+  <data name="MenuItemOptions" xml:space="preserve">
+    <value>&amp;Options</value>
+  </data>
+  <data name="MenuItemPrint" xml:space="preserve">
+    <value>&amp;Print...</value>
+  </data>
+  <data name="MenuItemPrintPreview" xml:space="preserve">
+    <value>Print Pre&amp;view...</value>
+  </data>
+  <data name="MenuItemReload" xml:space="preserve">
+    <value>&amp;Reload</value>
+  </data>
+  <data name="MenuItemTools" xml:space="preserve">
+    <value>&amp;Tools</value>
+  </data>
+  <data name="MenuItemView" xml:space="preserve">
+    <value>&amp;View</value>
+  </data>
+  <data name="ButtonNoAll" xml:space="preserve">
+    <value>No to All</value>
+  </data>
+  <data name="ButtonYesAll" xml:space="preserve">
+    <value>Yes to All</value>
+  </data>
+  <data name="MenuItemCopy" xml:space="preserve">
+    <value>&amp;Copy</value>
+  </data>
+  <data name="MenuItemCopyAbout" xml:space="preserve">
+    <value>Copy &amp;About Text</value>
+  </data>
+  <data name="MenuItemCopyUrl" xml:space="preserve">
+    <value>&amp;Copy URL</value>
+  </data>
+  <data name="ButtonClose" xml:space="preserve">
+    <value>Clos&amp;e</value>
+  </data>
+  <data name="CaptionAbout" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Helps with odds betting. Released under MIT License. This software uses portions of code under MIT License and portions of code under BSD License as shown below.</value>
+  </data>
+  <data name="LabelVersion" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="LabelWebsite" xml:space="preserve">
+    <value>Website:</value>
+  </data>
+  <data name="ToolTipVisit" xml:space="preserve">
+    <value>Visit website</value>
+  </data>
+  <data name="CaptionUpdateCheck" xml:space="preserve">
+    <value>Update Check</value>
+  </data>
+  <data name="LabelAvailableVersion" xml:space="preserve">
+    <value>Available version:</value>
+  </data>
+  <data name="LabelCurrentVersion" xml:space="preserve">
+    <value>Current version:</value>
+  </data>
+  <data name="MenuItemCopyVersion" xml:space="preserve">
+    <value>&amp;Copy Version</value>
+  </data>
+  <data name="MessageConnecting" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
+  <data name="MessageFinishing" xml:space="preserve">
+    <value>Finishing...</value>
+  </data>
+  <data name="MessageGeneratingPreview" xml:space="preserve">
+    <value>Generating preview...</value>
+  </data>
+  <data name="MessageInvalidResponse" xml:space="preserve">
+    <value>Invalid server response</value>
+  </data>
+  <data name="MessagePreferencesSaved" xml:space="preserve">
+    <value>Preferences saved</value>
+  </data>
+  <data name="MessagePreviewGenerated" xml:space="preserve">
+    <value>Preview generated</value>
+  </data>
+  <data name="MessagePrinting" xml:space="preserve">
+    <value>Printing...</value>
+  </data>
+  <data name="MessagePrintingFailed" xml:space="preserve">
+    <value>Printing failed</value>
+  </data>
+  <data name="MessagePrintingFinished" xml:space="preserve">
+    <value>Printing finished</value>
+  </data>
+  <data name="MessageProcessing" xml:space="preserve">
+    <value>Processing...</value>
+  </data>
+  <data name="MessageResetWarningLine1" xml:space="preserve">
+    <value>Are you sure you want to reset this application to it's default state?</value>
+  </data>
+  <data name="MessageResetWarningLine2" xml:space="preserve">
+    <value>All settings will be lost and the internal Chromium browser cache will be cleared including the user data and the local preferences. Bookmarks will be preserved.</value>
+  </data>
+  <data name="MessageUpdateAvailable" xml:space="preserve">
+    <value>An update is available.</value>
+  </data>
+  <data name="MessageUpdateCheckError" xml:space="preserve">
+    <value>Error checking for updates. Please try again later.</value>
+  </data>
+  <data name="MessageUpToDate" xml:space="preserve">
+    <value>Application is up to date.</value>
+  </data>
+  <data name="CaptionCapsLock" xml:space="preserve">
+    <value>CAPS</value>
+  </data>
+  <data name="CaptionInsert" xml:space="preserve">
+    <value>INS</value>
+  </data>
+  <data name="CaptionNumLock" xml:space="preserve">
+    <value>NUM</value>
+  </data>
+  <data name="CaptionOverWrite" xml:space="preserve">
+    <value>OVR</value>
+  </data>
+  <data name="CaptionScrollLock" xml:space="preserve">
+    <value>SCRL</value>
+  </data>
+  <data name="MenuItemLogIn" xml:space="preserve">
+    <value>&amp;Log in</value>
+  </data>
+  <data name="MenuItemHideRightPane" xml:space="preserve">
+    <value>&amp;Hide Right Pane</value>
+  </data>
+  <data name="MenuItemShowRightPane" xml:space="preserve">
+    <value>S&amp;how Right Pane</value>
+  </data>
+  <data name="MessageActionFinished" xml:space="preserve">
+    <value>Action finished</value>
+  </data>
+  <data name="MessagePleaseWait" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
+  <data name="MessageLogInFailed" xml:space="preserve">
+    <value>Login failed</value>
+  </data>
+  <data name="MessageClosingAdvertisement" xml:space="preserve">
+    <value>Closing advertisement...</value>
+  </data>
+  <data name="MessageClosingCookieConsent" xml:space="preserve">
+    <value>Closing cookie consent...</value>
+  </data>
+  <data name="MessageLoggingIn" xml:space="preserve">
+    <value>Logging in...</value>
+  </data>
+  <data name="MessageSendingPassword" xml:space="preserve">
+    <value>Sending password...</value>
+  </data>
+  <data name="MessageSendingUsername" xml:space="preserve">
+    <value>Sending username...</value>
+  </data>
+  <data name="MessageDisplayingLoginBlock" xml:space="preserve">
+    <value>Displaying login block...</value>
+  </data>
+  <data name="MessageSettingInputFocus" xml:space="preserve">
+    <value>Setting input focus...</value>
+  </data>
+  <data name="MessageClearingUsernameBox" xml:space="preserve">
+    <value>Clearing username box...</value>
+  </data>
+  <data name="MessageDisplayingBalance" xml:space="preserve">
+    <value>Displaying balance...</value>
+  </data>
+  <data name="MenuItemPrintToPdf" xml:space="preserve">
+    <value>Print to P&amp;DF...</value>
+  </data>
+  <data name="MenuItemEdit" xml:space="preserve">
+    <value>&amp;Edit</value>
+  </data>
+  <data name="MenuItemFind" xml:space="preserve">
+    <value>&amp;Find...</value>
+  </data>
+  <data name="CaptionFind" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="MessageClickingError" xml:space="preserve">
+    <value>Clicking DOM element has failed</value>
+  </data>
+  <data name="MessageLogInCanceled" xml:space="preserve">
+    <value>Login canceled</value>
+  </data>
+  <data name="MenuItemOpenInDefaultBrowser" xml:space="preserve">
+    <value>&amp;Open in Default Browser...</value>
+  </data>
+  <data name="MenuItemCopyText" xml:space="preserve">
+    <value>&amp;Copy Text</value>
+  </data>
+  <data name="MenuItemCut" xml:space="preserve">
+    <value>Cu&amp;t</value>
+  </data>
+  <data name="MenuItemDelete" xml:space="preserve">
+    <value>&amp;Delete</value>
+  </data>
+  <data name="MenuItemGoBack" xml:space="preserve">
+    <value>Go &amp;Back</value>
+  </data>
+  <data name="MenuItemGoForward" xml:space="preserve">
+    <value>Go &amp;Forward</value>
+  </data>
+  <data name="MenuItemPaste" xml:space="preserve">
+    <value>&amp;Paste</value>
+  </data>
+  <data name="MenuItemRedo" xml:space="preserve">
+    <value>&amp;Redo</value>
+  </data>
+  <data name="MenuItemSelectAll" xml:space="preserve">
+    <value>Select &amp;All</value>
+  </data>
+  <data name="MenuItemUndo" xml:space="preserve">
+    <value>&amp;Undo</value>
+  </data>
+  <data name="CaptionExport" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="CaptionPrintToPdf" xml:space="preserve">
+    <value>Print to PDF</value>
+  </data>
+  <data name="MenuItemLogInAtInitialPage" xml:space="preserve">
+    <value>Log in at Initial &amp;Page</value>
+  </data>
+  <data name="MenuItemReloadIgnoreCache" xml:space="preserve">
+    <value>Reload (Ignore &amp;Cache)</value>
+  </data>
+  <data name="MenuItemStopLoad" xml:space="preserve">
+    <value>&amp;Stop Load</value>
+  </data>
+  <data name="MenuItemClearBrowserCache" xml:space="preserve">
+    <value>&amp;Clear Browser Cache...</value>
+  </data>
+  <data name="MenuItemFindNext" xml:space="preserve">
+    <value>Fi&amp;nd Next</value>
+  </data>
+  <data name="MessageActionCanceled" xml:space="preserve">
+    <value>Action canceled</value>
+  </data>
+  <data name="MenuItemActualSize" xml:space="preserve">
+    <value>&amp;Actual Size (100%)</value>
+  </data>
+  <data name="MenuItemZoomInFine" xml:space="preserve">
+    <value>Zoom I&amp;n Fine</value>
+  </data>
+  <data name="MenuItemZoomOutFine" xml:space="preserve">
+    <value>&amp;Zoom Out Fine</value>
+  </data>
+  <data name="MenuItemZoomInCoarse" xml:space="preserve">
+    <value>Zoom &amp;In Coarse</value>
+  </data>
+  <data name="MenuItemZoomOutCoarse" xml:space="preserve">
+    <value>Z&amp;oom Out Coarse</value>
+  </data>
+  <data name="MessageClearBrowserCache" xml:space="preserve">
+    <value>The internal Chromium browser cache will be cleared.</value>
+  </data>
+  <data name="MenuItemCopyCurrentUrl" xml:space="preserve">
+    <value>&amp;Copy URL of Current Page</value>
+  </data>
+  <data name="MenuItemOpenPageInDefaultBrowser" xml:space="preserve">
+    <value>&amp;Open Current Page in Default Browser...</value>
+  </data>
+  <data name="MenuItemClearBrowserCacheInclUserData" xml:space="preserve">
+    <value>Clear Browser Cache Incl. &amp;User Data...</value>
+  </data>
+  <data name="MessageClearBrowserCacheInclUserDataLine1" xml:space="preserve">
+    <value>Are you sure you want to clear the internal Chromium browser cache?</value>
+  </data>
+  <data name="MessageClearBrowserCacheInclUserDataLine2" xml:space="preserve">
+    <value>Also the user data and the local preferences of the internal Chromium browser will be lost.</value>
+  </data>
+  <data name="MessageApplicationWillBeRestarted" xml:space="preserve">
+    <value>The application will be restarted.</value>
+  </data>
+  <data name="MenuItemGoHome" xml:space="preserve">
+    <value>&amp;Go Home (Initial Page)</value>
+  </data>
+  <data name="MessageLogInNotImplementedError" xml:space="preserve">
+    <value>Error: LogIn() method is not implemented.</value>
+  </data>
+  <data name="CaptionCalculator" xml:space="preserve">
+    <value>Calculator</value>
+  </data>
+  <data name="ExtensionFilterPdf" xml:space="preserve">
+    <value>Portable Document Format PDF (*.pdf)|*.pdf</value>
+  </data>
+  <data name="MenuItemBetCalculator" xml:space="preserve">
+    <value>&amp;Bet Calculator in Separate Window...</value>
+  </data>
+  <data name="MenuItemUnload" xml:space="preserve">
+    <value>&amp;Unload</value>
+  </data>
+  <data name="MenuItemSetRightPaneDefaultWidth" xml:space="preserve">
+    <value>Set Right Pane Default &amp;Width</value>
+  </data>
+  <data name="LabelCurrencySymbol" xml:space="preserve">
+    <value>Kč</value>
+  </data>
+  <data name="MenuItemLaunchCalculator" xml:space="preserve">
+    <value>L&amp;aunch Calculator</value>
+  </data>
+  <data name="MenuItemLaunchCharMap" xml:space="preserve">
+    <value>Launch Character &amp;Map</value>
+  </data>
+  <data name="MenuItemLaunchNotepad" xml:space="preserve">
+    <value>Lau&amp;nch Notepad</value>
+  </data>
+  <data name="MenuItemSetRightPaneMinimumWidth" xml:space="preserve">
+    <value>Set Right Pane Minimum &amp;Width</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Executable" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Executable.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Find" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Find.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OK.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShieldError" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShieldError.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShieldOK" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShieldOK.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShieldQuestion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShieldQuestion.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShieldQuestionRed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShieldQuestionRed.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShieldWarning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShieldWarning.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Table" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Table.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Warning.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuItemAutoAdjustRightPaneWidth" xml:space="preserve">
+    <value>Auto Adjust Right Pane &amp;Width</value>
+  </data>
+  <data name="MenuItemAutoLogInAfterInitialLoad" xml:space="preserve">
+    <value>Aut&amp;o Log in after Initial Load</value>
+  </data>
+  <data name="CaptionQuestion" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="MessageQuestionBeforeClosing" xml:space="preserve">
+    <value>Are you sure you want to quit the application?</value>
+  </data>
+  <data name="MenuItemNewTabBetCalculator" xml:space="preserve">
+    <value>New &amp;Tab with Bet Calculator</value>
+  </data>
+  <data name="MenuItemAddBookmark" xml:space="preserve">
+    <value>&amp;Add Bookmark</value>
+  </data>
+  <data name="MenuItemBookmarks" xml:space="preserve">
+    <value>&amp;Bookmarks</value>
+  </data>
+  <data name="MenuItemRemoveBookmark" xml:space="preserve">
+    <value>&amp;Remove Bookmark...</value>
+  </data>
+  <data name="MessageUrlCopied" xml:space="preserve">
+    <value>The URL has been copied to the Windows clipboard.</value>
+  </data>
+  <data name="MenuItemOpenPageInGoogleChrome" xml:space="preserve">
+    <value>Open Current Page in &amp;Google Chrome...</value>
+  </data>
+  <data name="MenuItemOpenPageInMozillaFirefox" xml:space="preserve">
+    <value>Open Current Page in Mozilla &amp;Firefox...</value>
+  </data>
+  <data name="MenuItemViewSource" xml:space="preserve">
+    <value>&amp;View Source...</value>
+  </data>
+  <data name="MenuItemLaunchWordPad" xml:space="preserve">
+    <value>Launch &amp;WordPad</value>
+  </data>
+  <data name="MenuItemDeveloperTools" xml:space="preserve">
+    <value>&amp;Developer Tools...</value>
+  </data>
+  <data name="MenuItemOpenInGoogleChrome" xml:space="preserve">
+    <value>Open in &amp;Google Chrome...</value>
+  </data>
+  <data name="MenuItemOpenInMozillaFirefox" xml:space="preserve">
+    <value>Open in Mozilla &amp;Firefox...</value>
+  </data>
+  <data name="MessageRemoveBookmark" xml:space="preserve">
+    <value>Are you sure you want to remove the current page from bookmarks?</value>
+  </data>
+  <data name="MenuItemWebInfo" xml:space="preserve">
+    <value>Web &amp;Info...</value>
+  </data>
+  <data name="CaptionWebInfo" xml:space="preserve">
+    <value>Web Info</value>
+  </data>
+  <data name="Form" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Form.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CaptionNotSet" xml:space="preserve">
+    <value>&lt;not set&gt;</value>
+  </data>
+  <data name="LabelCefGitHash" xml:space="preserve">
+    <value>CEF Git commit hash:</value>
+  </data>
+  <data name="LabelCefSharpVersion" xml:space="preserve">
+    <value>CefSharp version:</value>
+  </data>
+  <data name="LabelCefVersion" xml:space="preserve">
+    <value>Chromium Embedded Framework version:</value>
+  </data>
+  <data name="LabelChromiumVersion" xml:space="preserve">
+    <value>Chromium version:</value>
+  </data>
+  <data name="LabelTargetFramework" xml:space="preserve">
+    <value>Target framework:</value>
+  </data>
+  <data name="CaptionBetCalculator" xml:space="preserve">
+    <value>Bet Calculator</value>
+  </data>
+  <data name="MenuItemLogViewer" xml:space="preserve">
+    <value>&amp;Log Viewer...</value>
+  </data>
+  <data name="Logs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Logs.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CaptionLogViewer" xml:space="preserve">
+    <value>Log Viewer</value>
+  </data>
+  <data name="MenuItemPause" xml:space="preserve">
+    <value>&amp;Pause</value>
+  </data>
+  <data name="MenuItemTripleClickCopies" xml:space="preserve">
+    <value>Triple &amp;Click Also Copies</value>
+  </data>
+  <data name="MenuItemDoubleClickCopies" xml:space="preserve">
+    <value>&amp;Double Click Also Copies</value>
+  </data>
+  <data name="MenuItemSelectionCopies" xml:space="preserve">
+    <value>&amp;Mouse Selection Also Copies</value>
+  </data>
+  <data name="MessagePaused" xml:space="preserve">
+    <value>Paused</value>
+  </data>
+  <data name="MessageCopiedToClipboard" xml:space="preserve">
+    <value>Selected text has been copied to clipboard.</value>
+  </data>
+  <data name="CaptionPrintOutput" xml:space="preserve">
+    <value>Print Output</value>
+  </data>
+  <data name="MessageExportFinished" xml:space="preserve">
+    <value>Export finished</value>
+  </data>
+  <data name="MessageExporting" xml:space="preserve">
+    <value>Exporting...</value>
+  </data>
+  <data name="MenuItemOpen" xml:space="preserve">
+    <value>&amp;Open...</value>
+  </data>
+  <data name="MessageUnsupportedScheme" xml:space="preserve">
+    <value>Cannot open "{0}". Unsupported scheme "{1}".</value>
+  </data>
+  <data name="MessageUnsupportedHostNameType" xml:space="preserve">
+    <value>Cannot open "{0}". Unsupported hostname type.</value>
+  </data>
+  <data name="MessageCannotOpen" xml:space="preserve">
+    <value>Cannot open "{0}".</value>
+  </data>
+  <data name="MessageUrlOutOfUrlSet" xml:space="preserve">
+    <value>URL does not belong to the URL set by their second-level domain.</value>
+  </data>
+  <data name="MessageInvalidHashError" xml:space="preserve">
+    <value>Error: Invalid hash.</value>
+  </data>
+  <data name="MessageMissingHashError" xml:space="preserve">
+    <value>Error: Missing hash.</value>
+  </data>
+  <data name="MessageLogInBoxNotFoundError" xml:space="preserve">
+    <value>Error: Login box was not found.</value>
+  </data>
+  <data name="MessageLogInCannotSetFocusError" xml:space="preserve">
+    <value>Error: Cannot set input focus.</value>
+  </data>
+  <data name="MessageClickingLoginButtonError" xml:space="preserve">
+    <value>Error: Cannot click login button.</value>
+  </data>
+  <data name="MessageLogInButtonNotExistError" xml:space="preserve">
+    <value>Error: Login button does not exist.</value>
+  </data>
+  <data name="MessageConfigHashEmptyError" xml:space="preserve">
+    <value>Error: Config hash cannot be empty.</value>
+  </data>
+  <data name="MenuItemLaunchTelegram" xml:space="preserve">
+    <value>La&amp;unch Telegram</value>
+  </data>
+  <data name="CaptionEditRemoteConfig" xml:space="preserve">
+    <value>Edit Remote Configuration File</value>
+  </data>
+  <data name="MenuItemSave" xml:space="preserve">
+    <value>&amp;Save</value>
+  </data>
+  <data name="Config" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Config.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MessageSaved" xml:space="preserve">
+    <value>Saved</value>
+  </data>
+  <data name="MessageSavingFailed" xml:space="preserve">
+    <value>Error: Saving failed</value>
+  </data>
+  <data name="MessageSaving" xml:space="preserve">
+    <value>Saving...</value>
+  </data>
+  <data name="MessageSaveChanges" xml:space="preserve">
+    <value>Save changes to the remote configuration file?</value>
+  </data>
+  <data name="MenuItemAlwaysOnTop" xml:space="preserve">
+    <value>Always on &amp;Top</value>
+  </data>
+  <data name="calculator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\calculator.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MenuItemCopyCurrentTitle" xml:space="preserve">
+    <value>Copy Titl&amp;e of Current Page</value>
+  </data>
+  <data name="MenuItemDeselectItem" xml:space="preserve">
+    <value>De&amp;select Item</value>
+  </data>
+  <data name="MenuItemSelectItem" xml:space="preserve">
+    <value>&amp;Select Item</value>
+  </data>
+  <data name="MenuItemInvertSelection" xml:space="preserve">
+    <value>&amp;Invert Selection</value>
+  </data>
+  <data name="MenuItemCopyAsText" xml:space="preserve">
+    <value>&amp;Copy As Text</value>
+  </data>
+  <data name="MenuItemRemoveSelected" xml:space="preserve">
+    <value>&amp;Remove Selected</value>
+  </data>
+  <data name="MenuItemResetIpCheckLock" xml:space="preserve">
+    <value>Reset &amp;IP Address Check Lock</value>
+  </data>
+  <data name="MessageCheckYourIpAddress" xml:space="preserve">
+    <value>Error: Check your IP address.</value>
+  </data>
+  <data name="MenuItemInspectDomElement" xml:space="preserve">
+    <value>In&amp;spect DOM Element...</value>
+  </data>
+  <data name="MessageClearingPasswordBox" xml:space="preserve">
+    <value>Clearing password box...</value>
+  </data>
+  <data name="MenuItemTurnOffMonitors" xml:space="preserve">
+    <value>Tu&amp;rn off the Monitors...</value>
+  </data>
+  <data name="MessageOutOfMemoryError" xml:space="preserve">
+    <value>Error: Out of memory.</value>
+  </data>
+  <data name="MenuItemTrustDegrees" xml:space="preserve">
+    <value>Tr&amp;ust Degrees</value>
+  </data>
+  <data name="MenuItemMuteAudio" xml:space="preserve">
+    <value>&amp;Mute Audio</value>
+  </data>
+  <data name="MessageReloading" xml:space="preserve">
+    <value>Reloading...</value>
+  </data>
+  <data name="MenuItemHideChat" xml:space="preserve">
+    <value>Hide Cha&amp;t</value>
+  </data>
+  <data name="MenuItemShowChat" xml:space="preserve">
+    <value>Show Cha&amp;t</value>
+  </data>
+  <data name="MenuItemUnmuteAudio" xml:space="preserve">
+    <value>Un&amp;mute Audio</value>
+  </data>
+  <data name="MenuItemClear" xml:space="preserve">
+    <value>&amp;Clear</value>
+  </data>
+  <data name="MenuItemReloadFromStart" xml:space="preserve">
+    <value>Reload from &amp;Start</value>
+  </data>
+  <data name="MenuItemReloadTail" xml:space="preserve">
+    <value>Reload &amp;Tail</value>
+  </data>
+  <data name="MenuItemPrintImage" xml:space="preserve">
+    <value>Print I&amp;mage...</value>
+  </data>
+  <data name="MenuItemPrintImagePreview" xml:space="preserve">
+    <value>Pri&amp;nt Image Preview...</value>
+  </data>
+  <data name="MenuItemPrintTail" xml:space="preserve">
+    <value>Prin&amp;t Tail...</value>
+  </data>
+  <data name="MenuItemPrintTailPreview" xml:space="preserve">
+    <value>P&amp;rint Tail Preview...</value>
+  </data>
+  <data name="MessageQuestionCancelPrinting" xml:space="preserve">
+    <value>Are you sure you want to cancel the current print operation?</value>
+  </data>
+  <data name="MenuItemCopyDirectoryPath" xml:space="preserve">
+    <value>Copy Directory Pat&amp;h</value>
+  </data>
+  <data name="MenuItemCopyLogFileName" xml:space="preserve">
+    <value>Copy Log &amp;File Name</value>
+  </data>
+  <data name="MenuItemCopyLogFilePath" xml:space="preserve">
+    <value>&amp;Copy Log File Path</value>
+  </data>
+  <data name="MenuItemEncoderDecoder" xml:space="preserve">
+    <value>Enco&amp;der / Decoder...</value>
+  </data>
+  <data name="MenuItemOpenInDefaultEditor" xml:space="preserve">
+    <value>Op&amp;en Log in Default Editor...</value>
+  </data>
+  <data name="MenuItemOpenInPreferredEditor" xml:space="preserve">
+    <value>&amp;Open Log in Preferred Editor...</value>
+  </data>
+  <data name="MenuItemOpenLogLocation" xml:space="preserve">
+    <value>Open &amp;Log Location...</value>
+  </data>
+  <data name="MenuItemExportWindow" xml:space="preserve">
+    <value>Export &amp;Window Content...</value>
+  </data>
+  <data name="MenuItemPrintWindow" xml:space="preserve">
+    <value>Print Window &amp;Content...</value>
+  </data>
+  <data name="MenuItemPrintWindowPreview" xml:space="preserve">
+    <value>Print Window Content Pre&amp;view...</value>
+  </data>
+  <data name="MessageExportFailed" xml:space="preserve">
+    <value>Export failed</value>
+  </data>
+  <data name="MenuItemWordWrap" xml:space="preserve">
+    <value>&amp;Word Wrap</value>
+  </data>
+  <data name="CaptionEncoderDecoder" xml:space="preserve">
+    <value>Encoder / Decoder</value>
+  </data>
+  <data name="MenuItemDecodeBase64" xml:space="preserve">
+    <value>Decode &amp;Base64 to UTF-8</value>
+  </data>
+  <data name="MenuItemDecodeUrl" xml:space="preserve">
+    <value>D&amp;ecode URL</value>
+  </data>
+  <data name="MenuItemEncodeBase64" xml:space="preserve">
+    <value>Encode UTF-8 to Base&amp;64</value>
+  </data>
+  <data name="MenuItemEncodeRFC1738" xml:space="preserve">
+    <value>Encode According to RFC &amp;1738</value>
+  </data>
+  <data name="MenuItemEncodeRFC3986" xml:space="preserve">
+    <value>Encode According to RFC &amp;3986</value>
+  </data>
+  <data name="MenuItemFlip" xml:space="preserve">
+    <value>&amp;Flip</value>
+  </data>
+  <data name="MenuItemParseUrl" xml:space="preserve">
+    <value>Parse UR&amp;L</value>
+  </data>
+  <data name="Binary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Binary.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuItemAnalyzeCurrentUrl" xml:space="preserve">
+    <value>Analy&amp;ze URL of Current Page...</value>
+  </data>
+  <data name="MenuItemAnalyzeUrl" xml:space="preserve">
+    <value>Analy&amp;ze URL...</value>
+  </data>
+  <data name="MessagePreferredEditorWarning" xml:space="preserve">
+    <value>Preferred editor does not exist.</value>
+  </data>
+  <data name="MenuItemASCIIAlphanumeric" xml:space="preserve">
+    <value>To Alphanu&amp;meric ASCII Only</value>
+  </data>
+  <data name="MenuItemASCIIFull" xml:space="preserve">
+    <value>To All Possible Pri&amp;ntable ASCII</value>
+  </data>
+  <data name="MenuItemASCIISafeFileName" xml:space="preserve">
+    <value>To &amp;Safe File Name ASCII</value>
+  </data>
+  <data name="MenuItemASCIISafePath" xml:space="preserve">
+    <value>To Safe Pat&amp;h ASCII</value>
+  </data>
+  <data name="MenuItemClearInput" xml:space="preserve">
+    <value>Clea&amp;r Input</value>
+  </data>
+  <data name="MenuItemClearOutput" xml:space="preserve">
+    <value>Cle&amp;ar Output</value>
+  </data>
+  <data name="MenuItemFocusInput" xml:space="preserve">
+    <value>Focus &amp;Input</value>
+  </data>
+  <data name="MenuItemFocusOutput" xml:space="preserve">
+    <value>Focus &amp;Output</value>
+  </data>
+  <data name="MessageBookmarkAdded" xml:space="preserve">
+    <value>Bookmark has been added</value>
+  </data>
+  <data name="MessageBookmarkRemoved" xml:space="preserve">
+    <value>Bookmark has been removed</value>
+  </data>
+  <data name="MenuItemTryToKeepUserLoggedIn" xml:space="preserve">
+    <value>Try to keep the user &amp;logged in</value>
+  </data>
+  <data name="ImgServiceActive" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImgServiceActive.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImgServiceExpired" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImgServiceExpired.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImgTipLose" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImgTipLose.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImgTipPlaced" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImgTipPlaced.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImgTipPublished" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImgTipPublished.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImgTipReceived" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImgTipReceived.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImgTipSkipped" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImgTipSkipped.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImgTipVoid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImgTipVoid.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImgTipWin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ImgTipWin.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuItemActive" xml:space="preserve">
+    <value>A&amp;ctive</value>
+  </data>
+  <data name="MenuItemEditItem" xml:space="preserve">
+    <value>&amp;Edit...</value>
+  </data>
+  <data name="MenuItemExpire" xml:space="preserve">
+    <value>E&amp;xpire</value>
+  </data>
+  <data name="MenuItemLose" xml:space="preserve">
+    <value>&amp;Lose</value>
+  </data>
+  <data name="MenuItemNew" xml:space="preserve">
+    <value>&amp;New...</value>
+  </data>
+  <data name="MenuItemPlace" xml:space="preserve">
+    <value>&amp;Place</value>
+  </data>
+  <data name="MenuItemSelect" xml:space="preserve">
+    <value>&amp;Select</value>
+  </data>
+  <data name="MenuItemSelectNone" xml:space="preserve">
+    <value>Select N&amp;one</value>
+  </data>
+  <data name="MenuItemSkip" xml:space="preserve">
+    <value>S&amp;kip</value>
+  </data>
+  <data name="MenuItemUnselect" xml:space="preserve">
+    <value>&amp;Unselect</value>
+  </data>
+  <data name="MenuItemVoid" xml:space="preserve">
+    <value>&amp;Void</value>
+  </data>
+  <data name="MenuItemWin" xml:space="preserve">
+    <value>&amp;Win</value>
+  </data>
+  <data name="MessageDeleteService" xml:space="preserve">
+    <value>Are you sure you want to delete the selected service?</value>
+  </data>
+  <data name="MessageDeleteServices" xml:space="preserve">
+    <value>Are you sure you want to delete the selected {0} services?</value>
+  </data>
+  <data name="MessageDeleteTip" xml:space="preserve">
+    <value>Are you sure you want to delete the selected tip?</value>
+  </data>
+  <data name="MessageDeleteTips" xml:space="preserve">
+    <value>Are you sure you want to delete the selected {0} tips?</value>
+  </data>
+  <data name="CaptionEditService" xml:space="preserve">
+    <value>Edit Service</value>
+  </data>
+  <data name="CaptionEditTip" xml:space="preserve">
+    <value>Edit Tip</value>
+  </data>
+  <data name="CaptionNewService" xml:space="preserve">
+    <value>New Service</value>
+  </data>
+  <data name="CaptionNewTip" xml:space="preserve">
+    <value>New Tip</value>
+  </data>
+  <data name="MessageMatchEmptyError" xml:space="preserve">
+    <value>The name of the match must be entered.</value>
+  </data>
+  <data name="MenuItemTruncateLog" xml:space="preserve">
+    <value>&amp;Truncate Log...</value>
+  </data>
+  <data name="MessageTruncatingError" xml:space="preserve">
+    <value>Error: Truncating has failed.</value>
+  </data>
+  <data name="MessageTruncateFile" xml:space="preserve">
+    <value>Are you sure you want to truncate the current log file?</value>
+  </data>
+</root>
