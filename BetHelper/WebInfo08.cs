@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
@@ -38,7 +39,10 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('otPlaceholder')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('otPlaceholder')[0].style.display = 'none';");
             }
-            browser.ExecuteScriptAsync("for (let i = 0; i < document.getElementsByClassName('adsenvelope').length; i++) document.getElementsByClassName('adsenvelope')[i].style.display = 'none';");
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("for (let i = 0; i < document.getElementsByClassName('adsenvelope').length; i++) ")
+                .Append("document.getElementsByClassName('adsenvelope')[i].style.display = 'none';")
+                .ToString());
             Wait(browser);
             Sleep(30);
 
@@ -113,7 +117,9 @@ namespace BetHelper {
             Wait(browser);
             Sleep(1000);
 
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('modal__window')[0]", false) || ElementExistsAndVisible(browser, "document.getElementsByClassName('ui-processResult')[0]", false)) {
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('modal__window')[0]", false)
+                    || ElementExistsAndVisible(browser, "document.getElementsByClassName('ui-processResult')[0]", false)) {
+
                 if (!ClickElement(browser, "document.getElementsByClassName('close')[0]")) {
                     OnFinished();
                     return;
@@ -136,7 +142,11 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('langBoxModule__close')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('langBoxModule__close')[0].click();");
             }
-            browser.ExecuteScriptAsync("for (let i = 0; i < document.getElementsByClassName('adsenvelope').length; i++) document.getElementsByClassName('adsenvelope')[i].style.display = 'none';");
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("for (let i = 0; i < document.getElementsByClassName('adsenvelope').length; i++) ")
+                .Append("document.getElementsByClassName('adsenvelope')[i].style.display = 'none';")
+                .ToString());
+
             browser.ExecuteScriptAsync("document.body.classList.remove('background-add-on');");
             browser.ExecuteScriptAsync("document.querySelector('[id^=\"box-over-content\"]').remove();");
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('otPlaceholder')[0]", false)) {

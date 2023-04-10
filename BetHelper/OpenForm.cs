@@ -21,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -74,14 +75,36 @@ namespace BetHelper {
         private async void BuildContextMenuAsync() {
             await Task.Run(new Action(() => {
                 ContextMenu contextMenu = new ContextMenu();
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo, new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysCtrlZ))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo,
+                    new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysCtrlZ))));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut, new EventHandler((sender, e) => NativeMethods.PostMessage(((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_CUT, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler((sender, e) => NativeMethods.PostMessage(((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_COPY, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste, new EventHandler((sender, e) => NativeMethods.PostMessage(((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_PASTE, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete, new EventHandler((sender, e) => NativeMethods.PostMessage(((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_CLEAR, IntPtr.Zero, IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_CUT,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_COPY,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_PASTE,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_CLEAR,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler((sender, e) => ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                    new EventHandler((sender, e) => ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
                 contextMenu.Popup += new EventHandler((sender, e) => {
                     ComboBox comboBox = (ComboBox)contextMenu.SourceControl;
                     if (!comboBox.Focused) {
@@ -113,7 +136,13 @@ namespace BetHelper {
             string url = comboBoxUrl.Text;
             try {
                 if (!Regex.IsMatch(url, Constants.SchemePresenceTestPattern, RegexOptions.IgnoreCase)) {
-                    url = Constants.SchemeHttps + Constants.Colon + Constants.Slash + Constants.Slash + url.TrimStart(Constants.Colon, Constants.Slash);
+                    url = new StringBuilder()
+                        .Append(Constants.SchemeHttps)
+                        .Append(Constants.Colon)
+                        .Append(Constants.Slash)
+                        .Append(Constants.Slash)
+                        .Append(url.TrimStart(Constants.Colon, Constants.Slash))
+                        .ToString();
                 }
                 Uri uri = new Uri(url);
                 if (uri.Scheme.Equals(Constants.SchemeHttp)) {
@@ -122,28 +151,59 @@ namespace BetHelper {
                     uri = uriBuilder.Uri;
                 }
                 if (uri.Scheme.Equals(Constants.SchemeHttps)) {
-                    if (uri.HostNameType == UriHostNameType.Dns) {
+                    if (uri.HostNameType.Equals(UriHostNameType.Dns)) {
                         index = webInfoHandler.LoadUrl(uri.AbsoluteUri);
                         if (index >= 0) {
                             typedUrlsHandler.Add(uri.AbsoluteUri);
                             typedUrlsHandler.Save();
                             DialogResult = DialogResult.OK;
                         } else {
-                            dialog = new MessageForm(this, string.Format(Properties.Resources.MessageCannotOpen, comboBoxUrl.Text) + Constants.Space + Properties.Resources.MessageUrlOutOfUrlSet, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionWarning, MessageForm.Buttons.OK, MessageForm.BoxIcon.Warning);
+                            StringBuilder message = new StringBuilder()
+                                .AppendFormat(Properties.Resources.MessageCannotOpen, comboBoxUrl.Text)
+                                .Append(Constants.Space)
+                                .Append(Properties.Resources.MessageUrlOutOfUrlSet);
+                            StringBuilder title = new StringBuilder()
+                                .Append(Program.GetTitle())
+                                .Append(Constants.Space)
+                                .Append(Constants.EnDash)
+                                .Append(Constants.Space)
+                                .Append(Properties.Resources.CaptionWarning);
+                            dialog = new MessageForm(this, message.ToString(), title.ToString(), MessageForm.Buttons.OK,
+                                MessageForm.BoxIcon.Warning);
                             dialog.ShowDialog(this);
                         }
                     } else {
-                        dialog = new MessageForm(this, string.Format(Properties.Resources.MessageUnsupportedHostNameType, comboBoxUrl.Text), Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionWarning, MessageForm.Buttons.OK, MessageForm.BoxIcon.Warning);
+                        StringBuilder title = new StringBuilder()
+                            .Append(Program.GetTitle())
+                            .Append(Constants.Space)
+                            .Append(Constants.EnDash)
+                            .Append(Constants.Space)
+                            .Append(Properties.Resources.CaptionWarning);
+                        dialog = new MessageForm(this, string.Format(Properties.Resources.MessageUnsupportedHostNameType,
+                            comboBoxUrl.Text), title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Warning);
                         dialog.ShowDialog(this);
                     }
                 } else {
-                    dialog = new MessageForm(this, string.Format(Properties.Resources.MessageUnsupportedScheme, comboBoxUrl.Text, uri.Scheme), Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionWarning, MessageForm.Buttons.OK, MessageForm.BoxIcon.Warning);
+                    StringBuilder title = new StringBuilder()
+                        .Append(Program.GetTitle())
+                        .Append(Constants.Space)
+                        .Append(Constants.EnDash)
+                        .Append(Constants.Space)
+                        .Append(Properties.Resources.CaptionWarning);
+                    dialog = new MessageForm(this, string.Format(Properties.Resources.MessageUnsupportedScheme,
+                        comboBoxUrl.Text, uri.Scheme), title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Warning);
                     dialog.ShowDialog(this);
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-                dialog = new MessageForm(this, exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
                 dialog.ShowDialog(this);
             }
         }
@@ -172,7 +232,7 @@ namespace BetHelper {
         private void OnFormClosing(object sender, FormClosingEventArgs e) => textBoxClicksTimer.Dispose();
 
         private void OnKeyDown(object sender, KeyEventArgs e) {
-            if (e.Control && e.KeyCode == Keys.A) {
+            if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
                 if (sender is ComboBox) {
                     ((ComboBox)sender).SelectAll();
@@ -181,7 +241,7 @@ namespace BetHelper {
         }
 
         private void OnMouseDown(object sender, MouseEventArgs e) {
-            if (e.Button != MouseButtons.Left) {
+            if (!e.Button.Equals(MouseButtons.Left)) {
                 textBoxClicks = 0;
                 return;
             }
@@ -189,15 +249,20 @@ namespace BetHelper {
             textBoxClicksTimer.Stop();
             if (comboBox.SelectionLength > 0) {
                 textBoxClicks = 2;
-            } else if (textBoxClicks == 0 || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
+            } else if (textBoxClicks.Equals(0) || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
                 textBoxClicks++;
             } else {
                 textBoxClicks = 0;
             }
             location = e.Location;
-            if (textBoxClicks == 3) {
+            if (textBoxClicks.Equals(3)) {
                 textBoxClicks = 0;
-                NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Convert.ToUInt32(Cursor.Position.X), Convert.ToUInt32(Cursor.Position.Y), 0, 0);
+                NativeMethods.MouseEvent(
+                    Constants.MOUSEEVENTF_LEFTUP,
+                    Convert.ToUInt32(Cursor.Position.X),
+                    Convert.ToUInt32(Cursor.Position.Y),
+                    0,
+                    0);
                 comboBox.SelectAll();
                 comboBox.Focus();
             } else {

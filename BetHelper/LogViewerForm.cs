@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
@@ -48,8 +48,8 @@ namespace BetHelper {
         private CountDownForm countDownForm;
         private FileExtensionFilter fileExtensionFilter;
         private FindForm findForm;
-        private Form dialog;
         private Font printFont;
+        private Form dialog;
         private int availableHeight, availableWidth, doEvents, matchIndex, textBoxClicks, selectedIndex;
         private List<SearchResult> searchResults;
         private LogViewerState[] logViewerStates;
@@ -66,8 +66,8 @@ namespace BetHelper {
         private Size availableSize;
         private StatusStripHandler statusStripHandler;
         private string logFilePath, stringToPrint;
-        private Thread findThread, turnOffThread;
         private System.Windows.Forms.Timer textBoxClicksTimer;
+        private Thread findThread, turnOffThread;
         private UpdateChecker updateChecker;
 
         public LogViewerForm(Settings settings) {
@@ -76,7 +76,13 @@ namespace BetHelper {
             this.settings = settings;
 
             Icon = Properties.Resources.Logs;
-            Text = Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionLogViewer;
+            Text = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionLogViewer)
+                .ToString();
 
             textBoxClicksTimer = new System.Windows.Forms.Timer();
             textBoxClicksTimer.Interval = SystemInformation.DoubleClickTime;
@@ -128,64 +134,104 @@ namespace BetHelper {
                 MenuItem menuItemOptions = mainMenu.MenuItems.Add(Properties.Resources.MenuItemOptions);
                 MenuItem menuItemTools = mainMenu.MenuItems.Add(Properties.Resources.MenuItemTools);
                 MenuItem menuItemHelp = mainMenu.MenuItems.Add(Properties.Resources.MenuItemHelp);
-                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemExport, new EventHandler(Export), Shortcut.CtrlE));
+                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemExport,
+                    new EventHandler(Export), Shortcut.CtrlE));
                 menuItemFile.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintPreview, new EventHandler(PrintPreview)));
-                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrint, new EventHandler(Print), Shortcut.CtrlP));
-                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintTailPreview, new EventHandler(PrintTailPreview)));
-                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintTail + Constants.ShortcutShiftCtrlP, new EventHandler(PrintTail)));
-                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintImagePreview, new EventHandler(PrintImagePreview)));
-                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintImage + Constants.ShortcutAltShiftCtrlP, new EventHandler(PrintImage)));
+                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintPreview,
+                    new EventHandler(PrintPreview)));
+                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrint,
+                    new EventHandler(Print), Shortcut.CtrlP));
+                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintTailPreview,
+                    new EventHandler(PrintTailPreview)));
+                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintTail + Constants.ShortcutShiftCtrlP,
+                    new EventHandler(PrintTail)));
+                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintImagePreview,
+                    new EventHandler(PrintImagePreview)));
+                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPrintImage + Constants.ShortcutAltShiftCtrlP,
+                    new EventHandler(PrintImage)));
                 menuItemFile.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemExit, new EventHandler((sender, e) => Close()), Shortcut.AltF4));
-                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy + Constants.ShortcutCtrlC, new EventHandler(Copy)));
+                menuItemFile.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemExit,
+                    new EventHandler((sender, e) => Close()), Shortcut.AltF4));
+                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy + Constants.ShortcutCtrlC,
+                    new EventHandler(Copy)));
                 menuItemEdit.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll + Constants.ShortcutCtrlA, new EventHandler(SelectAll)));
+                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll + Constants.ShortcutCtrlA,
+                    new EventHandler(SelectAll)));
                 menuItemEdit.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemFind, new EventHandler(Find), Shortcut.CtrlF));
-                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemFindNext + Constants.ShortcutF3, new EventHandler(FindNext)));
-                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPause, new EventHandler(TogglePause), Shortcut.F9));
+                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemFind,
+                    new EventHandler(Find), Shortcut.CtrlF));
+                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemFindNext + Constants.ShortcutF3,
+                    new EventHandler(FindNext)));
+                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPause,
+                    new EventHandler(TogglePause), Shortcut.F9));
                 menuItemView.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemReload, new EventHandler(Reload), Shortcut.F5));
-                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemReloadFromStart, new EventHandler(ReloadFromStart), Shortcut.AltF7));
-                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemReloadTail, new EventHandler(ReloadTail), Shortcut.F7));
+                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemReload,
+                    new EventHandler(Reload), Shortcut.F5));
+                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemReloadFromStart,
+                    new EventHandler(ReloadFromStart), Shortcut.AltF7));
+                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemReloadTail,
+                    new EventHandler(ReloadTail), Shortcut.F7));
                 menuItemView.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemClear, new EventHandler(Clear), Shortcut.F8));
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAlwaysOnTop + Constants.ShortcutShiftCtrlT, new EventHandler(ToggleTopMost)));
+                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemClear,
+                    new EventHandler(Clear), Shortcut.F8));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAlwaysOnTop + Constants.ShortcutShiftCtrlT,
+                    new EventHandler(ToggleTopMost)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemWordWrap + Constants.ShortcutShiftCtrlL, new EventHandler(ToggleWordWrap)));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemWordWrap + Constants.ShortcutShiftCtrlL,
+                    new EventHandler(ToggleWordWrap)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectionCopies, new EventHandler((sender, e) => ((MenuItem)sender).Checked = !((MenuItem)sender).Checked)));
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDoubleClickCopies, new EventHandler((sender, e) => ((MenuItem)sender).Checked = !((MenuItem)sender).Checked)));
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTripleClickCopies, new EventHandler((sender, e) => ((MenuItem)sender).Checked = !((MenuItem)sender).Checked)));
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInPreferredEditor, new EventHandler(OpenInEditor), Shortcut.CtrlU));
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInDefaultEditor, new EventHandler(OpenInDefaultEditor)));
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenLogLocation, new EventHandler(OpenLogLocation), Shortcut.CtrlL));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectionCopies,
+                    new EventHandler((sender, e) => ((MenuItem)sender).Checked = !((MenuItem)sender).Checked)));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDoubleClickCopies,
+                    new EventHandler((sender, e) => ((MenuItem)sender).Checked = !((MenuItem)sender).Checked)));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTripleClickCopies,
+                    new EventHandler((sender, e) => ((MenuItem)sender).Checked = !((MenuItem)sender).Checked)));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInPreferredEditor,
+                    new EventHandler(OpenInEditor), Shortcut.CtrlU));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInDefaultEditor,
+                    new EventHandler(OpenInDefaultEditor)));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenLogLocation,
+                    new EventHandler(OpenLogLocation), Shortcut.CtrlL));
                 menuItemTools.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyLogFileName, new EventHandler(CopyLogFileName), Shortcut.CtrlJ));
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyLogFilePath, new EventHandler(CopyLogFilePath), Shortcut.CtrlM));
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyDirectoryPath, new EventHandler(CopyDirectoryPath), Shortcut.CtrlK));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyLogFileName,
+                    new EventHandler(CopyLogFileName), Shortcut.CtrlJ));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyLogFilePath,
+                    new EventHandler(CopyLogFilePath), Shortcut.CtrlM));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyDirectoryPath,
+                    new EventHandler(CopyDirectoryPath), Shortcut.CtrlK));
                 menuItemTools.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTruncateLog, new EventHandler(TruncateLog)));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTruncateLog,
+                    new EventHandler(TruncateLog)));
                 menuItemTools.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAnalyzeUrl, new EventHandler(AnalyzeUrl)));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAnalyzeUrl,
+                    new EventHandler(AnalyzeUrl)));
                 menuItemTools.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemEncoderDecoder + Constants.ShortcutShiftCtrlN, new EventHandler(OpenEncoderDecoder)));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemEncoderDecoder + Constants.ShortcutShiftCtrlN,
+                    new EventHandler(OpenEncoderDecoder)));
                 menuItemTools.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTurnOffMonitors, new EventHandler(TurnOffMonitors), Shortcut.F11));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTurnOffMonitors,
+                    new EventHandler(TurnOffMonitors), Shortcut.F11));
                 menuItemTools.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemLaunchCalculator, new EventHandler(LaunchCalculator), Shortcut.AltF11));
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemLaunchNotepad, new EventHandler(LaunchNotepad), Shortcut.AltF12));
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemLaunchWordPad, new EventHandler(LaunchWordPad)));
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemLaunchCharMap, new EventHandler(LaunchCharMap)));
-                menuItemHelp.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOnlineHelp, new EventHandler(OpenHelp), Shortcut.F1));
-                menuItemHelp.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCheckForUpdates, new EventHandler(CheckUpdates)));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemLaunchCalculator,
+                    new EventHandler(LaunchCalculator), Shortcut.AltF11));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemLaunchNotepad,
+                    new EventHandler(LaunchNotepad), Shortcut.AltF12));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemLaunchWordPad,
+                    new EventHandler(LaunchWordPad)));
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemLaunchCharMap,
+                    new EventHandler(LaunchCharMap)));
+                menuItemHelp.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOnlineHelp,
+                    new EventHandler(OpenHelp), Shortcut.F1));
+                menuItemHelp.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCheckForUpdates,
+                    new EventHandler(CheckUpdates)));
                 menuItemHelp.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemHelp.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAbout, new EventHandler(ShowAbout)));
+                menuItemHelp.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAbout,
+                    new EventHandler(ShowAbout)));
                 Menu = mainMenu;
                 menuItemEdit.Popup += new EventHandler((sender, e) => {
                     menuItemEdit.MenuItems[0].Enabled = logViewerStates[selectedIndex].TextBox.SelectionLength > 0;
-                    menuItemEdit.MenuItems[2].Enabled = logViewerStates[selectedIndex].TextBox.SelectionLength < logViewerStates[selectedIndex].TextBox.TextLength;
+                    menuItemEdit.MenuItems[2].Enabled =
+                        logViewerStates[selectedIndex].TextBox.SelectionLength < logViewerStates[selectedIndex].TextBox.TextLength;
                     menuItemEdit.MenuItems[5].Enabled = !string.IsNullOrEmpty(search.searchString);
                 });
                 menuItemView.Popup += new EventHandler((sender, e) => menuItemView.MenuItems[3].Enabled = !IsRestricted());
@@ -194,7 +240,8 @@ namespace BetHelper {
                     menuItemTools.MenuItems[10].Enabled = StaticMethods.CheckSelectedUrl(logViewerStates[selectedIndex].TextBox);
                     menuItemTools.MenuItems[0].Enabled = false;
                     try {
-                        menuItemTools.MenuItems[0].Enabled = !string.IsNullOrWhiteSpace(settings.PreferredEditor) && File.Exists(settings.PreferredEditor);
+                        menuItemTools.MenuItems[0].Enabled = !string.IsNullOrWhiteSpace(settings.PreferredEditor)
+                            && File.Exists(settings.PreferredEditor);
                     } catch (Exception exception) {
                         Debug.WriteLine(exception);
                         ErrorLog.WriteLine(exception);
@@ -206,11 +253,14 @@ namespace BetHelper {
         private async void BuildContextMenuAsync() {
             await Task.Run(new Action(() => {
                 ContextMenu contextMenu = new ContextMenu();
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler(Copy)));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                    new EventHandler(Copy)));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler(SelectAll)));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                    new EventHandler(SelectAll)));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAnalyzeUrl, new EventHandler(AnalyzeUrl)));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAnalyzeUrl,
+                    new EventHandler(AnalyzeUrl)));
                 contextMenu.Popup += new EventHandler((sender, e) => {
                     TextBox textBox = (TextBox)contextMenu.SourceControl;
                     if (!textBox.Focused) {
@@ -232,7 +282,11 @@ namespace BetHelper {
             await Task.Run(new Action(() => {
                 printDialog = new PrintDialog();
                 printDocument = new PrintDocument();
-                printDocument.DocumentName = Program.GetTitle() + Constants.Space + Properties.Resources.CaptionPrintOutput;
+                printDocument.DocumentName = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionPrintOutput)
+                    .ToString();
                 printDocument.BeginPrint += new PrintEventHandler(BeginPrint);
                 printDocument.PrintPage += new PrintPageEventHandler(PrintPage);
                 printDocument.EndPrint += new PrintEventHandler(EndPrint);
@@ -251,7 +305,9 @@ namespace BetHelper {
 
         private async void InitializeSaveFileDialogAsync() {
             await Task.Run(new Action(() => {
-                string initialDirectory = string.IsNullOrEmpty(settings.LastExportDirectory) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : settings.LastExportDirectory;
+                string initialDirectory = string.IsNullOrEmpty(settings.LastExportDirectory)
+                    ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+                    : settings.LastExportDirectory;
                 saveFileDialog = new SaveFileDialog() {
                     AddExtension = true,
                     CheckPathExists = true,
@@ -263,7 +319,9 @@ namespace BetHelper {
             }));
         }
 
-        private void InitializeStatusStripHandler() => statusStripHandler = new StatusStripHandler(statusStrip, StatusStripHandler.DisplayMode.Basic, settings);
+        private void InitializeStatusStripHandler() {
+            statusStripHandler = new StatusStripHandler(statusStrip, StatusStripHandler.DisplayMode.Basic, settings);
+        }
 
         private async void InitializeUpdateCheckerAsync() {
             await Task.Run(new Action(() => {
@@ -278,7 +336,12 @@ namespace BetHelper {
             try {
                 fileSystemWatcher.EnableRaisingEvents = false;
                 if (!string.IsNullOrEmpty(logViewerStates[selectedIndex].Path) && File.Exists(logViewerStates[selectedIndex].Path)) {
-                    using (FileStream fileStream = new FileStream(logViewerStates[selectedIndex].Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                    using (FileStream fileStream = new FileStream(
+                            logViewerStates[selectedIndex].Path,
+                            FileMode.Open,
+                            FileAccess.Read,
+                            FileShare.ReadWrite)) {
+
                         SetAction(fileStream);
                         fileStream.Seek(logViewerStates[selectedIndex].Position, SeekOrigin.Begin);
                         using (StreamReader streamReader = new StreamReader(fileStream, true)) {
@@ -396,7 +459,13 @@ namespace BetHelper {
             Exception exception = e.GetException();
             Debug.WriteLine(exception);
             ErrorLog.WriteLine(exception);
-            dialog = new MessageForm(this, exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+            StringBuilder title = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionError);
+            dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
             dialog.HelpRequested += new HelpEventHandler(OpenHelp);
             dialog.ShowDialog(this);
         }
@@ -426,10 +495,11 @@ namespace BetHelper {
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs e) {
-            if (!Menu.MenuItems[0].MenuItems[3].Enabled && e.CloseReason == CloseReason.UserClosing) {
-                dialog = new MessageForm(this, Properties.Resources.MessageQuestionCancelPrinting, Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question, MessageForm.DefaultButton.Button2);
+            if (!Menu.MenuItems[0].MenuItems[3].Enabled && e.CloseReason.Equals(CloseReason.UserClosing)) {
+                dialog = new MessageForm(this, Properties.Resources.MessageQuestionCancelPrinting, Properties.Resources.CaptionQuestion,
+                    MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question, MessageForm.DefaultButton.Button2);
                 dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-                if (dialog.ShowDialog(this) == DialogResult.Yes) {
+                if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
                     cancel = true;
                 } else {
                     e.Cancel = true;
@@ -507,7 +577,8 @@ namespace BetHelper {
 
         private void OnWindowStateLoaded(object sender, PersistWindowStateEventArgs e) {
             try {
-                byteSettings = Settings.IntToByteArray((int)e.RegistryKey.GetValue(Name + Constants.Settings, Settings.ByteArrayToInt(byteSettings)));
+                byteSettings = Settings.IntToByteArray(
+                    (int)e.RegistryKey.GetValue(Name + Constants.Settings, Settings.ByteArrayToInt(byteSettings)));
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -540,13 +611,17 @@ namespace BetHelper {
                     saveFileDialog.FilterIndex = fileExtensionFilter.GetFilterIndex();
                     saveFileDialog.Title = Properties.Resources.CaptionExport;
                     saveFileDialog.FileName = Application.ProductName + Properties.Resources.CaptionExport;
-                    if (saveFileDialog.ShowDialog(this) == DialogResult.OK) {
-                        statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, Properties.Resources.MessageExporting);
+                    if (saveFileDialog.ShowDialog(this).Equals(DialogResult.OK)) {
+                        statusStripHandler.SetMessage(
+                            StatusStripHandler.StatusMessageType.Temporary,
+                            Properties.Resources.MessageExporting);
                         StaticMethods.ExportAsImage(tabControl, saveFileDialog.FileName);
                         fileExtensionFilter.SetFilterIndex(saveFileDialog.FilterIndex);
                         settings.ExtensionFilterIndex = saveFileDialog.FilterIndex;
                         settings.LastExportDirectory = Path.GetDirectoryName(saveFileDialog.FileName);
-                        statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, Properties.Resources.MessageExportFinished);
+                        statusStripHandler.SetMessage(
+                            StatusStripHandler.StatusMessageType.Temporary,
+                            Properties.Resources.MessageExportFinished);
                     }
                 } catch (Exception exception) {
                     ShowException(exception, Properties.Resources.MessageExportFailed);
@@ -558,8 +633,8 @@ namespace BetHelper {
             printType = PrintType.All;
             try {
                 dialog = printPreviewDialog;
-                dialog.WindowState = WindowState == FormWindowState.Minimized ? FormWindowState.Normal : WindowState;
-                if (printPreviewDialog.ShowDialog(this) == DialogResult.OK) {
+                dialog.WindowState = WindowState.Equals(FormWindowState.Minimized) ? FormWindowState.Normal : WindowState;
+                if (printPreviewDialog.ShowDialog(this).Equals(DialogResult.OK)) {
                     printDocument.Print();
                 }
             } catch (Exception exception) {
@@ -579,7 +654,7 @@ namespace BetHelper {
                     printDialog.AllowSomePages = true;
                     printDialog.ShowHelp = true;
                     printDialog.UseEXDialog = true;
-                    if (printDialog.ShowDialog(this) == DialogResult.OK) {
+                    if (printDialog.ShowDialog(this).Equals(DialogResult.OK)) {
                         printDocument.Print();
                     }
                 } catch (Exception exception) {
@@ -592,8 +667,8 @@ namespace BetHelper {
             printType = PrintType.Tail;
             try {
                 dialog = printPreviewDialog;
-                dialog.WindowState = WindowState == FormWindowState.Minimized ? FormWindowState.Normal : WindowState;
-                if (printPreviewDialog.ShowDialog(this) == DialogResult.OK) {
+                dialog.WindowState = WindowState.Equals(FormWindowState.Minimized) ? FormWindowState.Normal : WindowState;
+                if (printPreviewDialog.ShowDialog(this).Equals(DialogResult.OK)) {
                     printDocument.Print();
                 }
             } catch (Exception exception) {
@@ -613,7 +688,7 @@ namespace BetHelper {
                     printDialog.AllowSomePages = false;
                     printDialog.ShowHelp = true;
                     printDialog.UseEXDialog = true;
-                    if (printDialog.ShowDialog(this) == DialogResult.OK) {
+                    if (printDialog.ShowDialog(this).Equals(DialogResult.OK)) {
                         printDocument.Print();
                     }
                 } catch (Exception exception) {
@@ -626,8 +701,8 @@ namespace BetHelper {
             printType = PrintType.Image;
             try {
                 dialog = printPreviewDialog;
-                dialog.WindowState = WindowState == FormWindowState.Minimized ? FormWindowState.Normal : WindowState;
-                if (printPreviewDialog.ShowDialog(this) == DialogResult.OK) {
+                dialog.WindowState = WindowState.Equals(FormWindowState.Minimized) ? FormWindowState.Normal : WindowState;
+                if (printPreviewDialog.ShowDialog(this).Equals(DialogResult.OK)) {
                     printDocument.Print();
                 }
             } catch (Exception exception) {
@@ -647,7 +722,7 @@ namespace BetHelper {
                     printDialog.AllowSomePages = false;
                     printDialog.ShowHelp = true;
                     printDialog.UseEXDialog = true;
-                    if (printDialog.ShowDialog(this) == DialogResult.OK) {
+                    if (printDialog.ShowDialog(this).Equals(DialogResult.OK)) {
                         printDocument.Print();
                     }
                 } catch (Exception exception) {
@@ -661,12 +736,22 @@ namespace BetHelper {
         private void ShowException(Exception exception, string statusMessage) {
             Debug.WriteLine(exception);
             ErrorLog.WriteLine(exception);
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, string.IsNullOrEmpty(statusMessage) ? exception.Message : statusMessage);
-            dialog = new MessageForm(this, exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+            statusStripHandler.SetMessage(
+                StatusStripHandler.StatusMessageType.PersistentB,
+                string.IsNullOrEmpty(statusMessage) ? exception.Message : statusMessage);
+            StringBuilder title = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionError);
+            dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
             dialog.HelpRequested += new HelpEventHandler(OpenHelp);
             dialog.ShowDialog(this);
             statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB);
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, string.IsNullOrEmpty(statusMessage) ? exception.Message : statusMessage);
+            statusStripHandler.SetMessage(
+                StatusStripHandler.StatusMessageType.Temporary,
+                string.IsNullOrEmpty(statusMessage) ? exception.Message : statusMessage);
         }
 
         private void BeginPrint(object sender, PrintEventArgs e) {
@@ -681,7 +766,11 @@ namespace BetHelper {
                 stringToPrint = null;
                 printAction = e.PrintAction;
                 printDocument.OriginAtMargins = settings.PrintSoftMargins;
-                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, e.PrintAction == PrintAction.PrintToPreview ? Properties.Resources.MessageGeneratingPreview : Properties.Resources.MessagePrinting);
+                statusStripHandler.SetMessage(
+                    StatusStripHandler.StatusMessageType.Temporary,
+                    e.PrintAction.Equals(PrintAction.PrintToPreview)
+                        ? Properties.Resources.MessageGeneratingPreview
+                        : Properties.Resources.MessagePrinting);
                 Cursor = Cursors.WaitCursor;
                 for (int i = 0; i < 8; i++) {
                     Menu.MenuItems[0].MenuItems[i].Enabled = false;
@@ -706,16 +795,20 @@ namespace BetHelper {
         private void PrintPage(object sender, PrintPageEventArgs e) {
             int charactersOnPage = 0;
             int linesPerPage = 0;
-            if (availableWidth == 0) {
-                availableWidth = (int)Math.Floor(printDocument.OriginAtMargins ? e.MarginBounds.Width : e.PageSettings.Landscape ? e.PageSettings.PrintableArea.Height : e.PageSettings.PrintableArea.Width);
+            if (availableWidth.Equals(0)) {
+                availableWidth = (int)Math.Floor(printDocument.OriginAtMargins
+                    ? e.MarginBounds.Width
+                    : e.PageSettings.Landscape ? e.PageSettings.PrintableArea.Height : e.PageSettings.PrintableArea.Width);
             }
-            if (availableHeight == 0) {
-                availableHeight = (int)Math.Floor(printDocument.OriginAtMargins ? e.MarginBounds.Height : e.PageSettings.Landscape ? e.PageSettings.PrintableArea.Width : e.PageSettings.PrintableArea.Height);
+            if (availableHeight.Equals(0)) {
+                availableHeight = (int)Math.Floor(printDocument.OriginAtMargins
+                    ? e.MarginBounds.Height
+                    : e.PageSettings.Landscape ? e.PageSettings.PrintableArea.Width : e.PageSettings.PrintableArea.Height);
             }
-            if (availableSize == Size.Empty) {
+            if (availableSize.Equals(Size.Empty)) {
                 availableSize = new Size(availableWidth, availableHeight);
             }
-            if (printAction == PrintAction.PrintToPreview) {
+            if (printAction.Equals(PrintAction.PrintToPreview)) {
                 e.Graphics.TranslateTransform(e.PageSettings.PrintableArea.X, e.PageSettings.PrintableArea.Y);
             }
             int strLengthToMeasure = availableWidth * availableHeight / 50;
@@ -737,11 +830,19 @@ namespace BetHelper {
                 case PrintType.Tail:
                     List<string> lines = new List<string>();
                     if (File.Exists(logFilePath)) {
-                        using (FileStream fileStream = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                        using (FileStream fileStream = new FileStream(
+                                logFilePath,
+                                FileMode.Open,
+                                FileAccess.Read,
+                                FileShare.ReadWrite)) {
+
                             long l = fileStream.Length - strLengthToMeasure * 2;
                             fileStream.Seek(l > 0 ? l : 0, SeekOrigin.Begin);
                             using (StreamReader streamReader = new StreamReader(fileStream, true)) {
-                                using (StringReader stringReader = new StringReader(streamReader.ReadToEnd().Replace(Constants.VerticalTab.ToString(), string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces)).TrimEnd())) {
+                                using (StringReader stringReader = new StringReader(
+                                        streamReader.ReadToEnd().Replace(Constants.VerticalTab.ToString(),
+                                        string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces)).TrimEnd())) {
+
                                     for (string line; (line = stringReader.ReadLine()) != null;) {
                                         lines.Add(line);
                                     }
@@ -752,14 +853,30 @@ namespace BetHelper {
                     int linesPerPageInitial = 0;
                     while (linesPerPage > linesPerPageInitial - 5 && lines.Count > 2) {
                         stringToMeasure = string.Join(Environment.NewLine, lines);
-                        e.Graphics.MeasureString(stringToMeasure.Length > strLengthToMeasure ? stringToMeasure.Substring(0, strLengthToMeasure) : stringToMeasure, printFont, availableSize, StringFormat.GenericTypographic, out charactersOnPage, out linesPerPage);
-                        if (linesPerPageInitial == 0) {
+
+                        e.Graphics.MeasureString(
+                            stringToMeasure.Length > strLengthToMeasure
+                                ? stringToMeasure.Substring(0, strLengthToMeasure)
+                                : stringToMeasure,
+                            printFont,
+                            availableSize,
+                            StringFormat.GenericTypographic,
+                            out charactersOnPage,
+                            out linesPerPage);
+
+                        if (linesPerPageInitial.Equals(0)) {
                             linesPerPageInitial = linesPerPage;
                         }
                         lines.RemoveAt(0);
                         lines.RemoveAt(0);
                     }
-                    e.Graphics.DrawString(string.Join(Environment.NewLine, lines), printFont, Brushes.Black, new Rectangle(Point.Empty, availableSize), StringFormat.GenericTypographic);
+                    e.Graphics.DrawString(
+                        string.Join(Environment.NewLine, lines),
+                        printFont,
+                        Brushes.Black,
+                        new Rectangle(Point.Empty, availableSize),
+                        StringFormat.GenericTypographic);
+
                     e.HasMorePages = false;
                     break;
                 default:
@@ -768,24 +885,52 @@ namespace BetHelper {
                         switch (printDocument.PrinterSettings.PrintRange) {
                             case PrintRange.AllPages:
                                 if (File.Exists(logFilePath)) {
-                                    using (FileStream fileStream = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                                    using (FileStream fileStream = new FileStream(
+                                            logFilePath,
+                                            FileMode.Open,
+                                            FileAccess.Read,
+                                            FileShare.ReadWrite)) {
+
                                         using (StreamReader streamReader = new StreamReader(fileStream, true)) {
-                                            stringToPrint = streamReader.ReadToEnd().Replace(Constants.VerticalTab.ToString(), string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces)).TrimEnd();
+                                            stringToPrint = streamReader
+                                                .ReadToEnd()
+                                                .Replace(Constants.VerticalTab.ToString(),
+                                                    string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces))
+                                                .TrimEnd();
                                         }
                                     }
                                 }
                                 break;
                             case PrintRange.SomePages:
                                 if (File.Exists(logFilePath)) {
-                                    using (FileStream fileStream = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                                    using (FileStream fileStream = new FileStream(
+                                            logFilePath,
+                                            FileMode.Open,
+                                            FileAccess.Read,
+                                            FileShare.ReadWrite)) {
+
                                         using (StreamReader streamReader = new StreamReader(fileStream, true)) {
-                                            stringToMeasure = streamReader.ReadToEnd().Replace(Constants.VerticalTab.ToString(), string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces)).TrimEnd();
+                                            stringToMeasure = streamReader
+                                                .ReadToEnd()
+                                                .Replace(Constants.VerticalTab.ToString(),
+                                                    string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces))
+                                                .TrimEnd();
                                         }
                                     }
                                 }
                                 StringBuilder stringBuilder = new StringBuilder();
                                 for (int n = 1; stringToMeasure.Length > 0 && n <= printDocument.PrinterSettings.ToPage; n++) {
-                                    e.Graphics.MeasureString(stringToMeasure.Length > strLengthToMeasure ? stringToMeasure.Substring(0, strLengthToMeasure) : stringToMeasure, printFont, availableSize, StringFormat.GenericTypographic, out charactersOnPage, out linesPerPage);
+
+                                    e.Graphics.MeasureString(
+                                        stringToMeasure.Length > strLengthToMeasure
+                                            ? stringToMeasure.Substring(0, strLengthToMeasure)
+                                            : stringToMeasure,
+                                        printFont,
+                                        availableSize,
+                                        StringFormat.GenericTypographic,
+                                        out charactersOnPage,
+                                        out linesPerPage);
+
                                     if (n >= printDocument.PrinterSettings.FromPage) {
                                         stringBuilder.Append(stringToMeasure.Substring(0, charactersOnPage));
                                     }
@@ -798,18 +943,40 @@ namespace BetHelper {
                                 stringToPrint = stringBuilder.ToString();
                                 break;
                             case PrintRange.Selection:
-                                stringToPrint = logViewerStates[selectedIndex].TextBox.SelectedText.Replace(Constants.VerticalTab.ToString(), string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces)).TrimEnd();
+                                stringToPrint = logViewerStates[selectedIndex].TextBox.SelectedText
+                                    .Replace(Constants.VerticalTab.ToString(),
+                                        string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces))
+                                    .TrimEnd();
                                 break;
                             default:
                                 if (File.Exists(logFilePath)) {
-                                    using (FileStream fileStream = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                                    using (FileStream fileStream = new FileStream(
+                                            logFilePath,
+                                            FileMode.Open,
+                                            FileAccess.Read,
+                                            FileShare.ReadWrite)) {
+
                                         using (StreamReader streamReader = new StreamReader(fileStream, true)) {
-                                            stringToMeasure = streamReader.ReadToEnd().Replace(Constants.VerticalTab.ToString(), string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces)).TrimEnd();
+                                            stringToMeasure = streamReader
+                                                .ReadToEnd()
+                                                .Replace(Constants.VerticalTab.ToString(),
+                                                    string.Empty.PadRight(Constants.VerticalTabNumberOfSpaces))
+                                                .TrimEnd();
                                         }
                                     }
                                 }
                                 for (int n = 1; stringToMeasure.Length > 0; n++) {
-                                    e.Graphics.MeasureString(stringToMeasure.Length > strLengthToMeasure ? stringToMeasure.Substring(0, strLengthToMeasure) : stringToMeasure, printFont, availableSize, StringFormat.GenericTypographic, out charactersOnPage, out linesPerPage);
+
+                                    e.Graphics.MeasureString(
+                                        stringToMeasure.Length > strLengthToMeasure
+                                            ? stringToMeasure.Substring(0, strLengthToMeasure)
+                                            : stringToMeasure,
+                                        printFont,
+                                        availableSize,
+                                        StringFormat.GenericTypographic,
+                                        out charactersOnPage,
+                                        out linesPerPage);
+
                                     stringToPrint = stringToMeasure;
                                     stringToMeasure = stringToMeasure.Substring(charactersOnPage);
                                     if (n % 100 == 0) {
@@ -820,8 +987,21 @@ namespace BetHelper {
                                 break;
                         }
                     }
-                    e.Graphics.MeasureString(stringToPrint.Length > strLengthToMeasure ? stringToPrint.Substring(0, strLengthToMeasure) : stringToPrint, printFont, availableSize, StringFormat.GenericTypographic, out charactersOnPage, out linesPerPage);
-                    e.Graphics.DrawString(stringToPrint.Substring(0, charactersOnPage), printFont, Brushes.Black, new Rectangle(Point.Empty, availableSize), StringFormat.GenericTypographic);
+
+                    e.Graphics.MeasureString(
+                        stringToPrint.Length > strLengthToMeasure ? stringToPrint.Substring(0, strLengthToMeasure) : stringToPrint,
+                        printFont, availableSize,
+                        StringFormat.GenericTypographic,
+                        out charactersOnPage,
+                        out linesPerPage);
+
+                    e.Graphics.DrawString(
+                        stringToPrint.Substring(0, charactersOnPage),
+                        printFont,
+                        Brushes.Black,
+                        new Rectangle(Point.Empty, availableSize),
+                        StringFormat.GenericTypographic);
+
                     stringToPrint = stringToPrint.Substring(charactersOnPage);
                     e.HasMorePages = stringToPrint.Length > 0;
                     if (++doEvents % 50 == 0) {
@@ -833,7 +1013,11 @@ namespace BetHelper {
         }
 
         private void EndPrint(object sender, PrintEventArgs e) {
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, e.PrintAction == PrintAction.PrintToPreview ? Properties.Resources.MessagePreviewGenerated : Properties.Resources.MessagePrintingFinished);
+            statusStripHandler.SetMessage(
+                StatusStripHandler.StatusMessageType.Temporary,
+                e.PrintAction.Equals(PrintAction.PrintToPreview)
+                    ? Properties.Resources.MessagePreviewGenerated
+                    : Properties.Resources.MessagePrintingFinished);
             try {
                 fileSystemWatcher.EnableRaisingEvents = true;
                 Menu.MenuItems[5].MenuItems[1].Enabled = true;
@@ -901,21 +1085,28 @@ namespace BetHelper {
         }
 
         private void TruncateLog(object sender, EventArgs e) {
-            dialog = new MessageForm(this, Properties.Resources.MessageTruncateFile, null, MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question, MessageForm.DefaultButton.Button2);
+            dialog = new MessageForm(this, Properties.Resources.MessageTruncateFile, null, MessageForm.Buttons.YesNo,
+                MessageForm.BoxIcon.Question, MessageForm.DefaultButton.Button2);
             dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-            if (dialog.ShowDialog(this) == DialogResult.Yes) {
+            if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
                 try {
                     fileSystemWatcher.EnableRaisingEvents = false;
-                    if (!string.IsNullOrEmpty(logViewerStates[selectedIndex].Path) && File.Exists(logViewerStates[selectedIndex].Path)) {
+                    if (!string.IsNullOrEmpty(logViewerStates[selectedIndex].Path)
+                            && File.Exists(logViewerStates[selectedIndex].Path)) {
+
                         for (int i = 0; i < 100; i++) {
                             try {
-                                using (FileStream fileStream = new FileStream(logViewerStates[selectedIndex].Path, FileMode.Truncate, FileAccess.Write, FileShare.ReadWrite)) { }
+                                using (FileStream fileStream = new FileStream(
+                                    logViewerStates[selectedIndex].Path,
+                                    FileMode.Truncate,
+                                    FileAccess.Write,
+                                    FileShare.ReadWrite)) { }
                             } catch (Exception exception) {
                                 Debug.WriteLine(exception);
                                 ErrorLog.WriteLine(exception);
                             }
                             try {
-                                if (new FileInfo(logViewerStates[selectedIndex].Path).Length == 0) {
+                                if (new FileInfo(logViewerStates[selectedIndex].Path).Length.Equals(0)) {
                                     break;
                                 }
                             } catch (Exception exception) {
@@ -948,7 +1139,11 @@ namespace BetHelper {
         private void AnalyzeUrl(object sender, EventArgs e) {
             if (StaticMethods.CheckSelectedUrl(logViewerStates[selectedIndex].TextBox)) {
                 try {
-                    Process.Start(Application.ExecutablePath, Constants.CommandLineSwitchWD + Constants.Space + StaticMethods.EscapeArgument(logViewerStates[selectedIndex].TextBox.SelectedText.TrimStart()));
+                    StringBuilder arguments = new StringBuilder()
+                        .Append(Constants.CommandLineSwitchWD)
+                        .Append(Constants.Space)
+                        .Append(StaticMethods.EscapeArgument(logViewerStates[selectedIndex].TextBox.SelectedText.TrimStart()));
+                    Process.Start(Application.ExecutablePath, arguments.ToString());
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
@@ -1066,21 +1261,38 @@ namespace BetHelper {
                 fileSystemWatcher.EnableRaisingEvents = false;
                 string haystack = textBox.Text;
                 if (search.regularExpression) {
-                    Regex regex = new Regex(search.searchString, (search.caseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase) | RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                    Regex regex = new Regex(search.searchString,
+                        (search.caseSensitive ? RegexOptions.None : RegexOptions.IgnoreCase)
+                            | RegexOptions.CultureInvariant
+                            | RegexOptions.Multiline);
                     foreach (Match match in regex.Matches(haystack)) {
                         searchResults.Add(new SearchResult(match.Index, match.Length));
                     }
                 } else if (search.startsWith || search.endsWith) {
                     foreach (SearchLine searchLine in StaticMethods.SplitToLines(haystack)) {
-                        if (search.startsWith && searchLine.line.StartsWith(search.searchString, search.caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase)) {
+                        if (search.startsWith && searchLine.line.StartsWith(search.searchString,
+                                search.caseSensitive
+                                    ? StringComparison.Ordinal
+                                    : StringComparison.OrdinalIgnoreCase)) {
+
                             searchResults.Add(new SearchResult(searchLine.index, search.searchString.Length));
                         }
-                        if (search.endsWith && searchLine.line.EndsWith(search.searchString, search.caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase)) {
-                            searchResults.Add(new SearchResult(searchLine.index + searchLine.line.Length - search.searchString.Length, search.searchString.Length));
+                        if (search.endsWith && searchLine.line.EndsWith(search.searchString, search.caseSensitive
+                                ? StringComparison.Ordinal
+                                : StringComparison.OrdinalIgnoreCase)) {
+
+                            searchResults.Add(new SearchResult(
+                                searchLine.index + searchLine.line.Length - search.searchString.Length,
+                                search.searchString.Length));
                         }
                     }
                 } else {
-                    for (int i = 0; (i = haystack.IndexOf(search.searchString, i, search.caseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase)) > -1; i += search.searchString.Length) {
+                    for (int i = 0;
+                            (i = haystack.IndexOf(search.searchString, i, search.caseSensitive
+                                ? StringComparison.Ordinal
+                                : StringComparison.OrdinalIgnoreCase)) > -1;
+                            i += search.searchString.Length) {
+
                         searchResults.Add(new SearchResult(i, search.searchString.Length));
                     }
                 }
@@ -1121,7 +1333,7 @@ namespace BetHelper {
                 }
                 lastMatch = false;
                 statusStripHandler.SetSearchResult(searchResults.Count, matchIndex + 1);
-                if (matchIndex == 0 || matchIndex == searchResults.Count - 1) {
+                if (matchIndex.Equals(0) || matchIndex.Equals(searchResults.Count - 1)) {
                     lastMatch = true;
                 }
             }
@@ -1133,7 +1345,9 @@ namespace BetHelper {
             } else {
                 MenuItem menuItem = (MenuItem)sender;
                 menuItem.Checked = !menuItem.Checked;
-                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, menuItem.Checked ? Properties.Resources.MessagePaused : string.Empty);
+                statusStripHandler.SetMessage(
+                    StatusStripHandler.StatusMessageType.PersistentB,
+                    menuItem.Checked ? Properties.Resources.MessagePaused : string.Empty);
                 if (!menuItem.Checked) {
                     ReadLog();
                 }
@@ -1300,7 +1514,13 @@ namespace BetHelper {
             } else {
                 if (!string.IsNullOrEmpty(Application.LocalUserAppDataPath)) {
                     try {
-                        Process.Start(Path.Combine(Path.GetDirectoryName(Environment.SystemDirectory), Constants.ExplorerFileName), Constants.ExplorerSwitchE + Constants.Comma + Constants.Space + StaticMethods.EscapeArgument(Application.LocalUserAppDataPath));
+                        string filePath = Path.Combine(Path.GetDirectoryName(Environment.SystemDirectory), Constants.ExplorerFileName);
+                        StringBuilder arguments = new StringBuilder()
+                            .Append(Constants.ExplorerSwitchE)
+                            .Append(Constants.Comma)
+                            .Append(Constants.Space)
+                            .Append(StaticMethods.EscapeArgument(Application.LocalUserAppDataPath));
+                        Process.Start(filePath, arguments.ToString());
                     } catch (Exception exception) {
                         Debug.WriteLine(exception);
                         ErrorLog.WriteLine(exception);
@@ -1443,7 +1663,12 @@ namespace BetHelper {
                 Invoke(new EventHandler(OpenHelp), sender, e);
             } else {
                 try {
-                    Process.Start(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant() + Constants.Slash + Application.ProductName.ToLowerInvariant() + Constants.Slash);
+                    StringBuilder url = new StringBuilder()
+                        .Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant())
+                        .Append(Constants.Slash)
+                        .Append(Application.ProductName.ToLowerInvariant())
+                        .Append(Constants.Slash);
+                    Process.Start(url.ToString());
                 } catch (Exception exception) {
                     ShowException(exception);
                 }
@@ -1453,44 +1678,44 @@ namespace BetHelper {
         private void OpenHelp(object sender, HelpEventArgs e) => OpenHelp(sender, (EventArgs)e);
 
         private void OnKeyDown(object sender, KeyEventArgs e) {
-            if (e.Alt && e.Shift && e.Control && e.KeyCode == Keys.P) {
+            if (e.Alt && e.Shift && e.Control && e.KeyCode.Equals(Keys.P)) {
                 if (Menu.MenuItems[0].MenuItems[7].Enabled) {
                     e.SuppressKeyPress = true;
                     PrintImage(sender, e);
                 }
-            } else if (e.Shift && e.Control && e.KeyCode == Keys.L) {
+            } else if (e.Shift && e.Control && e.KeyCode.Equals(Keys.L)) {
                 e.SuppressKeyPress = true;
                 ToggleWordWrap(sender, e);
-            } else if (e.Shift && e.Control && e.KeyCode == Keys.N) {
+            } else if (e.Shift && e.Control && e.KeyCode.Equals(Keys.N)) {
                 e.SuppressKeyPress = true;
                 OpenEncoderDecoder(sender, e);
-            } else if (e.Shift && e.Control && e.KeyCode == Keys.P) {
+            } else if (e.Shift && e.Control && e.KeyCode.Equals(Keys.P)) {
                 if (Menu.MenuItems[0].MenuItems[5].Enabled) {
                     e.SuppressKeyPress = true;
                     PrintTail(sender, e);
                 }
-            } else if (e.Shift && e.Control && e.KeyCode == Keys.T) {
+            } else if (e.Shift && e.Control && e.KeyCode.Equals(Keys.T)) {
                 if (Menu.MenuItems[3].MenuItems[0].Enabled) {
                     e.SuppressKeyPress = true;
                     ToggleTopMost(sender, e);
                 }
-            } else if (e.Control && e.KeyCode == Keys.A) {
+            } else if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
                 SelectAll(sender, e);
-            } else if (e.Control && e.KeyCode == Keys.C) {
+            } else if (e.Control && e.KeyCode.Equals(Keys.C)) {
                 e.SuppressKeyPress = true;
                 Copy(sender, e);
-            } else if (e.KeyCode == Keys.ShiftKey) {
+            } else if (e.KeyCode.Equals(Keys.ShiftKey)) {
                 invertDirection = true;
-            } else if (e.Shift && e.KeyCode == Keys.F3) {
+            } else if (e.Shift && e.KeyCode.Equals(Keys.F3)) {
                 e.SuppressKeyPress = true;
                 invertDirection = true;
                 FindPrevious(sender, e);
-            } else if (e.KeyCode == Keys.F3) {
+            } else if (e.KeyCode.Equals(Keys.F3)) {
                 e.SuppressKeyPress = true;
                 invertDirection = false;
                 FindNext(sender, e);
-            } else if (e.KeyCode == Keys.Escape) {
+            } else if (e.KeyCode.Equals(Keys.Escape)) {
                 e.SuppressKeyPress = true;
                 if (findForm != null) {
                     CloseFindForm();
@@ -1507,7 +1732,7 @@ namespace BetHelper {
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.ShiftKey) {
+            if (e.KeyCode.Equals(Keys.ShiftKey)) {
                 invertDirection = false;
             }
         }
@@ -1517,7 +1742,7 @@ namespace BetHelper {
         /// </summary>
         private void OnMouseDown(object sender, MouseEventArgs e) {
             statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);
-            if (e.Button != MouseButtons.Left) {
+            if (!e.Button.Equals(MouseButtons.Left)) {
                 textBoxClicks = 0;
                 return;
             }
@@ -1527,25 +1752,34 @@ namespace BetHelper {
                 fileSystemWatcher.EnableRaisingEvents = false;
                 if (textBox.SelectionLength > 0) {
                     textBoxClicks = 2;
-                } else if (textBoxClicks == 0 || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
+                } else if (textBoxClicks.Equals(0) || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
                     textBoxClicks++;
                 } else {
                     textBoxClicks = 0;
                 }
                 location = e.Location;
-                if (textBoxClicks == 3) {
+                if (textBoxClicks.Equals(3)) {
                     textBoxClicks = 0;
-                    NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Convert.ToUInt32(Cursor.Position.X), Convert.ToUInt32(Cursor.Position.Y), 0, 0);
+                    NativeMethods.MouseEvent(
+                        Constants.MOUSEEVENTF_LEFTUP,
+                        Convert.ToUInt32(Cursor.Position.X),
+                        Convert.ToUInt32(Cursor.Position.Y),
+                        0,
+                        0);
                     Application.DoEvents();
                     if (textBox.Multiline) {
                         char[] chars = textBox.Text.ToCharArray();
-                        int selectionEnd = Math.Min(Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart), Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
+                        int selectionEnd = Math.Min(
+                            Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart),
+                            Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
                         if (selectionEnd < 0) {
                             selectionEnd = textBox.TextLength;
                         }
                         selectionEnd = Math.Max(textBox.SelectionStart + textBox.SelectionLength, selectionEnd);
                         int selectionStart = Math.Min(textBox.SelectionStart, selectionEnd);
-                        while (--selectionStart > 0 && chars[selectionStart] != Constants.LineFeed && chars[selectionStart] != Constants.CarriageReturn) { }
+                        while (--selectionStart > 0
+                            && !chars[selectionStart].Equals(Constants.LineFeed)
+                            && !chars[selectionStart].Equals(Constants.CarriageReturn)) { }
                         textBox.Select(selectionStart, selectionEnd - selectionStart);
                     } else {
                         textBox.SelectAll();
@@ -1555,7 +1789,7 @@ namespace BetHelper {
                     }
                     textBox.Focus();
                 } else {
-                    if (textBoxClicks == 2 && Menu.MenuItems[3].MenuItems[6].Checked) {
+                    if (textBoxClicks.Equals(2) && Menu.MenuItems[3].MenuItems[6].Checked) {
                         CopyToClipboard();
                     }
                     textBoxClicksTimer.Start();
@@ -1574,7 +1808,7 @@ namespace BetHelper {
         }
 
         private void OnMouseUp(object sender, MouseEventArgs e) {
-            if (e.Button == MouseButtons.Left && Menu.MenuItems[3].MenuItems[4].Checked) {
+            if (e.Button.Equals(MouseButtons.Left) && Menu.MenuItems[3].MenuItems[4].Checked) {
                 try {
                     fileSystemWatcher.EnableRaisingEvents = false;
                     CopyToClipboard();
@@ -1597,7 +1831,7 @@ namespace BetHelper {
                 Control control = StaticMethods.FindControlAtCursor((Form)sender);
                 if (control is TabControl) {
                     TabControl tabControl = (TabControl)control;
-                    if (StaticMethods.IsHoverTabRectangle(tabControl) && e.Delta != 0) {
+                    if (StaticMethods.IsHoverTabRectangle(tabControl) && !e.Delta.Equals(0)) {
                         StaticMethods.TabControlScroll(tabControl, e.Delta);
                     }
                 }
@@ -1613,20 +1847,28 @@ namespace BetHelper {
                         if (File.Exists(logViewerStates[selectedIndex].Path)) {
                             if (IsRestricted()) {
                                 textBox.Copy();
-                                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, Properties.Resources.MessageCopiedToClipboard);
+                                statusStripHandler.SetMessage(
+                                    StatusStripHandler.StatusMessageType.Temporary,
+                                    Properties.Resources.MessageCopiedToClipboard);
                             } else {
                                 Cursor = Cursors.WaitCursor;
-                                using (FileStream fileStream = new FileStream(logViewerStates[selectedIndex].Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                                using (FileStream fileStream = new FileStream(
+                                        logViewerStates[selectedIndex].Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+
                                     using (StreamReader streamReader = new StreamReader(fileStream, true)) {
                                         Clipboard.SetText(streamReader.ReadToEnd());
-                                        statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, Properties.Resources.MessageCopiedToClipboard);
+                                        statusStripHandler.SetMessage(
+                                            StatusStripHandler.StatusMessageType.Temporary,
+                                            Properties.Resources.MessageCopiedToClipboard);
                                     }
                                 }
                             }
                         }
                     } else {
                         textBox.Copy();
-                        statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, Properties.Resources.MessageCopiedToClipboard);
+                        statusStripHandler.SetMessage(
+                            StatusStripHandler.StatusMessageType.Temporary,
+                            Properties.Resources.MessageCopiedToClipboard);
                     }
                 }
             } catch (OutOfMemoryException exception) {
@@ -1641,10 +1883,15 @@ namespace BetHelper {
             }
         }
 
-        private bool IsRestricted() => settings.RestrictForLargeLogs && logViewerStates[selectedIndex].Position > settings.LargeLogsLimit * (settings.UseDecimalPrefix ? 1000000 : 1048576);
+        private bool IsRestricted() {
+            return settings.RestrictForLargeLogs
+                && logViewerStates[selectedIndex].Position > settings.LargeLogsLimit * (settings.UseDecimalPrefix ? 1000000 : 1048576);
+        }
 
         private enum PrintType {
-            All, Tail, Image
+            All,
+            Tail,
+            Image
         }
     }
 }

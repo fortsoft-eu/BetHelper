@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
@@ -75,40 +75,41 @@ namespace BetHelper {
         }
 
         private void SetUid() {
-            StringBuilder stringBuilder = new StringBuilder(DateTime.ToString(Constants.TimeFormatForUid, CultureInfo.InvariantCulture));
-            stringBuilder.Append(Sport);
-            stringBuilder.Append(League);
-            stringBuilder.Append(Match);
-            stringBuilder.Append(Opportunity);
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append(DateTime.ToString(Constants.TimeFormatForUid, CultureInfo.InvariantCulture))
+                .Append(Sport)
+                .Append(League)
+                .Append(Match)
+                .Append(Opportunity);
             Uid = Hash.MD5(stringBuilder.ToString(), Encoding.UTF8);
         }
 
         public override string ToString() {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("DateTime");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(DateTime.ToString(Constants.ToStringTimeFormat, CultureInfo.InvariantCulture));
-            stringBuilder.Append("Sport");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Sport);
-            stringBuilder.Append("League");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(League);
-            stringBuilder.Append("Match");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Match);
-            stringBuilder.Append("Opportunity");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Opportunity);
-            stringBuilder.Append("Uid");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.Append(Uid);
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append("DateTime")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(DateTime.ToString(Constants.ToStringTimeFormat, CultureInfo.InvariantCulture))
+                .Append("Sport")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Sport)
+                .Append("League")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(League)
+                .Append("Match")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Match)
+                .Append("Opportunity")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Opportunity)
+                .Append("Uid")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .Append(Uid);
             return stringBuilder.ToString();
         }
     }

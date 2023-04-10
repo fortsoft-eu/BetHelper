@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -43,7 +43,11 @@ namespace BetHelper {
         private Timer textBoxClicksTimer;
 
         public AboutForm() {
-            Text = Properties.Resources.CaptionAbout + Constants.Space + Program.GetTitle();
+            Text = new StringBuilder()
+                .Append(Properties.Resources.CaptionAbout)
+                .Append(Constants.Space)
+                .Append(Program.GetTitle())
+                .ToString();
 
             textBoxClicksTimer = new Timer();
             textBoxClicksTimer.Interval = SystemInformation.DoubleClickTime;
@@ -57,13 +61,17 @@ namespace BetHelper {
             SuspendLayout();
             pictureBox.Image = Properties.Resources.Icon.ToBitmap();
             panelProductInfo.ContextMenu = new ContextMenu();
-            panelProductInfo.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyAbout, new EventHandler(CopyAbout)));
+            panelProductInfo.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyAbout,
+                new EventHandler(CopyAbout)));
             panelWebsite.ContextMenu = new ContextMenu();
-            panelWebsite.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyAbout, new EventHandler(CopyAbout)));
+            panelWebsite.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyAbout,
+                new EventHandler(CopyAbout)));
             ContextMenu contextMenu = new ContextMenu();
-            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler((sender, e) => textBox.Copy())));
+            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                new EventHandler((sender, e) => textBox.Copy())));
             contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler((sender, e) => textBox.SelectAll())));
+            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                new EventHandler((sender, e) => textBox.SelectAll())));
             contextMenu.Popup += new EventHandler((sender, e) => {
                 if (!textBox.Focused) {
                     textBox.Focus();
@@ -75,12 +83,12 @@ namespace BetHelper {
             ResumeLayout(false);
             PerformLayout();
 
-            stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine(Program.GetTitle());
-            stringBuilder.AppendLine(WordWrap(Properties.Resources.Description, labelProductInfo.Font, Width - 80));
-            stringBuilder.Append(Properties.Resources.LabelVersion);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Application.ProductVersion);
+            stringBuilder = new StringBuilder()
+                .AppendLine(Program.GetTitle())
+                .AppendLine(WordWrap(Properties.Resources.Description, labelProductInfo.Font, Width - 80))
+                .Append(Properties.Resources.LabelVersion)
+                .Append(Constants.Space)
+                .AppendLine(Application.ProductVersion);
             object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
             if (attributes.Length > 0) {
                 AssemblyCopyrightAttribute assemblyCopyrightAttribute = (AssemblyCopyrightAttribute)attributes[0];
@@ -89,39 +97,47 @@ namespace BetHelper {
             attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(TargetFrameworkAttribute), false);
             if (attributes.Length > 0) {
                 TargetFrameworkAttribute assemblyCopyrightAttribute = (TargetFrameworkAttribute)attributes[0];
-                stringBuilder.Append(Properties.Resources.LabelTargetFramework);
-                stringBuilder.Append(Constants.Space);
-                stringBuilder.AppendLine(assemblyCopyrightAttribute.FrameworkDisplayName);
+                stringBuilder.Append(Properties.Resources.LabelTargetFramework)
+                    .Append(Constants.Space)
+                    .AppendLine(assemblyCopyrightAttribute.FrameworkDisplayName);
             }
-            stringBuilder.Append(Properties.Resources.LabelCefSharpVersion);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Cef.CefSharpVersion);
-            stringBuilder.Append(Properties.Resources.LabelCefVersion);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Cef.CefVersion);
-            stringBuilder.Append(Properties.Resources.LabelCefGitHash);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Cef.CefCommitHash);
-            stringBuilder.Append(Properties.Resources.LabelChromiumVersion);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Cef.ChromiumVersion);
+            stringBuilder.Append(Properties.Resources.LabelCefSharpVersion)
+                .Append(Constants.Space)
+                .AppendLine(Cef.CefSharpVersion)
+                .Append(Properties.Resources.LabelCefVersion)
+                .Append(Constants.Space)
+                .AppendLine(Cef.CefVersion)
+                .Append(Properties.Resources.LabelCefGitHash)
+                .Append(Constants.Space)
+                .AppendLine(Cef.CefCommitHash)
+                .Append(Properties.Resources.LabelChromiumVersion)
+                .Append(Constants.Space)
+                .AppendLine(Cef.ChromiumVersion);
 
             labelProductInfo.Text = stringBuilder.ToString();
             labelWebsite.Text = Properties.Resources.LabelWebsite;
 
             linkLabel.ContextMenu = new ContextMenu();
-            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInDefaultBrowser, new EventHandler(OpenLink)));
+            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInDefaultBrowser,
+                new EventHandler(OpenLink)));
             linkLabel.ContextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyUrl, new EventHandler(CopyLink)));
+            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyUrl,
+                new EventHandler(CopyLink)));
             linkLabel.ContextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyAbout, new EventHandler(CopyAbout)));
-            linkLabel.Text = Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant() + Constants.Slash + Application.ProductName.ToLowerInvariant() + Constants.Slash;
+            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyAbout,
+                new EventHandler(CopyAbout)));
+            linkLabel.Text = new StringBuilder()
+                .Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant())
+                .Append(Constants.Slash)
+                .Append(Application.ProductName.ToLowerInvariant())
+                .Append(Constants.Slash)
+                .ToString();
             toolTip.SetToolTip(linkLabel, Properties.Resources.ToolTipVisit);
             button.Text = Properties.Resources.ButtonClose;
-            stringBuilder.AppendLine();
-            stringBuilder.Append(labelWebsite.Text);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.Append(linkLabel.Text);
+            stringBuilder.AppendLine()
+                .Append(labelWebsite.Text)
+                .Append(Constants.Space)
+                .Append(linkLabel.Text);
         }
 
         private void CopyAbout(object sender, EventArgs e) {
@@ -143,12 +159,14 @@ namespace BetHelper {
         }
 
         private void OnLinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Middle) {
+            if (e.Button.Equals(MouseButtons.Left) || e.Button.Equals(MouseButtons.Middle)) {
                 OpenLink((LinkLabel)sender);
             }
         }
 
-        private void OpenLink(object sender, EventArgs e) => OpenLink((LinkLabel)((MenuItem)sender).GetContextMenu().SourceControl);
+        private void OpenLink(object sender, EventArgs e) {
+            OpenLink((LinkLabel)((MenuItem)sender).GetContextMenu().SourceControl);
+        }
 
         private void OpenLink(LinkLabel linkLabel) {
             try {
@@ -157,7 +175,12 @@ namespace BetHelper {
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-                dialog = new MessageForm(this, exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+                StringBuilder title = new StringBuilder(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
                 dialog.ShowDialog(this);
             }
         }
@@ -177,7 +200,7 @@ namespace BetHelper {
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e) {
-            if (e.Control && e.KeyCode == Keys.A) {
+            if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
                 if (sender is TextBox) {
                     ((TextBox)sender).SelectAll();
@@ -186,7 +209,7 @@ namespace BetHelper {
         }
 
         private void OnMouseDown(object sender, MouseEventArgs e) {
-            if (e.Button != MouseButtons.Left) {
+            if (!e.Button.Equals(MouseButtons.Left)) {
                 textBoxClicks = 0;
                 return;
             }
@@ -194,25 +217,34 @@ namespace BetHelper {
             textBoxClicksTimer.Stop();
             if (textBox.SelectionLength > 0) {
                 textBoxClicks = 2;
-            } else if (textBoxClicks == 0 || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
+            } else if (textBoxClicks.Equals(0) || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
                 textBoxClicks++;
             } else {
                 textBoxClicks = 0;
             }
             location = e.Location;
-            if (textBoxClicks == 3) {
+            if (textBoxClicks.Equals(3)) {
                 textBoxClicks = 0;
-                NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Convert.ToUInt32(Cursor.Position.X), Convert.ToUInt32(Cursor.Position.Y), 0, 0);
+                NativeMethods.MouseEvent(
+                    Constants.MOUSEEVENTF_LEFTUP,
+                    Convert.ToUInt32(Cursor.Position.X),
+                    Convert.ToUInt32(Cursor.Position.Y),
+                    0,
+                    0);
                 Application.DoEvents();
                 if (textBox.Multiline) {
                     char[] chars = textBox.Text.ToCharArray();
-                    int selectionEnd = Math.Min(Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart), Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
+                    int selectionEnd = Math.Min(
+                        Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart),
+                        Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
                     if (selectionEnd < 0) {
                         selectionEnd = textBox.TextLength;
                     }
                     selectionEnd = Math.Max(textBox.SelectionStart + textBox.SelectionLength, selectionEnd);
                     int selectionStart = Math.Min(textBox.SelectionStart, selectionEnd);
-                    while (--selectionStart > 0 && chars[selectionStart] != Constants.LineFeed && chars[selectionStart] != Constants.CarriageReturn) { }
+                    while (--selectionStart > 0
+                        && !chars[selectionStart].Equals(Constants.LineFeed)
+                        && !chars[selectionStart].Equals(Constants.CarriageReturn)) { }
                     textBox.Select(selectionStart, selectionEnd - selectionStart);
                 } else {
                     textBox.SelectAll();
@@ -230,15 +262,21 @@ namespace BetHelper {
                 string[] words = line.Split(Constants.Space);
                 StringBuilder builder = new StringBuilder();
                 foreach (string word in words) {
-                    if (builder.Length == 0) {
-                        builder.Append(word);
-                    } else if (TextRenderer.MeasureText(builder.ToString() + Constants.Space + word, font).Width <= width) {
-                        builder.Append(Constants.Space);
+                    if (builder.Length.Equals(0)) {
                         builder.Append(word);
                     } else {
-                        stringBuilder.AppendLine(builder.ToString());
-                        builder = new StringBuilder();
-                        builder.Append(word);
+                        string str = new StringBuilder()
+                            .Append(builder.ToString())
+                            .Append(Constants.Space)
+                            .Append(word)
+                            .ToString();
+                        if (TextRenderer.MeasureText(str, font).Width <= width) {
+                            builder.Append(Constants.Space)
+                                .Append(word);
+                        } else {
+                            stringBuilder.AppendLine(builder.ToString());
+                            builder = new StringBuilder(word);
+                        }
                     }
                 }
                 stringBuilder.AppendLine(builder.ToString());

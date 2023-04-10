@@ -21,17 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
 using System.Drawing;
+using System.Text;
 
 namespace BetHelper {
     public class ConfigFindForm : FindForm {
         public ConfigFindForm(Search search) : base(search) {
             Name = GetType().Name;
-            Text = Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionEditRemoteConfig + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionFind;
+            Text = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionEditRemoteConfig)
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionFind)
+                .ToString();
 
             searchHandler = new SearchHandler(Constants.ConfigSearchFileName);
             searchHandler.Saved += new EventHandler(UpdateFindComboBoxList);

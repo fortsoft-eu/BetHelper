@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
@@ -37,28 +38,70 @@ namespace BetHelper {
         [STAThread]
         public static void Main(string[] args) {
             if (Environment.OSVersion.Platform != PlatformID.Win32NT) {
-                MessageBox.Show(Properties.Resources.MessageApplicationCannotRun, GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                StringBuilder title = new StringBuilder()
+                    .Append(GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                MessageBox.Show(Properties.Resources.MessageApplicationCannotRun, title.ToString(), MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 return;
             }
+
             Settings settings = new Settings();
             if (!settings.DisableThemes) {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 settings.RenderWithVisualStyles = Application.RenderWithVisualStyles;
             }
+
             bool noSwitch = false;
             try {
-                if (args.Length.Equals(1) && (args[0].Equals(Constants.CommandLineSwitchUC) || args[0].Equals(Constants.CommandLineSwitchWC))) {
+                if (args.Length.Equals(1)
+                        && (args[0].Equals(Constants.CommandLineSwitchUC) || args[0].Equals(Constants.CommandLineSwitchWC))) {
+
                     Application.Run(new CalculatorForm(settings));
-                } else if (args.Length.Equals(1) && (args[0].Equals(Constants.CommandLineSwitchUD) || args[0].Equals(Constants.CommandLineSwitchWD))) {
-                    SingleInstance.Run(new EncDecForm(settings), GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionEncoderDecoder);
-                } else if (args.Length.Equals(2) && (args[0].Equals(Constants.CommandLineSwitchUD) || args[0].Equals(Constants.CommandLineSwitchWD))) {
+
+                } else if (args.Length.Equals(1)
+                        && (args[0].Equals(Constants.CommandLineSwitchUD) || args[0].Equals(Constants.CommandLineSwitchWD))) {
+
+                    StringBuilder title = new StringBuilder()
+                        .Append(GetTitle())
+                        .Append(Constants.Space)
+                        .Append(Constants.EnDash)
+                        .Append(Constants.Space)
+                        .Append(Properties.Resources.CaptionEncoderDecoder);
+                    SingleInstance.Run(new EncDecForm(settings), title.ToString());
+
+                } else if (args.Length.Equals(2)
+                        && (args[0].Equals(Constants.CommandLineSwitchUD) || args[0].Equals(Constants.CommandLineSwitchWD))) {
+
                     Application.Run(new EncDecForm(settings, args[1]));
-                } else if (args.Length.Equals(1) && (args[0].Equals(Constants.CommandLineSwitchUE) || args[0].Equals(Constants.CommandLineSwitchWE))) {
+
+                } else if (args.Length.Equals(1)
+                        && (args[0].Equals(Constants.CommandLineSwitchUE) || args[0].Equals(Constants.CommandLineSwitchWE))) {
+
                     settings.LoadConfig();
-                    SingleInstance.Run(new ConfigEditForm(settings), GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionEditRemoteConfig);
-                } else if (args.Length.Equals(1) && (args[0].Equals(Constants.CommandLineSwitchUL) || args[0].Equals(Constants.CommandLineSwitchWL))) {
-                    SingleInstance.Run(new LogViewerForm(settings), GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionLogViewer);
+                    StringBuilder title = new StringBuilder()
+                        .Append(GetTitle())
+                        .Append(Constants.Space)
+                        .Append(Constants.EnDash)
+                        .Append(Constants.Space)
+                        .Append(Properties.Resources.CaptionEditRemoteConfig);
+                    SingleInstance.Run(new ConfigEditForm(settings), title.ToString());
+
+                } else if (args.Length.Equals(1)
+                        && (args[0].Equals(Constants.CommandLineSwitchUL) || args[0].Equals(Constants.CommandLineSwitchWL))) {
+
+                    StringBuilder title = new StringBuilder()
+                        .Append(GetTitle())
+                        .Append(Constants.Space)
+                        .Append(Constants.EnDash)
+                        .Append(Constants.Space)
+                        .Append(Properties.Resources.CaptionLogViewer);
+                    SingleInstance.Run(new LogViewerForm(settings), title.ToString());
+
                 } else {
                     noSwitch = true;
                     settings.LoadConfig();
@@ -67,9 +110,16 @@ namespace BetHelper {
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-                MessageBox.Show(exception.Message, GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                StringBuilder title = new StringBuilder()
+                    .Append(GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                MessageBox.Show(exception.Message, title.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (noSwitch) {
-                    MessageBox.Show(Properties.Resources.MessageApplicationError, GetTitle(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(Properties.Resources.MessageApplicationError, GetTitle(), MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
             }
         }

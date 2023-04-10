@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System.Text;
 
 namespace BetHelper {
     public class WebInfo11 : WebInfo {
@@ -34,7 +35,11 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('seoAdWrapper')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('seoAdWrapper')[0].style.display = 'none';");
             }
-            browser.ExecuteScriptAsync("for (let i = 0; i < document.getElementsByClassName('adsenvelope').length; i++) document.getElementsByClassName('adsenvelope')[i].style.display = 'none';");
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("for (let i = 0; i < document.getElementsByClassName('adsenvelope').length; i++) ")
+                .Append("document.getElementsByClassName('adsenvelope')[i].style.display = 'none';")
+                .ToString());
+
             browser.ExecuteScriptAsync("document.body.classList.remove('background-add-on');");
             browser.ExecuteScriptAsync("document.querySelector('[id^=\"box-over-content\"]').remove();");
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('otPlaceholder')[0]", false)) {

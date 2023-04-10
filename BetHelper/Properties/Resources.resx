@@ -465,10 +465,7 @@
   <data name="MenuItemClearBrowserCacheInclUserData" xml:space="preserve">
     <value>Clear Browser Cache Incl. &amp;User Data...</value>
   </data>
-  <data name="MessageClearBrowserCacheInclUserDataLine1" xml:space="preserve">
-    <value>Are you sure you want to clear the internal Chromium browser cache?</value>
-  </data>
-  <data name="MessageClearBrowserCacheInclUserDataLine2" xml:space="preserve">
+  <data name="MessageClearBrowserCacheInclUserData" xml:space="preserve">
     <value>Also the user data and the local preferences of the internal Chromium browser will be lost.</value>
   </data>
   <data name="MessageApplicationWillBeRestarted" xml:space="preserve">
@@ -1008,5 +1005,11 @@
   </data>
   <data name="MessageTruncateFile" xml:space="preserve">
     <value>Are you sure you want to truncate the current log file?</value>
+  </data>
+  <data name="Bell" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Bell.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="MenuItemStopRinging" xml:space="preserve">
+    <value>&amp;Stop Ringing</value>
   </data>
 </root>

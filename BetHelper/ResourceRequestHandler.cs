@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,14 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
 
 namespace BetHelper {
     public class ResourceRequestHandler : CefSharp.Handler.ResourceRequestHandler {
-        protected override CefReturnValue OnBeforeResourceLoad(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IRequest request, IRequestCallback callback) {
+        protected override CefReturnValue OnBeforeResourceLoad(
+                IWebBrowser chromiumWebBrowser,
+                IBrowser browser,
+                IFrame frame,
+                IRequest request,
+                IRequestCallback callback) {
+
             request.Url = string.Empty;
             request.Dispose();
             return CefReturnValue.Cancel;

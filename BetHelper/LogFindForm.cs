@@ -21,17 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
 using System.Drawing;
+using System.Text;
 
 namespace BetHelper {
     public class LogFindForm : FindForm {
         public LogFindForm(Search search) : base(search) {
             Name = GetType().Name;
-            Text = Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionLogViewer + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionFind;
+            Text = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionLogViewer)
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionFind)
+                .ToString();
 
             searchHandler = new SearchHandler(Constants.LogSearchFileName);
             searchHandler.Saved += new EventHandler(UpdateFindComboBoxList);

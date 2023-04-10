@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.6
+ * Version 1.1.0.0
  */
 
 using System;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
@@ -48,7 +49,11 @@ namespace BetHelper {
                 ProgressBar.Value++;
                 ProgressBar.Invalidate();
             }
-            LabelProgress.Text = (ProgressBar.Value * 100 / ProgressBar.Maximum).ToString() + Constants.Space + Constants.Percent;
+            LabelProgress.Text = new StringBuilder()
+                .Append(ProgressBar.Value * 100 / ProgressBar.Maximum)
+                .Append(Constants.Space)
+                .Append(Constants.Percent)
+                .ToString();
             LabelProgress.Invalidate();
             if (temp > Constants.ProgressBarFormInterval * 2) {
                 timer.Interval = temp / 2;
@@ -84,7 +89,11 @@ namespace BetHelper {
                     timer.Interval = Constants.ProgressBarFormInterval;
                     ProgressBar.Value = pValue;
                     ProgressBar.Invalidate();
-                    LabelProgress.Text = (pValue * 100 / ProgressBar.Maximum).ToString() + Constants.Space + Constants.Percent;
+                    LabelProgress.Text = new StringBuilder()
+                        .Append(pValue * 100 / ProgressBar.Maximum)
+                        .Append(Constants.Space)
+                        .Append(Constants.Percent)
+                        .ToString();
                     LabelProgress.Invalidate();
                 }
             }

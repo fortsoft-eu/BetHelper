@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
@@ -67,14 +67,20 @@ namespace BetHelper {
         private async void BuildContextMenuAsync() {
             await Task.Run(new Action(() => {
                 ContextMenu contextMenu = new ContextMenu();
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo, new EventHandler((sender, e) => textBox.Undo())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo,
+                    new EventHandler((sender, e) => textBox.Undo())));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut, new EventHandler((sender, e) => textBox.Cut())));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler((sender, e) => textBox.Copy())));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste, new EventHandler((sender, e) => textBox.Paste())));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete, new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysDelete))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut,
+                    new EventHandler((sender, e) => textBox.Cut())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                    new EventHandler((sender, e) => textBox.Copy())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste,
+                    new EventHandler((sender, e) => textBox.Paste())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete,
+                    new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysDelete))));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler((sender, e) => textBox.SelectAll())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                    new EventHandler((sender, e) => textBox.SelectAll())));
                 contextMenu.Popup += new EventHandler((sender, e) => {
                     if (!textBox.Focused) {
                         textBox.Focus();
@@ -94,14 +100,20 @@ namespace BetHelper {
                     }
                 });
                 textBox.ContextMenu = contextMenu;
-            })).ContinueWith(new Action<Task>(task => {
+            }))
+            .ContinueWith(new Action<Task>(task => {
                 ContextMenu contextMenu = new ContextMenu();
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyAsText, new EventHandler(CopyAsText)));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemRemoveSelected, new EventHandler(DeleteSelected)));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyAsText,
+                    new EventHandler(CopyAsText)));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemRemoveSelected,
+                    new EventHandler(DeleteSelected)));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectItem, new EventHandler(ToggleSelect)));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemInvertSelection, new EventHandler(InvertSelection)));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler(SelectAll)));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectItem,
+                    new EventHandler(ToggleSelect)));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemInvertSelection,
+                    new EventHandler(InvertSelection)));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                    new EventHandler(SelectAll)));
                 contextMenu.Popup += new EventHandler((sender, e) => {
                     contextMenu.MenuItems[0].Enabled = listBox.SelectedIndex >= 0;
                     contextMenu.MenuItems[1].Enabled = listBox.SelectedIndex >= 0;
@@ -109,7 +121,9 @@ namespace BetHelper {
                     contextMenu.MenuItems[4].Enabled = listBox.Items.Count > 0;
                     contextMenu.MenuItems[5].Enabled = listBox.Items.Count > listBox.SelectedItems.Count;
                     if (clickedIndex >= 0) {
-                        contextMenu.MenuItems[3].Text = listBox.GetSelected(clickedIndex) ? Properties.Resources.MenuItemDeselectItem : Properties.Resources.MenuItemSelectItem;
+                        contextMenu.MenuItems[3].Text = listBox.GetSelected(clickedIndex)
+                            ? Properties.Resources.MenuItemDeselectItem
+                            : Properties.Resources.MenuItemSelectItem;
                     } else {
                         contextMenu.MenuItems[3].Text = Properties.Resources.MenuItemSelectItem;
                     }
@@ -167,18 +181,18 @@ namespace BetHelper {
         private void OnFormClosing(object sender, FormClosingEventArgs e) => textBoxClicksTimer.Dispose();
 
         private void OnKeyDown(object sender, KeyEventArgs e) {
-            if (e.Control && e.KeyCode == Keys.A) {
+            if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
                 if (sender is TextBox) {
                     ((TextBox)sender).SelectAll();
                 } else if (sender is ListBox || sender is Button && ((Button)sender).Name.Equals(Constants.ButtonRemoveName)) {
                     SelectAll(sender, e);
                 }
-            } else if (e.Control && e.KeyCode == Keys.C) {
+            } else if (e.Control && e.KeyCode.Equals(Keys.C)) {
                 if (sender is ListBox || sender is Button && ((Button)sender).Name.Equals(Constants.ButtonRemoveName)) {
                     CopyAsText(sender, e);
                 }
-            } else if (e.KeyCode == Keys.Delete) {
+            } else if (e.KeyCode.Equals(Keys.Delete)) {
                 if (sender is ListBox || sender is Button && ((Button)sender).Name.Equals(Constants.ButtonRemoveName)) {
                     DeleteSelected(sender, e);
                 }
@@ -186,13 +200,13 @@ namespace BetHelper {
         }
 
         private void OnListBoxMouseDown(object sender, MouseEventArgs e) {
-            if (e.Button == MouseButtons.Right) {
+            if (e.Button.Equals(MouseButtons.Right)) {
                 clickedIndex = listBox.IndexFromPoint(e.Location);
             }
         }
 
         private void OnTextBoxMouseDown(object sender, MouseEventArgs e) {
-            if (e.Button != MouseButtons.Left) {
+            if (!e.Button.Equals(MouseButtons.Left)) {
                 textBoxClicks = 0;
                 return;
             }
@@ -200,25 +214,34 @@ namespace BetHelper {
             textBoxClicksTimer.Stop();
             if (textBox.SelectionLength > 0) {
                 textBoxClicks = 2;
-            } else if (textBoxClicks == 0 || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
+            } else if (textBoxClicks.Equals(0) || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
                 textBoxClicks++;
             } else {
                 textBoxClicks = 0;
             }
             location = e.Location;
-            if (textBoxClicks == 3) {
+            if (textBoxClicks.Equals(3)) {
                 textBoxClicks = 0;
-                NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Convert.ToUInt32(Cursor.Position.X), Convert.ToUInt32(Cursor.Position.Y), 0, 0);
+                NativeMethods.MouseEvent(
+                    Constants.MOUSEEVENTF_LEFTUP,
+                    Convert.ToUInt32(Cursor.Position.X),
+                    Convert.ToUInt32(Cursor.Position.Y),
+                    0,
+                    0);
                 Application.DoEvents();
                 if (textBox.Multiline) {
                     char[] chars = textBox.Text.ToCharArray();
-                    int selectionEnd = Math.Min(Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart), Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
+                    int selectionEnd = Math.Min(
+                        Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart),
+                        Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
                     if (selectionEnd < 0) {
                         selectionEnd = textBox.TextLength;
                     }
                     selectionEnd = Math.Max(textBox.SelectionStart + textBox.SelectionLength, selectionEnd);
                     int selectionStart = Math.Min(textBox.SelectionStart, selectionEnd);
-                    while (--selectionStart > 0 && chars[selectionStart] != Constants.LineFeed && chars[selectionStart] != Constants.CarriageReturn) { }
+                    while (--selectionStart > 0
+                        && !chars[selectionStart].Equals(Constants.LineFeed)
+                        && !chars[selectionStart].Equals(Constants.CarriageReturn)) { }
                     textBox.Select(selectionStart, selectionEnd - selectionStart);
                 } else {
                     textBox.SelectAll();

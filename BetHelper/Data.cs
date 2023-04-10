@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -45,7 +45,19 @@ namespace BetHelper {
         public string notes;
         public Tip[] tips;
 
-        public Data(decimal balance, decimal[] balances, decimal[] trustDegrees, Dictionary<DateTime, decimal> movements, string notes, Tip[] tips, int sortColumnTips, SortOrder sortOrderTips, Service[] services, int sortColumnServices, SortOrder sortOrderServices) {
+        public Data(
+                decimal balance,
+                decimal[] balances,
+                decimal[] trustDegrees,
+                Dictionary<DateTime, decimal> movements,
+                string notes,
+                Tip[] tips,
+                int sortColumnTips,
+                SortOrder sortOrderTips,
+                Service[] services,
+                int sortColumnServices,
+                SortOrder sortOrderServices) {
+
             this.balance = balance;
             this.balances = balances;
             this.movements = movements;

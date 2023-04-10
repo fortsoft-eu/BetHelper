@@ -1,4 +1,30 @@
-﻿namespace BetHelper {
+﻿/**
+ * This is open-source software licensed under the terms of the MIT License.
+ *
+ * Copyright (c) 2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ **
+ * Version 1.1.0.0
+ */
+
+namespace BetHelper {
     partial class TipForm {
         /// <summary>
         /// Required designer variable.
@@ -56,7 +82,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxBookmaker.Location = new System.Drawing.Point(271, 181);
             this.textBoxBookmaker.Name = "textBoxBookmaker";
-            this.textBoxBookmaker.Size = new System.Drawing.Size(125, 20);
+            this.textBoxBookmaker.Size = new System.Drawing.Size(121, 20);
             this.textBoxBookmaker.TabIndex = 6;
             this.textBoxBookmaker.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxBookmaker.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
@@ -111,14 +137,14 @@
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(283, 161);
+            this.tabControl.Size = new System.Drawing.Size(279, 161);
             this.tabControl.TabIndex = 2;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.OnSelectedIndexChanged);
             // 
             // buttonAddGame
             // 
             this.buttonAddGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddGame.Location = new System.Drawing.Point(301, 35);
+            this.buttonAddGame.Location = new System.Drawing.Point(297, 35);
             this.buttonAddGame.Name = "buttonAddGame";
             this.buttonAddGame.Size = new System.Drawing.Size(95, 23);
             this.buttonAddGame.TabIndex = 0;
@@ -129,7 +155,7 @@
             // buttonRemoveGame
             // 
             this.buttonRemoveGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonRemoveGame.Location = new System.Drawing.Point(301, 139);
+            this.buttonRemoveGame.Location = new System.Drawing.Point(297, 139);
             this.buttonRemoveGame.Name = "buttonRemoveGame";
             this.buttonRemoveGame.Size = new System.Drawing.Size(95, 23);
             this.buttonRemoveGame.TabIndex = 1;
@@ -140,7 +166,7 @@
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Location = new System.Drawing.Point(240, 233);
+            this.buttonSave.Location = new System.Drawing.Point(236, 233);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
             this.buttonSave.TabIndex = 13;
@@ -152,7 +178,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(321, 233);
+            this.buttonCancel.Location = new System.Drawing.Point(317, 233);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 14;
@@ -195,8 +221,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxService.Location = new System.Drawing.Point(271, 207);
             this.textBoxService.Name = "textBoxService";
-            this.textBoxService.Size = new System.Drawing.Size(125, 20);
+            this.textBoxService.Size = new System.Drawing.Size(121, 20);
             this.textBoxService.TabIndex = 10;
+            this.textBoxService.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            this.textBoxService.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
             // 
             // TipForm
             // 
@@ -204,7 +232,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(408, 268);
+            this.ClientSize = new System.Drawing.Size(404, 268);
             this.Controls.Add(this.textBoxService);
             this.Controls.Add(this.labelService);
             this.Controls.Add(this.comboBoxStatus);
@@ -223,7 +251,7 @@
             this.HelpButton = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(424, 307);
+            this.MinimumSize = new System.Drawing.Size(380, 307);
             this.Name = "TipForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

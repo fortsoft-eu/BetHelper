@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -29,8 +29,11 @@ using System.Windows.Forms;
 
 namespace BetHelper {
     public class MatchControlEventArgs : EventArgs {
+
         public string GameName { get; private set; }
+
         public int Ordinal { get; private set; }
+
         public TabPage TabPage { get; private set; }
 
         public MatchControlEventArgs(string gameName, int ordinal, TabPage tabPage) {

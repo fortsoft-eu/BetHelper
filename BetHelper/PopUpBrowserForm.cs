@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -50,6 +50,8 @@ namespace BetHelper {
         public PopUpBrowserForm(WebInfo webInfo, Settings settings, PopUpEventArgs popUpEventArgs) {
             this.webInfo = webInfo;
             this.settings = settings;
+            MainForm mainForm = (MainForm)webInfo.Parent.Form;
+
             browserConsoleMessage = string.Empty;
 
             Icon = Properties.Resources.Executable;
@@ -71,16 +73,28 @@ namespace BetHelper {
             closeTimer = new System.Timers.Timer();
             closeTimer.Interval = 1500;
             closeTimer.Elapsed += new System.Timers.ElapsedEventHandler(SafeClose);
-            ((MainForm)webInfo.Parent.Form).FormClosed += new FormClosedEventHandler(SafeClose);
+            mainForm.FormClosed += new FormClosedEventHandler(SafeClose);
 
-            ((MainForm)webInfo.Parent.Form).ShortcutManager.AddForm(this);
+            mainForm.ShortcutManager.AddForm(this);
 
             InitializeComponent();
             SuspendLayout();
 
-            statusStripHandler = new StatusStripHandler(statusStrip, StatusStripHandler.DisplayMode.Standard, settings, ((MainForm)webInfo.Parent.Form).ExtBrowsHandler);
-            ((MainForm)webInfo.Parent.Form).BrowserCacheManager.CacheSizeComputed += new EventHandler<BrowserCacheEventArgs>((sender, e) => statusStripHandler.SetDataSize(e.BrowserCacheSize));
-            popUpFrameHandler = new PopUpFrameHandler(new ChromiumWebBrowser(popUpEventArgs.TargetUrl), new FrameHandler(), new LoadHandler(), settings);
+            statusStripHandler = new StatusStripHandler(
+                statusStrip,
+                StatusStripHandler.DisplayMode.Standard,
+                settings,
+                mainForm.ExtBrowsHandler);
+
+            mainForm.BrowserCacheManager.CacheSizeComputed += new EventHandler<BrowserCacheEventArgs>((sender, e) =>
+                statusStripHandler.SetDataSize(e.BrowserCacheSize));
+
+            popUpFrameHandler = new PopUpFrameHandler(
+                new ChromiumWebBrowser(popUpEventArgs.TargetUrl),
+                new FrameHandler(),
+                new LoadHandler(),
+                settings);
+
             Browser = popUpFrameHandler.Browser;
             popUpFrameHandler.Close += new EventHandler(OnPopUpFrameHandlerClose);
             FindHandler findHandler = new FindHandler();
@@ -89,14 +103,24 @@ namespace BetHelper {
             });
             Browser.FindHandler = findHandler;
             RequestHandler requestHandler = new RequestHandler() { WebInfo = webInfo };
-            requestHandler.Canceled += new EventHandler((sender, e) => ((MainForm)webInfo.Parent.Form).StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageActionCanceled));
+            requestHandler.Canceled += new EventHandler((sender, e) => mainForm.StatusStripHandler.SetMessage(
+                StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageActionCanceled));
+
             Browser.RequestHandler = requestHandler;
-            if (webInfo.HandlePopUps || webInfo.PopUpLeft != 0 || webInfo.PopUpTop != 0 || webInfo.PopUpWidth != 0 || webInfo.PopUpHeight != 0) {
+
+            if (webInfo.HandlePopUps
+                    || !webInfo.PopUpLeft.Equals(0)
+                    || !webInfo.PopUpTop.Equals(0)
+                    || !webInfo.PopUpWidth.Equals(0)
+                    || !webInfo.PopUpHeight.Equals(0)) {
+
                 LifeSpanHandlerPopUp lifeSpanHandler = new LifeSpanHandlerPopUp();
                 lifeSpanHandler.BrowserPopUp += new EventHandler<PopUpEventArgs>((sender, popUpArgs) => {
                     if (!webInfo.CanNavigate(popUpArgs.TargetUrl)) {
-                        statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageActionCanceled);
-                        ((MainForm)webInfo.Parent.Form).StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageActionCanceled);
+                        statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA,
+                            Properties.Resources.MessageActionCanceled);
+                        mainForm.StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA,
+                            Properties.Resources.MessageActionCanceled);
                         return;
                     }
                     bool navigateToMainWindow = false;
@@ -150,7 +174,7 @@ namespace BetHelper {
                     } else {
                         nLeft = popUpEventArgs.Location.X;
                     }
-                } else if (popUpEventArgs.Location.X == 0) {
+                } else if (popUpEventArgs.Location.X.Equals(0)) {
                     nLeft = Left;
                 } else {
                     nLeft = 0;
@@ -162,7 +186,7 @@ namespace BetHelper {
                     } else {
                         nTop = popUpEventArgs.Location.Y;
                     }
-                } else if (popUpEventArgs.Location.Y == 0) {
+                } else if (popUpEventArgs.Location.Y.Equals(0)) {
                     nTop = Top;
                 } else {
                     nTop = 0;
@@ -175,7 +199,7 @@ namespace BetHelper {
                     } else {
                         nWidth = popUpEventArgs.Size.Width;
                     }
-                } else if (popUpEventArgs.Size.Width == 0) {
+                } else if (popUpEventArgs.Size.Width.Equals(0)) {
                     nWidth = Width;
                 } else {
                     nWidth = acceptedMax.Width;
@@ -187,7 +211,7 @@ namespace BetHelper {
                     } else {
                         nHeight = popUpEventArgs.Size.Height;
                     }
-                } else if (popUpEventArgs.Size.Height == 0) {
+                } else if (popUpEventArgs.Size.Height.Equals(0)) {
                     nHeight = Height;
                 } else {
                     nHeight = acceptedMax.Height;
@@ -211,7 +235,6 @@ namespace BetHelper {
         }
 
         private void PopUpBrowser() {
-            MainForm mainForm = (MainForm)webInfo.Parent.Form;
             popUpEventArgs.Location = new Point(webInfo.PopUpLeft, webInfo.PopUpTop);
             popUpEventArgs.Size = new Size(webInfo.PopUpWidth, webInfo.PopUpHeight);
             PopUpBrowserForm popUpBrowserForm = new PopUpBrowserForm(webInfo, settings, popUpEventArgs);
@@ -299,11 +322,14 @@ namespace BetHelper {
 
         private void OnBrowserConsoleMessage(object sender, ConsoleMessageEventArgs e) {
             if (settings.ShowConsoleMessages) {
-                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, string.Format(Constants.BrowserConsoleMessageFormat1, e.Line, e.Source, e.Message));
+                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB,
+                    string.Format(Constants.BrowserConsoleMessageFormat1, e.Line, e.Source, e.Message));
             }
         }
 
-        private void OnBrowserStatusMessage(object sender, StatusMessageEventArgs e) => statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Value);
+        private void OnBrowserStatusMessage(object sender, StatusMessageEventArgs e) {
+            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Value);
+        }
 
         private void OnBrowserTitleChanged(object sender, TitleChangedEventArgs e) {
             try {

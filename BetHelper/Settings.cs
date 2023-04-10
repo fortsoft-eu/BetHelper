@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2009-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.6
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
@@ -198,7 +198,9 @@ namespace BetHelper {
             numberFormatHandler = new NumberFormatHandler();
             persistentSettings = new PersistentSettings();
             try {
-                string telegramAppDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Constants.TelegramDesktopApplicationName);
+                string telegramAppDirectory = Path.Combine(
+                    Environment.GetFolderPath(
+                        Environment.SpecialFolder.ApplicationData), Constants.TelegramDesktopApplicationName);
                 if (File.Exists(Path.Combine(telegramAppDirectory, Constants.TelegramDesktopFileName))) {
                     TelegramAppDirectory = telegramAppDirectory;
                 }
@@ -764,39 +766,39 @@ namespace BetHelper {
         /// Compacts some boolean settings into an integer value.
         /// </summary>
         private int BitSettingsToInt() {
-            StringBuilder stringBuilder = new StringBuilder(32);
-            stringBuilder.Append(RightPaneCollapsed ? 1 : 0);
-            stringBuilder.Append(RightPaneWidth ? 1 : 0);
-            stringBuilder.Append(TabsBoldFont ? 1 : 0);
-            stringBuilder.Append(TabsBackgroundColor ? 1 : 0);
-            stringBuilder.Append(UseDecimalPrefix ? 1 : 0);
-            stringBuilder.Append(EnableCache ? 1 : 0);
-            stringBuilder.Append(PersistSessionCookies ? 1 : 0);
-            stringBuilder.Append(PersistUserPreferences ? 1 : 0);
-            stringBuilder.Append(EnablePrintPreview ? 1 : 0);
-            stringBuilder.Append(EnableDrmContent ? 1 : 0);
-            stringBuilder.Append(EnableAudio ? 1 : 0);
-            stringBuilder.Append(OutlineSearchResults ? 1 : 0);
-            stringBuilder.Append(LogForeignUrls ? 1 : 0);
-            stringBuilder.Append(LogPopUpFrameHandler ? 1 : 0);
-            stringBuilder.Append(ShowLoadErrors ? 1 : 0);
-            stringBuilder.Append(LogLoadErrors ? 1 : 0);
-            stringBuilder.Append(ShowConsoleMessages ? 1 : 0);
-            stringBuilder.Append(LogConsoleMessages ? 1 : 0);
-            stringBuilder.Append(EnableLogPreloadLimit ? 1 : 0);
-            stringBuilder.Append(RestrictForLargeLogs ? 1 : 0);
-            stringBuilder.Append(AutoAdjustRightPaneWidth ? 1 : 0);
-            stringBuilder.Append(AutoLogInAfterInitialLoad ? 1 : 0);
-            stringBuilder.Append(DisplayPromptBeforeClosing ? 1 : 0);
-            stringBuilder.Append(SortBookmarks ? 1 : 0);
-            stringBuilder.Append(TruncateBookmarkTitles ? 1 : 0);
-            stringBuilder.Append(BlockRequestsToForeignUrls ? 1 : 0);
-            stringBuilder.Append(KeepAnEyeOnTheClientsIP ? 1 : 0);
-            stringBuilder.Append(IgnoreCertificateErrors ? 1 : 0);
-            stringBuilder.Append(PrintSoftMargins ? 1 : 0);
-            stringBuilder.Append(CheckForUpdates ? 1 : 0);
-            stringBuilder.Append(StatusBarNotifOnly ? 1 : 0);
-            stringBuilder.Append(DisableThemes ? 1 : 0);
+            StringBuilder stringBuilder = new StringBuilder(32)
+                .Append(RightPaneCollapsed ? 1 : 0)
+                .Append(RightPaneWidth ? 1 : 0)
+                .Append(TabsBoldFont ? 1 : 0)
+                .Append(TabsBackgroundColor ? 1 : 0)
+                .Append(UseDecimalPrefix ? 1 : 0)
+                .Append(EnableCache ? 1 : 0)
+                .Append(PersistSessionCookies ? 1 : 0)
+                .Append(PersistUserPreferences ? 1 : 0)
+                .Append(EnablePrintPreview ? 1 : 0)
+                .Append(EnableDrmContent ? 1 : 0)
+                .Append(EnableAudio ? 1 : 0)
+                .Append(OutlineSearchResults ? 1 : 0)
+                .Append(LogForeignUrls ? 1 : 0)
+                .Append(LogPopUpFrameHandler ? 1 : 0)
+                .Append(ShowLoadErrors ? 1 : 0)
+                .Append(LogLoadErrors ? 1 : 0)
+                .Append(ShowConsoleMessages ? 1 : 0)
+                .Append(LogConsoleMessages ? 1 : 0)
+                .Append(EnableLogPreloadLimit ? 1 : 0)
+                .Append(RestrictForLargeLogs ? 1 : 0)
+                .Append(AutoAdjustRightPaneWidth ? 1 : 0)
+                .Append(AutoLogInAfterInitialLoad ? 1 : 0)
+                .Append(DisplayPromptBeforeClosing ? 1 : 0)
+                .Append(SortBookmarks ? 1 : 0)
+                .Append(TruncateBookmarkTitles ? 1 : 0)
+                .Append(BlockRequestsToForeignUrls ? 1 : 0)
+                .Append(KeepAnEyeOnTheClientsIP ? 1 : 0)
+                .Append(IgnoreCertificateErrors ? 1 : 0)
+                .Append(PrintSoftMargins ? 1 : 0)
+                .Append(CheckForUpdates ? 1 : 0)
+                .Append(StatusBarNotifOnly ? 1 : 0)
+                .Append(DisableThemes ? 1 : 0);
             return Convert.ToInt32(stringBuilder.ToString(), 2);
         }
 
@@ -831,7 +833,9 @@ namespace BetHelper {
         private void IntToWordSettings1(int i) {
             ushort[] values = IntToUShortArray(i);
             Border3DStyle = (Border3DStyle)values[0];
-            InspectOverlayOpacity = values[1] > InspectOverlayOpacityMax ? InspectOverlayOpacityMax : values[1] < InspectOverlayOpacityMin ? InspectOverlayOpacityMin : values[1];
+            InspectOverlayOpacity = values[1] > InspectOverlayOpacityMax
+                ? InspectOverlayOpacityMax
+                : values[1] < InspectOverlayOpacityMin ? InspectOverlayOpacityMin : values[1];
         }
 
         /// <summary>
@@ -850,8 +854,12 @@ namespace BetHelper {
         /// </summary>
         private void IntToWordSettings2(int i) {
             ushort[] values = IntToUShortArray(i);
-            LogPreloadLimit = values[0] > LogPreloadLimitMax ? LogPreloadLimitMax : values[0] < LogPreloadLimitMin ? LogPreloadLimitMin : values[0];
-            LargeLogsLimit = values[1] > LargeLogsLimitMax ? LargeLogsLimitMax : values[1] < LargeLogsLimitMin ? LargeLogsLimitMin : values[1];
+            LogPreloadLimit = values[0] > LogPreloadLimitMax
+                ? LogPreloadLimitMax
+                : values[0] < LogPreloadLimitMin ? LogPreloadLimitMin : values[0];
+            LargeLogsLimit = values[1] > LargeLogsLimitMax
+                ? LargeLogsLimitMax
+                : values[1] < LargeLogsLimitMin ? LargeLogsLimitMin : values[1];
         }
 
         /// <summary>
@@ -908,7 +916,7 @@ namespace BetHelper {
                     Environment.Exit(0);
                 } else {
                     ConfigHashForm configHashForm = new ConfigHashForm(this);
-                    if (configHashForm.ShowDialog() == DialogResult.OK) {
+                    if (configHashForm.ShowDialog().Equals(DialogResult.OK)) {
                         configHandler = new ConfigHandler(this);
                     } else {
                         Environment.Exit(0);
@@ -920,7 +928,13 @@ namespace BetHelper {
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
-                    MessageBox.Show(exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    StringBuilder title = new StringBuilder()
+                        .Append(Program.GetTitle())
+                        .Append(Constants.Space)
+                        .Append(Constants.EnDash)
+                        .Append(Constants.Space)
+                        .Append(Properties.Resources.CaptionError);
+                    MessageBox.Show(exception.Message, title.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Environment.Exit(0);
                 }
             }
@@ -991,8 +1005,18 @@ namespace BetHelper {
         /// <returns>An integer value to store in the Windows registry.</returns>
         public static int UShortArrayToInt(ushort[] values) {
             byte[] bytes = new byte[4];
-            Array.Copy(BitConverter.GetBytes(values[0]), 0, bytes, BitConverter.IsLittleEndian ? 0 : 2, 2);
-            Array.Copy(BitConverter.GetBytes(values[1]), 0, bytes, BitConverter.IsLittleEndian ? 2 : 0, 2);
+            Array.Copy(
+                BitConverter.GetBytes(values[0]),
+                0,
+                bytes,
+                BitConverter.IsLittleEndian ? 0 : 2,
+                2);
+            Array.Copy(
+                BitConverter.GetBytes(values[1]),
+                0,
+                bytes,
+                BitConverter.IsLittleEndian ? 2 : 0,
+                2);
             return BitConverter.ToInt32(bytes, 0);
         }
 
@@ -1003,7 +1027,10 @@ namespace BetHelper {
         /// <param name="val">An integer value stored in the registry.</param>
         public static ushort[] IntToUShortArray(int val) {
             byte[] bytes = BitConverter.GetBytes(val);
-            return new ushort[] { BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 0 : 2), BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 2 : 0) };
+            return new ushort[] {
+                BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 0 : 2),
+                BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 2 : 0)
+            };
         }
     }
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -38,6 +38,7 @@ using System.Windows.Forms;
 namespace BetHelper {
     public class ConfigHandler {
         private Settings settings;
+
         public ConfigHandler(Settings settings) {
             this.settings = settings;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
@@ -50,7 +51,9 @@ namespace BetHelper {
             symmetricAlgorithm.Key = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(password));
             symmetricAlgorithm.IV = new byte[16];
             using (MemoryStream memoryStream = new MemoryStream()) {
-                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, symmetricAlgorithm.CreateDecryptor(), CryptoStreamMode.Write)) {
+                using (CryptoStream cryptoStream = new CryptoStream(
+                        memoryStream, symmetricAlgorithm.CreateDecryptor(), CryptoStreamMode.Write)) {
+
                     cryptoStream.Write(bytes, 0, bytes.Length);
                     cryptoStream.FlushFinalBlock();
                     bytes = memoryStream.ToArray();
@@ -75,7 +78,9 @@ namespace BetHelper {
             symmetricAlgorithm.Key = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(password));
             symmetricAlgorithm.IV = new byte[16];
             using (MemoryStream memoryStream = new MemoryStream()) {
-                using (CryptoStream cryptoStream = new CryptoStream(memoryStream, symmetricAlgorithm.CreateEncryptor(), CryptoStreamMode.Write)) {
+                using (CryptoStream cryptoStream = new CryptoStream(
+                        memoryStream, symmetricAlgorithm.CreateEncryptor(), CryptoStreamMode.Write)) {
+
                     cryptoStream.Write(bytes, 0, bytes.Length);
                     cryptoStream.Write(hash, 0, hash.Length);
                     cryptoStream.FlushFinalBlock();

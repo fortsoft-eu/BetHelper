@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
@@ -48,7 +49,8 @@ namespace BetHelper {
         public CalculatorHandler(TabControl tabControl) {
             this.tabControl = tabControl;
             browsers = new List<ChromiumWebBrowser>(2);
-            uri = new Uri(Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath), Constants.CalculatorDirectoryName, Constants.CalculatorFileName03));
+            uri = new Uri(Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath),
+                Constants.CalculatorDirectoryName, Constants.CalculatorFileName03));
             AddNewTab();
         }
 
@@ -93,15 +95,23 @@ namespace BetHelper {
                         return;
                     }
                     int splitterDistance = splitContainer.Height / 2 - 2;
-                    splitContainer.SplitterDistance = splitterDistance < splitContainer.Panel1MinSize ? splitContainer.Panel1MinSize : splitterDistance;
+                    splitContainer.SplitterDistance = splitterDistance < splitContainer.Panel1MinSize
+                    ? splitContainer.Panel1MinSize
+                    : splitterDistance;
                 });
                 tabPage.Controls.Add(splitContainer);
                 tabControl.TabPages.Add(tabPage);
                 if (browsers.Count > 2) {
-                    tabPage.Text += Constants.Space.ToString() + Constants.OpeningBracket.ToString() + (browsers.Count / 2).ToString() + Constants.ClosingBracket.ToString();
+                    tabPage.Text += new StringBuilder()
+                        .Append(Constants.Space)
+                        .Append(Constants.OpeningBracket)
+                        .Append(browsers.Count / 2)
+                        .Append(Constants.ClosingBracket)
+                        .ToString();
                     tabControl.SelectedIndex = tabControl.TabCount - 1;
                 }
-                TabAdded?.Invoke(this, new TabAddedEventArgs(tabPage, browsers.Count / 2, browsers.Count / 2 == Constants.CalculatorTabsMaxCounts));
+                TabAdded?.Invoke(this,
+                    new TabAddedEventArgs(tabPage, browsers.Count / 2, browsers.Count / 2 == Constants.CalculatorTabsMaxCounts));
             }
         }
 

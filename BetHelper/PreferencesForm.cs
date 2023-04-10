@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
@@ -33,6 +33,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -64,7 +65,10 @@ namespace BetHelper {
             openFileDialog.DefaultExt = Constants.ExtensionExe;
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
 
-            colors = typeof(Color).GetProperties().Where(new Func<PropertyInfo, bool>(propertyInfo => propertyInfo.PropertyType == typeof(Color))).Select(new Func<PropertyInfo, object>(propertyInfo => propertyInfo.GetValue(null)));
+            colors = typeof(Color)
+                .GetProperties()
+                .Where(new Func<PropertyInfo, bool>(propertyInfo => propertyInfo.PropertyType == typeof(Color)))
+                .Select(new Func<PropertyInfo, object>(propertyInfo => propertyInfo.GetValue(null)));
 
             persistWindowState = new PersistWindowState();
             persistWindowState.DisableSaveSize = true;
@@ -76,7 +80,10 @@ namespace BetHelper {
             SuspendLayout();
             BuildContextMenuAsync();
 
-            comboBoxUnitPrefix.Items.AddRange(new string[] { Constants.UnitPrefixBinary, Constants.UnitPrefixDecimal });
+            comboBoxUnitPrefix.Items.AddRange(new string[] {
+                Constants.UnitPrefixBinary,
+                Constants.UnitPrefixDecimal
+            });
 
             pictureBoxWarning.Image = Properties.Resources.Warning.ToBitmap();
 
@@ -253,7 +260,11 @@ namespace BetHelper {
                 labelKiB.Enabled = checkBoxEnableLogPreloadLimit.Checked;
                 numericUpDownLargeLogsLimit.Enabled = checkBoxRestrictSomeFeatures.Checked;
                 labelMiB.Enabled = checkBoxRestrictSomeFeatures.Checked;
-                tabControl.SelectedIndex = settings.ActivePreferencesPanel < 0 || settings.ActivePreferencesPanel > tabControl.TabCount - 1 ? 0 : settings.ActivePreferencesPanel;
+                if (settings.ActivePreferencesPanel < 0 || settings.ActivePreferencesPanel > tabControl.TabCount - 1) {
+                    tabControl.SelectedIndex = 0;
+                } else {
+                    tabControl.SelectedIndex = settings.ActivePreferencesPanel;
+                }
                 SetWarning();
                 ResumeLayout(false);
                 PerformLayout();
@@ -265,14 +276,36 @@ namespace BetHelper {
         private async void BuildContextMenuAsync() {
             await Task.Run(new Action(() => {
                 ContextMenu contextMenu = new ContextMenu();
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo, new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysCtrlZ))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo,
+                    new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysCtrlZ))));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut, new EventHandler((sender, e) => NativeMethods.PostMessage(((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_CUT, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler((sender, e) => NativeMethods.PostMessage(((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_COPY, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste, new EventHandler((sender, e) => NativeMethods.PostMessage(((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_PASTE, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete, new EventHandler((sender, e) => NativeMethods.PostMessage(((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_CLEAR, IntPtr.Zero, IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_CUT,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_COPY,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_PASTE,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_CLEAR,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler((sender, e) => ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                    new EventHandler((sender, e) => ((ComboBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
                 contextMenu.Popup += new EventHandler((sender, e) => {
                     ComboBox comboBox = (ComboBox)contextMenu.SourceControl;
                     if (!comboBox.Focused) {
@@ -293,16 +326,39 @@ namespace BetHelper {
                 });
                 comboBoxUserAgent.ContextMenu = contextMenu;
                 comboBoxAcceptLanguage.ContextMenu = contextMenu;
-            })).ContinueWith(new Action<Task>(task => {
+            }))
+            .ContinueWith(new Action<Task>(task => {
                 ContextMenu contextMenu = new ContextMenu();
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Undo())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Undo())));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut, new EventHandler((sender, e) => NativeMethods.PostMessage(((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_CUT, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler((sender, e) => NativeMethods.PostMessage(((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_COPY, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste, new EventHandler((sender, e) => NativeMethods.PostMessage(((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_PASTE, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete, new EventHandler((sender, e) => NativeMethods.PostMessage(((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_CLEAR, IntPtr.Zero, IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_CUT,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_COPY,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_PASTE,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_CLEAR,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
                 contextMenu.Popup += new EventHandler((sender, e) => {
                     TextBox textBox = (TextBox)contextMenu.SourceControl;
                     if (!textBox.Focused) {
@@ -325,16 +381,23 @@ namespace BetHelper {
                 numericUpDownOverlayOpacity.ContextMenu = contextMenu;
                 numericUpDownPreloadLimit.ContextMenu = contextMenu;
                 numericUpDownLargeLogsLimit.ContextMenu = contextMenu;
-            })).ContinueWith(new Action<Task>(task => {
+            }))
+            .ContinueWith(new Action<Task>(task => {
                 ContextMenu contextMenu = new ContextMenu();
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Undo())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Undo())));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Cut())));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Copy())));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Paste())));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete, new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysDelete))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Cut())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Copy())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Paste())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete,
+                    new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysDelete))));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
                 contextMenu.Popup += new EventHandler((sender, e) => {
                     TextBox textBox = (TextBox)contextMenu.SourceControl;
                     if (!textBox.Focused) {
@@ -373,7 +436,9 @@ namespace BetHelper {
             dialog.ShowDialog(this);
         }
 
-        private void OnAutoUpdatesCheckedChanged(object sender, EventArgs e) => checkBoxStatusBarNotifOnly.Enabled = checkBoxCheckForUpdates.Checked;
+        private void OnAutoUpdatesCheckedChanged(object sender, EventArgs e) {
+            checkBoxStatusBarNotifOnly.Enabled = checkBoxCheckForUpdates.Checked;
+        }
 
         private void OnButtonBrowseClick(object sender, EventArgs e) {
             try {
@@ -397,13 +462,19 @@ namespace BetHelper {
                 ErrorLog.WriteLine(exception);
             }
             try {
-                if (openFileDialog.ShowDialog() == DialogResult.OK) {
+                if (openFileDialog.ShowDialog().Equals(DialogResult.OK)) {
                     textBoxPreferredEditor.Text = openFileDialog.FileName;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-                dialog = new MessageForm(this, exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
                 dialog.ShowDialog();
             }
         }
@@ -415,7 +486,9 @@ namespace BetHelper {
                 Color color;
                 Pen pen;
                 if (comboBox.DroppedDown) {
-                    if ((e.State & DrawItemState.Selected) == DrawItemState.Selected || (e.State & DrawItemState.HotLight) == DrawItemState.HotLight) {
+                    if ((e.State & DrawItemState.Selected) == DrawItemState.Selected
+                            || (e.State & DrawItemState.HotLight) == DrawItemState.HotLight) {
+
                         color = SystemColors.HighlightText;
                         pen = SystemPens.HighlightText;
                     } else {
@@ -430,13 +503,22 @@ namespace BetHelper {
                     pen = Pens.Black;
                 }
                 string text = comboBox.GetItemText(comboBox.Items[e.Index]);
-                Rectangle rectangle1 = new Rectangle(e.Bounds.Left + 1, e.Bounds.Top + 1, 2 * (e.Bounds.Height - 2), e.Bounds.Height - 2);
-                Rectangle rectangle2 = Rectangle.FromLTRB(rectangle1.Right + 2, e.Bounds.Top, e.Bounds.Right, e.Bounds.Bottom);
+                Rectangle rectangle1 = new Rectangle(
+                    e.Bounds.Left + 1,
+                    e.Bounds.Top + 1,
+                    2 * (e.Bounds.Height - 2),
+                    e.Bounds.Height - 2);
+                Rectangle rectangle2 = Rectangle.FromLTRB(
+                    rectangle1.Right + 2,
+                    e.Bounds.Top,
+                    e.Bounds.Right,
+                    e.Bounds.Bottom);
                 using (SolidBrush solidBrush = new SolidBrush((Color)comboBox.Items[e.Index])) {
                     e.Graphics.FillRectangle(solidBrush, rectangle1);
                 }
                 e.Graphics.DrawRectangle(pen, rectangle1);
-                TextRenderer.DrawText(e.Graphics, text, comboBox.Font, rectangle2, color, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                TextRenderer.DrawText(e.Graphics, text, comboBox.Font, rectangle2, color,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
             }
             if (!comboBox.DroppedDown) {
                 e.DrawFocusRectangle();
@@ -444,7 +526,7 @@ namespace BetHelper {
         }
 
         private void OnComboBoxMouseDown(object sender, MouseEventArgs e) {
-            if (e.Button != MouseButtons.Left) {
+            if (!e.Button.Equals(MouseButtons.Left)) {
                 textBoxClicks = 0;
                 return;
             }
@@ -452,15 +534,20 @@ namespace BetHelper {
             textBoxClicksTimer.Stop();
             if (comboBox.SelectionLength > 0) {
                 textBoxClicks = 2;
-            } else if (textBoxClicks == 0 || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
+            } else if (textBoxClicks.Equals(0) || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
                 textBoxClicks++;
             } else {
                 textBoxClicks = 0;
             }
             location = e.Location;
-            if (textBoxClicks == 3) {
+            if (textBoxClicks.Equals(3)) {
                 textBoxClicks = 0;
-                NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Convert.ToUInt32(Cursor.Position.X), Convert.ToUInt32(Cursor.Position.Y), 0, 0);
+                NativeMethods.MouseEvent(
+                    Constants.MOUSEEVENTF_LEFTUP,
+                    Convert.ToUInt32(Cursor.Position.X),
+                    Convert.ToUInt32(Cursor.Position.Y),
+                    0,
+                    0);
                 comboBox.SelectAll();
                 comboBox.Focus();
             } else {
@@ -475,7 +562,9 @@ namespace BetHelper {
                 Color color;
                 Pen pen;
                 if (comboBox.DroppedDown) {
-                    if ((e.State & DrawItemState.Selected) == DrawItemState.Selected || (e.State & DrawItemState.HotLight) == DrawItemState.HotLight) {
+                    if ((e.State & DrawItemState.Selected) == DrawItemState.Selected
+                            || (e.State & DrawItemState.HotLight) == DrawItemState.HotLight) {
+
                         color = SystemColors.HighlightText;
                         pen = SystemPens.HighlightText;
                     } else {
@@ -490,7 +579,8 @@ namespace BetHelper {
                     pen = Pens.Black;
                 }
                 string text = comboBox.GetItemText(comboBox.Items[e.Index]);
-                TextRenderer.DrawText(e.Graphics, text, comboBox.Font, e.Bounds, color, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+                TextRenderer.DrawText(e.Graphics, text, comboBox.Font, e.Bounds, color,
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
             }
             if (!comboBox.DroppedDown) {
                 e.DrawFocusRectangle();
@@ -518,7 +608,13 @@ namespace BetHelper {
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-                dialog = new MessageForm(this, exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
                 dialog.ShowDialog(this);
             }
         }
@@ -549,7 +645,7 @@ namespace BetHelper {
         private void OnFormClosing(object sender, FormClosingEventArgs e) => textBoxClicksTimer.Dispose();
 
         private void OnKeyDown(object sender, KeyEventArgs e) {
-            if (e.Control && e.KeyCode == Keys.A) {
+            if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
                 if (sender is TextBox) {
                     ((TextBox)sender).SelectAll();
@@ -568,7 +664,13 @@ namespace BetHelper {
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-                dialog = new MessageForm(this, exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
                 dialog.ShowDialog(this);
             }
         }
@@ -583,7 +685,7 @@ namespace BetHelper {
                 Control control = StaticMethods.FindControlAtCursor((Form)sender);
                 if (control is TabControl) {
                     TabControl tabControl = (TabControl)control;
-                    if (StaticMethods.IsHoverTabRectangle(tabControl) && e.Delta != 0) {
+                    if (StaticMethods.IsHoverTabRectangle(tabControl) && !e.Delta.Equals(0)) {
                         StaticMethods.TabControlScroll(tabControl, e.Delta);
                     }
                 }
@@ -596,7 +698,7 @@ namespace BetHelper {
         }
 
         private void OnTextBoxMouseDown(object sender, MouseEventArgs e) {
-            if (e.Button != MouseButtons.Left) {
+            if (!e.Button.Equals(MouseButtons.Left)) {
                 textBoxClicks = 0;
                 return;
             }
@@ -604,25 +706,34 @@ namespace BetHelper {
             textBoxClicksTimer.Stop();
             if (textBox.SelectionLength > 0) {
                 textBoxClicks = 2;
-            } else if (textBoxClicks == 0 || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
+            } else if (textBoxClicks.Equals(0) || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
                 textBoxClicks++;
             } else {
                 textBoxClicks = 0;
             }
             location = e.Location;
-            if (textBoxClicks == 3) {
+            if (textBoxClicks.Equals(3)) {
                 textBoxClicks = 0;
-                NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Convert.ToUInt32(Cursor.Position.X), Convert.ToUInt32(Cursor.Position.Y), 0, 0);
+                NativeMethods.MouseEvent(
+                    Constants.MOUSEEVENTF_LEFTUP,
+                    Convert.ToUInt32(Cursor.Position.X),
+                    Convert.ToUInt32(Cursor.Position.Y),
+                    0,
+                    0);
                 Application.DoEvents();
                 if (textBox.Multiline) {
                     char[] chars = textBox.Text.ToCharArray();
-                    int selectionEnd = Math.Min(Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart), Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
+                    int selectionEnd = Math.Min(Array.IndexOf(chars,
+                        Constants.CarriageReturn, textBox.SelectionStart),
+                        Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
                     if (selectionEnd < 0) {
                         selectionEnd = textBox.TextLength;
                     }
                     selectionEnd = Math.Max(textBox.SelectionStart + textBox.SelectionLength, selectionEnd);
                     int selectionStart = Math.Min(textBox.SelectionStart, selectionEnd);
-                    while (--selectionStart > 0 && chars[selectionStart] != Constants.LineFeed && chars[selectionStart] != Constants.CarriageReturn) { }
+                    while (--selectionStart > 0
+                        && !chars[selectionStart].Equals(Constants.LineFeed)
+                        && !chars[selectionStart].Equals(Constants.CarriageReturn)) { }
                     textBox.Select(selectionStart, selectionEnd - selectionStart);
                 } else {
                     textBox.SelectAll();
@@ -640,7 +751,8 @@ namespace BetHelper {
                     if (File.Exists(textBoxPreferredEditor.Text)) {
                         preferredEditor = textBoxPreferredEditor.Text;
                     } else {
-                        dialog = new MessageForm(this, Properties.Resources.MessagePreferredEditorWarning, null, MessageForm.Buttons.OK, MessageForm.BoxIcon.Exclamation);
+                        dialog = new MessageForm(this, Properties.Resources.MessagePreferredEditorWarning, null, MessageForm.Buttons.OK,
+                            MessageForm.BoxIcon.Exclamation);
                         dialog.ShowDialog(this);
                         tabControl.SelectedIndex = 1;
                         textBoxPreferredEditor.Focus();
@@ -652,7 +764,9 @@ namespace BetHelper {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
+
             SetWarning();
+
             settings.PreferredEditor = preferredEditor;
             settings.UserAgent = comboBoxUserAgent.Text;
             settings.AcceptLanguage = comboBoxAcceptLanguage.Text;
@@ -707,15 +821,25 @@ namespace BetHelper {
             settings.DisableThemes = checkBoxDisableThemes.Checked;
             settings.PrintSoftMargins = radioButtonSoftMargins.Checked;
             settings.ActivePreferencesPanel = tabControl.SelectedIndex;
+
             settings.Save();
+
             DialogResult = DialogResult.OK;
         }
 
         private void SetWarning() {
-            if ((settings.DisableThemes || settings.RenderWithVisualStyles) && (checkBoxDisableThemes.Checked && Application.RenderWithVisualStyles || !checkBoxDisableThemes.Checked && !Application.RenderWithVisualStyles) ||
-                    !settings.UserAgent.Equals(comboBoxUserAgent.Text) || !settings.AcceptLanguage.Equals(comboBoxAcceptLanguage.Text) || !settings.EnableDrmContent.Equals(checkBoxEnableDrmContent.Checked) ||
-                    !settings.EnableAudio.Equals(checkBoxEnableAudio.Checked) || !settings.EnablePrintPreview.Equals(checkBoxEnablePrintPreview.Checked) || !settings.EnableCache.Equals(checkBoxEnableCache.Checked) ||
-                    !settings.PersistSessionCookies.Equals(checkBoxPersistSessionCookies.Checked) || !settings.PersistUserPreferences.Equals(checkBoxPersistUserPreferences.Checked) || !settings.IgnoreCertificateErrors.Equals(checkBoxIgnoreCertificateErrors.Checked)) {
+            if ((settings.DisableThemes || settings.RenderWithVisualStyles)
+                        && (checkBoxDisableThemes.Checked && Application.RenderWithVisualStyles
+                            || !checkBoxDisableThemes.Checked && !Application.RenderWithVisualStyles)
+                    || !settings.UserAgent.Equals(comboBoxUserAgent.Text)
+                    || !settings.AcceptLanguage.Equals(comboBoxAcceptLanguage.Text)
+                    || !settings.EnableDrmContent.Equals(checkBoxEnableDrmContent.Checked)
+                    || !settings.EnableAudio.Equals(checkBoxEnableAudio.Checked)
+                    || !settings.EnablePrintPreview.Equals(checkBoxEnablePrintPreview.Checked)
+                    || !settings.EnableCache.Equals(checkBoxEnableCache.Checked)
+                    || !settings.PersistSessionCookies.Equals(checkBoxPersistSessionCookies.Checked)
+                    || !settings.PersistUserPreferences.Equals(checkBoxPersistUserPreferences.Checked)
+                    || !settings.IgnoreCertificateErrors.Equals(checkBoxIgnoreCertificateErrors.Checked)) {
 
                 RestartRequired = true;
                 pictureBoxWarning.Visible = true;

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -104,8 +104,11 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementById('support-section')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('support-section').remove();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1].style.visibility = 'hidden';");
+            if (ElementExistsAndVisible(browser,
+                    "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]", false)) {
+
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1].style.visibility = 'hidden';");
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mem--btn-seemore-slider')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('mem--btn-seemore-slider')[0].click();");
@@ -125,8 +128,11 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementById('support-section')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('support-section').remove();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1].style.visibility = 'hidden';");
+            if (ElementExistsAndVisible(browser,
+                    "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]", false)) {
+
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1].style.visibility = 'hidden';");
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mem--btn-seemore-slider')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('mem--btn-seemore-slider')[0].click();");

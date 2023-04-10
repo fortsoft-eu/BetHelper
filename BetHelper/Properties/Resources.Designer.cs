@@ -61,6 +61,16 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Bell {
+            get {
+                object obj = ResourceManager.GetObject("Bell", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon Binary {
@@ -1797,6 +1807,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Stop Ringing.
+        /// </summary>
+        internal static string MenuItemStopRinging {
+            get {
+                return ResourceManager.GetString("MenuItemStopRinging", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Tools.
         /// </summary>
         internal static string MenuItemTools {
@@ -2067,20 +2086,11 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to clear the internal Chromium browser cache?.
-        /// </summary>
-        internal static string MessageClearBrowserCacheInclUserDataLine1 {
-            get {
-                return ResourceManager.GetString("MessageClearBrowserCacheInclUserDataLine1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Also the user data and the local preferences of the internal Chromium browser will be lost..
         /// </summary>
-        internal static string MessageClearBrowserCacheInclUserDataLine2 {
+        internal static string MessageClearBrowserCacheInclUserData {
             get {
-                return ResourceManager.GetString("MessageClearBrowserCacheInclUserDataLine2", resourceCulture);
+                return ResourceManager.GetString("MessageClearBrowserCacheInclUserData", resourceCulture);
             }
         }
         

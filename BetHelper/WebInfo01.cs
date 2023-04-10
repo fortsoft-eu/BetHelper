@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -34,9 +34,12 @@ namespace BetHelper {
         protected override void LogIn(ChromiumWebBrowser browser) {
             OnStarted(6);
 
-            if (ElementExistsAndVisible(browser, "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1]", false)) {
+            if (ElementExistsAndVisible(browser,
+                    "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1]", false)) {
+
                 OnProgress(Properties.Resources.MessageClosingCookieConsent);
-                browser.ExecuteScriptAsync("document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1].click();");
+                browser.ExecuteScriptAsync(
+                    "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1].click();");
                 Wait(browser);
                 Sleep(50);
             }
@@ -91,8 +94,11 @@ namespace BetHelper {
         }
 
         protected override void NoLogIn(ChromiumWebBrowser browser) {
-            if (ElementExistsAndVisible(browser, "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1]", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1].click();");
+            if (ElementExistsAndVisible(browser,
+                    "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1]", false)) {
+
+                browser.ExecuteScriptAsync(
+                    "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1].click();");
             }
             if (ElementExists(browser, "document.getElementById('modalDialogCloseId')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('modalDialogCloseId').click();");

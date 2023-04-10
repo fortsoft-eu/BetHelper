@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -29,10 +29,15 @@ using System;
 namespace BetHelper {
 
     public class FindEventArgs : EventArgs {
+
         public int Count { get; private set; }
+
         public CefSharp.Structs.Rect SelectionRect { get; private set; }
+
         public int ActiveMatchOrdinal { get; private set; }
+
         public bool FinalUpdate { get; private set; }
+
         public bool EmptyResult { get; private set; }
 
         public FindEventArgs() {

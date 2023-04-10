@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 2.3.0.0
+ * Version 2.3.1.0
  */
 
 using Microsoft.Win32;
@@ -45,17 +45,21 @@ namespace FortSoft.Tools {
     public sealed class PersistWindowState : Component {
 
         /// <summary>
-        /// Constants
+        /// Windows API constants.
         /// </summary>
         private const int GW_HWNDNEXT = 2;
         private const int SW_RESTORE = 9;
+
+        /// <summary>
+        /// Constants.
+        /// </summary>
         private const string Location = "Location";
         private const string Size = "Size";
         private const string Software = "Software";
         private const string State = "State";
 
         /// <summary>
-        /// Imports
+        /// Imports.
         /// </summary>
         [DllImport("user32.dll")]
         private static extern bool IsWindowVisible(IntPtr hWnd);
@@ -82,7 +86,7 @@ namespace FortSoft.Tools {
         private static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
 
         /// <summary>
-        /// Fields
+        /// Fields.
         /// </summary>
         private bool topMost;
         private Form parent;
@@ -211,6 +215,7 @@ namespace FortSoft.Tools {
         private bool IsNextWindow(IntPtr hWnd) {
             IntPtr window = GetTopWindow(GetDesktopWindow());
             int thisWindow = -1, i = 0;
+
             do {
                 if (thisWindow > -1 && thisWindow + 1 < i) {
                     break;
@@ -218,14 +223,15 @@ namespace FortSoft.Tools {
                 if (!IsWindowVisible(window)) {
                     continue;
                 }
-                if (thisWindow > 0 && window == parentHandle) {
+                if (thisWindow > 0 && window.Equals(parentHandle)) {
                     return true;
                 }
                 if (window == hWnd) {
                     thisWindow = i;
                 }
                 i++;
-            } while ((window = GetWindow(window, GW_HWNDNEXT)) != IntPtr.Zero);
+            } while (!(window = GetWindow(window, GW_HWNDNEXT)).Equals(IntPtr.Zero));
+
             return false;
         }
 
@@ -234,12 +240,15 @@ namespace FortSoft.Tools {
         /// </summary>
         private void OnLoad(object sender, EventArgs e) {
             parentHandle = parent.Handle;
-            if (SavingOptions == PersistWindowStateSavingOptions.None || string.IsNullOrEmpty(RegistryPath)) {
+
+            if (SavingOptions.Equals(PersistWindowStateSavingOptions.None) || string.IsNullOrEmpty(RegistryPath)) {
                 if (!nLocation.IsEmpty || !nSize.IsEmpty) {
                     if (AllowSaveTopMost) {
                         parent.TopMost = topMost;
                     }
-                    if (!DisableSaveSize && (parent.FormBorderStyle == FormBorderStyle.Sizable || parent.FormBorderStyle == FormBorderStyle.SizableToolWindow)) {
+                    if (!DisableSaveSize && (parent.FormBorderStyle.Equals(FormBorderStyle.Sizable)
+                            || parent.FormBorderStyle.Equals(FormBorderStyle.SizableToolWindow))) {
+
                         if (!FixWidth && !DisableSaveWidth && nSize.Width > 0) {
                             parent.Width = nSize.Width;
                         }
@@ -254,18 +263,20 @@ namespace FortSoft.Tools {
                             parent.Location = nLocation;
                         }
                     }
-                    if (parent.WindowState == FormWindowState.Normal) {
+                    if (parent.WindowState.Equals(FormWindowState.Normal)) {
                         nSize = parent.Size;
                     }
                     if (!DisableSaveWindowState && parent.ControlBox && (parent.MinimizeBox || parent.MaximizeBox)) {
-                        parent.WindowState = AllowSaveMinimized || parent.WindowState != FormWindowState.Minimized ? windowState : FormWindowState.Normal;
+                        parent.WindowState = AllowSaveMinimized || !parent.WindowState.Equals(FormWindowState.Minimized)
+                            ? windowState
+                            : FormWindowState.Normal;
                     }
                     Loaded?.Invoke(this, new PersistWindowStateEventArgs());
                 } else {
                     if (AllowSaveTopMost) {
                         topMost = parent.TopMost;
                     }
-                    if (parent.WindowState == FormWindowState.Normal) {
+                    if (parent.WindowState.Equals(FormWindowState.Normal)) {
                         nLocation = parent.Location;
                     }
                     if (!AlreadyRunning()) {
@@ -277,7 +288,8 @@ namespace FortSoft.Tools {
                     }
                 }
             }
-            if (SavingOptions == PersistWindowStateSavingOptions.Registry && !string.IsNullOrEmpty(RegistryPath)) {
+
+            if (SavingOptions.Equals(PersistWindowStateSavingOptions.Registry) && !string.IsNullOrEmpty(RegistryPath)) {
                 RegistryKey registryKey = null;
                 try {
                     registryKey = Registry.CurrentUser.OpenSubKey(RegistryPath);
@@ -291,7 +303,7 @@ namespace FortSoft.Tools {
                     Debug.WriteLine(exception);
                 }
                 if (registryKey == null) {
-                    if (parent.WindowState == FormWindowState.Normal) {
+                    if (parent.WindowState.Equals(FormWindowState.Normal)) {
                         nLocation = parent.Location;
                     }
                     if (!AlreadyRunning()) {
@@ -303,7 +315,9 @@ namespace FortSoft.Tools {
                     }
                 } else {
                     nLocation = IntToPoint((int)registryKey.GetValue(parent.Name + Location, PointToInt(parent.Location)));
-                    if (!DisableSaveSize && (parent.FormBorderStyle == FormBorderStyle.Sizable || parent.FormBorderStyle == FormBorderStyle.SizableToolWindow)) {
+                    if (!DisableSaveSize && (parent.FormBorderStyle.Equals(FormBorderStyle.Sizable)
+                            || parent.FormBorderStyle.Equals(FormBorderStyle.SizableToolWindow))) {
+
                         Size size = IntToSize((int)registryKey.GetValue(parent.Name + Size, SizeToInt(parent.Size)));
                         if (!FixWidth && !DisableSaveWidth && size.Width > 0) {
                             parent.Width = size.Width;
@@ -319,12 +333,15 @@ namespace FortSoft.Tools {
                             parent.Location = nLocation;
                         }
                     }
-                    if (parent.WindowState == FormWindowState.Normal) {
+                    if (parent.WindowState.Equals(FormWindowState.Normal)) {
                         nSize = parent.Size;
                     }
-                    if (!DisableSaveWindowState && parent.ControlBox && (parent.MinimizeBox || parent.MaximizeBox) || AllowSaveTopMost) {
-                        windowState = IntToWindowState((int)registryKey.GetValue(parent.Name + State, WindowStateToInt(parent.WindowState, parent.TopMost)), out topMost);
-                        if (!AllowSaveMinimized && windowState == FormWindowState.Minimized) {
+                    if (!DisableSaveWindowState && parent.ControlBox && (parent.MinimizeBox || parent.MaximizeBox)
+                            || AllowSaveTopMost) {
+
+                        windowState = IntToWindowState((int)registryKey.GetValue(parent.Name
+                            + State, WindowStateToInt(parent.WindowState, parent.TopMost)), out topMost);
+                        if (!AllowSaveMinimized && windowState.Equals(FormWindowState.Minimized)) {
                             windowState = FormWindowState.Normal;
                         }
                         parent.WindowState = windowState;
@@ -335,16 +352,26 @@ namespace FortSoft.Tools {
                     Loaded?.Invoke(this, new PersistWindowStateEventArgs(registryKey));
                 }
             }
+
             if (FixWidth && FixHeight) {
                 parent.MaximumSize = parent.Size;
                 parent.MinimumSize = parent.Size;
             } else if (FixWidth) {
-                parent.MaximumSize = new Size(parent.Width, parent.MaximumSize.Height > 0 ? parent.MaximumSize.Height : int.MaxValue);
-                parent.MinimumSize = new Size(parent.Width, parent.MinimumSize.Height);
+                parent.MaximumSize = new Size(
+                    parent.Width,
+                    parent.MaximumSize.Height > 0 ? parent.MaximumSize.Height : int.MaxValue);
+                parent.MinimumSize = new Size(
+                    parent.Width,
+                    parent.MinimumSize.Height);
             } else if (FixHeight) {
-                parent.MaximumSize = new Size(parent.MaximumSize.Width > 0 ? parent.MaximumSize.Width : int.MaxValue, parent.Height);
-                parent.MinimumSize = new Size(parent.MinimumSize.Width, parent.Height);
+                parent.MaximumSize = new Size(
+                    parent.MaximumSize.Width > 0 ? parent.MaximumSize.Width : int.MaxValue,
+                    parent.Height);
+                parent.MinimumSize = new Size(
+                    parent.MinimumSize.Width,
+                    parent.Height);
             }
+
             parent.Resize += new EventHandler(OnResize);
             parent.Move += new EventHandler(OnMove);
         }
@@ -353,10 +380,10 @@ namespace FortSoft.Tools {
         /// Handles the Move event of the parent form.
         /// </summary>
         private void OnMove(object sender, EventArgs e) {
-            if (parent.WindowState == FormWindowState.Normal) {
+            if (parent.WindowState.Equals(FormWindowState.Normal)) {
                 nLocation = parent.Location;
             }
-            if (AllowSaveMinimized || parent.WindowState != FormWindowState.Minimized) {
+            if (AllowSaveMinimized || !parent.WindowState.Equals(FormWindowState.Minimized)) {
                 windowState = parent.WindowState;
             }
         }
@@ -365,10 +392,10 @@ namespace FortSoft.Tools {
         /// Handles the Resize event of the parent form.
         /// </summary>
         private void OnResize(object sender, EventArgs e) {
-            if (parent.WindowState == FormWindowState.Normal) {
+            if (parent.WindowState.Equals(FormWindowState.Normal)) {
                 nSize = parent.Size;
             }
-            if (AllowSaveMinimized || parent.WindowState != FormWindowState.Minimized) {
+            if (AllowSaveMinimized || !parent.WindowState.Equals(FormWindowState.Minimized)) {
                 windowState = parent.WindowState;
             }
         }
@@ -377,7 +404,7 @@ namespace FortSoft.Tools {
         /// Thread-safe restores the parent form to its the previous WindowState.
         /// </summary>
         public void Restore() {
-            if (parentHandle != IntPtr.Zero && IsIconic(parentHandle) != 0) {
+            if (!parentHandle.Equals(IntPtr.Zero) && !IsIconic(parentHandle).Equals(0)) {
                 ShowWindowAsync(parentHandle, SW_RESTORE);
             }
         }
@@ -386,7 +413,7 @@ namespace FortSoft.Tools {
         /// Saves the state of the parent form into the Windows registry.
         /// </summary>
         public void Save() {
-            if (SavingOptions == PersistWindowStateSavingOptions.Registry && !string.IsNullOrEmpty(RegistryPath)) {
+            if (SavingOptions.Equals(PersistWindowStateSavingOptions.Registry) && !string.IsNullOrEmpty(RegistryPath)) {
                 RegistryKey registryKey = null;
                 try {
                     registryKey = Registry.CurrentUser.CreateSubKey(RegistryPath);
@@ -408,11 +435,17 @@ namespace FortSoft.Tools {
                 if (!DisableSavePosition) {
                     registryKey.SetValue(parent.Name + Location, PointToInt(nLocation));
                 }
-                if (!DisableSaveSize && !(DisableSaveWidth && DisableSaveHeight) && (parent.FormBorderStyle == FormBorderStyle.Sizable || parent.FormBorderStyle == FormBorderStyle.SizableToolWindow)) {
+                if (!DisableSaveSize
+                        && !(DisableSaveWidth && DisableSaveHeight)
+                        && (parent.FormBorderStyle.Equals(FormBorderStyle.Sizable)
+                            || parent.FormBorderStyle.Equals(FormBorderStyle.SizableToolWindow))) {
+
                     registryKey.SetValue(parent.Name + Size, SizeToInt(nSize));
                 }
-                if (!DisableSaveWindowState && parent.ControlBox && (parent.MinimizeBox || parent.MaximizeBox) || AllowSaveTopMost) {
-                    if (AllowSaveMinimized || parent.WindowState != FormWindowState.Minimized) {
+                if (!DisableSaveWindowState && parent.ControlBox && (parent.MinimizeBox || parent.MaximizeBox)
+                        || AllowSaveTopMost) {
+
+                    if (AllowSaveMinimized || !parent.WindowState.Equals(FormWindowState.Minimized)) {
                         registryKey.SetValue(parent.Name + State, WindowStateToInt(parent.WindowState, parent.TopMost));
                     } else {
                         registryKey.SetValue(parent.Name + State, WindowStateToInt(windowState, parent.TopMost));
@@ -429,8 +462,8 @@ namespace FortSoft.Tools {
         /// </summary>
         /// <param name="hWnd">Reference form window handle.</param>
         public void SetVisible(IntPtr hWnd) {
-            if (parentHandle != IntPtr.Zero) {
-                if (IsIconic(parentHandle) != 0) {
+            if (!parentHandle.Equals(IntPtr.Zero)) {
+                if (!IsIconic(parentHandle).Equals(0)) {
                     ShowWindow(parentHandle, SW_RESTORE);
                     SetForegroundWindow(hWnd);
                 } else if (!IsNextWindow(hWnd)) {
@@ -472,8 +505,13 @@ namespace FortSoft.Tools {
         private static bool AlreadyRunning() {
             Process process = Process.GetCurrentProcess();
             FileSystemInfo processFileInfo = new FileInfo(process.MainModule.FileName);
-            foreach (Process p in Process.GetProcessesByName(process.ProcessName).Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId))).ToArray()) {
-                if (p.Id != process.Id && p.MainWindowHandle != IntPtr.Zero && processFileInfo.Name == new FileInfo(p.MainModule.FileName).Name) {
+            foreach (Process p in Process.GetProcessesByName(process.ProcessName)
+                    .Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId))).ToArray()) {
+
+                if (!p.Id.Equals(process.Id)
+                        && !p.MainWindowHandle.Equals(IntPtr.Zero)
+                        && processFileInfo.Name.Equals(new FileInfo(p.MainModule.FileName).Name)) {
+
                     return true;
                 }
             }
@@ -486,7 +524,9 @@ namespace FortSoft.Tools {
         /// <param name="val">An integer value stored in the registry.</param>
         private static Point IntToPoint(int val) {
             byte[] bytes = BitConverter.GetBytes(val);
-            return new Point(BitConverter.ToInt16(bytes, BitConverter.IsLittleEndian ? 0 : 2), BitConverter.ToInt16(bytes, BitConverter.IsLittleEndian ? 2 : 0));
+            return new Point(
+                BitConverter.ToInt16(bytes, BitConverter.IsLittleEndian ? 0 : 2),
+                BitConverter.ToInt16(bytes, BitConverter.IsLittleEndian ? 2 : 0));
         }
 
         /// <summary>
@@ -495,7 +535,9 @@ namespace FortSoft.Tools {
         /// <param name="val">An integer value stored in the registry.</param>
         private static Size IntToSize(int val) {
             byte[] bytes = BitConverter.GetBytes(val);
-            return new Size(BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 0 : 2), BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 2 : 0));
+            return new Size(
+                BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 0 : 2),
+                BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 2 : 0));
         }
 
         /// <summary>
@@ -507,7 +549,7 @@ namespace FortSoft.Tools {
             byte[] bytes = BitConverter.GetBytes(val);
             topMost = BitConverter.ToInt16(bytes, BitConverter.IsLittleEndian ? 2 : 0) > 0;
             short windowState = BitConverter.ToInt16(bytes, BitConverter.IsLittleEndian ? 0 : 2);
-            return windowState == 1 || windowState == 2 ? (FormWindowState)windowState : FormWindowState.Normal;
+            return windowState.Equals(1) || windowState.Equals(2) ? (FormWindowState)windowState : FormWindowState.Normal;
         }
 
         /// <summary>
@@ -517,8 +559,18 @@ namespace FortSoft.Tools {
         /// <returns>An integer value to store in the Windows registry.</returns>
         private static int PointToInt(Point point) {
             byte[] bytes = new byte[4];
-            Array.Copy(BitConverter.GetBytes(point.X), BitConverter.IsLittleEndian ? 0 : 2, bytes, BitConverter.IsLittleEndian ? 0 : 2, 2);
-            Array.Copy(BitConverter.GetBytes(point.Y), BitConverter.IsLittleEndian ? 0 : 2, bytes, BitConverter.IsLittleEndian ? 2 : 0, 2);
+            Array.Copy(
+                BitConverter.GetBytes(point.X),
+                BitConverter.IsLittleEndian ? 0 : 2,
+                bytes,
+                BitConverter.IsLittleEndian ? 0 : 2,
+                2);
+            Array.Copy(
+                BitConverter.GetBytes(point.Y),
+                BitConverter.IsLittleEndian ? 0 : 2,
+                bytes,
+                BitConverter.IsLittleEndian ? 2 : 0,
+                2);
             return BitConverter.ToInt32(bytes, 0);
         }
 
@@ -529,8 +581,18 @@ namespace FortSoft.Tools {
         /// <returns>An integer value to store in the Windows registry.</returns>
         private static int SizeToInt(Size size) {
             byte[] bytes = new byte[4];
-            Array.Copy(BitConverter.GetBytes(size.Width), BitConverter.IsLittleEndian ? 0 : 2, bytes, BitConverter.IsLittleEndian ? 0 : 2, 2);
-            Array.Copy(BitConverter.GetBytes(size.Height), BitConverter.IsLittleEndian ? 0 : 2, bytes, BitConverter.IsLittleEndian ? 2 : 0, 2);
+            Array.Copy(
+                BitConverter.GetBytes(size.Width),
+                BitConverter.IsLittleEndian ? 0 : 2,
+                bytes,
+                BitConverter.IsLittleEndian ? 0 : 2,
+                2);
+            Array.Copy(
+                BitConverter.GetBytes(size.Height),
+                BitConverter.IsLittleEndian ? 0 : 2,
+                bytes,
+                BitConverter.IsLittleEndian ? 2 : 0,
+                2);
             return BitConverter.ToInt32(bytes, 0);
         }
 
@@ -543,8 +605,18 @@ namespace FortSoft.Tools {
         /// <returns>An integer value to store in the Windows registry.</returns>
         private static int WindowStateToInt(FormWindowState formWindowState, bool topMost) {
             byte[] bytes = new byte[4];
-            Array.Copy(BitConverter.GetBytes((short)formWindowState), 0, bytes, BitConverter.IsLittleEndian ? 0 : 2, 2);
-            Array.Copy(BitConverter.GetBytes(Convert.ToInt16(topMost)), 0, bytes, BitConverter.IsLittleEndian ? 2 : 0, 2);
+            Array.Copy(
+                BitConverter.GetBytes((short)formWindowState),
+                0,
+                bytes,
+                BitConverter.IsLittleEndian ? 0 : 2,
+                2);
+            Array.Copy(
+                BitConverter.GetBytes(Convert.ToInt16(topMost)),
+                0,
+                bytes,
+                BitConverter.IsLittleEndian ? 2 : 0,
+                2);
             return BitConverter.ToInt32(bytes, 0);
         }
 

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -29,7 +29,9 @@ using System;
 namespace BetHelper {
 
     public class FocusEventArgs : EventArgs {
+
         public WebInfo WebInfo { get; private set; }
+
         public int Index { get; private set; }
 
         public FocusEventArgs(WebInfo webInfo, int index) {

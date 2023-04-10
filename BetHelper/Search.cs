@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
 using System.Runtime.Serialization;
 
 namespace BetHelper {
+
     [Serializable()]
     public struct Search {
         public string searchString;
@@ -37,7 +38,14 @@ namespace BetHelper {
         public bool endsWith;
         public bool regularExpression;
 
-        public Search(string searchString, bool caseSensitive, bool backward, bool startsWith, bool endsWith, bool regularExpression) {
+        public Search(
+                string searchString,
+                bool caseSensitive,
+                bool backward,
+                bool startsWith,
+                bool endsWith,
+                bool regularExpression) {
+
             this.searchString = searchString;
             this.caseSensitive = caseSensitive;
             this.backward = backward;
@@ -65,7 +73,12 @@ namespace BetHelper {
         }
 
         public bool Equals(Search search) {
-            return search.searchString == searchString && search.caseSensitive.Equals(caseSensitive) && search.backward.Equals(backward) && search.regularExpression.Equals(regularExpression) && search.startsWith.Equals(startsWith) && search.endsWith.Equals(endsWith);
+            return search.searchString == searchString
+                && search.caseSensitive.Equals(caseSensitive)
+                && search.backward.Equals(backward)
+                && search.regularExpression.Equals(regularExpression)
+                && search.startsWith.Equals(startsWith)
+                && search.endsWith.Equals(endsWith);
         }
     }
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -63,10 +63,12 @@ namespace BetHelper {
             }
             for (int i = 1; i <= 100; i++) {
                 if (ElementExists(browser, string.Format("document.getElementById('gad-news-list-item-{0}-wrapper')", i), false)) {
-                    browser.ExecuteScriptAsync(string.Format("document.getElementById('gad-news-list-item-{0}-wrapper').style.display = 'none';", i));
+                    browser.ExecuteScriptAsync(string.Format(
+                        "document.getElementById('gad-news-list-item-{0}-wrapper').style.display = 'none';", i));
                 }
                 if (ElementExists(browser, string.Format("document.getElementById('ad-holder-gad-news-article-item-{0}')", i), false)) {
-                    browser.ExecuteScriptAsync(string.Format("document.getElementById('ad-holder-gad-news-article-item-{0}').style.display = 'none';", i));
+                    browser.ExecuteScriptAsync(string.Format(
+                        "document.getElementById('ad-holder-gad-news-article-item-{0}').style.display = 'none';", i));
                 }
             }
             if (ElementExists(browser, "document.getElementById('gad-right-small-wrapper')", false)) {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using System;
@@ -42,19 +42,23 @@ using System.Windows.Forms;
 public static class SingleInstance {
 
     /// <summary>
-    /// Constants
+    /// Windows API constant.
     /// </summary>
     private const int SW_RESTORE = 9;
+
+    /// <summary>
+    /// Constants.
+    /// </summary>
     private const string Local = "Local";
     private const string Underscore = "_";
 
     /// <summary>
-    /// Field
+    /// Field.
     /// </summary>
     private static Mutex mutex;
 
     /// <summary>
-    /// Imports
+    /// Imports.
     /// </summary>
     [DllImport("user32.dll")]
     private static extern int ShowWindowAsync(IntPtr hWnd, int nCmdShow);
@@ -92,8 +96,8 @@ public static class SingleInstance {
     /// <returns>True if succeeded.</returns>
     public static bool FocusRunning(string filePath, Regex regex) {
         IntPtr hWnd = GetWindowHandle(filePath, regex);
-        if (hWnd != IntPtr.Zero) {
-            if (IsIconic(hWnd) != 0) {
+        if (!hWnd.Equals(IntPtr.Zero)) {
+            if (!IsIconic(hWnd).Equals(0)) {
                 ShowWindowAsync(hWnd, SW_RESTORE);
             }
             SetForegroundWindow(hWnd);
@@ -110,7 +114,9 @@ public static class SingleInstance {
     /// <param name="filePath">Application executable path.</param>
     /// <param name="mainWindowTitle">Main window title.</param>
     /// <returns>True if succeeded.</returns>
-    public static bool FocusRunning(string filePath, string mainWindowTitle) => FocusRunning(filePath, mainWindowTitle, CultureInfo.CurrentCulture);
+    public static bool FocusRunning(string filePath, string mainWindowTitle) {
+        return FocusRunning(filePath, mainWindowTitle, CultureInfo.CurrentCulture);
+    }
 
     /// <summary>
     /// Restore application window if minimized. Do not restore if already in
@@ -123,8 +129,8 @@ public static class SingleInstance {
     /// <returns>True if succeeded.</returns>
     public static bool FocusRunning(string filePath, string mainWindowTitle, StringComparison comparisonType) {
         IntPtr hWnd = GetWindowHandle(filePath, mainWindowTitle, comparisonType);
-        if (hWnd != IntPtr.Zero) {
-            if (IsIconic(hWnd) != 0) {
+        if (!hWnd.Equals(IntPtr.Zero)) {
+            if (!IsIconic(hWnd).Equals(0)) {
                 ShowWindowAsync(hWnd, SW_RESTORE);
             }
             SetForegroundWindow(hWnd);
@@ -142,7 +148,9 @@ public static class SingleInstance {
     /// <param name="mainWindowTitle">Main window title.</param>
     /// <param name="culture">Culture for string comparison.</param>
     /// <returns>True if succeeded.</returns>
-    public static bool FocusRunning(string filePath, string mainWindowTitle, CultureInfo culture) => FocusRunning(filePath, mainWindowTitle, culture, CompareOptions.None);
+    public static bool FocusRunning(string filePath, string mainWindowTitle, CultureInfo culture) {
+        return FocusRunning(filePath, mainWindowTitle, culture, CompareOptions.None);
+    }
 
     /// <summary>
     /// Restore application window if minimized. Do not restore if already in
@@ -156,8 +164,8 @@ public static class SingleInstance {
     /// <returns>True if succeeded.</returns>
     public static bool FocusRunning(string filePath, string mainWindowTitle, CultureInfo culture, CompareOptions options) {
         IntPtr hWnd = GetWindowHandle(filePath, mainWindowTitle, culture, options);
-        if (hWnd != IntPtr.Zero) {
-            if (IsIconic(hWnd) != 0) {
+        if (!hWnd.Equals(IntPtr.Zero)) {
+            if (!IsIconic(hWnd).Equals(0)) {
                 ShowWindowAsync(hWnd, SW_RESTORE);
             }
             SetForegroundWindow(hWnd);
@@ -200,16 +208,25 @@ public static class SingleInstance {
             Process process = Process.GetCurrentProcess();
             if (filePath == null) {
                 FileSystemInfo processFileInfo = new FileInfo(process.MainModule.FileName);
-                foreach (Process p in Process.GetProcessesByName(process.ProcessName).Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId))).ToArray()) {
-                    bool eq = p.Id != process.Id && p.MainWindowHandle != IntPtr.Zero && processFileInfo.Name.Equals(new FileInfo(p.MainModule.FileName).Name);
+                foreach (Process p in Process.GetProcessesByName(process.ProcessName)
+                        .Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId)))
+                        .ToArray()) {
+
+                    bool eq = !p.Id.Equals(process.Id)
+                        && !p.MainWindowHandle.Equals(IntPtr.Zero)
+                        && processFileInfo.Name.Equals(new FileInfo(p.MainModule.FileName).Name);
                     if (eq && regex == null || eq && regex.IsMatch(p.MainWindowTitle)) {
                         hWnd = p.MainWindowHandle;
                         break;
                     }
                 }
             } else {
-                foreach (Process p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(filePath)).Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId))).ToArray()) {
-                    bool eq = string.Compare(p.MainModule.FileName, filePath, StringComparison.OrdinalIgnoreCase) == 0 && p.MainWindowHandle != IntPtr.Zero;
+                foreach (Process p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(filePath))
+                        .Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId)))
+                        .ToArray()) {
+
+                    bool eq = string.Compare(p.MainModule.FileName, filePath, StringComparison.OrdinalIgnoreCase).Equals(0)
+                        && !p.MainWindowHandle.Equals(IntPtr.Zero);
                     if (eq && regex == null || eq && regex.IsMatch(p.MainWindowTitle)) {
                         hWnd = p.MainWindowHandle;
                         break;
@@ -231,7 +248,9 @@ public static class SingleInstance {
     /// <param name="filePath">Application executable path.</param>
     /// <param name="mainWindowTitle">Main window title.</param>
     /// <returns>Window handle.</returns>
-    public static IntPtr GetWindowHandle(string filePath, string mainWindowTitle) => GetWindowHandle(filePath, mainWindowTitle, CultureInfo.CurrentCulture);
+    public static IntPtr GetWindowHandle(string filePath, string mainWindowTitle) {
+        return GetWindowHandle(filePath, mainWindowTitle, CultureInfo.CurrentCulture);
+    }
 
     /// <summary>
     /// Gets the window handle of the application according to the specified path
@@ -249,17 +268,30 @@ public static class SingleInstance {
             Process process = Process.GetCurrentProcess();
             if (filePath == null) {
                 FileSystemInfo processFileInfo = new FileInfo(process.MainModule.FileName);
-                foreach (Process p in Process.GetProcessesByName(process.ProcessName).Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId))).ToArray()) {
-                    bool eq = p.Id != process.Id && p.MainWindowHandle != IntPtr.Zero && processFileInfo.Name.Equals(new FileInfo(p.MainModule.FileName).Name);
-                    if (eq && string.IsNullOrEmpty(mainWindowTitle) || eq && p.MainWindowTitle.IndexOf(mainWindowTitle, comparisonType) >= 0) {
+                foreach (Process p in Process.GetProcessesByName(process.ProcessName)
+                        .Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId)))
+                        .ToArray()) {
+
+                    bool eq = !p.Id.Equals(process.Id)
+                        && !p.MainWindowHandle.Equals(IntPtr.Zero)
+                        && processFileInfo.Name.Equals(new FileInfo(p.MainModule.FileName).Name);
+                    if (eq && string.IsNullOrEmpty(mainWindowTitle)
+                            || eq && p.MainWindowTitle.IndexOf(mainWindowTitle, comparisonType) >= 0) {
+
                         hWnd = p.MainWindowHandle;
                         break;
                     }
                 }
             } else {
-                foreach (Process p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(filePath)).Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId))).ToArray()) {
-                    bool eq = string.Compare(p.MainModule.FileName, filePath, StringComparison.OrdinalIgnoreCase) == 0 && p.MainWindowHandle != IntPtr.Zero;
-                    if (eq && string.IsNullOrEmpty(mainWindowTitle) || eq && p.MainWindowTitle.IndexOf(mainWindowTitle, comparisonType) >= 0) {
+                foreach (Process p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(filePath))
+                        .Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId)))
+                        .ToArray()) {
+
+                    bool eq = string.Compare(p.MainModule.FileName, filePath, StringComparison.OrdinalIgnoreCase).Equals(0)
+                        && !p.MainWindowHandle.Equals(IntPtr.Zero);
+                    if (eq && string.IsNullOrEmpty(mainWindowTitle)
+                            || eq && p.MainWindowTitle.IndexOf(mainWindowTitle, comparisonType) >= 0) {
+
                         hWnd = p.MainWindowHandle;
                         break;
                     }
@@ -281,7 +313,9 @@ public static class SingleInstance {
     /// <param name="mainWindowTitle">Main window title.</param>
     /// <param name="culture">Culture for string comparison.</param>
     /// <returns>Window handle.</returns>
-    public static IntPtr GetWindowHandle(string filePath, string mainWindowTitle, CultureInfo culture) => GetWindowHandle(filePath, mainWindowTitle, culture, CompareOptions.None);
+    public static IntPtr GetWindowHandle(string filePath, string mainWindowTitle, CultureInfo culture) {
+        return GetWindowHandle(filePath, mainWindowTitle, culture, CompareOptions.None);
+    }
 
     /// <summary>
     /// Gets the window handle of the application according to the specified path
@@ -300,17 +334,30 @@ public static class SingleInstance {
             Process process = Process.GetCurrentProcess();
             if (filePath == null) {
                 FileSystemInfo processFileInfo = new FileInfo(process.MainModule.FileName);
-                foreach (Process p in Process.GetProcessesByName(process.ProcessName).Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId))).ToArray()) {
-                    bool eq = p.Id != process.Id && p.MainWindowHandle != IntPtr.Zero && processFileInfo.Name.Equals(new FileInfo(p.MainModule.FileName).Name);
-                    if (eq && string.IsNullOrEmpty(mainWindowTitle) || eq && string.Compare(p.MainWindowTitle, mainWindowTitle, culture, options) == 0) {
+                foreach (Process p in Process.GetProcessesByName(process.ProcessName)
+                        .Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId)))
+                        .ToArray()) {
+
+                    bool eq = !p.Id.Equals(process.Id)
+                        && !p.MainWindowHandle.Equals(IntPtr.Zero)
+                        && processFileInfo.Name.Equals(new FileInfo(p.MainModule.FileName).Name);
+                    if (eq && string.IsNullOrEmpty(mainWindowTitle)
+                            || eq && string.Compare(p.MainWindowTitle, mainWindowTitle, culture, options).Equals(0)) {
+
                         hWnd = p.MainWindowHandle;
                         break;
                     }
                 }
             } else {
-                foreach (Process p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(filePath)).Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId))).ToArray()) {
-                    bool eq = string.Compare(p.MainModule.FileName, filePath, StringComparison.OrdinalIgnoreCase) == 0 && p.MainWindowHandle != IntPtr.Zero;
-                    if (eq && string.IsNullOrEmpty(mainWindowTitle) || eq && string.Compare(p.MainWindowTitle, mainWindowTitle, culture, options) == 0) {
+                foreach (Process p in Process.GetProcessesByName(Path.GetFileNameWithoutExtension(filePath))
+                        .Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId)))
+                        .ToArray()) {
+
+                    bool eq = string.Compare(p.MainModule.FileName, filePath, StringComparison.OrdinalIgnoreCase).Equals(0)
+                        && !p.MainWindowHandle.Equals(IntPtr.Zero);
+                    if (eq && string.IsNullOrEmpty(mainWindowTitle)
+                            || eq && string.Compare(p.MainWindowTitle, mainWindowTitle, culture, options).Equals(0)) {
+
                         hWnd = p.MainWindowHandle;
                         break;
                     }
@@ -412,7 +459,9 @@ public static class SingleInstance {
     /// <param name="form">A Windows Form to run.</param>
     /// <param name="mainWindowTitle">Main window title.</param>
     /// <param name="culture">Culture for string comparison.</param>
-    public static void Run(Form form, string mainWindowTitle, CultureInfo culture) => Run(form, mainWindowTitle, culture, CompareOptions.None);
+    public static void Run(Form form, string mainWindowTitle, CultureInfo culture) {
+        Run(form, mainWindowTitle, culture, CompareOptions.None);
+    }
 
     /// <summary>
     /// Begins running a standard application message loop on the current thread,

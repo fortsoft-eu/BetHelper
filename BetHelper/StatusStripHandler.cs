@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -45,18 +46,36 @@ namespace BetHelper {
         private System.Timers.Timer finishedTimer;
         private System.Windows.Forms.Timer heartBeatTimer, labelTimer, timer;
         private ToolStripProgressBar progressBar;
-        private ToolStripStatusLabel labelMessage, labelUrl, labelSearchResult, labelMuted, labelCache, labelZoomLvl, labelCaps, labelNum, labelIns, labelScrl;
+        private ToolStripStatusLabel labelCache;
+        private ToolStripStatusLabel labelCaps;
+        private ToolStripStatusLabel labelIns;
+        private ToolStripStatusLabel labelMessage;
+        private ToolStripStatusLabel labelMuted;
+        private ToolStripStatusLabel labelNum;
+        private ToolStripStatusLabel labelScrl;
+        private ToolStripStatusLabel labelSearchResult;
+        private ToolStripStatusLabel labelUrl;
+        private ToolStripStatusLabel labelZoomLvl;
 
         private delegate void SetMaximumCallback(int maximum);
-        private delegate void SetValueCallback(int value);
         private delegate void SetMessageCallback(StatusMessageType statusMessageType, string message);
         private delegate void SetSetSearchResultCallback(int count, int activeMatchOrdinal);
         private delegate void SetUrlCallback(string url);
+        private delegate void SetValueCallback(int value);
         private delegate void StatusStripHandlerCallback();
 
-        public StatusStripHandler(StatusStrip statusStrip, DisplayMode displayMode, Settings settings) : this(statusStrip, displayMode, settings, null) { }
+        public StatusStripHandler(
+                StatusStrip statusStrip,
+                DisplayMode displayMode,
+                Settings settings)
 
-        public StatusStripHandler(StatusStrip statusStrip, DisplayMode displayMode, Settings settings, ExtBrowsHandler extBrowsHandler) {
+            : this(statusStrip, displayMode, settings, null) { }
+
+        public StatusStripHandler(
+                StatusStrip statusStrip,
+                DisplayMode displayMode,
+                Settings settings,
+                ExtBrowsHandler extBrowsHandler) {
 
             labelMessage = new ToolStripStatusLabel() {
                 Alignment = ToolStripItemAlignment.Left,
@@ -218,9 +237,15 @@ namespace BetHelper {
             InitializeStatusLabelTimer();
             InitializeHeartBeatTimer();
 
-            statusStrip.Paint += new PaintEventHandler((sender, e) => e.Graphics.DrawLine(SystemPens.Control, e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.X + e.ClipRectangle.Width, e.ClipRectangle.Y));
+            statusStrip.Paint += new PaintEventHandler((sender, e) => e.Graphics.DrawLine(
+                SystemPens.Control,
+                e.ClipRectangle.X,
+                e.ClipRectangle.Y,
+                e.ClipRectangle.X + e.ClipRectangle.Width,
+                e.ClipRectangle.Y));
+
             statusStrip.SizeChanged += new EventHandler(OnStatusStripSizeChanged);
-            if (displayMode == DisplayMode.None) {
+            if (displayMode.Equals(DisplayMode.None)) {
                 statusStrip.Visible = false;
             }
             this.displayMode = displayMode;
@@ -257,65 +282,87 @@ namespace BetHelper {
 
         private void BuildContextMenu() {
             contextMenu = new ContextMenu();
-            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInDefaultBrowser, new EventHandler((sender, e) => {
-                if (!string.IsNullOrEmpty(msg4CtxMenu) && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase)) {
-                    try {
-                        Process.Start(StaticMethods.EscapeArgument(msg4CtxMenu));
-                    } catch (Exception exception) {
-                        Debug.WriteLine(exception);
-                        ErrorLog.WriteLine(exception);
+            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInDefaultBrowser,
+                new EventHandler((sender, e) => {
+                    if (!string.IsNullOrEmpty(msg4CtxMenu)
+                            && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase)) {
+
+                        try {
+                            Process.Start(StaticMethods.EscapeArgument(msg4CtxMenu));
+                        } catch (Exception exception) {
+                            Debug.WriteLine(exception);
+                            ErrorLog.WriteLine(exception);
+                        }
                     }
-                }
-            })));
-            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInGoogleChrome, new EventHandler((sender, e) => {
-                if (!string.IsNullOrEmpty(msg4CtxMenu) && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase)) {
-                    try {
-                        extBrowsHandler.Open(ExtBrowsHandler.Browser.GoogleChrome, msg4CtxMenu);
-                    } catch (Exception exception) {
-                        Debug.WriteLine(exception);
-                        ErrorLog.WriteLine(exception);
+                })));
+            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInGoogleChrome,
+                new EventHandler((sender, e) => {
+                    if (!string.IsNullOrEmpty(msg4CtxMenu)
+                            && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase)) {
+
+                        try {
+                            extBrowsHandler.Open(ExtBrowsHandler.Browser.GoogleChrome, msg4CtxMenu);
+                        } catch (Exception exception) {
+                            Debug.WriteLine(exception);
+                            ErrorLog.WriteLine(exception);
+                        }
                     }
-                }
-            })));
-            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInMozillaFirefox, new EventHandler((sender, e) => {
-                if (!string.IsNullOrEmpty(msg4CtxMenu) && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase)) {
-                    try {
-                        extBrowsHandler.Open(ExtBrowsHandler.Browser.Firefox, msg4CtxMenu);
-                    } catch (Exception exception) {
-                        Debug.WriteLine(exception);
-                        ErrorLog.WriteLine(exception);
+                })));
+            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInMozillaFirefox,
+                new EventHandler((sender, e) => {
+                    if (!string.IsNullOrEmpty(msg4CtxMenu)
+                            && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase)) {
+
+                        try {
+                            extBrowsHandler.Open(ExtBrowsHandler.Browser.Firefox, msg4CtxMenu);
+                        } catch (Exception exception) {
+                            Debug.WriteLine(exception);
+                            ErrorLog.WriteLine(exception);
+                        }
                     }
-                }
-            })));
+                })));
             contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAnalyzeUrl, new EventHandler((sender, e) => {
-                if (!string.IsNullOrEmpty(msg4CtxMenu) && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase)) {
-                    try {
-                        Process.Start(Application.ExecutablePath, Constants.CommandLineSwitchWD + Constants.Space + StaticMethods.EscapeArgument(msg4CtxMenu));
-                    } catch (Exception exception) {
-                        Debug.WriteLine(exception);
-                        ErrorLog.WriteLine(exception);
+            contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemAnalyzeUrl,
+                new EventHandler((sender, e) => {
+                    if (!string.IsNullOrEmpty(msg4CtxMenu)
+                            && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase)) {
+
+                        try {
+                            StringBuilder arguments = new StringBuilder()
+                                .Append(Constants.CommandLineSwitchWD)
+                                .Append(Constants.Space)
+                                .Append(StaticMethods.EscapeArgument(msg4CtxMenu));
+                            Process.Start(Application.ExecutablePath, arguments.ToString());
+                        } catch (Exception exception) {
+                            Debug.WriteLine(exception);
+                            ErrorLog.WriteLine(exception);
+                        }
                     }
-                }
-            })));
+                })));
             contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-            contextMenu.MenuItems.Add(new MenuItem(string.Empty, new EventHandler((sender, e) => {
-                if (!string.IsNullOrEmpty(msg4CtxMenu)) {
-                    ClipboardSetText(msg4CtxMenu);
-                }
-            })));
+            contextMenu.MenuItems.Add(new MenuItem(string.Empty,
+                new EventHandler((sender, e) => {
+                    if (!string.IsNullOrEmpty(msg4CtxMenu)) {
+                        ClipboardSetText(msg4CtxMenu);
+                    }
+                })));
             contextMenu.Popup += new EventHandler((sender, e) => {
-                bool isLink = !string.IsNullOrEmpty(msg4CtxMenu) && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase);
+                bool isLink = !string.IsNullOrEmpty(msg4CtxMenu)
+                    && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase);
                 ContextMenu contextMenu = (ContextMenu)sender;
                 contextMenu.MenuItems[0].Visible = isLink;
                 contextMenu.MenuItems[1].Visible = isLink;
-                contextMenu.MenuItems[1].Enabled = extBrowsHandler != null && extBrowsHandler.Exists(ExtBrowsHandler.Browser.GoogleChrome);
+                contextMenu.MenuItems[1].Enabled = extBrowsHandler != null
+                    && extBrowsHandler.Exists(ExtBrowsHandler.Browser.GoogleChrome);
                 contextMenu.MenuItems[2].Visible = isLink;
-                contextMenu.MenuItems[2].Enabled = extBrowsHandler != null && extBrowsHandler.Exists(ExtBrowsHandler.Browser.Firefox);
+                contextMenu.MenuItems[2].Enabled = extBrowsHandler != null
+                    && extBrowsHandler.Exists(ExtBrowsHandler.Browser.Firefox);
                 contextMenu.MenuItems[3].Visible = isLink;
                 contextMenu.MenuItems[4].Visible = isLink;
                 contextMenu.MenuItems[5].Visible = isLink;
-                contextMenu.MenuItems[6].Text = isLink ? Properties.Resources.MenuItemCopyUrl : Properties.Resources.MenuItemCopyText;
+                contextMenu.MenuItems[6].Text = isLink
+                    ? Properties.Resources.MenuItemCopyUrl
+                    : Properties.Resources.MenuItemCopyText;
                 contextMenu.MenuItems[6].Visible = !string.IsNullOrWhiteSpace(msg4CtxMenu);
             });
         }
@@ -408,7 +455,9 @@ namespace BetHelper {
                 } else {
                     foreach (object item in statusStrip.Items) {
                         if (item is ToolStripStatusLabel) {
-                            ((ToolStripStatusLabel)item).BorderStyle = settings.Border3DStyle == 0 ? Border3DStyle.Adjust : settings.Border3DStyle;
+                            ((ToolStripStatusLabel)item).BorderStyle = settings.Border3DStyle == 0
+                                ? Border3DStyle.Adjust
+                                : settings.Border3DStyle;
                         }
                     }
                 }
@@ -435,7 +484,7 @@ namespace BetHelper {
         private void SetStatusLabelText(object sender, EventArgs e) => msg4CtxMenu = ((ToolStripStatusLabel)sender).Text;
 
         private void SetStatusLabelText(object sender, MouseEventArgs e) {
-            if (e.Button == MouseButtons.Right) {
+            if (e.Button.Equals(MouseButtons.Right)) {
                 msg4CtxMenu = ((ToolStripStatusLabel)sender).Text;
             }
         }
@@ -443,7 +492,7 @@ namespace BetHelper {
         private void SetNull(object sender, EventArgs e) => msg4CtxMenu = null;
 
         private void SetNull(object sender, MouseEventArgs e) {
-            if (e.Button == MouseButtons.Right) {
+            if (e.Button.Equals(MouseButtons.Right)) {
                 msg4CtxMenu = null;
             }
         }
@@ -465,15 +514,21 @@ namespace BetHelper {
                                 labelTimer.Stop();
                                 tempMsg = null;
                                 if (!string.IsNullOrWhiteSpace(msgA)) {
-                                    labelMessage.Text = msgA.EndsWith(Constants.ThreeDots) ? message : message.Trim(Constants.Period) + Constants.Period;
+                                    labelMessage.Text = msgA.EndsWith(Constants.ThreeDots)
+                                        ? message
+                                        : message.Trim(Constants.Period) + Constants.Period;
                                 } else if (!string.IsNullOrWhiteSpace(msgB)) {
-                                    labelMessage.Text = msgB.EndsWith(Constants.ThreeDots) ? message : message.Trim(Constants.Period) + Constants.Period;
+                                    labelMessage.Text = msgB.EndsWith(Constants.ThreeDots)
+                                        ? message
+                                        : message.Trim(Constants.Period) + Constants.Period;
                                 } else {
                                     labelMessage.Text = Properties.Resources.MessageReady;
                                 }
                             } else {
                                 tempMsg = message;
-                                labelMessage.Text = message.EndsWith(Constants.ThreeDots) ? message : message.Trim(Constants.Period) + Constants.Period;
+                                labelMessage.Text = message.EndsWith(Constants.ThreeDots)
+                                    ? message
+                                    : message.Trim(Constants.Period) + Constants.Period;
                                 labelTimer.Start();
                             }
                             break;
@@ -509,7 +564,9 @@ namespace BetHelper {
                                 if (message.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase)) {
                                     labelMessage.Text = message;
                                 } else {
-                                    labelMessage.Text = message.EndsWith(Constants.ThreeDots) ? message : message.Trim(Constants.Period) + Constants.Period;
+                                    labelMessage.Text = message.EndsWith(Constants.ThreeDots)
+                                        ? message
+                                        : message.Trim(Constants.Period) + Constants.Period;
                                 }
                             }
                             break;
@@ -560,7 +617,11 @@ namespace BetHelper {
                         }
                         labelSearchResult.TextAlign = ContentAlignment.MiddleRight;
                         labelSearchResult.ForeColor = SystemColors.ControlText;
-                        labelSearchResult.Text = string.Format(Constants.StripSearchFormat, activeMatchOrdinal, count, match);
+                        labelSearchResult.Text = string.Format(
+                            Constants.StripSearchFormat,
+                            activeMatchOrdinal,
+                            count,
+                            match);
                     } else {
                         labelSearchResult.TextAlign = ContentAlignment.MiddleCenter;
                         labelSearchResult.ForeColor = Color.Crimson;
@@ -623,7 +684,10 @@ namespace BetHelper {
                     if (statusStrip.InvokeRequired) {
                         statusStrip.Invoke(new StatusStripHandlerCallback(SetDataSize));
                     } else {
-                        labelCache.Text = StaticMethods.ShowSize(dataSize, settings.NumberFormat.cultureInfo, settings.UseDecimalPrefix);
+                        labelCache.Text = StaticMethods.ShowSize(
+                            dataSize,
+                            settings.NumberFormat.cultureInfo,
+                            settings.UseDecimalPrefix);
                         SetStatusStripControlsSize();
                     }
                 } catch (Exception exception) {
@@ -703,7 +767,9 @@ namespace BetHelper {
         }
 
         private bool SetStatusLabelCaps() {
-            string str = Control.IsKeyLocked(Keys.CapsLock) ? Properties.Resources.CaptionCapsLock : string.Empty;
+            string str = Control.IsKeyLocked(Keys.CapsLock)
+                ? Properties.Resources.CaptionCapsLock
+                : string.Empty;
             if (str.Equals(labelCaps.Text)) {
                 return false;
             }
@@ -712,7 +778,9 @@ namespace BetHelper {
         }
 
         private bool SetStatusLabelNum() {
-            string str = Control.IsKeyLocked(Keys.NumLock) ? Properties.Resources.CaptionNumLock : string.Empty;
+            string str = Control.IsKeyLocked(Keys.NumLock)
+                ? Properties.Resources.CaptionNumLock
+                : string.Empty;
             if (str.Equals(labelNum.Text)) {
                 return false;
             }
@@ -721,7 +789,9 @@ namespace BetHelper {
         }
 
         private bool SetStatusLabelIns() {
-            string str = Control.IsKeyLocked(Keys.Insert) ? Properties.Resources.CaptionOverWrite : Properties.Resources.CaptionInsert;
+            string str = Control.IsKeyLocked(Keys.Insert)
+                ? Properties.Resources.CaptionOverWrite
+                : Properties.Resources.CaptionInsert;
             if (str.Equals(labelIns.Text)) {
                 return false;
             }
@@ -730,7 +800,9 @@ namespace BetHelper {
         }
 
         private bool SetStatusLabelScrl() {
-            string str = Control.IsKeyLocked(Keys.Scroll) ? Properties.Resources.CaptionScrollLock : string.Empty;
+            string str = Control.IsKeyLocked(Keys.Scroll)
+                ? Properties.Resources.CaptionScrollLock
+                : string.Empty;
             if (str.Equals(labelScrl.Text)) {
                 return false;
             }
@@ -744,7 +816,9 @@ namespace BetHelper {
             labelSearchResult.Visible = statusStrip.Width > Constants.StripStatusLblSearchResVLimit;
             progressBar.Visible = statusStrip.Width > Constants.StripProgressBarVLimit;
             progressBar.ProgressBar.Width = statusStrip.Width / Constants.StripProgressBarWRatio;
-            bool visible = statusStrip.Width > (displayMode == DisplayMode.Standard ? Constants.StripStatusLblCacheVLimit : Constants.StripStatusLblCacheVLimitReduced);
+            bool visible = statusStrip.Width > (displayMode.Equals(DisplayMode.Standard)
+                ? Constants.StripStatusLblCacheVLimit
+                : Constants.StripStatusLblCacheVLimitReduced);
             labelMuted.Visible = visible;
             labelZoomLvl.Visible = visible;
             labelCache.Visible = visible;
@@ -782,11 +856,18 @@ namespace BetHelper {
 
         private static string ShowZoomLevel(double zoomLevel, IFormatProvider provider) {
             double perCent = zoomLevel < 0 ? 11.1111d * zoomLevel + 100 : 100 * zoomLevel / 3 + 100;
-            return perCent.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + Constants.Percent;
+            return new StringBuilder()
+                .Append(perCent.ToString(Constants.OneDecimalDigitFormat, provider))
+                .Append(Constants.Space)
+                .Append(Constants.Percent)
+                .ToString();
         }
 
         public enum DisplayMode {
-            None, Standard, Reduced, Basic
+            None,
+            Standard,
+            Reduced,
+            Basic
         }
 
         /// <summary>

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -33,8 +33,15 @@ namespace BetHelper {
 
         public WebInfo WebInfo { get; set; }
 
-        protected override IResourceRequestHandler GetResourceRequestHandler(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame,
-                IRequest request, bool isNavigation, bool isDownload, string requestInitiator, ref bool disableDefaultHandling) {
+        protected override IResourceRequestHandler GetResourceRequestHandler(
+                IWebBrowser chromiumWebBrowser,
+                IBrowser browser,
+                IFrame frame,
+                IRequest request,
+                bool isNavigation,
+                bool isDownload,
+                string requestInitiator,
+                ref bool disableDefaultHandling) {
 
             Settings settings = ((MainForm)WebInfo.Parent.Form).Settings;
             if (settings.KeepAnEyeOnTheClientsIP && !settings.AllowedAddrHandler.Check()) {

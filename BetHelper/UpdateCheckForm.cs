@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -47,24 +47,40 @@ namespace BetHelper {
         public event EventHandler<UpdateCheckerEventArgs> StateSet;
 
         public UpdateCheckForm(string version) {
-            Text = Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionUpdateCheck;
+            Text = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionUpdateCheck)
+                .ToString();
             this.version = version;
 
             InitializeComponent();
 
             SuspendLayout();
             label2.ContextMenu = new ContextMenu();
-            label2.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyVersion, new EventHandler(CopyVersion)));
+            label2.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyVersion,
+                new EventHandler(CopyVersion)));
             label4.ContextMenu = new ContextMenu();
-            label4.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyVersion, new EventHandler(CopyVersion)));
+            label4.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyVersion,
+                new EventHandler(CopyVersion)));
             label5.ContextMenu = new ContextMenu();
-            label5.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler(Copy)));
+            label5.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                new EventHandler(Copy)));
             label6.Text = Properties.Resources.LabelWebsite;
             linkLabel.ContextMenu = new ContextMenu();
-            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInDefaultBrowser, new EventHandler(OpenLink)));
+            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInDefaultBrowser,
+                new EventHandler(OpenLink)));
             linkLabel.ContextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyUrl, new EventHandler(CopyLink)));
-            linkLabel.Text = Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant() + Constants.Slash + Application.ProductName.ToLowerInvariant() + Constants.Slash;
+            linkLabel.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopyUrl,
+                new EventHandler(CopyLink)));
+            linkLabel.Text = new StringBuilder()
+                .Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant())
+                .Append(Constants.Slash)
+                .Append(Application.ProductName.ToLowerInvariant())
+                .Append(Constants.Slash)
+                .ToString();
             toolTip.SetToolTip(linkLabel, Properties.Resources.ToolTipVisit);
             button.Text = Properties.Resources.ButtonClose;
             ResumeLayout(false);
@@ -74,16 +90,16 @@ namespace BetHelper {
         private void CheckForUpdates() {
             HttpWebRequest webRequest = null;
             HttpWebResponse webResponse = null;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant());
-            stringBuilder.Append(Constants.Slash);
-            stringBuilder.Append(Application.ProductName.ToLowerInvariant());
-            stringBuilder.Append(Constants.Slash);
-            stringBuilder.Append(Constants.RemoteApiScriptName);
-            stringBuilder.Append(Constants.QuestionMark);
-            stringBuilder.Append(Constants.RemoteVariableNameGet);
-            stringBuilder.Append(Constants.EqualSign);
-            stringBuilder.Append(Constants.RemoteProductLatestVersion);
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant())
+                .Append(Constants.Slash)
+                .Append(Application.ProductName.ToLowerInvariant())
+                .Append(Constants.Slash)
+                .Append(Constants.RemoteApiScriptName)
+                .Append(Constants.QuestionMark)
+                .Append(Constants.RemoteVariableNameGet)
+                .Append(Constants.EqualSign)
+                .Append(Constants.RemoteProductLatestVersion);
             try {
                 webRequest = (HttpWebRequest)WebRequest.Create(stringBuilder.ToString());
                 webResponse = (HttpWebResponse)webRequest.GetResponse();
@@ -121,7 +137,9 @@ namespace BetHelper {
                     Invoke(new ResponseCallback(Response), version);
                 } else {
                     try {
-                        SetState(UpdateChecker.CompareVersion(version, Application.ProductVersion) > 0 ? UpdateChecker.State.UpdateAvailable : UpdateChecker.State.UpToDate);
+                        SetState(UpdateChecker.CompareVersion(version, Application.ProductVersion) > 0
+                            ? UpdateChecker.State.UpdateAvailable
+                            : UpdateChecker.State.UpToDate);
                     } catch (Exception exception) {
                         Debug.WriteLine(exception);
                         ErrorLog.WriteLine(exception);
@@ -259,12 +277,14 @@ namespace BetHelper {
         }
 
         private void OnLinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Middle) {
+            if (e.Button.Equals(MouseButtons.Left) || e.Button.Equals(MouseButtons.Middle)) {
                 OpenLink((LinkLabel)sender);
             }
         }
 
-        private void OpenLink(object sender, EventArgs e) => OpenLink((LinkLabel)((MenuItem)sender).GetContextMenu().SourceControl);
+        private void OpenLink(object sender, EventArgs e) {
+            OpenLink((LinkLabel)((MenuItem)sender).GetContextMenu().SourceControl);
+        }
 
         private void OpenLink(LinkLabel linkLabel) {
             try {
@@ -273,7 +293,13 @@ namespace BetHelper {
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-                dialog = new MessageForm(this, exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
                 dialog.ShowDialog(this);
             }
         }

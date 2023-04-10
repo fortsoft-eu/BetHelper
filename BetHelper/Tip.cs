@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
@@ -35,7 +35,15 @@ namespace BetHelper {
     [Serializable()]
     public class Tip : ISerializable {
 
-        public Tip(DateTime dateTime, Game[] games, string bookmaker, float odd, float trustDegree, string service, TipStatus status) {
+        public Tip(
+                DateTime dateTime,
+                Game[] games,
+                string bookmaker,
+                float odd,
+                float trustDegree,
+                string service,
+                TipStatus status) {
+
             Bookmaker = bookmaker;
             DateTime = dateTime;
             Games = games;
@@ -97,41 +105,41 @@ namespace BetHelper {
         }
 
         public override string ToString() {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("DateTime");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(DateTime.ToString(Constants.ToStringTimeFormat, CultureInfo.InvariantCulture));
-            stringBuilder.Append("Bookmaker");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Bookmaker);
-            stringBuilder.Append("Odd");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Odd.ToString(Constants.TwoDecimalDigitsFormat, CultureInfo.InvariantCulture));
-            stringBuilder.Append("TrustDegree");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(TrustDegree.ToString(Constants.TwoDecimalDigitsFormat, CultureInfo.InvariantCulture));
-            stringBuilder.Append("Service");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Service);
-            stringBuilder.Append("Status");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Status.ToString());
-            stringBuilder.Append("Uid");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Uid);
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append("DateTime")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(DateTime.ToString(Constants.ToStringTimeFormat, CultureInfo.InvariantCulture))
+                .Append("Bookmaker")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Bookmaker)
+                .Append("Odd")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Odd.ToString(Constants.TwoDecimalDigitsFormat, CultureInfo.InvariantCulture))
+                .Append("TrustDegree")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(TrustDegree.ToString(Constants.TwoDecimalDigitsFormat, CultureInfo.InvariantCulture))
+                .Append("Service")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Service)
+                .Append("Status")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Status.ToString())
+                .Append("Uid")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Uid);
             foreach (Game game in Games) {
                 for (int i = 0; i < 10; i++) {
                     stringBuilder.Append(Constants.Hyphen);
                 }
-                stringBuilder.AppendLine();
-                stringBuilder.AppendLine(game.ToString());
+                stringBuilder.AppendLine()
+                    .AppendLine(game.ToString());
             }
             return stringBuilder.ToString();
         }

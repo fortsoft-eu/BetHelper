@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -92,11 +92,12 @@ namespace BetHelper {
                 }
             }
             if (ElementExists(browser, "document.getElementsByClassName('footer')[0].children[0].children[2]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('footer')[0].children[0].children[2].style.display = 'none';");
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('footer')[0].children[0].children[2].style.display = 'none';");
             }
 
             Sleep(250);
-            if (GetBalance() == decimal.MinValue) {
+            if (decimal.MinValue.Equals(GetBalance())) {
                 OnProgress(Properties.Resources.MessageDisplayingBalance);
                 if (ElementExists(browser, "document.getElementsByClassName('money')[0]", false)) {
                     browser.ExecuteScriptAsync("document.getElementsByClassName('money')[0].click();");
@@ -113,10 +114,11 @@ namespace BetHelper {
                 }
             }
             if (ElementExists(browser, "document.getElementsByClassName('footer')[0].children[0].children[2]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('footer')[0].children[0].children[2].style.display = 'none';");
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('footer')[0].children[0].children[2].style.display = 'none';");
             }
 
-            if (GetBalance() == decimal.MinValue) {
+            if (decimal.MinValue.Equals(GetBalance())) {
                 if (ElementExists(browser, "document.getElementsByClassName('money')[0]", false)) {
                     browser.ExecuteScriptAsync("document.getElementsByClassName('money')[0].click();");
                 }
@@ -130,10 +132,11 @@ namespace BetHelper {
                 }
             }
             if (ElementExists(browser, "document.getElementsByClassName('footer')[0].children[0].children[2]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('footer')[0].children[0].children[2].style.display = 'none';");
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('footer')[0].children[0].children[2].style.display = 'none';");
             }
 
-            if (GetBalance() == decimal.MinValue) {
+            if (decimal.MinValue.Equals(GetBalance())) {
                 if (ElementExists(browser, "document.getElementsByClassName('money')[0]", false)) {
                     browser.ExecuteScriptAsync("document.getElementsByClassName('money')[0].click();");
                 }

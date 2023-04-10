@@ -1,4 +1,30 @@
-﻿namespace BetHelper {
+﻿/**
+ * This is open-source software licensed under the terms of the MIT License.
+ *
+ * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ **
+ * Version 1.1.0.0
+ */
+
+namespace BetHelper {
     partial class WebInfoForm {
         /// <summary>
         /// Required designer variable.
@@ -71,6 +97,14 @@
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.checkBoxTabNavigation = new System.Windows.Forms.CheckBox();
             this.checkBoxWillTryToKeep = new System.Windows.Forms.CheckBox();
+            this.labelTips = new System.Windows.Forms.Label();
+            this.textBoxTips = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.panelChatHosts = new System.Windows.Forms.Panel();
+            this.panelAllowedHosts = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel.SuspendLayout();
+            this.panelChatHosts.SuspendLayout();
+            this.panelAllowedHosts.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelTitle
@@ -84,10 +118,12 @@
             // 
             // textBoxTitle
             // 
-            this.textBoxTitle.Location = new System.Drawing.Point(127, 12);
+            this.textBoxTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTitle.Location = new System.Drawing.Point(138, 12);
             this.textBoxTitle.Name = "textBoxTitle";
             this.textBoxTitle.ReadOnly = true;
-            this.textBoxTitle.Size = new System.Drawing.Size(304, 20);
+            this.textBoxTitle.Size = new System.Drawing.Size(253, 20);
             this.textBoxTitle.TabIndex = 1;
             this.textBoxTitle.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
@@ -103,17 +139,20 @@
             // 
             // textBoxUrl
             // 
-            this.textBoxUrl.Location = new System.Drawing.Point(127, 35);
+            this.textBoxUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxUrl.Location = new System.Drawing.Point(138, 35);
             this.textBoxUrl.Name = "textBoxUrl";
             this.textBoxUrl.ReadOnly = true;
-            this.textBoxUrl.Size = new System.Drawing.Size(304, 20);
+            this.textBoxUrl.Size = new System.Drawing.Size(253, 20);
             this.textBoxUrl.TabIndex = 4;
             this.textBoxUrl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxUrl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // buttonCopyUrl
             // 
-            this.buttonCopyUrl.Location = new System.Drawing.Point(437, 33);
+            this.buttonCopyUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCopyUrl.Location = new System.Drawing.Point(397, 33);
             this.buttonCopyUrl.Name = "buttonCopyUrl";
             this.buttonCopyUrl.Size = new System.Drawing.Size(75, 23);
             this.buttonCopyUrl.TabIndex = 5;
@@ -124,28 +163,31 @@
             // labelUserName
             // 
             this.labelUserName.AutoSize = true;
-            this.labelUserName.Location = new System.Drawing.Point(12, 107);
+            this.labelUserName.Location = new System.Drawing.Point(12, 130);
             this.labelUserName.Name = "labelUserName";
             this.labelUserName.Size = new System.Drawing.Size(61, 13);
-            this.labelUserName.TabIndex = 10;
+            this.labelUserName.TabIndex = 12;
             this.labelUserName.Text = "User na&me:";
             // 
             // textBoxUserName
             // 
-            this.textBoxUserName.Location = new System.Drawing.Point(127, 104);
+            this.textBoxUserName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxUserName.Location = new System.Drawing.Point(138, 127);
             this.textBoxUserName.Name = "textBoxUserName";
             this.textBoxUserName.ReadOnly = true;
-            this.textBoxUserName.Size = new System.Drawing.Size(304, 20);
-            this.textBoxUserName.TabIndex = 11;
+            this.textBoxUserName.Size = new System.Drawing.Size(253, 20);
+            this.textBoxUserName.TabIndex = 13;
             this.textBoxUserName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxUserName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // buttonCopyUserName
             // 
-            this.buttonCopyUserName.Location = new System.Drawing.Point(437, 102);
+            this.buttonCopyUserName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCopyUserName.Location = new System.Drawing.Point(397, 125);
             this.buttonCopyUserName.Name = "buttonCopyUserName";
             this.buttonCopyUserName.Size = new System.Drawing.Size(75, 23);
-            this.buttonCopyUserName.TabIndex = 12;
+            this.buttonCopyUserName.TabIndex = 14;
             this.buttonCopyUserName.Text = "C&opy";
             this.buttonCopyUserName.UseVisualStyleBackColor = true;
             this.buttonCopyUserName.Click += new System.EventHandler(this.OnCopyUserNameClick);
@@ -153,29 +195,32 @@
             // labelPassword
             // 
             this.labelPassword.AutoSize = true;
-            this.labelPassword.Location = new System.Drawing.Point(12, 130);
+            this.labelPassword.Location = new System.Drawing.Point(12, 153);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(56, 13);
-            this.labelPassword.TabIndex = 13;
+            this.labelPassword.TabIndex = 15;
             this.labelPassword.Text = "Pass&word:";
             // 
             // maskedTextBoxPassword
             // 
-            this.maskedTextBoxPassword.Location = new System.Drawing.Point(127, 127);
+            this.maskedTextBoxPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.maskedTextBoxPassword.Location = new System.Drawing.Point(138, 150);
             this.maskedTextBoxPassword.Name = "maskedTextBoxPassword";
             this.maskedTextBoxPassword.ReadOnly = true;
-            this.maskedTextBoxPassword.Size = new System.Drawing.Size(304, 20);
-            this.maskedTextBoxPassword.TabIndex = 14;
+            this.maskedTextBoxPassword.Size = new System.Drawing.Size(253, 20);
+            this.maskedTextBoxPassword.TabIndex = 17;
             this.maskedTextBoxPassword.UseSystemPasswordChar = true;
             this.maskedTextBoxPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnPasswordKeyDown);
             this.maskedTextBoxPassword.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnPasswordMouseDown);
             // 
             // buttonCopyPassword
             // 
-            this.buttonCopyPassword.Location = new System.Drawing.Point(437, 125);
+            this.buttonCopyPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCopyPassword.Location = new System.Drawing.Point(397, 148);
             this.buttonCopyPassword.Name = "buttonCopyPassword";
             this.buttonCopyPassword.Size = new System.Drawing.Size(75, 23);
-            this.buttonCopyPassword.TabIndex = 16;
+            this.buttonCopyPassword.TabIndex = 18;
             this.buttonCopyPassword.Text = "&Copy";
             this.buttonCopyPassword.UseVisualStyleBackColor = true;
             this.buttonCopyPassword.Click += new System.EventHandler(this.OnCopyPasswordClick);
@@ -183,86 +228,94 @@
             // labelScript
             // 
             this.labelScript.AutoSize = true;
-            this.labelScript.Location = new System.Drawing.Point(12, 153);
+            this.labelScript.Location = new System.Drawing.Point(12, 176);
             this.labelScript.Name = "labelScript";
             this.labelScript.Size = new System.Drawing.Size(60, 13);
-            this.labelScript.TabIndex = 17;
+            this.labelScript.TabIndex = 19;
             this.labelScript.Text = "&JavaScript:";
             // 
             // textBoxScript
             // 
-            this.textBoxScript.Location = new System.Drawing.Point(127, 150);
+            this.textBoxScript.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxScript.Location = new System.Drawing.Point(138, 173);
             this.textBoxScript.Name = "textBoxScript";
             this.textBoxScript.ReadOnly = true;
-            this.textBoxScript.Size = new System.Drawing.Size(304, 20);
-            this.textBoxScript.TabIndex = 18;
+            this.textBoxScript.Size = new System.Drawing.Size(253, 20);
+            this.textBoxScript.TabIndex = 20;
             this.textBoxScript.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxScript.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // labelPattern
             // 
             this.labelPattern.AutoSize = true;
-            this.labelPattern.Location = new System.Drawing.Point(12, 176);
+            this.labelPattern.Location = new System.Drawing.Point(12, 199);
             this.labelPattern.Name = "labelPattern";
             this.labelPattern.Size = new System.Drawing.Size(44, 13);
-            this.labelPattern.TabIndex = 19;
+            this.labelPattern.TabIndex = 21;
             this.labelPattern.Text = "Patter&n:";
             // 
             // textBoxPattern
             // 
-            this.textBoxPattern.Location = new System.Drawing.Point(127, 173);
+            this.textBoxPattern.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxPattern.Location = new System.Drawing.Point(138, 196);
             this.textBoxPattern.Name = "textBoxPattern";
             this.textBoxPattern.ReadOnly = true;
-            this.textBoxPattern.Size = new System.Drawing.Size(304, 20);
-            this.textBoxPattern.TabIndex = 20;
+            this.textBoxPattern.Size = new System.Drawing.Size(253, 20);
+            this.textBoxPattern.TabIndex = 22;
             this.textBoxPattern.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPattern.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // labelFields
             // 
             this.labelFields.AutoSize = true;
-            this.labelFields.Location = new System.Drawing.Point(12, 199);
+            this.labelFields.Location = new System.Drawing.Point(12, 222);
             this.labelFields.Name = "labelFields";
             this.labelFields.Size = new System.Drawing.Size(37, 13);
-            this.labelFields.TabIndex = 21;
+            this.labelFields.TabIndex = 23;
             this.labelFields.Text = "&Fields:";
             // 
             // textBoxFields
             // 
-            this.textBoxFields.Location = new System.Drawing.Point(127, 196);
+            this.textBoxFields.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxFields.Location = new System.Drawing.Point(138, 219);
             this.textBoxFields.Name = "textBoxFields";
             this.textBoxFields.ReadOnly = true;
-            this.textBoxFields.Size = new System.Drawing.Size(304, 20);
-            this.textBoxFields.TabIndex = 22;
+            this.textBoxFields.Size = new System.Drawing.Size(253, 20);
+            this.textBoxFields.TabIndex = 24;
             this.textBoxFields.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxFields.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // labelDisplayName
             // 
             this.labelDisplayName.AutoSize = true;
-            this.labelDisplayName.Location = new System.Drawing.Point(12, 222);
+            this.labelDisplayName.Location = new System.Drawing.Point(12, 245);
             this.labelDisplayName.Name = "labelDisplayName";
             this.labelDisplayName.Size = new System.Drawing.Size(73, 13);
-            this.labelDisplayName.TabIndex = 23;
-            this.labelDisplayName.Text = "&Display name:";
+            this.labelDisplayName.TabIndex = 25;
+            this.labelDisplayName.Text = "Displa&y name:";
             // 
             // textBoxDisplayName
             // 
-            this.textBoxDisplayName.Location = new System.Drawing.Point(127, 219);
+            this.textBoxDisplayName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxDisplayName.Location = new System.Drawing.Point(138, 242);
             this.textBoxDisplayName.Name = "textBoxDisplayName";
             this.textBoxDisplayName.ReadOnly = true;
-            this.textBoxDisplayName.Size = new System.Drawing.Size(304, 20);
-            this.textBoxDisplayName.TabIndex = 24;
+            this.textBoxDisplayName.Size = new System.Drawing.Size(253, 20);
+            this.textBoxDisplayName.TabIndex = 26;
             this.textBoxDisplayName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxDisplayName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // checkBoxHandlePopUps
             // 
             this.checkBoxHandlePopUps.AutoSize = true;
-            this.checkBoxHandlePopUps.Location = new System.Drawing.Point(15, 262);
+            this.checkBoxHandlePopUps.Location = new System.Drawing.Point(15, 285);
             this.checkBoxHandlePopUps.Name = "checkBoxHandlePopUps";
             this.checkBoxHandlePopUps.Size = new System.Drawing.Size(98, 17);
-            this.checkBoxHandlePopUps.TabIndex = 27;
+            this.checkBoxHandlePopUps.TabIndex = 29;
             this.checkBoxHandlePopUps.Text = "Handle popups";
             this.checkBoxHandlePopUps.UseVisualStyleBackColor = true;
             this.checkBoxHandlePopUps.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
@@ -270,145 +323,149 @@
             // labelPopUpWidth
             // 
             this.labelPopUpWidth.AutoSize = true;
-            this.labelPopUpWidth.Location = new System.Drawing.Point(12, 304);
+            this.labelPopUpWidth.Location = new System.Drawing.Point(12, 326);
             this.labelPopUpWidth.Name = "labelPopUpWidth";
             this.labelPopUpWidth.Size = new System.Drawing.Size(72, 13);
-            this.labelPopUpWidth.TabIndex = 31;
-            this.labelPopUpWidth.Text = "Pop up w&idth:";
+            this.labelPopUpWidth.TabIndex = 33;
+            this.labelPopUpWidth.Text = "Pop up wi&dth:";
             // 
             // textBoxPopUpWidth
             // 
-            this.textBoxPopUpWidth.Location = new System.Drawing.Point(127, 300);
+            this.textBoxPopUpWidth.Location = new System.Drawing.Point(138, 323);
             this.textBoxPopUpWidth.Name = "textBoxPopUpWidth";
             this.textBoxPopUpWidth.ReadOnly = true;
             this.textBoxPopUpWidth.Size = new System.Drawing.Size(55, 20);
-            this.textBoxPopUpWidth.TabIndex = 32;
+            this.textBoxPopUpWidth.TabIndex = 34;
             this.textBoxPopUpWidth.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPopUpWidth.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // labelPopUpHeight
             // 
             this.labelPopUpHeight.AutoSize = true;
-            this.labelPopUpHeight.Location = new System.Drawing.Point(261, 304);
+            this.labelPopUpHeight.Location = new System.Drawing.Point(210, 326);
             this.labelPopUpHeight.Name = "labelPopUpHeight";
             this.labelPopUpHeight.Size = new System.Drawing.Size(76, 13);
-            this.labelPopUpHeight.TabIndex = 33;
+            this.labelPopUpHeight.TabIndex = 35;
             this.labelPopUpHeight.Text = "Pop up &height:";
             // 
             // textBoxPopUpHeight
             // 
-            this.textBoxPopUpHeight.Location = new System.Drawing.Point(376, 300);
+            this.textBoxPopUpHeight.Location = new System.Drawing.Point(336, 323);
             this.textBoxPopUpHeight.Name = "textBoxPopUpHeight";
             this.textBoxPopUpHeight.ReadOnly = true;
             this.textBoxPopUpHeight.Size = new System.Drawing.Size(55, 20);
-            this.textBoxPopUpHeight.TabIndex = 34;
+            this.textBoxPopUpHeight.TabIndex = 36;
             this.textBoxPopUpHeight.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPopUpHeight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // labelPopUpLeft
             // 
             this.labelPopUpLeft.AutoSize = true;
-            this.labelPopUpLeft.Location = new System.Drawing.Point(12, 326);
+            this.labelPopUpLeft.Location = new System.Drawing.Point(12, 349);
             this.labelPopUpLeft.Name = "labelPopUpLeft";
             this.labelPopUpLeft.Size = new System.Drawing.Size(61, 13);
-            this.labelPopUpLeft.TabIndex = 35;
+            this.labelPopUpLeft.TabIndex = 37;
             this.labelPopUpLeft.Text = "Pop up &left:";
             // 
             // textBoxPopUpLeft
             // 
-            this.textBoxPopUpLeft.Location = new System.Drawing.Point(127, 323);
+            this.textBoxPopUpLeft.Location = new System.Drawing.Point(138, 346);
             this.textBoxPopUpLeft.Name = "textBoxPopUpLeft";
             this.textBoxPopUpLeft.ReadOnly = true;
             this.textBoxPopUpLeft.Size = new System.Drawing.Size(55, 20);
-            this.textBoxPopUpLeft.TabIndex = 36;
+            this.textBoxPopUpLeft.TabIndex = 38;
             this.textBoxPopUpLeft.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPopUpLeft.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // labelPopUpTop
             // 
             this.labelPopUpTop.AutoSize = true;
-            this.labelPopUpTop.Location = new System.Drawing.Point(261, 326);
+            this.labelPopUpTop.Location = new System.Drawing.Point(210, 349);
             this.labelPopUpTop.Name = "labelPopUpTop";
             this.labelPopUpTop.Size = new System.Drawing.Size(62, 13);
-            this.labelPopUpTop.TabIndex = 37;
+            this.labelPopUpTop.TabIndex = 39;
             this.labelPopUpTop.Text = "Pop &up top:";
             // 
             // textBoxPopUpTop
             // 
-            this.textBoxPopUpTop.Location = new System.Drawing.Point(376, 323);
+            this.textBoxPopUpTop.Location = new System.Drawing.Point(336, 346);
             this.textBoxPopUpTop.Name = "textBoxPopUpTop";
             this.textBoxPopUpTop.ReadOnly = true;
             this.textBoxPopUpTop.Size = new System.Drawing.Size(55, 20);
-            this.textBoxPopUpTop.TabIndex = 38;
+            this.textBoxPopUpTop.TabIndex = 40;
             this.textBoxPopUpTop.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPopUpTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // labelIetfLanguageTag
             // 
             this.labelIetfLanguageTag.AutoSize = true;
-            this.labelIetfLanguageTag.Location = new System.Drawing.Point(12, 349);
+            this.labelIetfLanguageTag.Location = new System.Drawing.Point(12, 372);
             this.labelIetfLanguageTag.Name = "labelIetfLanguageTag";
             this.labelIetfLanguageTag.Size = new System.Drawing.Size(98, 13);
-            this.labelIetfLanguageTag.TabIndex = 39;
+            this.labelIetfLanguageTag.TabIndex = 41;
             this.labelIetfLanguageTag.Text = "IETF lan&guage tag:";
             // 
             // textBoxIetfLanguageTag
             // 
-            this.textBoxIetfLanguageTag.Location = new System.Drawing.Point(127, 346);
+            this.textBoxIetfLanguageTag.Location = new System.Drawing.Point(138, 369);
             this.textBoxIetfLanguageTag.Name = "textBoxIetfLanguageTag";
             this.textBoxIetfLanguageTag.ReadOnly = true;
             this.textBoxIetfLanguageTag.Size = new System.Drawing.Size(55, 20);
-            this.textBoxIetfLanguageTag.TabIndex = 40;
+            this.textBoxIetfLanguageTag.TabIndex = 42;
             this.textBoxIetfLanguageTag.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxIetfLanguageTag.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // labelBackNavigation
             // 
             this.labelBackNavigation.AutoSize = true;
-            this.labelBackNavigation.Location = new System.Drawing.Point(261, 349);
+            this.labelBackNavigation.Location = new System.Drawing.Point(210, 372);
             this.labelBackNavigation.Name = "labelBackNavigation";
             this.labelBackNavigation.Size = new System.Drawing.Size(87, 13);
-            this.labelBackNavigation.TabIndex = 41;
+            this.labelBackNavigation.TabIndex = 43;
             this.labelBackNavigation.Text = "&Back navigation:";
             // 
             // textBoxBackNavigation
             // 
-            this.textBoxBackNavigation.Location = new System.Drawing.Point(376, 346);
+            this.textBoxBackNavigation.Location = new System.Drawing.Point(336, 369);
             this.textBoxBackNavigation.Name = "textBoxBackNavigation";
             this.textBoxBackNavigation.ReadOnly = true;
             this.textBoxBackNavigation.Size = new System.Drawing.Size(55, 20);
-            this.textBoxBackNavigation.TabIndex = 42;
+            this.textBoxBackNavigation.TabIndex = 44;
             this.textBoxBackNavigation.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxBackNavigation.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // labelAllowedHosts
             // 
             this.labelAllowedHosts.AutoSize = true;
-            this.labelAllowedHosts.Location = new System.Drawing.Point(12, 372);
+            this.labelAllowedHosts.Location = new System.Drawing.Point(0, 3);
             this.labelAllowedHosts.Name = "labelAllowedHosts";
             this.labelAllowedHosts.Size = new System.Drawing.Size(75, 13);
-            this.labelAllowedHosts.TabIndex = 43;
+            this.labelAllowedHosts.TabIndex = 0;
             this.labelAllowedHosts.Text = "&Allowed hosts:";
             // 
             // textBoxAllowedHosts
             // 
-            this.textBoxAllowedHosts.Location = new System.Drawing.Point(127, 369);
+            this.textBoxAllowedHosts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxAllowedHosts.Location = new System.Drawing.Point(126, 0);
             this.textBoxAllowedHosts.Multiline = true;
             this.textBoxAllowedHosts.Name = "textBoxAllowedHosts";
             this.textBoxAllowedHosts.ReadOnly = true;
             this.textBoxAllowedHosts.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxAllowedHosts.Size = new System.Drawing.Size(304, 45);
-            this.textBoxAllowedHosts.TabIndex = 44;
+            this.textBoxAllowedHosts.Size = new System.Drawing.Size(253, 45);
+            this.textBoxAllowedHosts.TabIndex = 1;
             this.textBoxAllowedHosts.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxAllowedHosts.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // buttonOk
             // 
+            this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonOk.Location = new System.Drawing.Point(437, 439);
+            this.buttonOk.Location = new System.Drawing.Point(397, 462);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
-            this.buttonOk.TabIndex = 47;
+            this.buttonOk.TabIndex = 46;
             this.buttonOk.Text = "Clos&e";
             this.buttonOk.UseVisualStyleBackColor = true;
             // 
@@ -416,10 +473,10 @@
             // 
             this.checkBoxWillHandlePopUps.AutoSize = true;
             this.checkBoxWillHandlePopUps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBoxWillHandlePopUps.Location = new System.Drawing.Point(15, 281);
+            this.checkBoxWillHandlePopUps.Location = new System.Drawing.Point(15, 304);
             this.checkBoxWillHandlePopUps.Name = "checkBoxWillHandlePopUps";
             this.checkBoxWillHandlePopUps.Size = new System.Drawing.Size(155, 17);
-            this.checkBoxWillHandlePopUps.TabIndex = 29;
+            this.checkBoxWillHandlePopUps.TabIndex = 31;
             this.checkBoxWillHandlePopUps.Text = "Will actually handle popups";
             this.checkBoxWillHandlePopUps.UseVisualStyleBackColor = true;
             this.checkBoxWillHandlePopUps.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
@@ -427,21 +484,24 @@
             // labelChatHosts
             // 
             this.labelChatHosts.AutoSize = true;
-            this.labelChatHosts.Location = new System.Drawing.Point(12, 420);
+            this.labelChatHosts.Location = new System.Drawing.Point(0, 5);
             this.labelChatHosts.Name = "labelChatHosts";
             this.labelChatHosts.Size = new System.Drawing.Size(60, 13);
-            this.labelChatHosts.TabIndex = 45;
+            this.labelChatHosts.TabIndex = 0;
             this.labelChatHosts.Text = "Chat ho&sts:";
             // 
             // textBoxChatHosts
             // 
-            this.textBoxChatHosts.Location = new System.Drawing.Point(127, 417);
+            this.textBoxChatHosts.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxChatHosts.Location = new System.Drawing.Point(126, 2);
             this.textBoxChatHosts.Multiline = true;
             this.textBoxChatHosts.Name = "textBoxChatHosts";
             this.textBoxChatHosts.ReadOnly = true;
             this.textBoxChatHosts.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxChatHosts.Size = new System.Drawing.Size(304, 45);
-            this.textBoxChatHosts.TabIndex = 46;
+            this.textBoxChatHosts.Size = new System.Drawing.Size(253, 45);
+            this.textBoxChatHosts.TabIndex = 1;
             this.textBoxChatHosts.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxChatHosts.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -456,10 +516,12 @@
             // 
             // textBoxUrlLive
             // 
-            this.textBoxUrlLive.Location = new System.Drawing.Point(127, 58);
+            this.textBoxUrlLive.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxUrlLive.Location = new System.Drawing.Point(138, 58);
             this.textBoxUrlLive.Name = "textBoxUrlLive";
             this.textBoxUrlLive.ReadOnly = true;
-            this.textBoxUrlLive.Size = new System.Drawing.Size(304, 20);
+            this.textBoxUrlLive.Size = new System.Drawing.Size(253, 20);
             this.textBoxUrlLive.TabIndex = 7;
             this.textBoxUrlLive.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxUrlLive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
@@ -467,10 +529,10 @@
             // checkBoxIsService
             // 
             this.checkBoxIsService.AutoSize = true;
-            this.checkBoxIsService.Location = new System.Drawing.Point(15, 243);
+            this.checkBoxIsService.Location = new System.Drawing.Point(15, 266);
             this.checkBoxIsService.Name = "checkBoxIsService";
             this.checkBoxIsService.Size = new System.Drawing.Size(71, 17);
-            this.checkBoxIsService.TabIndex = 25;
+            this.checkBoxIsService.TabIndex = 27;
             this.checkBoxIsService.Text = "Is service";
             this.checkBoxIsService.UseVisualStyleBackColor = true;
             this.checkBoxIsService.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
@@ -478,18 +540,19 @@
             // checkBoxAudioMutedByDefault
             // 
             this.checkBoxAudioMutedByDefault.AutoSize = true;
-            this.checkBoxAudioMutedByDefault.Location = new System.Drawing.Point(264, 243);
+            this.checkBoxAudioMutedByDefault.Location = new System.Drawing.Point(213, 266);
             this.checkBoxAudioMutedByDefault.Name = "checkBoxAudioMutedByDefault";
             this.checkBoxAudioMutedByDefault.Size = new System.Drawing.Size(134, 17);
-            this.checkBoxAudioMutedByDefault.TabIndex = 26;
+            this.checkBoxAudioMutedByDefault.TabIndex = 28;
             this.checkBoxAudioMutedByDefault.Text = "Audio muted by default";
             this.checkBoxAudioMutedByDefault.UseVisualStyleBackColor = true;
             this.checkBoxAudioMutedByDefault.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
             // 
             // labelOrdinal
             // 
+            this.labelOrdinal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelOrdinal.AutoSize = true;
-            this.labelOrdinal.Location = new System.Drawing.Point(437, 15);
+            this.labelOrdinal.Location = new System.Drawing.Point(397, 15);
             this.labelOrdinal.Name = "labelOrdinal";
             this.labelOrdinal.Size = new System.Drawing.Size(62, 13);
             this.labelOrdinal.TabIndex = 2;
@@ -506,31 +569,35 @@
             // 
             // textBoxUrlNext
             // 
-            this.textBoxUrlNext.Location = new System.Drawing.Point(127, 81);
+            this.textBoxUrlNext.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxUrlNext.Location = new System.Drawing.Point(138, 81);
             this.textBoxUrlNext.Name = "textBoxUrlNext";
             this.textBoxUrlNext.ReadOnly = true;
-            this.textBoxUrlNext.Size = new System.Drawing.Size(304, 20);
+            this.textBoxUrlNext.Size = new System.Drawing.Size(253, 20);
             this.textBoxUrlNext.TabIndex = 9;
             this.textBoxUrlNext.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxUrlNext.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // textBoxPassword
             // 
-            this.textBoxPassword.Location = new System.Drawing.Point(127, 127);
+            this.textBoxPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxPassword.Location = new System.Drawing.Point(138, 150);
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.ReadOnly = true;
-            this.textBoxPassword.Size = new System.Drawing.Size(304, 20);
-            this.textBoxPassword.TabIndex = 15;
+            this.textBoxPassword.Size = new System.Drawing.Size(253, 20);
+            this.textBoxPassword.TabIndex = 16;
             this.textBoxPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPassword.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
             // checkBoxTabNavigation
             // 
             this.checkBoxTabNavigation.AutoSize = true;
-            this.checkBoxTabNavigation.Location = new System.Drawing.Point(264, 262);
+            this.checkBoxTabNavigation.Location = new System.Drawing.Point(213, 285);
             this.checkBoxTabNavigation.Name = "checkBoxTabNavigation";
             this.checkBoxTabNavigation.Size = new System.Drawing.Size(170, 17);
-            this.checkBoxTabNavigation.TabIndex = 28;
+            this.checkBoxTabNavigation.TabIndex = 30;
             this.checkBoxTabNavigation.Text = "Allow navigation between tabs";
             this.checkBoxTabNavigation.UseVisualStyleBackColor = true;
             this.checkBoxTabNavigation.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
@@ -539,20 +606,83 @@
             // 
             this.checkBoxWillTryToKeep.AutoSize = true;
             this.checkBoxWillTryToKeep.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBoxWillTryToKeep.Location = new System.Drawing.Point(264, 281);
+            this.checkBoxWillTryToKeep.Location = new System.Drawing.Point(213, 304);
             this.checkBoxWillTryToKeep.Name = "checkBoxWillTryToKeep";
-            this.checkBoxWillTryToKeep.Size = new System.Drawing.Size(165, 17);
-            this.checkBoxWillTryToKeep.TabIndex = 30;
-            this.checkBoxWillTryToKeep.Text = "Will try to keep user logged in";
+            this.checkBoxWillTryToKeep.Size = new System.Drawing.Size(183, 17);
+            this.checkBoxWillTryToKeep.TabIndex = 32;
+            this.checkBoxWillTryToKeep.Text = "Will try to keep the user logged in";
             this.checkBoxWillTryToKeep.UseVisualStyleBackColor = true;
             this.checkBoxWillTryToKeep.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
+            // 
+            // labelTips
+            // 
+            this.labelTips.AutoSize = true;
+            this.labelTips.Location = new System.Drawing.Point(12, 107);
+            this.labelTips.Name = "labelTips";
+            this.labelTips.Size = new System.Drawing.Size(55, 13);
+            this.labelTips.TabIndex = 10;
+            this.labelTips.Text = "T&ips URL:";
+            // 
+            // textBoxTips
+            // 
+            this.textBoxTips.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxTips.Location = new System.Drawing.Point(138, 104);
+            this.textBoxTips.Name = "textBoxTips";
+            this.textBoxTips.ReadOnly = true;
+            this.textBoxTips.Size = new System.Drawing.Size(253, 20);
+            this.textBoxTips.TabIndex = 11;
+            this.textBoxTips.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            this.textBoxTips.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+            // 
+            // tableLayoutPanel
+            // 
+            this.tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel.ColumnCount = 1;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.Controls.Add(this.panelChatHosts, 0, 1);
+            this.tableLayoutPanel.Controls.Add(this.panelAllowedHosts, 0, 0);
+            this.tableLayoutPanel.Location = new System.Drawing.Point(12, 392);
+            this.tableLayoutPanel.Name = "tableLayoutPanel";
+            this.tableLayoutPanel.RowCount = 2;
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.Size = new System.Drawing.Size(379, 93);
+            this.tableLayoutPanel.TabIndex = 45;
+            // 
+            // panelChatHosts
+            // 
+            this.panelChatHosts.Controls.Add(this.textBoxChatHosts);
+            this.panelChatHosts.Controls.Add(this.labelChatHosts);
+            this.panelChatHosts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelChatHosts.Location = new System.Drawing.Point(0, 46);
+            this.panelChatHosts.Margin = new System.Windows.Forms.Padding(0);
+            this.panelChatHosts.Name = "panelChatHosts";
+            this.panelChatHosts.Size = new System.Drawing.Size(379, 47);
+            this.panelChatHosts.TabIndex = 0;
+            // 
+            // panelAllowedHosts
+            // 
+            this.panelAllowedHosts.Controls.Add(this.textBoxAllowedHosts);
+            this.panelAllowedHosts.Controls.Add(this.labelAllowedHosts);
+            this.panelAllowedHosts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelAllowedHosts.Location = new System.Drawing.Point(0, 0);
+            this.panelAllowedHosts.Margin = new System.Windows.Forms.Padding(0);
+            this.panelAllowedHosts.Name = "panelAllowedHosts";
+            this.panelAllowedHosts.Size = new System.Drawing.Size(379, 46);
+            this.panelAllowedHosts.TabIndex = 0;
             // 
             // WebInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonOk;
-            this.ClientSize = new System.Drawing.Size(524, 474);
+            this.ClientSize = new System.Drawing.Size(484, 497);
+            this.Controls.Add(this.tableLayoutPanel);
+            this.Controls.Add(this.textBoxTips);
+            this.Controls.Add(this.labelTips);
             this.Controls.Add(this.checkBoxWillTryToKeep);
             this.Controls.Add(this.checkBoxTabNavigation);
             this.Controls.Add(this.textBoxPassword);
@@ -563,12 +693,8 @@
             this.Controls.Add(this.checkBoxIsService);
             this.Controls.Add(this.textBoxUrlLive);
             this.Controls.Add(this.labelUrlLive);
-            this.Controls.Add(this.textBoxChatHosts);
-            this.Controls.Add(this.labelChatHosts);
             this.Controls.Add(this.checkBoxWillHandlePopUps);
             this.Controls.Add(this.buttonOk);
-            this.Controls.Add(this.textBoxAllowedHosts);
-            this.Controls.Add(this.labelAllowedHosts);
             this.Controls.Add(this.textBoxBackNavigation);
             this.Controls.Add(this.labelBackNavigation);
             this.Controls.Add(this.textBoxIetfLanguageTag);
@@ -601,10 +727,16 @@
             this.Controls.Add(this.labelUrl);
             this.Controls.Add(this.textBoxTitle);
             this.Controls.Add(this.labelTitle);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(500, 536);
             this.Name = "WebInfoForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
+            this.SizeChanged += new System.EventHandler(this.GripStyle);
+            this.Move += new System.EventHandler(this.GripStyle);
+            this.tableLayoutPanel.ResumeLayout(false);
+            this.panelChatHosts.ResumeLayout(false);
+            this.panelChatHosts.PerformLayout();
+            this.panelAllowedHosts.ResumeLayout(false);
+            this.panelAllowedHosts.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -660,5 +792,10 @@
         private System.Windows.Forms.TextBox textBoxPassword;
         private System.Windows.Forms.CheckBox checkBoxTabNavigation;
         private System.Windows.Forms.CheckBox checkBoxWillTryToKeep;
+        private System.Windows.Forms.Label labelTips;
+        private System.Windows.Forms.TextBox textBoxTips;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
+        private System.Windows.Forms.Panel panelChatHosts;
+        private System.Windows.Forms.Panel panelAllowedHosts;
     }
 }

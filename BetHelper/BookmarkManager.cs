@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -75,7 +75,9 @@ namespace BetHelper {
         }
 
         private void AddMenuItem(string url, string title) {
-            MenuItem item = new MenuItem(settings.TruncateBookmarkTitles ? TruncateBookmarkTitle(title) : title, new EventHandler(OnMenuItemClicked));
+            MenuItem item = new MenuItem(settings.TruncateBookmarkTitles
+                ? TruncateBookmarkTitle(title)
+                : title, new EventHandler(OnMenuItemClicked));
             item.Tag = url;
             menuItem.MenuItems.Add(item);
         }
@@ -123,7 +125,9 @@ namespace BetHelper {
             }
         }
 
-        private void OnMenuItemClicked(object sender, EventArgs e) => Activated?.Invoke(sender, new UrlEventArgs((string)(((MenuItem)sender).Tag)));
+        private void OnMenuItemClicked(object sender, EventArgs e) {
+            Activated?.Invoke(sender, new UrlEventArgs((string)(((MenuItem)sender).Tag)));
+        }
 
         public void Populate() {
             while (menuItem.MenuItems.Count > 2) {
@@ -185,12 +189,15 @@ namespace BetHelper {
             try {
                 Uri uri1 = new Uri(url1);
                 Uri uri2 = new Uri(url2);
-                bool ep = uri2.GetComponents(UriComponents.PathAndQuery, UriFormat.UriEscaped).Equals(uri1.GetComponents(UriComponents.PathAndQuery, UriFormat.UriEscaped), StringComparison.Ordinal);
-                if (uri1.HostNameType == UriHostNameType.Dns && uri2.HostNameType == UriHostNameType.Dns) {
+                bool ep = uri2.GetComponents(UriComponents.PathAndQuery, UriFormat.UriEscaped)
+                    .Equals(uri1.GetComponents(UriComponents.PathAndQuery, UriFormat.UriEscaped), StringComparison.Ordinal);
+                if (uri1.HostNameType.Equals(UriHostNameType.Dns) && uri2.HostNameType.Equals(UriHostNameType.Dns)) {
                     Regex regex = new Regex(Constants.SecondLevelDomainPattern, RegexOptions.RightToLeft);
-                    return ep && regex.Replace(uri2.Host, Constants.ReplaceSecond).Equals(regex.Replace(uri1.Host, Constants.ReplaceSecond), StringComparison.Ordinal);
+                    return ep && regex.Replace(uri2.Host, Constants.ReplaceSecond)
+                        .Equals(regex.Replace(uri1.Host, Constants.ReplaceSecond), StringComparison.Ordinal);
                 } else if (uri1.HostNameType == uri2.HostNameType) {
-                    return ep && uri2.GetComponents(UriComponents.Host, UriFormat.UriEscaped).Equals(uri1.GetComponents(UriComponents.Host, UriFormat.UriEscaped), StringComparison.Ordinal);
+                    return ep && uri2.GetComponents(UriComponents.Host, UriFormat.UriEscaped)
+                        .Equals(uri1.GetComponents(UriComponents.Host, UriFormat.UriEscaped), StringComparison.Ordinal);
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -200,7 +207,8 @@ namespace BetHelper {
         }
 
         private enum Action {
-            Add, Remove
+            Add,
+            Remove
         }
     }
 }

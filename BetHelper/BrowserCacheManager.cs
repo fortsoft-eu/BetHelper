@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -67,7 +67,9 @@ namespace BetHelper {
 
         public void Set(ClearSet clearSet) {
             try {
-                File.WriteAllText(Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath), Constants.BrowserCacheMngrSetClearFileName), clearSet.ToString());
+                File.WriteAllText(
+                    Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath), Constants.BrowserCacheMngrSetClearFileName),
+                    clearSet.ToString());
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -79,7 +81,9 @@ namespace BetHelper {
                 try {
                     string appDataPath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
                     if (File.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrSetClearFileName))) {
-                        ClearSet clearSet = (ClearSet)Enum.Parse(typeof(ClearSet), File.ReadAllText(Path.Combine(appDataPath, Constants.BrowserCacheMngrSetClearFileName)).Trim(), true);
+                        ClearSet clearSet = (ClearSet)Enum
+                            .Parse(typeof(ClearSet),
+                                File.ReadAllText(Path.Combine(appDataPath, Constants.BrowserCacheMngrSetClearFileName)).Trim(), true);
                         switch (clearSet) {
                             case ClearSet.BrowserCacheOnly:
                                 ClearCacheOnly(appDataPath);
@@ -119,15 +123,18 @@ namespace BetHelper {
                 string appDataPath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
                 monitorSemaphore.Wait();
                 if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrCacheSubDirName))) {
-                    DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(appDataPath, Constants.BrowserCacheMngrCacheSubDirName));
+                    DirectoryInfo directoryInfo = new DirectoryInfo(
+                        Path.Combine(appDataPath, Constants.BrowserCacheMngrCacheSubDirName));
                     size += DirectorySize(directoryInfo);
                 }
                 if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName))) {
-                    DirectoryInfo directoryInfo = new DirectoryInfo(Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName));
+                    DirectoryInfo directoryInfo = new DirectoryInfo(
+                        Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName));
                     size += DirectorySize(directoryInfo);
                 }
                 if (File.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrLocalPrefsFileName))) {
-                    size += new FileInfo(Path.Combine(appDataPath, Constants.BrowserCacheMngrLocalPrefsFileName)).Length;
+                    size += new FileInfo(
+                        Path.Combine(appDataPath, Constants.BrowserCacheMngrLocalPrefsFileName)).Length;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -139,7 +146,11 @@ namespace BetHelper {
             }
         }
 
-        private static long DirectorySize(DirectoryInfo directoryInfo) => directoryInfo.GetFiles().Sum(new Func<FileInfo, long>(fileInfo => fileInfo.Length)) + directoryInfo.GetDirectories().Sum(new Func<DirectoryInfo, long>(dirInfo => DirectorySize(dirInfo)));
+        private static long DirectorySize(DirectoryInfo directoryInfo) {
+            return directoryInfo.GetFiles()
+                .Sum(new Func<FileInfo, long>(fileInfo => fileInfo.Length)) + directoryInfo.GetDirectories()
+                .Sum(new Func<DirectoryInfo, long>(dirInfo => DirectorySize(dirInfo)));
+        }
 
         public void Dispose() {
             if (monitorThread != null && monitorThread.IsAlive) {
@@ -152,7 +163,8 @@ namespace BetHelper {
         }
 
         public enum ClearSet {
-            BrowserCacheOnly, BrowserCacheIncludingUserData
+            BrowserCacheOnly,
+            BrowserCacheIncludingUserData
         }
     }
 }

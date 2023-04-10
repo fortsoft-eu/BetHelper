@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
@@ -71,13 +72,18 @@ namespace BetHelper {
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingUsernameBox);
-                browser.ExecuteScriptAsync("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username').value = '';");
+                browser.ExecuteScriptAsync(
+                    "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username').value = '';");
                 Wait(browser);
                 Sleep(50);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (ElementExists(browser, "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username')", true)) {
-                    browser.ExecuteScriptAsync("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username').focus();");
+                if (ElementExists(browser,
+                        "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username')",
+                        true)) {
+
+                    browser.ExecuteScriptAsync(
+                        "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username').focus();");
                     Sleep(250);
                 } else {
                     OnError();
@@ -86,7 +92,8 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingUsername);
                 SendString(browser, Username);
-            } while (!GetValueById("username", "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document").Equals(Username));
+            } while (!GetValueById("username", "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+                .Equals(Username));
 
             Wait(browser);
             Sleep(200);
@@ -94,13 +101,18 @@ namespace BetHelper {
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingPasswordBox);
-                browser.ExecuteScriptAsync("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('password').value = '';");
+                browser.ExecuteScriptAsync(
+                    "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('password').value = '';");
                 Wait(browser);
                 Sleep(50);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (ElementExists(browser, "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('password')", true)) {
-                    browser.ExecuteScriptAsync("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('password').focus();");
+                if (ElementExists(browser,
+                        "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('password')",
+                        true)) {
+
+                    browser.ExecuteScriptAsync(
+                        "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('password').focus();");
                     Sleep(250);
                 } else {
                     OnError();
@@ -109,7 +121,8 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingPassword);
                 SendString(browser, Password);
-            } while (!GetValueById("password", "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document").Equals(Password));
+            } while (!GetValueById("password", "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+                .Equals(Password));
 
             SendKey(browser, Keys.Tab);
             OnProgress(Properties.Resources.MessageLoggingIn);
@@ -118,7 +131,8 @@ namespace BetHelper {
             Sleep(800);
 
             if (ElementExists(browser, "document.getElementsByClassName('sb-header__user-verification-banner')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('sb-header__user-verification-banner')[0].style.display = 'none';");
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('sb-header__user-verification-banner')[0].style.display = 'none';");
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('sb-header__timers')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('sb-header__timers')[0].remove();");
@@ -137,7 +151,8 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('sb-modal__close__btn')[0].click();");
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('sb-header__user-verification-banner')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('sb-header__user-verification-banner')[0].style.display = 'none';");
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('sb-header__user-verification-banner')[0].style.display = 'none';");
             }
         }
 
@@ -146,12 +161,18 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync("document.getElementById('notifications-slider').style.display = 'none';");
             }
             if (ElementExists(browser, "document.getElementsByClassName('sb-header__user-verification-banner')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('sb-header__user-verification-banner')[0].style.display = 'none';");
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('sb-header__user-verification-banner')[0].style.display = 'none';");
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('sb-header__header__navigation')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('sb-header__header__navigation')[0].children[1].children[0].children[2].remove();");
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('sb-header__header__navigation')[0].children[1].children[0].children[2].remove();");
             }
-            browser.ExecuteScriptAsync("for (let i = 0; i < document.getElementsByClassName('casino-banners').length; i++) document.getElementsByClassName('casino-banners')[i].style.display = 'none';");
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("for (let i = 0; i < document.getElementsByClassName('casino-banners').length; i++)")
+                .Append(" document.getElementsByClassName('casino-banners')[i].style.display = 'none';")
+                .ToString());
+
             if (ElementExists(browser, "document.getElementsByClassName('mini-banners')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('mini-banners')[0].style.display = 'none';");
             }
@@ -164,7 +185,14 @@ namespace BetHelper {
             if (ElementExists(browser, "document.getElementById('bet-mentor-modal')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('bet-mentor-modal').style.display = 'none';");
             }
-            browser.ExecuteScriptAsync("var jips4Cx7 = document.getElementsByClassName('sport-picker')[0].children.length > 8 ? 1 : 0; for (let i = 1; i <= 4; i++) { var eFs57Wt3 = document.getElementsByClassName('sport-picker')[0].children[i + jips4Cx7]; eFs57Wt3.style.visibility = 'hidden'; eFs57Wt3.style.height = 0; }");
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("var jipq4Cx7 = document.getElementsByClassName('sport-picker')[0].children.length > 8 ? 1 : 0;")
+                .Append("for (let i = 1; i <= 4; i++) {")
+                .Append("    var eFs57Wq3 = document.getElementsByClassName('sport-picker')[0].children[i + jipq4Cx7];")
+                .Append("    eFs57Wq3.style.visibility = 'hidden';")
+                .Append("    eFs57Wq3.style.height = 0; }")
+                .ToString());
+
             if (ElementExists(browser, "document.getElementsByClassName('story-groups-wrapper')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('story-groups-wrapper')[0].style.display = 'none';");
             }

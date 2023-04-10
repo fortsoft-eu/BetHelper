@@ -21,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -44,8 +45,15 @@ namespace BetHelper {
 
         public WebInfoForm(WebInfo webInfo) {
             this.webInfo = webInfo;
+
             Icon = Properties.Resources.Form;
-            Text = Properties.Resources.CaptionWebInfo + Constants.Space + Constants.EnDash + Constants.Space + webInfo.Title;
+            Text = new StringBuilder()
+                .Append(Properties.Resources.CaptionWebInfo)
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(webInfo.Title)
+                .ToString();
 
             textBoxClicksTimer = new Timer();
             textBoxClicksTimer.Interval = SystemInformation.DoubleClickTime;
@@ -67,6 +75,7 @@ namespace BetHelper {
             textBoxUrl.Text = string.IsNullOrEmpty(webInfo.Url) ? Properties.Resources.CaptionNotSet : webInfo.Url;
             textBoxUrlLive.Text = string.IsNullOrEmpty(webInfo.UrlLive) ? Properties.Resources.CaptionNotSet : webInfo.UrlLive;
             textBoxUrlNext.Text = string.IsNullOrEmpty(webInfo.UrlNext) ? Properties.Resources.CaptionNotSet : webInfo.UrlNext;
+            textBoxTips.Text = string.IsNullOrEmpty(webInfo.UrlTips) ? Properties.Resources.CaptionNotSet : webInfo.UrlTips;
             textBoxUserName.Text = string.IsNullOrEmpty(webInfo.Username) ? Properties.Resources.CaptionNotSet : webInfo.Username;
             maskedTextBoxPassword.Text = webInfo.Password;
             maskedTextBoxPassword.Visible = !string.IsNullOrEmpty(webInfo.Password);
@@ -75,18 +84,30 @@ namespace BetHelper {
             textBoxScript.Text = string.IsNullOrEmpty(webInfo.Script) ? Properties.Resources.CaptionNotSet : webInfo.Script;
             textBoxPattern.Text = string.IsNullOrEmpty(webInfo.Pattern) ? Properties.Resources.CaptionNotSet : webInfo.Pattern;
             textBoxFields.Text = string.IsNullOrEmpty(webInfo.Fields) ? Properties.Resources.CaptionNotSet : webInfo.Fields;
-            textBoxDisplayName.Text = string.IsNullOrEmpty(webInfo.DisplayName) ? Properties.Resources.CaptionNotSet : webInfo.DisplayName;
+            textBoxDisplayName.Text = string.IsNullOrEmpty(webInfo.DisplayName)
+                ? Properties.Resources.CaptionNotSet
+                : webInfo.DisplayName;
             checkBoxIsService.Checked = webInfo.IsService;
             checkBoxAudioMutedByDefault.Checked = webInfo.AudioMutedByDefault;
             checkBoxHandlePopUps.Checked = webInfo.HandlePopUps;
             checkBoxTabNavigation.Checked = webInfo.TabNavigation;
             checkBoxWillHandlePopUps.Checked = webInfo.WillActuallyHandlePopUps;
             checkBoxWillTryToKeep.Checked = webInfo.WillTryToKeepUserLoggedIn;
-            textBoxPopUpWidth.Text = webInfo.PopUpWidth == 0 ? Properties.Resources.CaptionNotSet : webInfo.PopUpWidth.ToString().Replace(Constants.Hyphen, Constants.MinusSign);
-            textBoxPopUpHeight.Text = webInfo.PopUpHeight == 0 ? Properties.Resources.CaptionNotSet : webInfo.PopUpHeight.ToString().Replace(Constants.Hyphen, Constants.MinusSign);
-            textBoxPopUpLeft.Text = webInfo.PopUpLeft == 0 ? Properties.Resources.CaptionNotSet : webInfo.PopUpLeft.ToString().Replace(Constants.Hyphen, Constants.MinusSign);
-            textBoxPopUpTop.Text = webInfo.PopUpTop == 0 ? Properties.Resources.CaptionNotSet : webInfo.PopUpTop.ToString().Replace(Constants.Hyphen, Constants.MinusSign);
-            textBoxIetfLanguageTag.Text = string.IsNullOrEmpty(webInfo.IetfLanguageTag) ? Properties.Resources.CaptionNotSet : webInfo.IetfLanguageTag;
+            textBoxPopUpWidth.Text = webInfo.PopUpWidth.Equals(0)
+                ? Properties.Resources.CaptionNotSet
+                : webInfo.PopUpWidth.ToString().Replace(Constants.Hyphen, Constants.MinusSign);
+            textBoxPopUpHeight.Text = webInfo.PopUpHeight.Equals(0)
+                ? Properties.Resources.CaptionNotSet
+                : webInfo.PopUpHeight.ToString().Replace(Constants.Hyphen, Constants.MinusSign);
+            textBoxPopUpLeft.Text = webInfo.PopUpLeft.Equals(0)
+                ? Properties.Resources.CaptionNotSet
+                : webInfo.PopUpLeft.ToString().Replace(Constants.Hyphen, Constants.MinusSign);
+            textBoxPopUpTop.Text = webInfo.PopUpTop.Equals(0)
+                ? Properties.Resources.CaptionNotSet
+                : webInfo.PopUpTop.ToString().Replace(Constants.Hyphen, Constants.MinusSign);
+            textBoxIetfLanguageTag.Text = string.IsNullOrEmpty(webInfo.IetfLanguageTag)
+                ? Properties.Resources.CaptionNotSet
+                : webInfo.IetfLanguageTag;
             textBoxBackNavigation.Text = webInfo.BackNavigation.ToString();
             if (webInfo.AllowedHosts == null) {
                 textBoxAllowedHosts.Text = Properties.Resources.CaptionNotSet;
@@ -136,6 +157,8 @@ namespace BetHelper {
                         control.ContextMenu = contextMenu;
                     }
                 }
+                textBoxAllowedHosts.ContextMenu = contextMenu;
+                textBoxChatHosts.ContextMenu = contextMenu;
             }));
         }
 
@@ -161,6 +184,10 @@ namespace BetHelper {
             }
         }
 
+        private void GripStyle(object sender, EventArgs e) {
+            SizeGripStyle = WindowState.Equals(FormWindowState.Normal) ? SizeGripStyle.Show : SizeGripStyle.Hide;
+        }
+
         private void SelectAll(object sender, EventArgs e) {
             Control control = ((MenuItem)sender).GetContextMenu().SourceControl;
             if (control is TextBox) {
@@ -181,7 +208,7 @@ namespace BetHelper {
         public void SafeHide() {
             if (InvokeRequired) {
                 Invoke(new WebInfoFormCallback(SafeHide));
-            } else if (WindowState != FormWindowState.Minimized) {
+            } else if (!WindowState.Equals(FormWindowState.Minimized)) {
                 WindowState = FormWindowState.Minimized;
             }
         }
@@ -233,14 +260,14 @@ namespace BetHelper {
         private void OnFormClosing(object sender, FormClosingEventArgs e) => textBoxClicksTimer.Dispose();
 
         private void OnKeyDown(object sender, KeyEventArgs e) {
-            if (e.Control && e.KeyCode == Keys.A) {
+            if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
                 ((TextBox)sender).SelectAll();
             }
         }
 
         private void OnMouseDown(object sender, MouseEventArgs e) {
-            if (e.Button != MouseButtons.Left) {
+            if (!e.Button.Equals(MouseButtons.Left)) {
                 textBoxClicks = 0;
                 return;
             }
@@ -248,25 +275,34 @@ namespace BetHelper {
             textBoxClicksTimer.Stop();
             if (textBox.SelectionLength > 0) {
                 textBoxClicks = 2;
-            } else if (textBoxClicks == 0 || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
+            } else if (textBoxClicks.Equals(0) || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
                 textBoxClicks++;
             } else {
                 textBoxClicks = 0;
             }
             location = e.Location;
-            if (textBoxClicks == 3) {
+            if (textBoxClicks.Equals(3)) {
                 textBoxClicks = 0;
-                NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Convert.ToUInt32(Cursor.Position.X), Convert.ToUInt32(Cursor.Position.Y), 0, 0);
+                NativeMethods.MouseEvent(
+                    Constants.MOUSEEVENTF_LEFTUP,
+                    Convert.ToUInt32(Cursor.Position.X),
+                    Convert.ToUInt32(Cursor.Position.Y),
+                    0,
+                    0);
                 Application.DoEvents();
                 if (textBox.Multiline) {
                     char[] chars = textBox.Text.ToCharArray();
-                    int selectionEnd = Math.Min(Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart), Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
+                    int selectionEnd = Math.Min(
+                        Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart),
+                        Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
                     if (selectionEnd < 0) {
                         selectionEnd = textBox.TextLength;
                     }
                     selectionEnd = Math.Max(textBox.SelectionStart + textBox.SelectionLength, selectionEnd);
                     int selectionStart = Math.Min(textBox.SelectionStart, selectionEnd);
-                    while (--selectionStart > 0 && chars[selectionStart] != Constants.LineFeed && chars[selectionStart] != Constants.CarriageReturn) { }
+                    while (--selectionStart > 0
+                        && !chars[selectionStart].Equals(Constants.LineFeed)
+                        && !chars[selectionStart].Equals(Constants.CarriageReturn)) { }
                     textBox.Select(selectionStart, selectionEnd - selectionStart);
                 } else {
                     textBox.SelectAll();
@@ -278,14 +314,14 @@ namespace BetHelper {
         }
 
         private void OnPasswordKeyDown(object sender, KeyEventArgs e) {
-            if (e.Control && e.KeyCode == Keys.A) {
+            if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
                 ((MaskedTextBox)sender).SelectAll();
             }
         }
 
         private void OnPasswordMouseDown(object sender, MouseEventArgs e) {
-            if (e.Button != MouseButtons.Left) {
+            if (!e.Button.Equals(MouseButtons.Left)) {
                 textBoxClicks = 0;
                 return;
             }
@@ -293,15 +329,20 @@ namespace BetHelper {
             textBoxClicksTimer.Stop();
             if (maskedTextBox.SelectionLength > 0) {
                 textBoxClicks = 2;
-            } else if (textBoxClicks == 0 || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
+            } else if (textBoxClicks.Equals(0) || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
                 textBoxClicks++;
             } else {
                 textBoxClicks = 0;
             }
             location = e.Location;
-            if (textBoxClicks == 3) {
+            if (textBoxClicks.Equals(3)) {
                 textBoxClicks = 0;
-                NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Convert.ToUInt32(Cursor.Position.X), Convert.ToUInt32(Cursor.Position.Y), 0, 0);
+                NativeMethods.MouseEvent(
+                    Constants.MOUSEEVENTF_LEFTUP,
+                    Convert.ToUInt32(Cursor.Position.X),
+                    Convert.ToUInt32(Cursor.Position.Y),
+                    0,
+                    0);
                 maskedTextBox.SelectAll();
                 maskedTextBox.Focus();
             } else {

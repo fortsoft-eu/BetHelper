@@ -21,17 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System.Text;
 
 namespace BetHelper {
     public class WebInfo19 : WebInfo {
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
-            browser.ExecuteScriptAsync("for (let i = 0; i < document.getElementsByClassName('ad').length; i++) document.getElementsByClassName('ad')[i].remove();");
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("for (let i = 0; i < document.getElementsByClassName('ad').length; i++) ")
+                .Append("document.getElementsByClassName('ad')[i].remove();")
+                .ToString());
+
             if (ElementExists(browser, "document.getElementById('content').getElementsByClassName('block')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('content').getElementsByClassName('block')[0].remove();");
             }

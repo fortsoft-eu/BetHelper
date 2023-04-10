@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.6
+ * Version 1.1.0.0
  */
 
 using System;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
@@ -49,14 +50,17 @@ namespace BetHelper {
         }
 
         public ProgressBar ProgressBar => progressBar;
+
         public Label LabelProgress => labelProgress;
 
         public bool ProgressBarMarquee {
             get {
-                return progressBar.Style == ProgressBarStyle.Marquee;
+                return progressBar.Style.Equals(ProgressBarStyle.Marquee);
             }
             set {
-                progressBar.Style = value ? ProgressBarStyle.Marquee : ProgressBarStyle.Continuous;
+                progressBar.Style = value
+                    ? ProgressBarStyle.Marquee
+                    : ProgressBarStyle.Continuous;
             }
         }
 
@@ -104,7 +108,11 @@ namespace BetHelper {
                 }
                 progressBar.Value = value;
                 progressBar.Invalidate();
-                labelProgress.Text = (value * 100 / progressBar.Maximum).ToString() + Constants.Space + Constants.Percent;
+                labelProgress.Text = new StringBuilder()
+                    .Append(value * 100 / progressBar.Maximum)
+                    .Append(Constants.Space)
+                    .Append(Constants.Percent)
+                    .ToString();
                 labelProgress.Invalidate();
             }
         }
@@ -121,7 +129,11 @@ namespace BetHelper {
                 progressBar.Value = 1;
                 progressBar.Invalidate();
                 label.Text = message;
-                labelProgress.Text = 100.ToString() + Constants.Space + Constants.Percent;
+                labelProgress.Text = new StringBuilder()
+                    .Append(100)
+                    .Append(Constants.Space)
+                    .Append(Constants.Percent)
+                    .ToString();
                 labelProgress.Invalidate();
                 timer.Start();
             }
@@ -134,8 +146,12 @@ namespace BetHelper {
 
         private void OnCancelButtonClick(object sender, EventArgs e) => Close();
 
-        private void DisableCloseButton() => NativeMethods.EnableMenuItem(NativeMethods.GetSystemMenu(Handle, false), Constants.SC_CLOSE, 1);
+        private void DisableCloseButton() {
+            NativeMethods.EnableMenuItem(NativeMethods.GetSystemMenu(Handle, false), Constants.SC_CLOSE, 1);
+        }
 
-        private void EnableCloseButton() => NativeMethods.EnableMenuItem(NativeMethods.GetSystemMenu(Handle, false), Constants.SC_CLOSE, 0);
+        private void EnableCloseButton() {
+            NativeMethods.EnableMenuItem(NativeMethods.GetSystemMenu(Handle, false), Constants.SC_CLOSE, 0);
+        }
     }
 }

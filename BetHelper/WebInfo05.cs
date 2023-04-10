@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
@@ -122,7 +123,7 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('quick-nav')[0].children[3].remove();");
             }
 
-            if (GetBalance() == decimal.MinValue) {
+            if (decimal.MinValue.Equals(GetBalance())) {
                 OnProgress(Properties.Resources.MessageDisplayingBalance);
                 if (ElementExists(browser, "document.getElementById('userName')", false)) {
                     browser.ExecuteScriptAsync("document.getElementById('userName').click();");
@@ -158,7 +159,7 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('quick-nav')[0].children[3].remove();");
             }
 
-            if (GetBalance() == decimal.MinValue) {
+            if (decimal.MinValue.Equals(GetBalance())) {
                 if (ElementExists(browser, "document.getElementById('userName')", false)) {
                     browser.ExecuteScriptAsync("document.getElementById('userName').click();");
                 }
@@ -186,7 +187,7 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('quick-nav')[0].children[3].remove();");
             }
 
-            if (GetBalance() == decimal.MinValue) {
+            if (decimal.MinValue.Equals(GetBalance())) {
                 if (ElementExists(browser, "document.getElementById('userName')", false)) {
                     browser.ExecuteScriptAsync("document.getElementById('userName').click();");
                 }
@@ -198,7 +199,10 @@ namespace BetHelper {
             if (ElementExists(browser, "document.getElementsByClassName('footer-social')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('footer-social')[0].style.display = 'none';");
             }
-            browser.ExecuteScriptAsync("for (let i = 2; i < 7; i++) document.getElementsByClassName('sports-bets-menu')[0].children[0].children[1].children[i].style.display = 'none';");
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("for (let i = 2; i < 7; i++) ")
+                .Append("document.getElementsByClassName('sports-bets-menu')[0].children[0].children[1].children[i].style.display = 'none';")
+                .ToString());
         }
     }
 }

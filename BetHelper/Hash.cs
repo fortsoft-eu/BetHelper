@@ -67,15 +67,25 @@ namespace FortSoft.Tools {
         public static Algorithm GetAlgorithm(string hash) {
             switch (hash.Length) {
                 case 32:
-                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase) ? Algorithm.MD5 : Algorithm.Undefined;
+                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)
+                        ? Algorithm.MD5
+                        : Algorithm.Undefined;
                 case 40:
-                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase) ? Algorithm.SHA1 : Algorithm.Undefined;
+                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)
+                        ? Algorithm.SHA1
+                        : Algorithm.Undefined;
                 case 64:
-                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase) ? Algorithm.SHA256 : Algorithm.Undefined;
+                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)
+                        ? Algorithm.SHA256
+                        : Algorithm.Undefined;
                 case 96:
-                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase) ? Algorithm.SHA384 : Algorithm.Undefined;
+                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)
+                        ? Algorithm.SHA384
+                        : Algorithm.Undefined;
                 case 128:
-                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase) ? Algorithm.SHA512 : Algorithm.Undefined;
+                    return Regex.IsMatch(hash, "^[0-9a-f]*$", RegexOptions.CultureInvariant | RegexOptions.IgnoreCase)
+                        ? Algorithm.SHA512
+                        : Algorithm.Undefined;
                 default:
                     return Algorithm.Undefined;
             }

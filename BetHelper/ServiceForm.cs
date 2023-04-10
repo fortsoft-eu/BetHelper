@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
@@ -29,6 +29,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -66,10 +67,14 @@ namespace BetHelper {
             InitializeComponent();
             BuildContextMenuAsync();
 
+            StringBuilder customFormat = new StringBuilder()
+                .Append(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern)
+                .Append(Constants.Space)
+                .Append(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortTimePattern);
             dateTimePickerExpiration.Format = DateTimePickerFormat.Custom;
-            dateTimePickerExpiration.CustomFormat = settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern + Constants.Space + settings.NumberFormat.cultureInfo.DateTimeFormat.ShortTimePattern;
+            dateTimePickerExpiration.CustomFormat = customFormat.ToString();
             dateTimePickerSubscribed.Format = DateTimePickerFormat.Custom;
-            dateTimePickerSubscribed.CustomFormat = settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern + Constants.Space + settings.NumberFormat.cultureInfo.DateTimeFormat.ShortTimePattern;
+            dateTimePickerSubscribed.CustomFormat = customFormat.ToString();
             textBoxPrice.Text = ShowPrice(0m);
             comboBoxSpan.DataSource = Enum.GetValues(typeof(Service.SpanUnit));
             comboBoxStatus.DataSource = Enum.GetValues(typeof(Service.ServiceStatus));
@@ -83,7 +88,16 @@ namespace BetHelper {
                 service = value;
                 text = Properties.Resources.CaptionEditService;
                 textBoxName.Text = service.Name;
-                Text = string.IsNullOrWhiteSpace(textBoxName.Text) ? text : text + Constants.Space + Constants.EnDash + Constants.Space + textBoxName.Text.Trim();
+                if (string.IsNullOrWhiteSpace(textBoxName.Text)) {
+                    Text = text;
+                } else {
+                    Text = new StringBuilder(text)
+                        .Append(Constants.Space)
+                        .Append(Constants.EnDash)
+                        .Append(Constants.Space)
+                        .Append(textBoxName.Text.Trim())
+                        .ToString();
+                }
                 price = service.Price;
                 textBoxPrice.Text = ShowPrice(service.Price);
                 numericUpDownSpan.Value = service.Span;
@@ -97,14 +111,20 @@ namespace BetHelper {
         private async void BuildContextMenuAsync() {
             await Task.Run(new Action(() => {
                 ContextMenu contextMenu = new ContextMenu();
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Undo())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Undo())));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Cut())));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Copy())));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Paste())));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete, new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysDelete))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Cut())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Copy())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Paste())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete,
+                    new EventHandler((sender, e) => SendKeys.Send(Constants.SendKeysDelete))));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
                 contextMenu.Popup += new EventHandler((sender, e) => {
                     TextBox textBox = (TextBox)contextMenu.SourceControl;
                     if (!textBox.Focused) {
@@ -126,16 +146,39 @@ namespace BetHelper {
                 });
                 textBoxName.ContextMenu = contextMenu;
                 textBoxPrice.ContextMenu = contextMenu;
-            })).ContinueWith(new Action<Task>(task => {
+            }))
+            .ContinueWith(new Action<Task>(task => {
                 ContextMenu contextMenu = new ContextMenu();
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Undo())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUndo,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Undo())));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut, new EventHandler((sender, e) => NativeMethods.PostMessage(((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_CUT, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler((sender, e) => NativeMethods.PostMessage(((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_COPY, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste, new EventHandler((sender, e) => NativeMethods.PostMessage(((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_PASTE, IntPtr.Zero, IntPtr.Zero))));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete, new EventHandler((sender, e) => NativeMethods.PostMessage(((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle, Constants.WM_CLEAR, IntPtr.Zero, IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCut,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_CUT,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_COPY,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemPaste,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_PASTE,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete,
+                    new EventHandler((sender, e) => NativeMethods.PostMessage(
+                        ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).Handle,
+                        Constants.WM_CLEAR,
+                        IntPtr.Zero,
+                        IntPtr.Zero))));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll, new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
+                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
+                    new EventHandler((sender, e) => ((TextBox)((MenuItem)sender).GetContextMenu().SourceControl).SelectAll())));
                 contextMenu.Popup += new EventHandler((sender, e) => {
                     TextBox textBox = (TextBox)contextMenu.SourceControl;
                     if (!textBox.Focused) {
@@ -159,7 +202,15 @@ namespace BetHelper {
             }));
         }
 
-        private void EnableSave() => buttonSave.Enabled = !string.IsNullOrWhiteSpace(textBoxName.Text) && decimal.TryParse(Regex.Replace(textBoxPrice.Text.Replace(Constants.Comma, Constants.Period), Constants.JSBalancePattern, string.Empty), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out price);
+        private void EnableSave() {
+            buttonSave.Enabled = !string.IsNullOrWhiteSpace(textBoxName.Text)
+                && decimal.TryParse(
+                    Regex.Replace(textBoxPrice.Text.Replace(Constants.Comma, Constants.Period),
+                        Constants.JSBalancePattern, string.Empty),
+                    NumberStyles.AllowDecimalPoint,
+                    CultureInfo.InvariantCulture,
+                    out price);
+        }
 
         private void OnFormActivated(object sender, EventArgs e) {
             if (dialog != null) {
@@ -170,7 +221,7 @@ namespace BetHelper {
         private void OnFormClosing(object sender, FormClosingEventArgs e) => textBoxClicksTimer.Dispose();
 
         private void OnKeyDown(object sender, KeyEventArgs e) {
-            if (e.Control && e.KeyCode == Keys.A) {
+            if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
                 if (sender is TextBox) {
                     ((TextBox)sender).SelectAll();
@@ -187,14 +238,23 @@ namespace BetHelper {
         }
 
         private void OnNameChanged(object sender, EventArgs e) {
-            Text = string.IsNullOrWhiteSpace(textBoxName.Text) ? text : text + Constants.Space + Constants.EnDash + Constants.Space + textBoxName.Text.Trim();
+            if (string.IsNullOrWhiteSpace(textBoxName.Text)) {
+                Text = text;
+            } else {
+                Text = new StringBuilder(text)
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(textBoxName.Text.Trim())
+                    .ToString();
+            }
             EnableSave();
         }
 
         private void OnPriceChanged(object sender, EventArgs e) => EnableSave();
 
         private void OnTextBoxMouseDown(object sender, MouseEventArgs e) {
-            if (e.Button != MouseButtons.Left) {
+            if (!e.Button.Equals(MouseButtons.Left)) {
                 textBoxClicks = 0;
                 return;
             }
@@ -202,25 +262,34 @@ namespace BetHelper {
             textBoxClicksTimer.Stop();
             if (textBox.SelectionLength > 0) {
                 textBoxClicks = 2;
-            } else if (textBoxClicks == 0 || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
+            } else if (textBoxClicks.Equals(0) || Math.Abs(e.X - location.X) < 2 && Math.Abs(e.Y - location.Y) < 2) {
                 textBoxClicks++;
             } else {
                 textBoxClicks = 0;
             }
             location = e.Location;
-            if (textBoxClicks == 3) {
+            if (textBoxClicks.Equals(3)) {
                 textBoxClicks = 0;
-                NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Convert.ToUInt32(Cursor.Position.X), Convert.ToUInt32(Cursor.Position.Y), 0, 0);
+                NativeMethods.MouseEvent(
+                    Constants.MOUSEEVENTF_LEFTUP,
+                    Convert.ToUInt32(Cursor.Position.X),
+                    Convert.ToUInt32(Cursor.Position.Y),
+                    0,
+                    0);
                 Application.DoEvents();
                 if (textBox.Multiline) {
                     char[] chars = textBox.Text.ToCharArray();
-                    int selectionEnd = Math.Min(Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart), Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
+                    int selectionEnd = Math.Min(
+                        Array.IndexOf(chars, Constants.CarriageReturn, textBox.SelectionStart),
+                        Array.IndexOf(chars, Constants.LineFeed, textBox.SelectionStart));
                     if (selectionEnd < 0) {
                         selectionEnd = textBox.TextLength;
                     }
                     selectionEnd = Math.Max(textBox.SelectionStart + textBox.SelectionLength, selectionEnd);
                     int selectionStart = Math.Min(textBox.SelectionStart, selectionEnd);
-                    while (--selectionStart > 0 && chars[selectionStart] != Constants.LineFeed && chars[selectionStart] != Constants.CarriageReturn) { }
+                    while (--selectionStart > 0
+                        && !chars[selectionStart].Equals(Constants.LineFeed)
+                        && !chars[selectionStart].Equals(Constants.CarriageReturn)) { }
                     textBox.Select(selectionStart, selectionEnd - selectionStart);
                 } else {
                     textBox.SelectAll();
@@ -232,16 +301,31 @@ namespace BetHelper {
         }
 
         private void OnTextBoxPriceLeave(object sender, EventArgs e) {
-            decimal.TryParse(Regex.Replace(textBoxPrice.Text.Replace(Constants.Comma, Constants.Period), Constants.JSBalancePattern, string.Empty), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out price);
+            decimal.TryParse(
+                Regex.Replace(textBoxPrice.Text.Replace(Constants.Comma, Constants.Period), Constants.JSBalancePattern, string.Empty),
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out price);
             textBoxPrice.Text = ShowPrice(price);
         }
 
-        private static decimal ParsePrice(string str) => decimal.Parse(Regex.Replace(str.Replace(Constants.Comma, Constants.Period), Constants.JSBalancePattern, string.Empty), CultureInfo.InvariantCulture);
+        private static decimal ParsePrice(string str) {
+            return decimal.Parse(
+                Regex.Replace(str.Replace(Constants.Comma, Constants.Period), Constants.JSBalancePattern, string.Empty),
+                CultureInfo.InvariantCulture);
+        }
 
         private void Save(object sender, EventArgs e) {
             try {
                 if (service == null) {
-                    service = new Service(textBoxName.Text, ParsePrice(textBoxPrice.Text), (int)numericUpDownSpan.Value, (Service.SpanUnit)comboBoxSpan.SelectedValue, dateTimePickerExpiration.Value, dateTimePickerSubscribed.Value, (Service.ServiceStatus)comboBoxStatus.SelectedValue);
+                    service = new Service(
+                        textBoxName.Text,
+                        ParsePrice(textBoxPrice.Text),
+                        (int)numericUpDownSpan.Value,
+                        (Service.SpanUnit)comboBoxSpan.SelectedValue,
+                        dateTimePickerExpiration.Value,
+                        dateTimePickerSubscribed.Value,
+                        (Service.ServiceStatus)comboBoxStatus.SelectedValue);
                 } else {
                     service.Price = ParsePrice(textBoxPrice.Text);
                     service.Name = textBoxName.Text;
@@ -255,13 +339,25 @@ namespace BetHelper {
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-                dialog = new MessageForm(this, exception.Message, Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionError, MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
                 dialog.ShowDialog(this);
                 textBoxPrice.Focus();
                 textBoxPrice.SelectAll();
             }
         }
 
-        private string ShowPrice(decimal price) => price.ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo) + Constants.Space + Properties.Resources.LabelCurrencySymbol;
+        private string ShowPrice(decimal price) {
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append(price.ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo))
+                .Append(Constants.Space)
+                .Append(Properties.Resources.LabelCurrencySymbol);
+            return stringBuilder.ToString();
+        }
     }
 }

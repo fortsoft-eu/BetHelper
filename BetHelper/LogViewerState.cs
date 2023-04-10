@@ -21,21 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System.Windows.Forms;
 
 namespace BetHelper {
     public class LogViewerState {
+
         public long Cleared { get; set; }
+
         public long Position { get; set; }
+
         public LogViewerAction Action { get; set; }
+
         public string Path { get; set; }
+
         public TextBox TextBox { get; set; }
     }
 
     public enum LogViewerAction {
-        Append, Start, PreloadLimit, Cleared, Reload
+        Append,
+        Start,
+        PreloadLimit,
+        Cleared,
+        Reload
     }
 }

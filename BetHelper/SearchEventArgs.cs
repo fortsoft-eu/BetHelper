@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -30,6 +30,7 @@ namespace BetHelper {
     public class SearchEventArgs : EventArgs {
 
         public IntPtr Handle { get; private set; }
+
         public Search Search { get; private set; }
 
         public SearchEventArgs(IntPtr handle, Search search) {

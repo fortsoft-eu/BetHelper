@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.6
+ * Version 1.1.0.0
  */
 
 namespace BetHelper {
@@ -307,17 +307,16 @@ namespace BetHelper {
         public const char Semicolon = ';';
         public const char Slash = '/';
         public const char Space = ' ';
-        public const char T = 'T';
         public const char Underscore = '_';
+        public const char UpperCaseT = 'T';
+        public const char UpperCaseZ = 'Z';
         public const char VerticalBar = '|';
         public const char VerticalTab = '\t';
-        public const char UpperCaseZ = 'Z';
         public const char Zero = '0';
 
         /// <summary>
         /// Strings used in many places in the application code.
         /// </summary>
-
         public const string AllowedAddrFileName = "AllowedAddr.dat";
         public const string AllowedUrlStarts = "devtools:,about:";
         public const string BlankPageUri = "about:blank";
@@ -547,6 +546,8 @@ namespace BetHelper {
         public const string ShortcutF3 = "\tF3";
         public const string ShortcutF4 = "\tF4";
         public const string ShortcutF5 = "\tF5";
+        public const string ShortcutF6 = "\tF6";
+        public const string ShortcutF7 = "\tF7";
         public const string ShortcutF8 = "\tF8";
         public const string ShortcutF9 = "\tF9";
         public const string ShortcutShiftCtrlDelete = "\tShift+Ctrl+Delete";

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -87,9 +87,13 @@ namespace BetHelper {
         }
 
         public decimal Balance => balance;
+
         public Form Form => form;
+
         public List<WebInfo> WebInfos => webInfos;
+
         public Tip[] Tips => tips;
+
         public WebInfo Current => current;
 
         private void ParseConfig(string config) {
@@ -98,7 +102,7 @@ namespace BetHelper {
             StringReader stringReader = new StringReader(config);
             for (string line; (line = stringReader.ReadLine()) != null;) {
                 string[] configLine = line.Split(new char[] { Constants.EqualSign }, 2);
-                if (configLine.Length == 2) {
+                if (configLine.Length.Equals(2)) {
                     if (webInfo == null) {
                         webInfo = GetWebInfo();
                     }
@@ -209,19 +213,28 @@ namespace BetHelper {
                             }
                             break;
                         case Constants.ConfigService:
-                            webInfo.IsService = string.Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase) == 0;
+                            webInfo.IsService = string
+                                .Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
+                                .Equals(0);
                             break;
                         case Constants.ConfigMute:
-                            webInfo.AudioMutedByDefault = string.Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase) == 0;
+                            webInfo.AudioMutedByDefault = string
+                                .Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
+                                .Equals(0);
                             break;
                         case Constants.ConfigHandlePopUps:
-                            webInfo.HandlePopUps = string.Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase) == 0;
+                            webInfo.HandlePopUps = string
+                                .Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
+                                .Equals(0);
                             break;
                         case Constants.ConfigTabNavigation:
-                            webInfo.TabNavigation = string.Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase) == 0;
+                            webInfo.TabNavigation = string
+                                .Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
+                                .Equals(0);
                             break;
                         case Constants.ConfigBackNavigation:
-                            webInfo.BackNavigation = (WebInfo.BackNavigationType)Enum.Parse(typeof(WebInfo.BackNavigationType), configLine[1].Trim(), true);
+                            webInfo.BackNavigation = (WebInfo.BackNavigationType)Enum
+                                .Parse(typeof(WebInfo.BackNavigationType), configLine[1].Trim(), true);
                             break;
                         case Constants.ConfigAllowedHosts:
                             webInfo.AllowedHosts = webInfo.AllowedHosts ?? new List<string>();
@@ -312,7 +325,10 @@ namespace BetHelper {
             if (current != null) {
                 if (!string.IsNullOrWhiteSpace(current.BrowserAddress) && current.BrowserAddress.StartsWith(Constants.SchemeHttps)) {
                     return current.BrowserAddress;
-                } else if (current.Browser != null && !string.IsNullOrWhiteSpace(current.Browser.Address) && current.Browser.Address.StartsWith(Constants.SchemeHttps)) {
+                } else if (current.Browser != null
+                        && !string.IsNullOrWhiteSpace(current.Browser.Address)
+                        && current.Browser.Address.StartsWith(Constants.SchemeHttps)) {
+
                     return current.Browser.Address;
                 }
             }

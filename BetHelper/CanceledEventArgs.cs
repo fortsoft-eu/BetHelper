@@ -21,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
 
 namespace BetHelper {
     public class CanceledEventArgs : EventArgs {
+
         public string CancelMessage { get; private set; }
 
         public CanceledEventArgs(string cancelMessage) {

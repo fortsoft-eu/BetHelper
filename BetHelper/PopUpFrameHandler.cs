@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -50,7 +50,7 @@ namespace BetHelper {
 
             FrameHandler.FrameCreated += new EventHandler<FrameEventArgs>((sender, e) => {
                 StringBuilder stringBuilder = new StringBuilder();
-                if (frameIdentifier0 == 0) {
+                if (frameIdentifier0.Equals(0)) {
                     frameIdentifier0 = e.Identifier;
                     if (settings.LogPopUpFrameHandler) {
                         stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 0, e.Identifier));
@@ -59,25 +59,27 @@ namespace BetHelper {
                 frameIdentifier2 = 0;
                 if (settings.LogPopUpFrameHandler) {
                     if (stringBuilder.Length > 0) {
-                        stringBuilder.Append(Constants.Semicolon);
-                        stringBuilder.Append(Constants.Space);
+                        stringBuilder.Append(Constants.Semicolon)
+                            .Append(Constants.Space);
                     }
                     stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 2, 0));
                     Log(stringBuilder.ToString());
                 }
             });
+
             LoadHandler.FrameLoadEnd += new EventHandler<LoadEventArgs>((sender, e) => {
                 StringBuilder stringBuilder = new StringBuilder();
                 frameIdentifier0 = 0;
                 frameIdentifier2 = 0;
                 if (settings.LogPopUpFrameHandler) {
-                    stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 0, 0));
-                    stringBuilder.Append(Constants.Semicolon);
-                    stringBuilder.Append(Constants.Space);
-                    stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 2, 0));
+                    stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 0, 0))
+                        .Append(Constants.Semicolon)
+                        .Append(Constants.Space)
+                        .Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 2, 0));
                     Log(stringBuilder.ToString());
                 }
             });
+
             LoadHandler.FrameLoadStart += new EventHandler<LoadEventArgs>((sender, e) => {
                 StringBuilder stringBuilder = new StringBuilder();
                 frameIdentifier0 = 0;
@@ -88,20 +90,21 @@ namespace BetHelper {
                     frameIdentifier3 = e.Identifier;
                     if (settings.LogPopUpFrameHandler) {
                         if (stringBuilder.Length > 0) {
-                            stringBuilder.Append(Constants.Semicolon);
-                            stringBuilder.Append(Constants.Space);
+                            stringBuilder.Append(Constants.Semicolon)
+                                .Append(Constants.Space);
                         }
                         stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 3, e.Identifier));
                     }
                 }
                 frameIdentifier2 = 0;
                 if (settings.LogPopUpFrameHandler) {
-                    stringBuilder.Append(Constants.Semicolon);
-                    stringBuilder.Append(Constants.Space);
-                    stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 2, 0));
+                    stringBuilder.Append(Constants.Semicolon)
+                        .Append(Constants.Space)
+                        .Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 2, 0));
                     Log(stringBuilder.ToString());
                 }
             });
+
             LoadHandler.LoadingStateChange += new EventHandler<LoadEventArgs>((sender, e) => {
                 StringBuilder stringBuilder = new StringBuilder();
                 if (frameIdentifier1 == e.Identifier) {
@@ -114,8 +117,8 @@ namespace BetHelper {
                     frameIdentifier1 = e.Identifier;
                     if (settings.LogPopUpFrameHandler) {
                         if (stringBuilder.Length > 0) {
-                            stringBuilder.Append(Constants.Semicolon);
-                            stringBuilder.Append(Constants.Space);
+                            stringBuilder.Append(Constants.Semicolon)
+                                .Append(Constants.Space);
                         }
                         stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 1, e.Identifier));
                     }
@@ -123,8 +126,8 @@ namespace BetHelper {
                 frameIdentifier0 = 0;
                 if (settings.LogPopUpFrameHandler) {
                     if (stringBuilder.Length > 0) {
-                        stringBuilder.Append(Constants.Semicolon);
-                        stringBuilder.Append(Constants.Space);
+                        stringBuilder.Append(Constants.Semicolon)
+                            .Append(Constants.Space);
                     }
                     stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 0, 0));
                     Log(stringBuilder.ToString());
@@ -133,8 +136,11 @@ namespace BetHelper {
         }
 
         public ChromiumWebBrowser Browser { get; private set; }
+
         public FrameHandler FrameHandler { get; private set; }
+
         public LoadHandler LoadHandler { get; private set; }
+
         public string NewUrl { get; private set; }
 
         private void OnAddressChanged(object sender, AddressChangedEventArgs e) {
@@ -159,7 +165,9 @@ namespace BetHelper {
             try {
                 Uri uri1 = new Uri(url1);
                 Uri uri2 = new Uri(url2);
-                return string.Compare(uri1.GetLeftPart(UriPartial.Path), uri2.GetLeftPart(UriPartial.Path), StringComparison.OrdinalIgnoreCase) == 0;
+                return string
+                    .Compare(uri1.GetLeftPart(UriPartial.Path), uri2.GetLeftPart(UriPartial.Path), StringComparison.OrdinalIgnoreCase)
+                    .Equals(0);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -169,10 +177,12 @@ namespace BetHelper {
 
         private static void Log(string message) {
             try {
-                using (StreamWriter streamWriter = File.AppendText(Path.Combine(Application.LocalUserAppDataPath, Constants.PopUpFrameHandlerLogFileName))) {
-                    StringBuilder stringBuilder = new StringBuilder(DateTime.Now.ToString(Constants.ErrorLogTimeFormat));
-                    stringBuilder.Append(Constants.VerticalTab);
-                    stringBuilder.Append(message);
+                string filePath = Path.Combine(Application.LocalUserAppDataPath, Constants.PopUpFrameHandlerLogFileName);
+                using (StreamWriter streamWriter = File.AppendText(filePath)) {
+                    StringBuilder stringBuilder = new StringBuilder()
+                        .Append(DateTime.Now.ToString(Constants.ErrorLogTimeFormat))
+                        .Append(Constants.VerticalTab)
+                        .Append(message);
                     streamWriter.WriteLine(stringBuilder.ToString());
                 }
             } catch (Exception exception) {

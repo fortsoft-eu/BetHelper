@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -31,14 +31,21 @@ namespace BetHelper {
     public class WebInfo20 : WebInfo {
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
-            if (ElementExistsAndVisible(browser, "document.getElementById('wrapper-footer').children[0].children[0].children[1]", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('wrapper-footer').children[0].children[0].children[1].style.display = 'none';");
+            if (ElementExistsAndVisible(browser,
+                    "document.getElementById('wrapper-footer').children[0].children[0].children[1]", false)) {
+
+                browser.ExecuteScriptAsync(
+                    "document.getElementById('wrapper-footer').children[0].children[0].children[1].style.display = 'none';");
             }
+
             if (ElementExistsAndVisible(browser, "document.getElementById('wrapper-navbar').children[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('wrapper-navbar').children[0].remove();");
             }
+
             Wait(browser);
+
             Sleep(1200);
+
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('gdpr-fbo-0')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('gdpr-fbo-0')[0].click();");
             }

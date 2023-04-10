@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -124,53 +124,99 @@ namespace BetHelper {
         }
 
         public int Ordinal { get; set; }
+
         public Form Dialog { get; set; }
+
         public WebInfoHandler Parent { get; set; }
+
         public string Title { get; set; }
+
         public string Url { get; set; }
+
         public string UrlLive { get; set; }
+
         public string UrlToLoad { get; private set; }
+
         public string UrlTips { get; set; }
+
         public string Username { get; set; }
+
         public string Password { get; set; }
+
         public ChromiumWebBrowser Browser { get; private set; }
+
         public string Script { get; set; }
+
         public string Pattern { get; set; }
+
         public string Fields { get; set; }
+
         public string DisplayName { get; set; }
+
         public bool IsService { get; set; }
+
         public bool HandlePopUps { get; set; }
+
         public int PopUpWidth { get; set; }
+
         public int PopUpHeight { get; set; }
+
         public int PopUpLeft { get; set; }
+
         public int PopUpTop { get; set; }
+
         public string IetfLanguageTag { get; set; }
+
         public bool TabNavigation { get; set; }
+
         public BackNavigationType BackNavigation { get; set; }
+
         public List<string> AllowedHosts { get; set; }
+
         public List<string> ChatHosts { get; set; }
+
         public string BrowserTitle { get; private set; }
+
         public string BrowserAddress { get; private set; }
+
         public PopUpEventArgs PopUpArgs { get; set; }
+
         public bool CanGoBack { get; private set; }
+
         public bool CanGoForward { get; private set; }
+
         public bool CanReload { get; private set; }
+
         public bool IsLoading { get; private set; }
+
         public int ConsoleLine { get; private set; }
+
         public string ConsoleSource { get; private set; }
+
         public string ConsoleMessage { get; private set; }
+
         public CefErrorCode ErrorCode { get; private set; }
+
         public string ErrorText { get; private set; }
+
         public string FailedUrl { get; private set; }
+
         public string StatusMessage { get; private set; }
+
         public double ZoomLevel { get; private set; }
+
         protected bool RemoveChat { get; private set; } = true;
+
         public bool IsBookmaker => Fields == null ? false : Fields.Contains(Constants.FieldBalance);
-        public bool WillActuallyHandlePopUps => HandlePopUps || PopUpLeft != 0 || PopUpTop != 0 || PopUpWidth != 0 || PopUpHeight != 0;
+
         public bool WillTryToKeepUserLoggedIn => IsBookmaker || IsService;
+
         public bool CanPing => WillTryToKeepUserLoggedIn && CanReload && !IsLoading && pingTimerElapsed && IsLoggedIn();
+
         public bool HasChat => ChatHosts != null && ChatHosts.Count > 0;
+
         public bool IsChatHidden => RemoveChat;
+
         public bool IsAudioMuted { get; private set; }
 
         public bool AudioMutedByDefault {
@@ -190,6 +236,12 @@ namespace BetHelper {
             set {
                 urlNext = value;
                 UrlToLoad = value;
+            }
+        }
+
+        public bool WillActuallyHandlePopUps {
+            get {
+                return HandlePopUps || !PopUpLeft.Equals(0) || !PopUpTop.Equals(0) || !PopUpWidth.Equals(0) || !PopUpHeight.Equals(0);
             }
         }
 
@@ -276,19 +328,28 @@ namespace BetHelper {
         }
 
         protected string GetDisplayName(string response) {
-            string[] fields = Fields.Split(Constants.Comma).Select(new Func<string, string>(field => field.Trim())).ToArray();
+            string[] fields = Fields
+                .Split(Constants.Comma)
+                .Select(new Func<string, string>(field => field.Trim()))
+                .ToArray();
             try {
                 if (fields.Contains(Constants.FieldDisplayName)) {
                     if (string.IsNullOrEmpty(Pattern)) {
-                        return fields.Length == 1 ? response : null;
+                        return fields.Length.Equals(1) ? response : null;
                     } else {
-                        return Regex.Replace(response, Pattern, string.Format(Constants.ReplaceIndex, Array.FindIndex(fields, new Predicate<string>(field => field.Contains(Constants.FieldDisplayName))) + 1));
+                        return Regex.Replace(response, Pattern,
+                            string.Format(Constants.ReplaceIndex,
+                                Array.FindIndex(fields,
+                                    new Predicate<string>(field => field.Contains(Constants.FieldDisplayName))) + 1));
                     }
                 } else if (fields.Contains(Constants.FieldUsername)) {
                     if (string.IsNullOrEmpty(Pattern)) {
-                        return fields.Length == 1 ? response : null;
+                        return fields.Length.Equals(1) ? response : null;
                     } else {
-                        return Regex.Replace(response, Pattern, string.Format(Constants.ReplaceIndex, Array.FindIndex(fields, new Predicate<string>(field => field.Contains(Constants.FieldUsername))) + 1));
+                        return Regex.Replace(response, Pattern,
+                            string.Format(Constants.ReplaceIndex,
+                                Array.FindIndex(fields,
+                                    new Predicate<string>(field => field.Contains(Constants.FieldUsername))) + 1));
                     }
                 }
             } catch (Exception exception) {
@@ -299,7 +360,10 @@ namespace BetHelper {
         }
 
         protected string GetDisplayName() {
-            string[] fields = Fields.Split(Constants.Comma).Select(new Func<string, string>(field => field.Trim())).ToArray();
+            string[] fields = Fields
+                .Split(Constants.Comma)
+                .Select(new Func<string, string>(field => field.Trim()))
+                .ToArray();
             if (fields.Contains(Constants.FieldDisplayName)) {
                 return DisplayName;
             } else if (fields.Contains(Constants.FieldUsername)) {
@@ -323,20 +387,39 @@ namespace BetHelper {
             try {
                 LogIn(Browser);
             } catch (Exception exception) {
-                Error?.Invoke(this, new ErrorEventArgs(Properties.Resources.MessageLogInFailed + Constants.Colon + Constants.Space + exception.Message));
+                StringBuilder message = new StringBuilder()
+                    .Append(Properties.Resources.MessageLogInFailed)
+                    .Append(Constants.Colon)
+                    .Append(Constants.Space)
+                    .Append(exception.Message);
+                Error?.Invoke(this, new ErrorEventArgs(message.ToString()));
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
         }
 
         private decimal GetBalance(string response) {
-            string[] fields = Fields.Split(Constants.Comma).Select(new Func<string, string>(field => field.Trim())).ToArray();
+            string[] fields = Fields
+                .Split(Constants.Comma)
+                .Select(new Func<string, string>(field => field.Trim()))
+                .ToArray();
             try {
                 if (fields.Contains(Constants.FieldBalance)) {
                     if (string.IsNullOrEmpty(Pattern)) {
-                        return fields.Length == 1 ? decimal.Parse(Regex.Replace(response, Constants.JSBalancePattern, string.Empty), CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)) : decimal.MinValue;
+                        return fields.Length.Equals(1)
+                            ? decimal.Parse(
+                                Regex.Replace(response, Constants.JSBalancePattern, string.Empty),
+                                CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag))
+                            : decimal.MinValue;
                     } else {
-                        return decimal.Parse(Regex.Replace(Regex.Replace(response, Pattern, string.Format(Constants.ReplaceIndex, Array.FindIndex(fields, new Predicate<string>(field => field.Contains(Constants.FieldBalance))) + 1)), Constants.JSBalancePattern, string.Empty), CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag));
+                        return decimal.Parse(
+                            Regex.Replace(
+                                Regex.Replace(response, Pattern,
+                                    string.Format(Constants.ReplaceIndex,
+                                        Array.FindIndex(fields,
+                                            new Predicate<string>(field => field.Contains(Constants.FieldBalance))) + 1)),
+                                Constants.JSBalancePattern, string.Empty),
+                            CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag));
                     }
                 }
             } catch (Exception exception) {
@@ -409,7 +492,7 @@ namespace BetHelper {
         public async void ActualSizeAsync() {
             if (Browser != null) {
                 double zoomLevel = await Browser.GetZoomLevelAsync();
-                if (zoomLevel != 0) {
+                if (!zoomLevel.Equals(0)) {
                     SetZoomLevel(0);
                 }
             }
@@ -465,7 +548,11 @@ namespace BetHelper {
 
         public void Initialize() {
             Settings settings = ((MainForm)Parent.Form).Settings;
-            if (settings.AutoLogInAfterInitialLoad && !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrEmpty(Password) && !string.IsNullOrWhiteSpace(Script)) {
+            if (settings.AutoLogInAfterInitialLoad
+                    && !string.IsNullOrWhiteSpace(Username)
+                    && !string.IsNullOrEmpty(Password)
+                    && !string.IsNullOrWhiteSpace(Script)) {
+
                 Started?.Invoke(this, new StartedEventArgs());
             }
             Browser = new ChromiumWebBrowser(new Uri(Url).AbsoluteUri);
@@ -475,11 +562,15 @@ namespace BetHelper {
                 Find?.Invoke(this, e);
             });
             Browser.FindHandler = findHandler;
-            RequestHandler requestHandler = new RequestHandler() { WebInfo = this };
+            RequestHandler requestHandler = new RequestHandler() {
+                WebInfo = this
+            };
             StatusStripHandler statusStripHandler = ((MainForm)Parent.Form).StatusStripHandler;
-            requestHandler.Canceled += new EventHandler((sender, e) => statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageActionCanceled));
+            requestHandler.Canceled += new EventHandler((sender, e) => statusStripHandler.SetMessage(
+                StatusStripHandler.StatusMessageType.PersistentA,
+                Properties.Resources.MessageActionCanceled));
             Browser.RequestHandler = requestHandler;
-            if (HandlePopUps || PopUpLeft != 0 || PopUpTop != 0 || PopUpWidth != 0 || PopUpHeight != 0) {
+            if (WillActuallyHandlePopUps) {
                 LifeSpanHandler lifeSpanHandler = new LifeSpanHandler();
                 lifeSpanHandler.BrowserPopUp += new EventHandler<PopUpEventArgs>((sender, popUpArgs) => {
                     if (CanNavigate(popUpArgs.TargetUrl)) {
@@ -491,7 +582,9 @@ namespace BetHelper {
                             popUpThread.Start();
                         }
                     } else {
-                        statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageActionCanceled);
+                        statusStripHandler.SetMessage(
+                            StatusStripHandler.StatusMessageType.PersistentA,
+                            Properties.Resources.MessageActionCanceled);
                     }
                 });
                 Browser.LifeSpanHandler = lifeSpanHandler;
@@ -504,7 +597,9 @@ namespace BetHelper {
                     ChromiumWebBrowser browser = (ChromiumWebBrowser)sender;
                     browser.GetBrowser().StopLoad();
                     browser.Load(Url);
-                    statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageActionCanceled);
+                    statusStripHandler.SetMessage(
+                        StatusStripHandler.StatusMessageType.PersistentA,
+                        Properties.Resources.MessageActionCanceled);
                 }
             });
             Browser.ConsoleMessage += new EventHandler<ConsoleMessageEventArgs>((sender, e) => {
@@ -520,7 +615,11 @@ namespace BetHelper {
             Browser.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(async (sender, e) => {
                 HeartBeatReset();
                 if (loaded++ < 1) {
-                    if (settings.AutoLogInAfterInitialLoad && !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrEmpty(Password) && !string.IsNullOrWhiteSpace(Script)) {
+                    if (settings.AutoLogInAfterInitialLoad
+                            && !string.IsNullOrWhiteSpace(Username)
+                            && !string.IsNullOrEmpty(Password)
+                            && !string.IsNullOrWhiteSpace(Script)) {
+
                         loadingBeforeLogInTimer.Start();
                     }
                 } else {
@@ -620,7 +719,7 @@ namespace BetHelper {
 
         private bool WaitForInitialLoad() {
             LoadUrlAsyncResponse loadUrlAsyncResponse = Browser.WaitForInitialLoadAsync().GetAwaiter().GetResult();
-            return loadUrlAsyncResponse != null && loadUrlAsyncResponse.Success && loadUrlAsyncResponse.HttpStatusCode == 200;
+            return loadUrlAsyncResponse != null && loadUrlAsyncResponse.Success && loadUrlAsyncResponse.HttpStatusCode.Equals(200);
         }
 
         private void PopUpBrowser() {
@@ -677,9 +776,13 @@ namespace BetHelper {
                 if (Browser.CanExecuteJavascriptInMainFrame) {
                     JavascriptResponse javascriptResponse = Browser.EvaluateScriptAsync(Script).GetAwaiter().GetResult();
                     if (javascriptResponse != null && javascriptResponse.Success) {
-                        return string.Compare(GetDisplayName(), GetDisplayName((string)javascriptResponse.Result), string.IsNullOrEmpty(IetfLanguageTag)
-                            ? CultureInfo.InvariantCulture
-                            : CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag), CompareOptions.IgnoreNonSpace) == 0;
+                        return string.Compare(
+                            GetDisplayName(),
+                            GetDisplayName((string)javascriptResponse.Result),
+                            string.IsNullOrEmpty(IetfLanguageTag)
+                                ? CultureInfo.InvariantCulture
+                                : CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag),
+                            CompareOptions.IgnoreNonSpace).Equals(0);
                     }
                 }
             } catch (Exception exception) {
@@ -688,9 +791,18 @@ namespace BetHelper {
             return false;
         }
 
-        protected virtual void OnError() => Error?.Invoke(this, new ErrorEventArgs(Properties.Resources.MessageLogInFailed));
+        protected virtual void OnError() {
+            Error?.Invoke(this, new ErrorEventArgs(Properties.Resources.MessageLogInFailed));
+        }
 
-        protected virtual void OnError(string errorMessage) => Error?.Invoke(this, new ErrorEventArgs(Properties.Resources.MessageLogInFailed + Constants.Colon + Constants.Space + errorMessage));
+        protected virtual void OnError(string errorMessage) {
+            StringBuilder message = new StringBuilder()
+                .Append(Properties.Resources.MessageLogInFailed)
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .Append(errorMessage);
+            Error?.Invoke(this, new ErrorEventArgs(message.ToString()));
+        }
 
         protected virtual void OnFinished() {
             loadingBeforeLogInTimer.Stop();
@@ -699,7 +811,9 @@ namespace BetHelper {
             LoadUrlToLoad();
         }
 
-        protected virtual void OnProgress(string message) => Progress?.Invoke(this, new ProgressEventArgs(currentItem++, itemsTotal, message));
+        protected virtual void OnProgress(string message) {
+            Progress?.Invoke(this, new ProgressEventArgs(currentItem++, itemsTotal, message));
+        }
 
         protected virtual void OnStarted(int itemsTotal) {
             this.itemsTotal = itemsTotal;
@@ -713,7 +827,9 @@ namespace BetHelper {
 
         public virtual void HeartBeat(ChromiumWebBrowser browser) { }
 
-        protected virtual void LogIn(ChromiumWebBrowser browser) => Error?.Invoke(this, new ErrorEventArgs(Properties.Resources.MessageLogInNotImplementedError));
+        protected virtual void LogIn(ChromiumWebBrowser browser) {
+            Error?.Invoke(this, new ErrorEventArgs(Properties.Resources.MessageLogInNotImplementedError));
+        }
 
         protected virtual void NoLogIn(ChromiumWebBrowser browser) { }
 
@@ -724,26 +840,36 @@ namespace BetHelper {
                 }
                 Point point = GetElementCenterAsync(browser, script).GetAwaiter().GetResult();
                 if (point.X > 0 && point.Y > 0) {
-                    browser.GetBrowser().GetHost().SendMouseClickEvent(new MouseEvent(point.X, point.Y, CefEventFlags.None), MouseButtonType.Left, false, 1);
-                    browser.GetBrowser().GetHost().SendMouseClickEvent(new MouseEvent(point.X, point.Y, CefEventFlags.None), MouseButtonType.Left, true, 1);
+                    browser.GetBrowser().GetHost()
+                        .SendMouseClickEvent(new MouseEvent(point.X, point.Y, CefEventFlags.None), MouseButtonType.Left, false, 1);
+                    browser.GetBrowser().GetHost()
+                        .SendMouseClickEvent(new MouseEvent(point.X, point.Y, CefEventFlags.None), MouseButtonType.Left, true, 1);
                     return true;
                 }
             }
             string browserAddress;
             if (BrowserAddress == null) {
                 browserAddress = Constants.ErrorLogNull;
-            } else if (BrowserAddress == string.Empty) {
+            } else if (BrowserAddress.Equals(string.Empty)) {
                 browserAddress = Constants.ErrorLogEmptyString;
             } else {
                 browserAddress = BrowserAddress;
             }
-            string errorMessage = Properties.Resources.MessageClickingError + Constants.VerticalTab + browserAddress + Constants.VerticalTab + script;
+            string errorMessage = new StringBuilder()
+                .Append(Properties.Resources.MessageClickingError)
+                .Append(Constants.VerticalTab)
+                .Append(browserAddress)
+                .Append(Constants.VerticalTab)
+                .Append(script)
+                .ToString();
             Debug.WriteLine(errorMessage);
             ErrorLog.WriteLine(errorMessage);
             return false;
         }
 
-        protected bool ElementExists(ChromiumWebBrowser browser, string script, bool wait) => ElementExists(browser, new string[] { script }, wait);
+        protected bool ElementExists(ChromiumWebBrowser browser, string script, bool wait) {
+            return ElementExists(browser, new string[] { script }, wait);
+        }
 
         protected bool ElementExists(ChromiumWebBrowser browser, string[] scripts, bool wait) {
             for (int i = 0; i < (wait ? Constants.JScriptWaitCycles : 1); i++) {
@@ -756,7 +882,10 @@ namespace BetHelper {
                         continue;
                     }
                     if (browser.CanExecuteJavascriptInMainFrame) {
-                        JavascriptResponse javascriptResponse = browser.EvaluateScriptAsync(string.Format(Constants.JSIsNotEqualToNullFormat, script.TrimEnd(Constants.Semicolon))).GetAwaiter().GetResult();
+                        JavascriptResponse javascriptResponse = browser
+                            .EvaluateScriptAsync(string.Format(Constants.JSIsNotEqualToNullFormat, script.TrimEnd(Constants.Semicolon)))
+                            .GetAwaiter()
+                            .GetResult();
                         if (javascriptResponse.Success && (bool)javascriptResponse.Result) {
                             return true;
                         }
@@ -766,7 +895,9 @@ namespace BetHelper {
             return false;
         }
 
-        protected bool ElementExistsAndVisible(ChromiumWebBrowser browser, string script, bool wait) => ElementExistsAndVisible(browser, new string[] { script }, wait);
+        protected bool ElementExistsAndVisible(ChromiumWebBrowser browser, string script, bool wait) {
+            return ElementExistsAndVisible(browser, new string[] { script }, wait);
+        }
 
         protected bool ElementExistsAndVisible(ChromiumWebBrowser browser, string[] scripts, bool wait) {
             for (int i = 0; i < (wait ? Constants.JScriptWaitCycles : 1); i++) {
@@ -789,11 +920,15 @@ namespace BetHelper {
             }
             try {
                 if (browser.CanExecuteJavascriptInMainFrame) {
-                    JavascriptResponse javascriptResponse = await browser.EvaluateScriptAsync(script.TrimEnd(Constants.Semicolon) + Constants.JSGetBoundingClientRect);
+                    JavascriptResponse javascriptResponse = await browser
+                        .EvaluateScriptAsync(script.TrimEnd(Constants.Semicolon) + Constants.JSGetBoundingClientRect);
                     if (javascriptResponse.Success) {
                         IDictionary<string, object> dictionary = (IDictionary<string, object>)javascriptResponse.Result;
-                        return new Point((Convert.ToInt32(dictionary[Constants.JSPropertyLeft]) + Convert.ToInt32(dictionary[Constants.JSPropertyRight])) / 2,
-                            (Convert.ToInt32(dictionary[Constants.JSPropertyTop]) + Convert.ToInt32(dictionary[Constants.JSPropertyBottom])) / 2);
+                        return new Point(
+                            (Convert.ToInt32(dictionary[Constants.JSPropertyLeft])
+                                + Convert.ToInt32(dictionary[Constants.JSPropertyRight])) / 2,
+                            (Convert.ToInt32(dictionary[Constants.JSPropertyTop])
+                                + Convert.ToInt32(dictionary[Constants.JSPropertyBottom])) / 2);
                     }
                 }
             } catch (Exception exception) {
@@ -802,16 +937,38 @@ namespace BetHelper {
             return Point.Empty;
         }
 
-        protected string GetValueById(string elementId, string rootElement = Constants.DOMRootElementName) => GetValue(string.Format(Constants.JSGetElementByIdFormat, rootElement, elementId));
+        protected string GetValueById(
+                string elementId,
+                string rootElement = Constants.DOMRootElementName) {
 
-        protected string GetValueBy(ElementAttribute elementAttribute, string attributeValue, int index = 0, string rootElement = Constants.DOMRootElementName) {
+            return GetValue(string.Format(Constants.JSGetElementByIdFormat, rootElement, elementId));
+        }
+
+        protected string GetValueBy(
+                ElementAttribute elementAttribute,
+                string attributeValue,
+                int index = 0,
+                string rootElement = Constants.DOMRootElementName) {
+
             switch (elementAttribute) {
                 case ElementAttribute.ClassName:
-                    return GetValue(string.Format(Constants.JSGetElementsByClassNameFormat, rootElement, attributeValue, index));
+                    return GetValue(string.Format(
+                        Constants.JSGetElementsByClassNameFormat,
+                        rootElement,
+                        attributeValue,
+                        index));
                 case ElementAttribute.Name:
-                    return GetValue(string.Format(Constants.JSGetElementsByNameFormat, rootElement, attributeValue, index));
+                    return GetValue(string.Format(
+                        Constants.JSGetElementsByNameFormat,
+                        rootElement,
+                        attributeValue,
+                        index));
                 case ElementAttribute.TagName:
-                    return GetValue(string.Format(Constants.JSGetElementsByTagNameFormat, rootElement, attributeValue, index));
+                    return GetValue(string.Format(
+                        Constants.JSGetElementsByTagNameFormat,
+                        rootElement,
+                        attributeValue,
+                        index));
                 default:
                     throw new NotImplementedException();
             }
@@ -855,12 +1012,14 @@ namespace BetHelper {
 
         private void LogForeignUrl(string url) {
             try {
-                using (StreamWriter streamWriter = File.AppendText(Path.Combine(Application.LocalUserAppDataPath, Constants.ForeignUrlsLogFileName))) {
-                    StringBuilder stringBuilder = new StringBuilder(DateTime.Now.ToString(Constants.ErrorLogTimeFormat));
-                    stringBuilder.Append(Constants.VerticalTab);
-                    stringBuilder.Append(Title);
-                    stringBuilder.Append(Constants.VerticalTab);
-                    stringBuilder.Append(url);
+                string filePath = Path.Combine(Application.LocalUserAppDataPath, Constants.ForeignUrlsLogFileName);
+                using (StreamWriter streamWriter = File.AppendText(filePath)) {
+                    StringBuilder stringBuilder = new StringBuilder()
+                        .Append(DateTime.Now.ToString(Constants.ErrorLogTimeFormat))
+                        .Append(Constants.VerticalTab)
+                        .Append(Title)
+                        .Append(Constants.VerticalTab)
+                        .Append(url);
                     streamWriter.WriteLine(stringBuilder.ToString());
                 }
             } catch (Exception exception) {
@@ -872,12 +1031,18 @@ namespace BetHelper {
         private void LogConsoleMessage(int line, string source, string message) {
             if (!string.IsNullOrEmpty(source)) {
                 try {
-                    using (StreamWriter streamWriter = File.AppendText(Path.Combine(Application.LocalUserAppDataPath, Constants.ConsoleMessageLogFileName))) {
-                        StringBuilder stringBuilder = new StringBuilder(DateTime.Now.ToString(Constants.ErrorLogTimeFormat));
-                        stringBuilder.Append(Constants.VerticalTab);
-                        stringBuilder.Append(Title);
-                        stringBuilder.Append(Constants.VerticalTab);
-                        stringBuilder.Append(string.IsNullOrWhiteSpace(message) ? string.Format(Constants.BrowserConsoleMessageFormat4, line, source.Trim()) : string.Format(Constants.BrowserConsoleMessageFormat3, line, source.Trim(), message.Trim()));
+                    string filePath = Path.Combine(Application.LocalUserAppDataPath, Constants.ConsoleMessageLogFileName);
+                    using (StreamWriter streamWriter = File.AppendText(filePath)) {
+                        StringBuilder stringBuilder = new StringBuilder()
+                            .Append(DateTime.Now.ToString(Constants.ErrorLogTimeFormat))
+                            .Append(Constants.VerticalTab)
+                            .Append(Title)
+                            .Append(Constants.VerticalTab);
+                        if (string.IsNullOrWhiteSpace(message)) {
+                            stringBuilder.AppendFormat(Constants.BrowserConsoleMessageFormat4, line, source.Trim());
+                        } else {
+                            stringBuilder.AppendFormat(Constants.BrowserConsoleMessageFormat3, line, source.Trim(), message.Trim());
+                        }
                         streamWriter.WriteLine(stringBuilder.ToString());
                     }
                 } catch (Exception exception) {
@@ -890,12 +1055,14 @@ namespace BetHelper {
         private void LogLoadError(CefErrorCode errorCode, string errorText, string failedUrl) {
             if (errorCode != CefErrorCode.None && !string.IsNullOrEmpty(errorText) && !string.IsNullOrEmpty(failedUrl)) {
                 try {
-                    using (StreamWriter streamWriter = File.AppendText(Path.Combine(Application.LocalUserAppDataPath, Constants.LoadErrorLogFileName))) {
-                        StringBuilder stringBuilder = new StringBuilder(DateTime.Now.ToString(Constants.ErrorLogTimeFormat));
-                        stringBuilder.Append(Constants.VerticalTab);
-                        stringBuilder.Append(Title);
-                        stringBuilder.Append(Constants.VerticalTab);
-                        stringBuilder.Append(string.Format(Constants.BrowserLoadErrorMessageFormat2, errorText.Trim(), failedUrl.Trim()));
+                    string filePath = Path.Combine(Application.LocalUserAppDataPath, Constants.LoadErrorLogFileName);
+                    using (StreamWriter streamWriter = File.AppendText(filePath)) {
+                        StringBuilder stringBuilder = new StringBuilder()
+                            .Append(DateTime.Now.ToString(Constants.ErrorLogTimeFormat))
+                            .Append(Constants.VerticalTab)
+                            .Append(Title)
+                            .Append(Constants.VerticalTab)
+                            .AppendFormat(Constants.BrowserLoadErrorMessageFormat2, errorText.Trim(), failedUrl.Trim());
                         streamWriter.WriteLine(stringBuilder.ToString());
                     }
                 } catch (Exception exception) {
@@ -911,14 +1078,28 @@ namespace BetHelper {
             }
             try {
                 if (!urlScheme.IsMatch(subdomainUrl)) {
-                    subdomainUrl = Constants.SchemeHttps + Constants.Colon + Constants.Slash + Constants.Slash + subdomainUrl.TrimStart(Constants.Colon, Constants.Slash);
+                    subdomainUrl = new StringBuilder()
+                        .Append(Constants.SchemeHttps)
+                        .Append(Constants.Colon)
+                        .Append(Constants.Slash)
+                        .Append(Constants.Slash)
+                        .Append(subdomainUrl.TrimStart(Constants.Colon, Constants.Slash))
+                        .ToString();
                 }
                 if (!urlScheme.IsMatch(baseUrl)) {
-                    baseUrl = Constants.SchemeHttps + Constants.Colon + Constants.Slash + Constants.Slash + baseUrl.TrimStart(Constants.Colon, Constants.Slash);
+                    baseUrl = new StringBuilder()
+                        .Append(Constants.SchemeHttps)
+                        .Append(Constants.Colon)
+                        .Append(Constants.Slash)
+                        .Append(Constants.Slash)
+                        .Append(baseUrl.TrimStart(Constants.Colon, Constants.Slash))
+                        .ToString();
                 }
                 Uri subdomainUri = new Uri(subdomainUrl);
                 Uri baseUri = new Uri(baseUrl);
-                if (subdomainUri.HostNameType == UriHostNameType.Dns && baseUri.HostNameType == UriHostNameType.Dns) {
+                if (subdomainUri.HostNameType.Equals(UriHostNameType.Dns)
+                        && baseUri.HostNameType.Equals(UriHostNameType.Dns)) {
+
                     return subdomainUri.Host.EndsWith(baseUri.Host, StringComparison.Ordinal);
                 }
             } catch (Exception exception) {
@@ -935,9 +1116,15 @@ namespace BetHelper {
             try {
                 Uri uri1 = new Uri(url);
                 Uri uri2 = new Uri(Url);
-                if (uri1.HostNameType == UriHostNameType.Dns && uri2.HostNameType == UriHostNameType.Dns) {
-                    bool eq = secondLevelDomain.Replace(uri2.Host, Constants.ReplaceSecond).Equals(secondLevelDomain.Replace(uri1.Host, Constants.ReplaceSecond), StringComparison.Ordinal);
-                    return includeTld ? eq && secondLevelDomain.Replace(uri2.Host, Constants.ReplaceThird).Equals(secondLevelDomain.Replace(uri1.Host, Constants.ReplaceThird), StringComparison.Ordinal) : eq;
+                if (uri1.HostNameType.Equals(UriHostNameType.Dns)
+                        && uri2.HostNameType.Equals(UriHostNameType.Dns)) {
+
+                    bool eq = secondLevelDomain.Replace(uri2.Host, Constants.ReplaceSecond)
+                        .Equals(secondLevelDomain.Replace(uri1.Host, Constants.ReplaceSecond), StringComparison.Ordinal);
+                    return includeTld
+                        ? eq && secondLevelDomain.Replace(uri2.Host, Constants.ReplaceThird)
+                            .Equals(secondLevelDomain.Replace(uri1.Host, Constants.ReplaceThird), StringComparison.Ordinal)
+                        : eq;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -1042,11 +1229,15 @@ namespace BetHelper {
         protected static void Sleep(TimeSpan timeout) => Thread.Sleep(timeout);
 
         public enum ElementAttribute {
-            ClassName, Name, TagName
+            ClassName,
+            Name,
+            TagName
         }
 
         public enum BackNavigationType {
-            None, Fragment, Single
+            None,
+            Fragment,
+            Single
         }
     }
 }

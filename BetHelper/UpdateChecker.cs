@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -72,10 +72,12 @@ namespace BetHelper {
                     if (dialog == null || !dialog.Visible) {
                         UpdateCheckForm updateCheckForm = new UpdateCheckForm(null);
                         updateCheckForm.Load += new EventHandler(OnLoad);
-                        updateCheckForm.StateSet += new EventHandler<UpdateCheckerEventArgs>((sender, e) => StateChanged?.Invoke(sender, e));
+                        updateCheckForm.StateSet += new EventHandler<UpdateCheckerEventArgs>((sender, e) =>
+                            StateChanged?.Invoke(sender, e));
                         updateCheckForm.HelpRequested += new HelpEventHandler((sender, hlpevent) => Help?.Invoke(sender, hlpevent));
                         dialog = updateCheckForm;
-                        StateChanged?.Invoke(this, new UpdateCheckerEventArgs(dialog, State.Connecting, Properties.Resources.MessageConnecting));
+                        StateChanged?.Invoke(this,
+                            new UpdateCheckerEventArgs(dialog, State.Connecting, Properties.Resources.MessageConnecting));
                         updateCheckForm.ShowDialog(parent);
                     }
                     break;
@@ -97,10 +99,12 @@ namespace BetHelper {
 
         private void OnSizeChanged(object sender, EventArgs e) {
             Form form = (Form)sender;
-            if (size == form.Size) {
+            if (size.Equals(form.Size)) {
                 return;
             }
-            Point point = new Point(form.Location.X - (form.Width - size.Width) / 2, form.Location.Y - (form.Height - size.Height) / 2);
+            Point point = new Point(
+                form.Location.X - (form.Width - size.Width) / 2,
+                form.Location.Y - (form.Height - size.Height) / 2);
             if (point.X + form.Size.Width > SystemInformation.VirtualScreen.Width) {
                 point.X = SystemInformation.VirtualScreen.Width - form.Size.Width;
             } else if (point.X < SystemInformation.VirtualScreen.Left) {
@@ -117,16 +121,17 @@ namespace BetHelper {
         private void CheckForUpdates() {
             HttpWebRequest webRequest = null;
             HttpWebResponse webResponse = null;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant());
-            stringBuilder.Append(Constants.Slash);
-            stringBuilder.Append(Application.ProductName.ToLowerInvariant());
-            stringBuilder.Append(Constants.Slash);
-            stringBuilder.Append(Constants.RemoteApiScriptName);
-            stringBuilder.Append(Constants.QuestionMark);
-            stringBuilder.Append(Constants.RemoteVariableNameGet);
-            stringBuilder.Append(Constants.EqualSign);
-            stringBuilder.Append(Constants.RemoteProductLatestVersion);
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant())
+                .Append(Constants.Slash)
+                .Append(Application.ProductName.ToLowerInvariant())
+                .Append(Constants.Slash)
+                .Append(Constants.RemoteApiScriptName)
+                .Append(Constants.QuestionMark)
+                .Append(Constants.RemoteVariableNameGet)
+                .Append(Constants.EqualSign)
+                .Append(Constants.RemoteProductLatestVersion);
+
             try {
                 webRequest = (HttpWebRequest)WebRequest.Create(stringBuilder.ToString());
                 webResponse = (HttpWebResponse)webRequest.GetResponse();
@@ -165,12 +170,13 @@ namespace BetHelper {
                 } else {
                     try {
                         if (CompareVersion(version, Application.ProductVersion) > 0) {
-                            if (checkType == CheckType.Auto && dialog == null || !dialog.Visible) {
+                            if (checkType.Equals(CheckType.Auto) && dialog == null || !dialog.Visible) {
                                 UpdateCheckForm updateCheckForm = new UpdateCheckForm(version);
                                 dialog = updateCheckForm;
                                 updateCheckForm.ShowDialog(parent);
                             }
-                            StateChanged?.Invoke(this, new UpdateCheckerEventArgs(dialog, State.UpdateAvailable, Properties.Resources.MessageUpdateAvailable));
+                            StateChanged?.Invoke(this,
+                                new UpdateCheckerEventArgs(dialog, State.UpdateAvailable, Properties.Resources.MessageUpdateAvailable));
                         }
                     } catch (Exception exception) {
                         Debug.WriteLine(exception);
@@ -251,11 +257,16 @@ namespace BetHelper {
         }
 
         public enum CheckType {
-            User, Auto, Silent
+            User,
+            Auto,
+            Silent
         }
 
         public enum State {
-            Connecting, UpToDate, UpdateAvailable, Error
+            Connecting,
+            UpToDate,
+            UpdateAvailable,
+            Error
         }
     }
 }

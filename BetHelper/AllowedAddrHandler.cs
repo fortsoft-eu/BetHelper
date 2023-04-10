@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -71,16 +71,16 @@ namespace BetHelper {
         public bool Locked => locked;
 
         private void BuildRemoteXmlAddress() {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant());
-            stringBuilder.Append(Constants.Slash);
-            stringBuilder.Append(Application.ProductName.ToLowerInvariant());
-            stringBuilder.Append(Constants.Slash);
-            stringBuilder.Append(Constants.RemoteApiScriptName);
-            stringBuilder.Append(Constants.QuestionMark);
-            stringBuilder.Append(Constants.RemoteVariableNameGet);
-            stringBuilder.Append(Constants.EqualSign);
-            stringBuilder.Append(Constants.RemoteClientRemoteAddress);
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant())
+                .Append(Constants.Slash)
+                .Append(Application.ProductName.ToLowerInvariant())
+                .Append(Constants.Slash)
+                .Append(Constants.RemoteApiScriptName)
+                .Append(Constants.QuestionMark)
+                .Append(Constants.RemoteVariableNameGet)
+                .Append(Constants.EqualSign)
+                .Append(Constants.RemoteClientRemoteAddress);
             remoteXmlAddress = stringBuilder.ToString();
         }
 

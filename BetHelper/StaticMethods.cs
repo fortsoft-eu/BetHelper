@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -56,13 +56,16 @@ namespace BetHelper {
 
         public static void DumpEnumerable(IEnumerable data) {
             try {
-                using (StreamWriter streamWriter = File.AppendText(Path.Combine(Application.LocalUserAppDataPath, DateTime.Now.ToString(Constants.DumpFileNameTimeFormat) + Constants.ExtensionTxt))) {
+                string filePath = Path.Combine(
+                    Application.LocalUserAppDataPath,
+                    DateTime.Now.ToString(Constants.DumpFileNameTimeFormat) + Constants.ExtensionTxt);
+                using (StreamWriter streamWriter = File.AppendText(filePath)) {
                     StringBuilder stringBuilder = new StringBuilder();
                     int i = 0;
                     foreach (object item in data) {
-                        stringBuilder.Append(i++);
-                        stringBuilder.Append(Constants.Colon);
-                        stringBuilder.AppendLine(item.ToString());
+                        stringBuilder.Append(i++)
+                            .Append(Constants.Colon)
+                            .AppendLine(item.ToString());
                     }
                     streamWriter.WriteLine(stringBuilder.ToString());
                 }
@@ -74,7 +77,10 @@ namespace BetHelper {
 
         public static void DumpString(string str) {
             try {
-                using (StreamWriter streamWriter = File.AppendText(Path.Combine(Application.LocalUserAppDataPath, DateTime.Now.ToString(Constants.DumpFileNameTimeFormat) + Constants.ExtensionTxt))) {
+                string filePath = Path.Combine(
+                    Application.LocalUserAppDataPath,
+                    DateTime.Now.ToString(Constants.DumpFileNameTimeFormat) + Constants.ExtensionTxt);
+                using (StreamWriter streamWriter = File.AppendText(filePath)) {
                     streamWriter.WriteLine(str);
                 }
             } catch (Exception exception) {
@@ -90,10 +96,14 @@ namespace BetHelper {
             try {
                 Uri uri1 = new Uri(url1);
                 Uri uri2 = new Uri(url2);
-                if (uri1.HostNameType == UriHostNameType.Dns && uri2.HostNameType == UriHostNameType.Dns) {
+                if (uri1.HostNameType.Equals(UriHostNameType.Dns) && uri2.HostNameType.Equals(UriHostNameType.Dns)) {
                     Regex regex = new Regex(Constants.SecondLevelDomainPattern, RegexOptions.RightToLeft);
-                    bool eq = regex.Replace(uri2.Host, Constants.ReplaceSecond).Equals(regex.Replace(uri1.Host, Constants.ReplaceSecond), StringComparison.Ordinal);
-                    return includeTld ? eq && regex.Replace(uri2.Host, Constants.ReplaceThird).Equals(regex.Replace(uri1.Host, Constants.ReplaceThird), StringComparison.Ordinal) : eq;
+                    bool eq = regex.Replace(uri2.Host, Constants.ReplaceSecond)
+                            .Equals(regex.Replace(uri1.Host, Constants.ReplaceSecond), StringComparison.Ordinal);
+                    return includeTld
+                        ? eq && regex.Replace(uri2.Host, Constants.ReplaceThird)
+                            .Equals(regex.Replace(uri1.Host, Constants.ReplaceThird), StringComparison.Ordinal)
+                        : eq;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -159,7 +169,8 @@ namespace BetHelper {
             if (graphicSize.Width < canvasSize.Width && graphicSize.Height < canvasSize.Height) {
                 return false;
             }
-            if (graphicSize.Width / (float)graphicSize.Height < 1f && canvasSize.Width / (float)canvasSize.Height < 1f || graphicSize.Width / (float)graphicSize.Height > 1f && canvasSize.Width / (float)canvasSize.Height > 1f) {
+            if (graphicSize.Width / (float)graphicSize.Height < 1f && canvasSize.Width / (float)canvasSize.Height < 1f ||
+                graphicSize.Width / (float)graphicSize.Height > 1f && canvasSize.Width / (float)canvasSize.Height > 1f) {
                 return false;
             }
             return true;
@@ -204,45 +215,90 @@ namespace BetHelper {
         public static string ShowSize(long length, IFormatProvider provider, bool useDecimalPrefix) {
             double num = length;
             if (num < 1000d) {
-                return num.ToString(provider) + Constants.Space + Constants.Byte;
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.ZeroDecimalDigitsFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(Constants.Byte)
+                    .ToString();
             }
             num = num / (useDecimalPrefix ? 1000d : 1024d);
             if (num < 1000d) {
-                return num.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Kilobyte : Constants.Kibibyte);
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(useDecimalPrefix ? Constants.Kilobyte : Constants.Kibibyte)
+                    .ToString();
             }
             num = num / (useDecimalPrefix ? 1000d : 1024d);
             if (num < 1000d) {
-                return num.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Megabyte : Constants.Mebibyte);
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(useDecimalPrefix ? Constants.Megabyte : Constants.Mebibyte)
+                    .ToString();
             }
             num = num / (useDecimalPrefix ? 1000d : 1024d);
             if (num < 1000d) {
-                return num.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Gigabyte : Constants.Gibibyte);
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(useDecimalPrefix ? Constants.Gigabyte : Constants.Gibibyte)
+                    .ToString();
             }
             num = num / (useDecimalPrefix ? 1000d : 1024d);
             if (num < 1000d) {
-                return num.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Terabyte : Constants.Tebibyte);
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(useDecimalPrefix ? Constants.Terabyte : Constants.Tebibyte)
+                    .ToString();
             }
             num = num / (useDecimalPrefix ? 1000d : 1024d);
             if (num < 1000d) {
-                return num.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Petabyte : Constants.Pebibyte);
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(useDecimalPrefix ? Constants.Petabyte : Constants.Pebibyte)
+                    .ToString();
             }
             num = num / (useDecimalPrefix ? 1000d : 1024d);
             if (num < 1000d) {
-                return num.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Exabyte : Constants.Exbibyte);
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(useDecimalPrefix ? Constants.Exabyte : Constants.Exbibyte)
+                    .ToString();
             }
             num = num / (useDecimalPrefix ? 1000d : 1024d);
             if (num < 1000d) {
-                return num.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Zettabyte : Constants.Zebibyte);
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(useDecimalPrefix ? Constants.Zettabyte : Constants.Zebibyte)
+                    .ToString();
             }
             num = num / (useDecimalPrefix ? 1000d : 1024d);
             if (num < 1000d) {
-                return num.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Yottabyte : Constants.Yobibyte);
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(useDecimalPrefix ? Constants.Yottabyte : Constants.Yobibyte)
+                    .ToString();
             }
             num = num / (useDecimalPrefix ? 1000d : 1024d);
             if (num < 1000d) {
-                return num.ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Ronnabyte : Constants.Robibyte);
+                return new StringBuilder()
+                    .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                    .Append(Constants.Space)
+                    .Append(useDecimalPrefix ? Constants.Ronnabyte : Constants.Robibyte)
+                    .ToString();
             }
-            return (num / (useDecimalPrefix ? 1000d : 1024d)).ToString(Constants.OneDecimalDigitFormat, provider) + Constants.Space + (useDecimalPrefix ? Constants.Quettabyte : Constants.Qubibyte);
+            num = num / (useDecimalPrefix ? 1000d : 1024d);
+            return new StringBuilder()
+                .Append(num.ToString(Constants.OneDecimalDigitFormat, provider))
+                .Append(Constants.Space)
+                .Append(useDecimalPrefix ? Constants.Quettabyte : Constants.Qubibyte)
+                .ToString();
         }
 
         public static List<SearchLine> SplitToLines(string str) {
@@ -254,7 +310,7 @@ namespace BetHelper {
                     lines.Add(new SearchLine(stringBuilder.ToString(), index));
                     stringBuilder = new StringBuilder();
                 } else {
-                    if (stringBuilder.Length == 0) {
+                    if (stringBuilder.Length.Equals(0)) {
                         index = charIndex;
                     }
                     stringBuilder.Append(c);

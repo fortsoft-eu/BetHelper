@@ -21,18 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
     public class MainFindForm : FindForm {
         public MainFindForm(Search search) : base(search) {
             Name = GetType().Name;
-            Text = Program.GetTitle() + Constants.Space + Constants.EnDash + Constants.Space + Properties.Resources.CaptionFind;
+            Text = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionFind)
+                .ToString();
 
             searchDelayTimer = new Timer();
             searchDelayTimer.Interval = 150;

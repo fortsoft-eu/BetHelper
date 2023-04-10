@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -63,7 +63,11 @@ namespace BetHelper {
                 return;
             }
 
-            if (!ElementExistsAndVisible(browser, new string[] { "document.getElementsByClassName('a-link_label')[0]", "document.getElementsByClassName('a-navbar-toggle')[0]" }, true)) {
+            if (!ElementExistsAndVisible(browser, new string[] {
+                        "document.getElementsByClassName('a-link_label')[0]",
+                        "document.getElementsByClassName('a-navbar-toggle')[0]"
+                    }, true)) {
+
                 OnError();
                 return;
             }
@@ -160,8 +164,9 @@ namespace BetHelper {
                 if (Browser.CanExecuteJavascriptInMainFrame) {
                     JavascriptResponse javascriptResponse = Browser.EvaluateScriptAsync(javaScript).GetAwaiter().GetResult();
                     if (javascriptResponse != null && javascriptResponse.Success) {
-                        return string.Compare(notLoggedInText, (string)javascriptResponse.Result, string.IsNullOrEmpty(IetfLanguageTag) ?
-                            CultureInfo.InvariantCulture : CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag), CompareOptions.IgnoreCase) != 0;
+                        return !string.Compare(notLoggedInText, (string)javascriptResponse.Result, string.IsNullOrEmpty(IetfLanguageTag)
+                            ? CultureInfo.InvariantCulture
+                            : CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag), CompareOptions.IgnoreCase).Equals(0);
                     }
                 }
             } catch (Exception exception) {
@@ -201,7 +206,10 @@ namespace BetHelper {
             string response = null;
             try {
                 if (browser.CanExecuteJavascriptInMainFrame) {
-                    JavascriptResponse javascriptResponse = browser.EvaluateScriptAsync("document.getElementsByClassName('my-tips')[0].innerHTML").GetAwaiter().GetResult();
+                    JavascriptResponse javascriptResponse = browser
+                        .EvaluateScriptAsync("document.getElementsByClassName('my-tips')[0].innerHTML")
+                        .GetAwaiter()
+                        .GetResult();
                     if (javascriptResponse.Success) {
                         response = (string)javascriptResponse.Result;
                     }
@@ -215,11 +223,17 @@ namespace BetHelper {
                 DateTime dateTimeNow = DateTime.Now;
                 Regex endHtmlTagRegex = new Regex("\\s*</.*>.*$", RegexOptions.Singleline);
                 Regex lineRegex = new Regex("\\s*(</[^>]+>)*\\s*<\\w+[^>]+>\\s*");
-                Regex matchRegex = new Regex("^.*</span>\\s*(.*)</div>\\s*$", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-                Regex splitTipsRegex = new Regex("<div\\s+class=\"o-tbody[^>]+>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-                Regex sportRegex = new Regex("^.*<use\\s+xlink:.*\\.svg#sprite-(\\w+(-\\w+)*)\"\\s*>.*$", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                Regex matchRegex = new Regex("^.*</span>\\s*(.*)</div>\\s*$",
+                    RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                Regex splitTipsRegex = new Regex("<div\\s+class=\"o-tbody[^>]+>",
+                    RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                Regex sportRegex = new Regex("^.*<use\\s+xlink:.*\\.svg#sprite-(\\w+(-\\w+)*)\"\\s*>.*$",
+                    RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 int i = 0;
-                foreach (string serviceBlock in response.Split(new string[] { "<div class=\"o-thead\">" }, StringSplitOptions.None)) {
+                foreach (string serviceBlock in response.Split(
+                        new string[] { "<div class=\"o-thead\">" },
+                        StringSplitOptions.None)) {
+
                     if (i++ == 0) {
                         continue;
                     }
@@ -240,7 +254,10 @@ namespace BetHelper {
                         } else {
                             List<string> sportList = new List<string>();
                             int k = 0;
-                            foreach (string rawSportItem in splitTips[j].Split(new string[] { "<div class=\"m-tr sortable-item\">" }, StringSplitOptions.None)) {
+                            foreach (string rawSportItem in splitTips[j].Split(
+                                    new string[] { "<div class=\"m-tr sortable-item\">" },
+                                    StringSplitOptions.None)) {
+
                                 if (k++ == 0) {
                                     continue;
                                 }
@@ -283,7 +300,9 @@ namespace BetHelper {
                                         sport = "Zimní sport";
                                         break;
                                 }
-                                sportList.Add(sport.Length < 30 ? StaticMethods.UppercaseFirst(sport, CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)) : null);
+                                sportList.Add(sport.Length < 30
+                                    ? StaticMethods.UppercaseFirst(sport, CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag))
+                                    : null);
                             }
                             List<string> tipList = new List<string>();
                             foreach (string rawHeaderItem in lineRegex.Split(splitTips[j])) {
@@ -295,15 +314,22 @@ namespace BetHelper {
                             if (tipList.Count < 12) {
                                 continue;
                             }
-                            float trustDegree = float.Parse(Regex.Replace(tipList[8], Constants.TrustDegreePattern, Constants.ReplaceFirst));
-                            float odd = float.Parse(Regex.Replace(tipList[9].Replace(Constants.Comma, Constants.Period), Constants.OddPattern, string.Empty), CultureInfo.InvariantCulture);
+                            float trustDegree = float.Parse(
+                                Regex.Replace(tipList[8],
+                                Constants.TrustDegreePattern,
+                                Constants.ReplaceFirst));
+                            float odd = float.Parse(
+                                Regex.Replace(tipList[9].Replace(Constants.Comma, Constants.Period), Constants.OddPattern, string.Empty),
+                                CultureInfo.InvariantCulture);
                             string bookmaker = tipList[10];
                             tipList.RemoveRange(8, 4);
+                            bool toBePlayed = true;
                             List<Game> games = new List<Game>();
                             for (k = 0; k < tipList.Count / 8; k++) {
                                 DateTime dateTime;
-                                if (tipList[0 + k * 8].Contains("se hraje")) {
-                                    dateTime = new DateTime(dateTimeNow.Year, dateTimeNow.Month, dateTimeNow.Day, int.Parse(tipList[1 + k * 8].Substring(0, 2)), int.Parse(tipList[1 + k * 8].Substring(3, 2)), 0);
+                                if (tipList[k * 8].Contains("se hraje")) {
+                                    toBePlayed = false;
+                                    break;
                                 } else {
                                     string[] span = tipList[1 + k * 8].Split(Constants.Colon);
                                     if (span.Length < 3) {
@@ -311,10 +337,29 @@ namespace BetHelper {
                                     }
                                     dateTime = dateTimeNow.Add(new TimeSpan(int.Parse(span[0]), int.Parse(span[1]), int.Parse(span[2])));
                                 }
-                                StringBuilder match = new StringBuilder(tipList[4 + k * 8]).Append(Constants.Space).Append(Constants.EnDash).Append(Constants.Space).Append(matchRegex.Replace(tipList[5 + k * 8], Constants.ReplaceFirst).TrimEnd());
-                                games.Add(new Game(dateTime.AddMinutes(((int)Math.Round(dateTime.Minute / 5.0)) * 5 - dateTime.Minute), sportList[k], endHtmlTagRegex.Replace(tipList[6 + k * 8], string.Empty), match.ToString(), endHtmlTagRegex.Replace(tipList[7 + k * 8], string.Empty)));
+                                StringBuilder match = new StringBuilder()
+                                    .Append(tipList[4 + k * 8])
+                                    .Append(Constants.Space)
+                                    .Append(Constants.EnDash)
+                                    .Append(Constants.Space)
+                                    .Append(matchRegex.Replace(tipList[5 + k * 8], Constants.ReplaceFirst).TrimEnd());
+                                games.Add(new Game(
+                                    dateTime.AddMinutes(((int)Math.Round(dateTime.Minute / 5.0)) * 5 - dateTime.Minute),
+                                    sportList[k],
+                                    endHtmlTagRegex.Replace(tipList[6 + k * 8], string.Empty),
+                                    match.ToString(),
+                                    endHtmlTagRegex.Replace(tipList[7 + k * 8], string.Empty)));
                             }
-                            list.Add(new Tip(dateTimeNow, games.ToArray(), bookmaker, odd, trustDegree, service, Tip.TipStatus.Received));
+                            if (toBePlayed) {
+                                list.Add(new Tip(
+                                    dateTimeNow,
+                                    games.ToArray(),
+                                    bookmaker,
+                                    odd,
+                                    trustDegree,
+                                    service,
+                                    Tip.TipStatus.Received));
+                            }
                         }
                     }
                 }

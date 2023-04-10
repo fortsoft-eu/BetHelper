@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2020-2022 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2020-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.6
+ * Version 1.1.0.0
  */
 
 using System;
@@ -59,14 +59,16 @@ namespace BetHelper {
         /// <param name="exception">An instance of the Exception class.</param>
         public static void WriteLine(Exception exception) {
             try {
-                using (StreamWriter streamWriter = File.AppendText(Path.Combine(Application.LocalUserAppDataPath, Constants.ErrorLogFileName))) {
-                    StringBuilder stringBuilder = new StringBuilder(DateTime.Now.ToString(Constants.ErrorLogTimeFormat));
-                    stringBuilder.Append(Constants.VerticalTab);
-                    stringBuilder.Append(exception.TargetSite.Name);
-                    stringBuilder.Append(Constants.VerticalTab);
-                    stringBuilder.Append(exception.GetType().FullName);
-                    stringBuilder.Append(Constants.VerticalTab);
-                    stringBuilder.Append(exception.Message);
+                string filePath = Path.Combine(Application.LocalUserAppDataPath, Constants.ErrorLogFileName);
+                using (StreamWriter streamWriter = File.AppendText(filePath)) {
+                    StringBuilder stringBuilder = new StringBuilder()
+                        .Append(DateTime.Now.ToString(Constants.ErrorLogTimeFormat))
+                        .Append(Constants.VerticalTab)
+                        .Append(exception.TargetSite.Name)
+                        .Append(Constants.VerticalTab)
+                        .Append(exception.GetType().FullName)
+                        .Append(Constants.VerticalTab)
+                        .Append(exception.Message);
                     string[] stackTrace = SplitStackTrace(exception.StackTrace);
                     if (stackTrace.Length > 0) {
                         stringBuilder.Append(Constants.VerticalTab);
@@ -85,12 +87,14 @@ namespace BetHelper {
         /// <param name="errorMessage">Error message.</param>
         public static void WriteLine(string errorMessage) {
             try {
-                using (StreamWriter streamWriter = File.AppendText(Path.Combine(Application.LocalUserAppDataPath, Constants.ErrorLogFileName))) {
-                    StringBuilder stringBuilder = new StringBuilder(DateTime.Now.ToString(Constants.ErrorLogTimeFormat));
-                    stringBuilder.Append(Constants.VerticalTab);
-                    stringBuilder.Append(Constants.ErrorLogErrorMessage);
-                    stringBuilder.Append(Constants.Colon);
-                    stringBuilder.Append(Constants.VerticalTab);
+                string filePath = Path.Combine(Application.LocalUserAppDataPath, Constants.ErrorLogFileName);
+                using (StreamWriter streamWriter = File.AppendText(filePath)) {
+                    StringBuilder stringBuilder = new StringBuilder()
+                        .Append(DateTime.Now.ToString(Constants.ErrorLogTimeFormat))
+                        .Append(Constants.VerticalTab)
+                        .Append(Constants.ErrorLogErrorMessage)
+                        .Append(Constants.Colon)
+                        .Append(Constants.VerticalTab);
                     if (errorMessage == null) {
                         stringBuilder.Append(Constants.ErrorLogNull);
                     } else if (errorMessage.Equals(string.Empty)) {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
@@ -35,6 +35,7 @@ namespace BetHelper {
         private Timer timer;
 
         private delegate void CountDownFormback();
+
         public CountDownForm() {
             persistWindowState = new PersistWindowState();
             persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
@@ -51,7 +52,7 @@ namespace BetHelper {
                 if (sec > 0) {
                     labelSec.Text = (--sec).ToString();
                 }
-                if (sec == 0) {
+                if (sec.Equals(0)) {
                     timer.Stop();
                     SendMessage();
                     Close();
@@ -89,7 +90,13 @@ namespace BetHelper {
             }
         }
 
-        private void SendMessage() => NativeMethods.SendMessage(Handle, Constants.WM_SYSCOMMAND, (IntPtr)Constants.SC_MONITORPOWER, (IntPtr)MonitorState.MonitorStateOff);
+        private void SendMessage() {
+            NativeMethods.SendMessage(
+                Handle,
+                Constants.WM_SYSCOMMAND,
+                (IntPtr)Constants.SC_MONITORPOWER,
+                (IntPtr)MonitorState.MonitorStateOff);
+        }
 
         private enum MonitorState {
             MonitorStateOn = -1,

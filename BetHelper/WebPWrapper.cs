@@ -37,7 +37,7 @@
  *  float[] PictureDistortion(Bitmap source, Bitmap reference, int metric_type) -
  *          Get PSNR, SSIM or LSIM distortion metric between two pictures
  **
- * Modified 2023-02-06 by Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Modified 2023-04-04 by Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  * Reformatted to meet FortSoft codestyle.
  **
  * This is open-source software licensed under the terms of the MIT License.
@@ -63,7 +63,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using System;
@@ -72,6 +72,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Text;
 using System.Windows.Forms;
 
 namespace WebPWrapper {
@@ -869,30 +870,31 @@ namespace WebPWrapper {
                 // Show statistics
                 if (info) {
                     stats = (WebPAuxStats)Marshal.PtrToStructure(ptrStats, typeof(WebPAuxStats));
-                    MessageBox.Show("Dimension: " + wpic.width + "×" + wpic.height + " pixels" + Environment.NewLine +
-                                    "Output:    " + stats.coded_size + " bytes" + Environment.NewLine +
-                                    "PSNR Y:    " + stats.PSNRY + " db" + Environment.NewLine +
-                                    "PSNR u:    " + stats.PSNRU + " db" + Environment.NewLine +
-                                    "PSNR v:    " + stats.PSNRV + " db" + Environment.NewLine +
-                                    "PSNR ALL:  " + stats.PSNRALL + " db" + Environment.NewLine +
-                                    "Block intra4:  " + stats.block_count_intra4 + Environment.NewLine +
-                                    "Block intra16: " + stats.block_count_intra16 + Environment.NewLine +
-                                    "Block skipped: " + stats.block_count_skipped + Environment.NewLine +
-                                    "Header size:    " + stats.header_bytes + " bytes" + Environment.NewLine +
-                                    "Mode-partition: " + stats.mode_partition_0 + " bytes" + Environment.NewLine +
-                                    "Macro-blocks 0: " + stats.segment_size_segments0 + " residuals bytes" + Environment.NewLine +
-                                    "Macro-blocks 1: " + stats.segment_size_segments1 + " residuals bytes" + Environment.NewLine +
-                                    "Macro-blocks 2: " + stats.segment_size_segments2 + " residuals bytes" + Environment.NewLine +
-                                    "Macro-blocks 3: " + stats.segment_size_segments3 + " residuals bytes" + Environment.NewLine +
-                                    "Quantizer    0: " + stats.segment_quant_segments0 + " residuals bytes" + Environment.NewLine +
-                                    "Quantizer    1: " + stats.segment_quant_segments1 + " residuals bytes" + Environment.NewLine +
-                                    "Quantizer    2: " + stats.segment_quant_segments2 + " residuals bytes" + Environment.NewLine +
-                                    "Quantizer    3: " + stats.segment_quant_segments3 + " residuals bytes" + Environment.NewLine +
-                                    "Filter level 0: " + stats.segment_level_segments0 + " residuals bytes" + Environment.NewLine +
-                                    "Filter level 1: " + stats.segment_level_segments1 + " residuals bytes" + Environment.NewLine +
-                                    "Filter level 2: " + stats.segment_level_segments2 + " residuals bytes" + Environment.NewLine +
-                                    "Filter level 3: " + stats.segment_level_segments3 + " residuals bytes" + Environment.NewLine,
-                                    "Compression statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    StringBuilder message = new StringBuilder()
+                        .Append("Dimension: ").Append(wpic.width).Append("×").Append(wpic.height).Append(" pixels").Append(Environment.NewLine)
+                        .Append("Output:    ").Append(stats.coded_size).Append(" bytes").Append(Environment.NewLine)
+                        .Append("PSNR Y:    ").Append(stats.PSNRY).Append(" db").Append(Environment.NewLine)
+                        .Append("PSNR u:    ").Append(stats.PSNRU).Append(" db").Append(Environment.NewLine)
+                        .Append("PSNR v:    ").Append(stats.PSNRV).Append(" db").Append(Environment.NewLine)
+                        .Append("PSNR ALL:  ").Append(stats.PSNRALL).Append(" db").Append(Environment.NewLine)
+                        .Append("Block intra4:  ").Append(stats.block_count_intra4).Append(Environment.NewLine)
+                        .Append("Block intra16: ").Append(stats.block_count_intra16).Append(Environment.NewLine)
+                        .Append("Block skipped: ").Append(stats.block_count_skipped).Append(Environment.NewLine)
+                        .Append("Header size:    ").Append(stats.header_bytes).Append(" bytes").Append(Environment.NewLine)
+                        .Append("Mode-partition: ").Append(stats.mode_partition_0).Append(" bytes").Append(Environment.NewLine)
+                        .Append("Macro-blocks 0: ").Append(stats.segment_size_segments0).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Macro-blocks 1: ").Append(stats.segment_size_segments1).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Macro-blocks 2: ").Append(stats.segment_size_segments2).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Macro-blocks 3: ").Append(stats.segment_size_segments3).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Quantizer    0: ").Append(stats.segment_quant_segments0).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Quantizer    1: ").Append(stats.segment_quant_segments1).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Quantizer    2: ").Append(stats.segment_quant_segments2).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Quantizer    3: ").Append(stats.segment_quant_segments3).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Filter level 0: ").Append(stats.segment_level_segments0).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Filter level 1: ").Append(stats.segment_level_segments1).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Filter level 2: ").Append(stats.segment_level_segments2).Append(" residuals bytes").Append(Environment.NewLine)
+                        .Append("Filter level 3: ").Append(stats.segment_level_segments3).Append(" residuals bytes");
+                    MessageBox.Show(message.ToString(), "Compression statistics", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
                 return rawWebP;

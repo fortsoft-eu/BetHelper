@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -131,7 +131,10 @@ namespace BetHelper {
             string response = null;
             try {
                 if (browser.CanExecuteJavascriptInMainFrame) {
-                    JavascriptResponse javascriptResponse = browser.EvaluateScriptAsync("document.getElementsByClassName('tips')[0].innerHTML").GetAwaiter().GetResult();
+                    JavascriptResponse javascriptResponse = browser
+                        .EvaluateScriptAsync("document.getElementsByClassName('tips')[0].innerHTML")
+                        .GetAwaiter()
+                        .GetResult();
                     if (javascriptResponse.Success) {
                         response = (string)javascriptResponse.Result;
                     }
@@ -142,12 +145,14 @@ namespace BetHelper {
             }
             List<Tip> list = new List<Tip>();
             if (!string.IsNullOrWhiteSpace(response)) {
-                Regex bookmakerRegex = new Regex("^.*<img\\s+style.*\"([^\"]*)\"\\s*></a></div>.*$", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                Regex bookmakerRegex = new Regex("^.*<img\\s+style.*\"([^\"]*)\"\\s*></a></div>.*$",
+                    RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 Regex dateTimeSplitRegex = new Regex("^(.*)\\((.*)\\)$");
                 Regex endHtmlTagRegex = new Regex("(\\s+\\?)?</.*>$");
                 Regex lineRegex = new Regex("\\s*(</[^>]+>)*\\s*<\\w+[^>]+>\\s*");
                 int i = 0;
-                foreach (string rawTipLine in Regex.Split(response, "<li\\s+class=\"reason\"[^>]+>", RegexOptions.IgnoreCase)) {
+                foreach (string rawTipLine in Regex.Split(response, "<li\\s+class=\"reason\"[^>]+>",
+                    RegexOptions.IgnoreCase)) {
                     if (i++ == 0) {
                         continue;
                     }
@@ -167,7 +172,7 @@ namespace BetHelper {
                             }
                             continue;
                         }
-                        if (stringBuilder.Length == 0) {
+                        if (stringBuilder.Length.Equals(0)) {
                             stringBuilder.Append(item);
                             stringBuilder.Append(Constants.Space);
                         } else {
@@ -178,17 +183,34 @@ namespace BetHelper {
                         tipLineItems.Add(endHtmlTagRegex.Replace(stringBuilder.ToString().TrimEnd(), string.Empty));
                     }
                     try {
-                        list.Add(new Tip(DateTime.Now, new Game[] {
-                                new Game(DateTime.Parse(tipLineItems[6].Substring(7, 4) + Constants.Hyphen + tipLineItems[6].Substring(3, 2)
-                                    + Constants.Hyphen + tipLineItems[6].Substring(0, 2) + Constants.T + tipLineItems[7] + Constants.Colon
-                                    + Constants.Zero + Constants.Zero + Constants.UpperCaseZ, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind),
-                                StaticMethods.UppercaseFirst(tipLineItems[0], CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
-                                StaticMethods.UppercaseFirst(tipLineItems[5], CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
-                                StaticMethods.UppercaseFirst(dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceFirst), CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
-                                StaticMethods.UppercaseFirst(dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceSecond), CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag))
-                                    + Constants.Space + tipLineItems[3])
-                            }, bookmaker.Length < 30 ? bookmaker : null, float.Parse(tipLineItems[2], NumberStyles.Float, CultureInfo.InvariantCulture), 10f,
-                            StaticMethods.UppercaseFirst(Title, CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)), Tip.TipStatus.Received));
+                        DateTime dateTime = new DateTime(
+                            int.Parse(tipLineItems[6].Substring(7, 4)),
+                            int.Parse(tipLineItems[6].Substring(3, 2)),
+                            int.Parse(tipLineItems[6].Substring(0, 2)),
+                            int.Parse(tipLineItems[7]),
+                            0,
+                            0);
+                        Game game = new Game(
+                            dateTime,
+                            StaticMethods.UppercaseFirst(tipLineItems[0], CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
+                            StaticMethods.UppercaseFirst(tipLineItems[5], CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
+                            StaticMethods.UppercaseFirst(dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceFirst),
+                                CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
+                            new StringBuilder()
+                                .Append(StaticMethods.UppercaseFirst(
+                                    dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceSecond),
+                                    CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)))
+                                .Append(Constants.Space)
+                                .Append(tipLineItems[3])
+                                .ToString());
+                        list.Add(new Tip(
+                            DateTime.Now,
+                            new Game[] { game },
+                            bookmaker.Length < 30 ? bookmaker : null,
+                            float.Parse(tipLineItems[2], NumberStyles.Float, CultureInfo.InvariantCulture),
+                            10f,
+                            StaticMethods.UppercaseFirst(Title, CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
+                            Tip.TipStatus.Received));
                     } catch (Exception exception) {
                         Debug.WriteLine(exception);
                         ErrorLog.WriteLine(exception);

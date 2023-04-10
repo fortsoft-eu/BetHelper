@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -45,10 +45,20 @@ namespace BetHelper {
             filters.Add(Constants.ExtensionTif, Constants.ExtensionFilterTif);
             filters.Add(Constants.ExtensionWebP, Constants.ExtensionFilterWebP);
 
-            string[] imageBasicTypeFilter = new string[] { filters[Constants.ExtensionBmp], filters[Constants.ExtensionGif], filters[Constants.ExtensionJpg], filters[Constants.ExtensionPng], filters[Constants.ExtensionTif] };
-            string[] imageWebPTypeFilter = new string[] { filters[Constants.ExtensionWebP] };
+            string[] imageBasicTypeFilter = new string[] {
+                filters[Constants.ExtensionBmp],
+                filters[Constants.ExtensionGif],
+                filters[Constants.ExtensionJpg],
+                filters[Constants.ExtensionPng],
+                filters[Constants.ExtensionTif]
+            };
+            string[] imageWebPTypeFilter = new string[] {
+                filters[Constants.ExtensionWebP]
+            };
             try {
-                if (File.Exists(Path.Combine(Application.StartupPath, Constants.LibWebPX86FileName)) && File.Exists(Path.Combine(Application.StartupPath, Constants.LibWebPX64FileName))) {
+                if (File.Exists(Path.Combine(Application.StartupPath, Constants.LibWebPX86FileName))
+                        && File.Exists(Path.Combine(Application.StartupPath, Constants.LibWebPX64FileName))) {
+
                     imageTypeFilter = new string[imageBasicTypeFilter.Length + imageWebPTypeFilter.Length];
                     Array.Copy(imageBasicTypeFilter, imageTypeFilter, imageBasicTypeFilter.Length);
                     Array.Copy(imageWebPTypeFilter, 0, imageTypeFilter, imageBasicTypeFilter.Length, imageWebPTypeFilter.Length);

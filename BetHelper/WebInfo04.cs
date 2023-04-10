@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
 using System;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
@@ -128,9 +129,12 @@ namespace BetHelper {
                 Wait(browser);
                 Sleep(30);
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1]", false)) {
+            if (ElementExistsAndVisible(browser,
+                    "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1]", false)) {
+
                 OnProgress(Properties.Resources.MessageClosingCookieConsent);
-                browser.ExecuteScriptAsync("document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1].click();");
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1].click();");
                 Wait(browser);
                 Sleep(50);
             }
@@ -208,7 +212,9 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementById('cookie-consent-button-accept')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('cookie-consent-button-accept').click();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1]", false)) {
+            if (ElementExistsAndVisible(browser,
+                    "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1]", false)) {
+
                 browser.ExecuteScriptAsync("document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1].click();");
             }
         }
@@ -217,8 +223,11 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementById('cookie-consent-button-accept')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('cookie-consent-button-accept').click();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1].click();");
+            if (ElementExistsAndVisible(browser,
+                    "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1]", false)) {
+
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1].click();");
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('dy-lb-close')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('dy-lb-close')[0].click();");
@@ -235,8 +244,15 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementById('hp-carousel')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('hp-carousel').style.display = 'none';");
             }
-            browser.ExecuteScriptAsync("for (let i = 2; i < 7; i++) if (i != 5) document.getElementsByClassName('main-navigation')[0].children[1].children[0].children[i].style.display = 'none';");
-            browser.ExecuteScriptAsync("for (let i = 3; i < 8; i++) if (i != 6) document.getElementsByClassName('top_panel')[0].children[0].children[0].children[i].style.display = 'none';");
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("for (let i = 2; i < 7; i++) if (i != 5) ")
+                .Append("document.getElementsByClassName('main-navigation')[0].children[1].children[0].children[i].style.display = 'none';")
+                .ToString());
+
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("for (let i = 3; i < 8; i++) if (i != 6) ")
+                .Append("document.getElementsByClassName('top_panel')[0].children[0].children[0].children[i].style.display = 'none';")
+                .ToString());
         }
     }
 }

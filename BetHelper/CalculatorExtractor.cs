@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -47,14 +47,14 @@ namespace BetHelper {
                         Directory.CreateDirectory(calculatorDirectory);
                     }
                     if (!File.Exists(Constants.CalculatorFileName01) || !File.Exists(Constants.CalculatorFileName02)
-                        || !File.Exists(Constants.CalculatorFileName03) || !File.Exists(Constants.CalculatorFileName04)
-                        || !File.Exists(Constants.CalculatorFileName05) || !File.Exists(Constants.CalculatorFileName06)
-                        || !File.Exists(Constants.CalculatorFileName07) || !File.Exists(Constants.CalculatorFileName08)
-                        || !File.Exists(Constants.CalculatorFileName09) || !File.Exists(Constants.CalculatorFileName10)
-                        || !File.Exists(Constants.CalculatorFileName11) || !File.Exists(Constants.CalculatorFileName12)
-                        || !File.Exists(Constants.CalculatorFileName13) || !File.Exists(Constants.CalculatorFileName14)
-                        || !File.Exists(Constants.CalculatorFileName15) || !File.Exists(Constants.CalculatorFileName16)
-                        || !File.Exists(Constants.CalculatorFileName17) || !File.Exists(Constants.CalculatorFileName18)) {
+                            || !File.Exists(Constants.CalculatorFileName03) || !File.Exists(Constants.CalculatorFileName04)
+                            || !File.Exists(Constants.CalculatorFileName05) || !File.Exists(Constants.CalculatorFileName06)
+                            || !File.Exists(Constants.CalculatorFileName07) || !File.Exists(Constants.CalculatorFileName08)
+                            || !File.Exists(Constants.CalculatorFileName09) || !File.Exists(Constants.CalculatorFileName10)
+                            || !File.Exists(Constants.CalculatorFileName11) || !File.Exists(Constants.CalculatorFileName12)
+                            || !File.Exists(Constants.CalculatorFileName13) || !File.Exists(Constants.CalculatorFileName14)
+                            || !File.Exists(Constants.CalculatorFileName15) || !File.Exists(Constants.CalculatorFileName16)
+                            || !File.Exists(Constants.CalculatorFileName17) || !File.Exists(Constants.CalculatorFileName18)) {
 
                         string calculatorZipFilePath = Path.Combine(calculatorDirectory, Constants.CalculatorZipFileName);
                         if (!File.Exists(calculatorZipFilePath)) {

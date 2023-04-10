@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using System;
@@ -49,7 +49,8 @@ namespace FortSoft.Controls {
         /// <summary>
         /// Proper system hand cursor.
         /// </summary>
-        private static readonly System.Windows.Forms.Cursor SystemHandCursor = new System.Windows.Forms.Cursor(LoadCursor(IntPtr.Zero, IDC_HAND));
+        private static readonly System.Windows.Forms.Cursor SystemHandCursor =
+            new System.Windows.Forms.Cursor(LoadCursor(IntPtr.Zero, IDC_HAND));
 
         /// <summary>
         /// Overriding OnMouseMove method. If the base class decided to show the

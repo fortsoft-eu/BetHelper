@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using CefSharp;
@@ -31,18 +31,43 @@ namespace BetHelper {
     public class LifeSpanHandler : ILifeSpanHandler {
         public event EventHandler<PopUpEventArgs> BrowserPopUp;
 
-        public bool OnBeforePopup(IWebBrowser browserControl, IBrowser browser, IFrame frame, string targetUrl,
-                string targetFrameName, WindowOpenDisposition targetDisposition, bool userGesture, IPopupFeatures popupFeatures,
-                IWindowInfo windowInfo, IBrowserSettings browserSettings, ref bool noJavascriptAccess, out IWebBrowser newBrowser) {
+        public bool OnBeforePopup(
+                IWebBrowser browserControl,
+                IBrowser browser,
+                IFrame frame,
+                string targetUrl,
+                string targetFrameName,
+                WindowOpenDisposition targetDisposition,
+                bool userGesture,
+                IPopupFeatures popupFeatures,
+                IWindowInfo windowInfo,
+                IBrowserSettings browserSettings,
+                ref bool noJavascriptAccess,
+                out IWebBrowser newBrowser) {
 
             newBrowser = null;
-            PopUpEventArgs popUpEventArgs = new PopUpEventArgs(browserControl, browser, frame, targetUrl, targetFrameName,
-                targetDisposition, userGesture, popupFeatures, windowInfo, browserSettings, noJavascriptAccess);
+
+            PopUpEventArgs popUpEventArgs = new PopUpEventArgs(
+                browserControl,
+                browser,
+                frame,
+                targetUrl,
+                targetFrameName,
+                targetDisposition,
+                userGesture,
+                popupFeatures,
+                windowInfo,
+                browserSettings,
+                noJavascriptAccess);
+
             BrowserPopUp?.Invoke(this, popUpEventArgs);
+
             return true;
         }
 
-        public virtual bool DoClose(IWebBrowser browserControl, IBrowser browser) => WebInfo.IsAllowedUrl(browserControl.Address);
+        public virtual bool DoClose(IWebBrowser browserControl, IBrowser browser) {
+            return WebInfo.IsAllowedUrl(browserControl.Address);
+        }
 
         public void OnBeforeClose(IWebBrowser browserControl, IBrowser browser) { }
 

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.0.0.0
+ * Version 1.1.0.0
  */
 
 using FortSoft.Tools;
@@ -34,7 +34,15 @@ namespace BetHelper {
 
     [Serializable()]
     public class Service : ISerializable {
-        public Service(string name, decimal price, int span, SpanUnit unit, DateTime expiration, DateTime subscribed, ServiceStatus status) {
+        public Service(
+                string name,
+                decimal price,
+                int span,
+                SpanUnit unit,
+                DateTime expiration,
+                DateTime subscribed,
+                ServiceStatus status) {
+
             Expiration = expiration;
             Name = name;
             Price = price;
@@ -86,46 +94,49 @@ namespace BetHelper {
         private void SetUid() => Uid = Hash.MD5(Name, Encoding.UTF8);
 
         public override string ToString() {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("Name");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Name);
-            stringBuilder.Append("Price");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Price.ToString(Constants.TwoDecimalDigitsFormat, CultureInfo.InvariantCulture));
-            stringBuilder.Append("Span");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.Append(Span.ToString());
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Unit.ToString());
-            stringBuilder.Append("Expiration");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Expiration.ToString(Constants.ToStringTimeFormat, CultureInfo.InvariantCulture));
-            stringBuilder.Append("Subscribed");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Subscribed.ToString(Constants.ToStringTimeFormat, CultureInfo.InvariantCulture));
-            stringBuilder.Append("Status");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.AppendLine(Status.ToString());
-            stringBuilder.Append("Uid");
-            stringBuilder.Append(Constants.Colon);
-            stringBuilder.Append(Constants.Space);
-            stringBuilder.Append(Uid);
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append("Name")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Name)
+                .Append("Price")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Price.ToString(Constants.TwoDecimalDigitsFormat, CultureInfo.InvariantCulture))
+                .Append("Span")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .Append(Span.ToString())
+                .Append(Constants.Space)
+                .AppendLine(Unit.ToString())
+                .Append("Expiration")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Expiration.ToString(Constants.ToStringTimeFormat, CultureInfo.InvariantCulture))
+                .Append("Subscribed")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Subscribed.ToString(Constants.ToStringTimeFormat, CultureInfo.InvariantCulture))
+                .Append("Status")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(Status.ToString())
+                .Append("Uid")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .Append(Uid);
             return stringBuilder.ToString();
         }
 
         public enum ServiceStatus {
-            Active, Expired
+            Active,
+            Expired
         }
 
         public enum SpanUnit {
-            Day, Month, Year
+            Day,
+            Month,
+            Year
         }
     }
 }
