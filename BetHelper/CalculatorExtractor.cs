@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using System;
@@ -96,9 +96,9 @@ namespace BetHelper {
                 int bytesRead;
                 while ((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0) {
                     totalBytesRead += bytesRead;
-                    if (totalBytesRead == readBuffer.Length) {
+                    if (totalBytesRead.Equals(readBuffer.Length)) {
                         int nextByte = stream.ReadByte();
-                        if (nextByte != -1) {
+                        if (!nextByte.Equals(-1)) {
                             byte[] temp = new byte[readBuffer.Length * 2];
                             Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
                             Buffer.SetByte(temp, totalBytesRead, (byte)nextByte);
@@ -108,7 +108,7 @@ namespace BetHelper {
                     }
                 }
                 byte[] buffer = readBuffer;
-                if (readBuffer.Length != totalBytesRead) {
+                if (!totalBytesRead.Equals(readBuffer.Length)) {
                     buffer = new byte[totalBytesRead];
                     Buffer.BlockCopy(readBuffer, 0, buffer, 0, totalBytesRead);
                 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using CefSharp;
@@ -543,7 +543,7 @@ namespace BetHelper {
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemDelete,
                     new EventHandler(DeleteItem)));
                 contextMenu.Popup += new EventHandler((sender, e) => {
-                    contextMenu.MenuItems[0].Enabled = listViewServices.SelectedItems.Count == 1;
+                    contextMenu.MenuItems[0].Enabled = listViewServices.SelectedItems.Count.Equals(1);
                     bool enabled = listViewServices.SelectedItems.Count > 0;
                     for (int i = 2; i < 4; i++) {
                         contextMenu.MenuItems[i].Enabled = enabled;
@@ -1720,7 +1720,7 @@ namespace BetHelper {
                 dialog = new MessageForm(this, message.ToString(), null, MessageForm.Buttons.OKCancel, MessageForm.BoxIcon.Information);
                 dialog.HelpRequested += new HelpEventHandler(OpenHelp);
 
-                if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
+                if (dialog.ShowDialog(this).Equals(DialogResult.OK)) {
                     browserCacheManager.Set(BrowserCacheManager.ClearSet.BrowserCacheIncludingUserData);
                     RestartApplication();
                 }
@@ -2415,7 +2415,7 @@ namespace BetHelper {
                 e.Bounds.Top + (e.Bounds.Height - sizeF.Height) / 2);
             if (tabControl.Appearance.Equals(TabAppearance.Normal)) {
                 pointF.Y = pointF.Y + 1;
-            } else if (e.State == DrawItemState.Selected) {
+            } else if (e.State.Equals(DrawItemState.Selected)) {
                 pointF.X = pointF.X + 1;
                 pointF.Y = pointF.Y + 1;
             }
@@ -2544,7 +2544,7 @@ namespace BetHelper {
 
         private void SetLoadErrorMessage(CefErrorCode errorCode, string errorText, string failedUrl) {
             if (settings.ShowLoadErrors
-                    && errorCode != CefErrorCode.None
+                    && !errorCode.Equals(CefErrorCode.None)
                     && !string.IsNullOrEmpty(errorText)
                     && !string.IsNullOrEmpty(failedUrl)) {
 
@@ -3628,7 +3628,7 @@ namespace BetHelper {
         }
 
         private void EditTip(object sender, EventArgs e) {
-            if (listViewTips.SelectedItems.Count == 1) {
+            if (listViewTips.SelectedItems.Count.Equals(1)) {
                 TipForm tipForm = new TipForm(settings);
                 tipForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
                 tipForm.HelpRequested += new HelpEventHandler(OpenHelp);

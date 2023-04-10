@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 2.3.1.0
+ * Version 2.3.2.0
  */
 
 using Microsoft.Win32;
@@ -203,7 +203,7 @@ namespace FortSoft.Tools {
         /// method is the replacement of unreliable Control.BringToFront().
         /// </summary>
         public void BringToFront() {
-            if (parentHandle != IntPtr.Zero) {
+            if (!parentHandle.Equals(IntPtr.Zero)) {
                 SetForegroundWindow(parentHandle);
             }
         }
@@ -226,7 +226,7 @@ namespace FortSoft.Tools {
                 if (thisWindow > 0 && window.Equals(parentHandle)) {
                     return true;
                 }
-                if (window == hWnd) {
+                if (window.Equals(hWnd)) {
                     thisWindow = i;
                 }
                 i++;

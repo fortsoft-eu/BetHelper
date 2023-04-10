@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using CefSharp;
@@ -598,7 +598,7 @@ namespace BetHelper {
             if (bitmap != null) {
                 RectangleF marginBounds = e.MarginBounds;
                 RectangleF printableArea = e.PageSettings.PrintableArea;
-                if (printAction == PrintAction.PrintToPreview) {
+                if (printAction.Equals(PrintAction.PrintToPreview)) {
                     e.Graphics.TranslateTransform(printableArea.X, printableArea.Y);
                 }
                 int availableWidth = (int)Math.Floor(printDocument.OriginAtMargins
@@ -841,7 +841,7 @@ namespace BetHelper {
         }
 
         private void SetLoadErrorMessage(CefErrorCode errorCode, string errorText, string failedUrl) {
-            if (errorCode != CefErrorCode.None && !string.IsNullOrEmpty(errorText) && !string.IsNullOrEmpty(failedUrl)) {
+            if (!errorCode.Equals(CefErrorCode.None) && !string.IsNullOrEmpty(errorText) && !string.IsNullOrEmpty(failedUrl)) {
                 statusStripHandler.SetMessage(
                     StatusStripHandler.StatusMessageType.PersistentB,
                     string.Format(Constants.BrowserLoadErrorMessageFormat1, errorText.Trim(), failedUrl.Trim()));
@@ -871,7 +871,7 @@ namespace BetHelper {
         }
 
         private static void LogLoadError(CefErrorCode errorCode, string errorText, string failedUrl) {
-            if (errorCode != CefErrorCode.None && !string.IsNullOrEmpty(errorText) && !string.IsNullOrEmpty(failedUrl)) {
+            if (!errorCode.Equals(CefErrorCode.None) && !string.IsNullOrEmpty(errorText) && !string.IsNullOrEmpty(failedUrl)) {
                 try {
                     string fileName = Path.Combine(Application.LocalUserAppDataPath, Constants.LoadErrorLogFileName);
                     using (StreamWriter streamWriter = File.AppendText(fileName)) {

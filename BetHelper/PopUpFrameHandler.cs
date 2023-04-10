@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using CefSharp;
@@ -86,7 +86,7 @@ namespace BetHelper {
                 if (settings.LogPopUpFrameHandler) {
                     stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 0, 0));
                 }
-                if (frameIdentifier2 == e.Identifier) {
+                if (frameIdentifier2.Equals(e.Identifier)) {
                     frameIdentifier3 = e.Identifier;
                     if (settings.LogPopUpFrameHandler) {
                         if (stringBuilder.Length > 0) {
@@ -107,13 +107,13 @@ namespace BetHelper {
 
             LoadHandler.LoadingStateChange += new EventHandler<LoadEventArgs>((sender, e) => {
                 StringBuilder stringBuilder = new StringBuilder();
-                if (frameIdentifier1 == e.Identifier) {
+                if (frameIdentifier1.Equals(e.Identifier)) {
                     frameIdentifier2 = e.Identifier;
                     if (settings.LogPopUpFrameHandler) {
                         stringBuilder.Append(string.Format(Constants.PopUpFrameHandlerLogFormat, 2, e.Identifier));
                     }
                 }
-                if (frameIdentifier0 == e.Identifier) {
+                if (frameIdentifier0.Equals(e.Identifier)) {
                     frameIdentifier1 = e.Identifier;
                     if (settings.LogPopUpFrameHandler) {
                         if (stringBuilder.Length > 0) {
@@ -144,7 +144,7 @@ namespace BetHelper {
         public string NewUrl { get; private set; }
 
         private void OnAddressChanged(object sender, AddressChangedEventArgs e) {
-            if (frameIdentifier3 == e.Browser.FocusedFrame.Identifier && !EqualsLeftPart(frameUrl, e.Address)) {
+            if (frameIdentifier3.Equals(e.Browser.FocusedFrame.Identifier) && !EqualsLeftPart(frameUrl, e.Address)) {
                 NewUrl = e.Address;
                 if (closeCount++ < 1) {
                     Close?.Invoke(this, e);
@@ -152,7 +152,7 @@ namespace BetHelper {
                     closeCount = 1;
                 }
             }
-            if (frameIdentifier1 == e.Browser.FocusedFrame.Identifier) {
+            if (frameIdentifier1.Equals(e.Browser.FocusedFrame.Identifier)) {
                 frameUrl = e.Address;
             }
             frameIdentifier0 = 0;

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using System;
@@ -37,7 +37,7 @@ namespace BetHelper {
         /// </summary>
         [STAThread]
         public static void Main(string[] args) {
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT) {
+            if (!Environment.OSVersion.Platform.Equals(PlatformID.Win32NT)) {
                 StringBuilder title = new StringBuilder()
                     .Append(GetTitle())
                     .Append(Constants.Space)

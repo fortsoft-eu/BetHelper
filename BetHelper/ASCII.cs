@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 2.0.0.2
+ * Version 2.0.2.0
  */
 
 using System;
@@ -2126,7 +2126,7 @@ namespace FortSoft.Tools {
                         List<char> charList = new List<char>(1);
                         foreach (char character in charArray) {
                             UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(character);
-                            if (unicodeCategory != UnicodeCategory.NonSpacingMark) {
+                            if (!unicodeCategory.Equals(UnicodeCategory.NonSpacingMark)) {
                                 charList.Add(character);
                             }
                         }
@@ -2152,7 +2152,7 @@ namespace FortSoft.Tools {
         /// <param name="conversionOptions">Conversion options.</param>
         /// <returns>Output string.</returns>
         public static string Convert(string str, Encoding encoding, ConversionOptions conversionOptions) {
-            char replacingChar = conversionOptions == ConversionOptions.Alphanumeric ? '_' : ' ';
+            char replacingChar = conversionOptions.Equals(ConversionOptions.Alphanumeric) ? '_' : ' ';
             byte[] bytes = Encoding.Convert(encoding, Encoding.Unicode, encoding.GetBytes(str));
             char[] charArray = Encoding.Unicode.GetString(bytes).ToCharArray();
             StringBuilder stringBuilder = new StringBuilder(charArray.Length);

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using System;
@@ -213,12 +213,12 @@ namespace BetHelper {
             statusStrip.MaximumSize = new Size(0, 20);
             statusStrip.MinimumSize = new Size(0, 20);
             statusStrip.Items.Add(labelMessage);
-            if (displayMode == DisplayMode.Standard) {
+            if (displayMode.Equals(DisplayMode.Standard)) {
                 statusStrip.Items.Add(labelUrl);
                 statusStrip.Items.Add(progressBar);
                 statusStrip.Items.Add(labelSearchResult);
             }
-            if (displayMode == DisplayMode.Basic) {
+            if (displayMode.Equals(DisplayMode.Basic)) {
                 statusStrip.Items.Add(labelSearchResult);
             }
             statusStrip.Items.Add(labelMuted);
@@ -226,7 +226,7 @@ namespace BetHelper {
             statusStrip.Items.Add(labelCache);
             statusStrip.Items.Add(labelCaps);
             statusStrip.Items.Add(labelNum);
-            if (displayMode == DisplayMode.Basic) {
+            if (displayMode.Equals(DisplayMode.Basic)) {
                 statusStrip.Items.Add(labelIns);
             }
             statusStrip.Items.Add(labelScrl);

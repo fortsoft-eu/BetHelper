@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using System;
@@ -321,7 +321,7 @@ namespace BetHelper {
                             .Append(Constants.Space)
                             .Append(word)
                             .ToString();
-                        if (TextRenderer.MeasureText(str, label.Font).Width <= (icon == BoxIcon.None ? maxWidth : maxWidth - 50)
+                        if (TextRenderer.MeasureText(str, label.Font).Width <= (icon.Equals(BoxIcon.None) ? maxWidth : maxWidth - 50)
                                 || noWrap) {
 
                             stringBuilder.Append(Constants.Space)
@@ -594,7 +594,7 @@ namespace BetHelper {
         public ClickedButton MessageBoxClickedButton => clickedButton;
 
         private void OnFormLoad(object sender, EventArgs e) {
-            if (Location == Point.Empty && (parent == null || !parent.Visible)) {
+            if (Location.IsEmpty && (parent == null || !parent.Visible)) {
                 Location = new Point(
                     (SystemInformation.PrimaryMonitorSize.Width - Width) / 2,
                     (SystemInformation.PrimaryMonitorSize.Height - Height) / 2);

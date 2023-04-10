@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.1.0
  */
 
 using FortSoft.Tools;
@@ -486,8 +486,8 @@ namespace BetHelper {
                 Color color;
                 Pen pen;
                 if (comboBox.DroppedDown) {
-                    if ((e.State & DrawItemState.Selected) == DrawItemState.Selected
-                            || (e.State & DrawItemState.HotLight) == DrawItemState.HotLight) {
+                    if ((e.State & DrawItemState.Selected).Equals(DrawItemState.Selected)
+                            || (e.State & DrawItemState.HotLight).Equals(DrawItemState.HotLight)) {
 
                         color = SystemColors.HighlightText;
                         pen = SystemPens.HighlightText;
@@ -495,7 +495,7 @@ namespace BetHelper {
                         color = comboBox.ForeColor;
                         pen = Pens.Black;
                     }
-                } else if ((e.State & DrawItemState.Focus) == DrawItemState.Focus) {
+                } else if ((e.State & DrawItemState.Focus).Equals(DrawItemState.Focus)) {
                     color = SystemColors.HighlightText;
                     pen = SystemPens.HighlightText;
                 } else {
@@ -562,8 +562,8 @@ namespace BetHelper {
                 Color color;
                 Pen pen;
                 if (comboBox.DroppedDown) {
-                    if ((e.State & DrawItemState.Selected) == DrawItemState.Selected
-                            || (e.State & DrawItemState.HotLight) == DrawItemState.HotLight) {
+                    if ((e.State & DrawItemState.Selected).Equals(DrawItemState.Selected)
+                            || (e.State & DrawItemState.HotLight).Equals(DrawItemState.HotLight)) {
 
                         color = SystemColors.HighlightText;
                         pen = SystemPens.HighlightText;
@@ -571,7 +571,7 @@ namespace BetHelper {
                         color = comboBox.ForeColor;
                         pen = Pens.Black;
                     }
-                } else if ((e.State & DrawItemState.Focus) == DrawItemState.Focus) {
+                } else if ((e.State & DrawItemState.Focus).Equals(DrawItemState.Focus)) {
                     color = SystemColors.HighlightText;
                     pen = SystemPens.HighlightText;
                 } else {
