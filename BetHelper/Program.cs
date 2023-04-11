@@ -38,14 +38,8 @@ namespace BetHelper {
         [STAThread]
         public static void Main(string[] args) {
             if (!Environment.OSVersion.Platform.Equals(PlatformID.Win32NT)) {
-                StringBuilder title = new StringBuilder()
-                    .Append(GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                MessageBox.Show(Properties.Resources.MessageApplicationCannotRun, title.ToString(), MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(Properties.Resources.MessageApplicationCannotRun, GetTitle(Properties.Resources.CaptionError),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -66,13 +60,7 @@ namespace BetHelper {
                 } else if (args.Length.Equals(1)
                         && (args[0].Equals(Constants.CommandLineSwitchUD) || args[0].Equals(Constants.CommandLineSwitchWD))) {
 
-                    StringBuilder title = new StringBuilder()
-                        .Append(GetTitle())
-                        .Append(Constants.Space)
-                        .Append(Constants.EnDash)
-                        .Append(Constants.Space)
-                        .Append(Properties.Resources.CaptionEncoderDecoder);
-                    SingleInstance.Run(new EncDecForm(settings), title.ToString());
+                    SingleInstance.Run(new EncDecForm(settings), GetTitle(Properties.Resources.CaptionEncoderDecoder));
 
                 } else if (args.Length.Equals(2)
                         && (args[0].Equals(Constants.CommandLineSwitchUD) || args[0].Equals(Constants.CommandLineSwitchWD))) {
@@ -83,24 +71,12 @@ namespace BetHelper {
                         && (args[0].Equals(Constants.CommandLineSwitchUE) || args[0].Equals(Constants.CommandLineSwitchWE))) {
 
                     settings.LoadConfig();
-                    StringBuilder title = new StringBuilder()
-                        .Append(GetTitle())
-                        .Append(Constants.Space)
-                        .Append(Constants.EnDash)
-                        .Append(Constants.Space)
-                        .Append(Properties.Resources.CaptionEditRemoteConfig);
-                    SingleInstance.Run(new ConfigEditForm(settings), title.ToString());
+                    SingleInstance.Run(new ConfigEditForm(settings), GetTitle(Properties.Resources.CaptionEditRemoteConfig));
 
                 } else if (args.Length.Equals(1)
                         && (args[0].Equals(Constants.CommandLineSwitchUL) || args[0].Equals(Constants.CommandLineSwitchWL))) {
 
-                    StringBuilder title = new StringBuilder()
-                        .Append(GetTitle())
-                        .Append(Constants.Space)
-                        .Append(Constants.EnDash)
-                        .Append(Constants.Space)
-                        .Append(Properties.Resources.CaptionLogViewer);
-                    SingleInstance.Run(new LogViewerForm(settings), title.ToString());
+                    SingleInstance.Run(new LogViewerForm(settings), GetTitle(Properties.Resources.CaptionLogViewer));
 
                 } else {
                     noSwitch = true;
@@ -110,13 +86,8 @@ namespace BetHelper {
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-                StringBuilder title = new StringBuilder()
-                    .Append(GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                MessageBox.Show(exception.Message, title.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(exception.Message, GetTitle(Properties.Resources.CaptionError), MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 if (noSwitch) {
                     MessageBox.Show(Properties.Resources.MessageApplicationError, GetTitle(), MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
@@ -132,6 +103,16 @@ namespace BetHelper {
                 title = assemblyTitleAttribute.Title;
             }
             return string.IsNullOrEmpty(title) ? Application.ProductName : title;
+        }
+
+        public static string GetTitle(string title) {
+            return new StringBuilder()
+                .Append(GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(title)
+                .ToString();
         }
 
         public static bool IsDebugging {
