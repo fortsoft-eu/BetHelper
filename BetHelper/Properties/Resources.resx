@@ -1012,4 +1012,10 @@
   <data name="MenuItemStopRinging" xml:space="preserve">
     <value>&amp;Stop Ringing</value>
   </data>
+  <data name="MenuItemBell" xml:space="preserve">
+    <value>&amp;Bell</value>
+  </data>
+  <data name="MenuItemBellTest" xml:space="preserve">
+    <value>Bell &amp;Test</value>
+  </data>
 </root>

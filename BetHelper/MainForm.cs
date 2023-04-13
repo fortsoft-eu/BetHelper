@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.1.0
+ * Version 1.1.2.0
  */
 
 using CefSharp;
@@ -256,6 +256,11 @@ namespace BetHelper {
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTryToKeepUserLoggedIn,
                     new EventHandler(TryToKeepUserLoggedIn)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemBell,
+                    new EventHandler(ToggleBell)));
+                menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemBellTest,
+                    new EventHandler((sender, e) => telephoneBell.Ring())));
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemStopRinging + Constants.ShortcutF6,
                     new EventHandler((sender, e) => telephoneBell.Stop())));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
@@ -367,7 +372,8 @@ namespace BetHelper {
                     menuItemOptions.MenuItems[0].Checked = settings.AutoAdjustRightPaneWidth;
                     menuItemOptions.MenuItems[2].Checked = settings.AutoLogInAfterInitialLoad;
                     menuItemOptions.MenuItems[3].Checked = settings.TryToKeepUserLoggedIn;
-                    menuItemOptions.MenuItems[7].Enabled = settings.AllowedAddrHandler.Locked;
+                    menuItemOptions.MenuItems[5].Checked = settings.EnableBell;
+                    menuItemOptions.MenuItems[10].Enabled = settings.AllowedAddrHandler.Locked;
                 });
                 menuItemTools.Popup += new EventHandler((sender, e) => {
                     bool enabled = !string.IsNullOrEmpty(webInfoHandler.GetCurrentAddress());
@@ -759,7 +765,8 @@ namespace BetHelper {
                 tabControlRight.SelectedIndex = settings.ActivePanelRight < 0 || settings.ActivePanelRight > tabControlRight.TabCount - 1
                     ? 0
                     : settings.ActivePanelRight;
-            })).ContinueWith(new Action<Task>(task => SubscribeEvents()));
+            }))
+            .ContinueWith(new Action<Task>(task => SubscribeEvents()));
         }
 
         private void InitializeBookmarkManager(MenuItem menuItem) {
@@ -1541,9 +1548,18 @@ namespace BetHelper {
         }
 
         private void FindNext(object sender, EventArgs e) {
-            if (webInfoHandler.Current != null && webInfoHandler.Current.Browser != null && !string.IsNullOrEmpty(search.searchString)) {
-                searching = true;
-                webInfoHandler.Current.Browser.Find(search.searchString, !search.backward, search.caseSensitive, true);
+            if (findThread != null && findThread.IsAlive) {
+                try {
+                    findForm.SafeSelect();
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+            } else {
+                if (webInfoHandler.Current != null && webInfoHandler.Current.Browser != null && !string.IsNullOrEmpty(search.searchString)) {
+                    searching = true;
+                    webInfoHandler.Current.Browser.Find(search.searchString, !search.backward, search.caseSensitive, true);
+                }
             }
         }
 
@@ -1687,6 +1703,11 @@ namespace BetHelper {
         private void TryToKeepUserLoggedIn(object sender, EventArgs e) {
             settings.TryToKeepUserLoggedIn = !settings.TryToKeepUserLoggedIn;
             ((MenuItem)sender).Checked = settings.TryToKeepUserLoggedIn;
+        }
+
+        private void ToggleBell(object sender, EventArgs e) {
+            settings.EnableBell = !settings.EnableBell;
+            ((MenuItem)sender).Checked = settings.EnableBell;
         }
 
         private void ClearBrowserCache(object sender, EventArgs e) {
@@ -2171,6 +2192,9 @@ namespace BetHelper {
                         countDownForm.SafeClose();
                     }
                 }
+
+                webInfoHandler.Suspend();
+                Thread.Sleep(250);
                 SaveRightPaneData();
 
                 if (!close && !restart && settings.DisplayPromptBeforeClosing && e.CloseReason.Equals(CloseReason.UserClosing)) {
@@ -2178,6 +2202,7 @@ namespace BetHelper {
                         Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question);
                     dialog.HelpRequested += new HelpEventHandler(OpenHelp);
                     if (!dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
+                        webInfoHandler.Resume();
                         e.Cancel = true;
                         return;
                     }
@@ -2354,7 +2379,7 @@ namespace BetHelper {
         }
 
         private void OnMouseWheel(object sender, MouseEventArgs e) {
-            if (ActiveForm == (Form)sender) {
+            if (((Form)sender).Equals(ActiveForm)) {
                 Control control = StaticMethods.FindControlAtCursor((Form)sender);
                 if (control is TabControl) {
                     TabControl tabControl = (TabControl)control;
@@ -2574,7 +2599,7 @@ namespace BetHelper {
         private void SetTips(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(SetTips), sender, e);
-            } else if (AddTips(webInfoHandler.Tips)) {
+            } else if (AddTips(webInfoHandler.Tips) && settings.EnableBell) {
                 telephoneBell.Ring();
             }
         }

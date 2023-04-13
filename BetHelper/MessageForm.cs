@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.1.0
+ * Version 1.1.2.0
  */
 
 using System;
@@ -310,9 +310,8 @@ namespace BetHelper {
             List<string> lines = new List<string>();
             StringReader stringReader = new StringReader(text);
             for (string line; (line = stringReader.ReadLine()) != null;) {
-                string[] words = line.Split(Constants.Space);
                 StringBuilder stringBuilder = new StringBuilder();
-                foreach (string word in words) {
+                foreach (string word in line.Split(Constants.Space)) {
                     if (stringBuilder.Length.Equals(0)) {
                         stringBuilder.Append(word);
                     } else {

@@ -835,6 +835,24 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Bell.
+        /// </summary>
+        internal static string MenuItemBell {
+            get {
+                return ResourceManager.GetString("MenuItemBell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bell &amp;Test.
+        /// </summary>
+        internal static string MenuItemBellTest {
+            get {
+                return ResourceManager.GetString("MenuItemBellTest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Bet Calculator in Separate Window....
         /// </summary>
         internal static string MenuItemBetCalculator {

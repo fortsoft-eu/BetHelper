@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.2.0
  */
 
 namespace BetHelper {
@@ -81,7 +81,7 @@ namespace BetHelper {
         /// The time interval in minutes after which the cache size of the
         /// internal Chromium web browser will be refreshed.
         /// </summary>
-        public const int CacheSizeRefreshInterval = 30;
+        public const int CacheSizeRefreshInterval = 15;
 
         /// <summary>
         /// Maximum number of tabs with bet calculators.
@@ -475,10 +475,12 @@ namespace BetHelper {
         public const string NotepadFileName = "notepad.exe";
         public const string NumberFormatSystem = "[system]";
         public const string NumericUpDownEdit = "upDownEdit";
+        public const string OddPattern = "[^\\.,\\d]";
         public const string OneDecimalDigitFormat = "f1";
         public const string PopUpFrameHandlerLogFileName = "PopUpFrameHandler.log";
         public const string PopUpFrameHandlerLogFormat = "frameIdentifier{0} = {1}";
-        public const string OddPattern = "[^\\.,\\d]";
+        public const string PreferredEditorApplicationName = "Notepad++";
+        public const string PreferredEditorFileName = "notepad++.exe";
         public const string PrintOutputInput = "Input";
         public const string PrintOutputOutput = "Output";
         public const string RemoteApiScriptName = "api.php";
@@ -558,6 +560,7 @@ namespace BetHelper {
         public const string ShortcutShiftCtrlP = "\tShift+Ctrl+P";
         public const string ShortcutShiftCtrlPlus = "\tShift+Ctrl++";
         public const string ShortcutShiftCtrlT = "\tShift+Ctrl+T";
+        public const string SplitWordsPattern = "\\s+";
         public const string StatusOk = "Ok";
         public const string StripSearchFormat = "{0}/{1} {2}";
         public const string StripSearchMatches = "matches";
@@ -596,6 +599,9 @@ namespace BetHelper {
         public const string XmlElementVersion = "Version";
         public const string ZeroDecimalDigitsFormat = "f0";
 
+        /// <summary>
+        /// Data size units with their binary and decimal prefixes.
+        /// </summary>
         public const string Byte = "B";
         public const string Kibibyte = "KiB";
         public const string Kilobyte = "kB";

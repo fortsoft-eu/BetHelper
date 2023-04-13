@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.2.0
  */
 
 using FortSoft.Tools;
@@ -32,6 +32,7 @@ using System.Windows.Forms;
 
 namespace BetHelper {
     public sealed class ShortcutManager : IDisposable {
+        private Form form;
         private int registered;
         private KeyboardHookManager keyboardHookManager;
 
@@ -99,138 +100,391 @@ namespace BetHelper {
             registered = 1;
 
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.BROWSER_BACK,
-                new Action(() => GoBack?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        GoBack?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.BROWSER_FORWARD,
-                new Action(() => GoForward?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        GoForward?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.BROWSER_HOME,
-                new Action(() => GoHome?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        GoHome?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.BROWSER_REFRESH,
-                new Action(() => Reload?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Reload?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.BROWSER_SEARCH,
-                new Action(() => Find?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Find?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.BROWSER_STOP,
-                new Action(() => StopLoad?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        StopLoad?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.ESCAPE,
-                new Action(() => Escape?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Escape?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F1,
-                new Action(() => OpenHelp?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        OpenHelp?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F11,
-                new Action(() => TurnOffMonitors?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        TurnOffMonitors?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F12,
-                new Action(() => OpenDeveloperTools?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        OpenDeveloperTools?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F2,
-                new Action(() => FocusTrustDegrees?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        FocusTrustDegrees?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F3,
-                new Action(() => FindNext?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        FindNext?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F4,
-                new Action(() => UnloadPage?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        UnloadPage?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F5,
-                new Action(() => Reload?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Reload?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F6,
-                new Action(() => StopRinging?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        StopRinging?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F7,
-                new Action(() => ResetIpCheckLock?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ResetIpCheckLock?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F8,
-                new Action(() => LogIn?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        LogIn?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F9,
-                new Action(() => ToggleRightPane?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ToggleRightPane?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt | ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.KEY_E,
-                new Action(() => ExportWindowAsync?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ExportWindowAsync?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt | ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.KEY_P,
-                new Action(() => PrintImage?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        PrintImage?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F10,
-                new Action(() => OpenBetCalculator?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        OpenBetCalculator?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F11,
-                new Action(() => LaunchCalculator?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        LaunchCalculator?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F12,
-                new Action(() => LaunchNotepad?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        LaunchNotepad?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F8,
-                new Action(() => LogInAtInitialPage?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        LogInAtInitialPage?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F9,
-                new Action(() => ToggleRightPanetWidth?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ToggleRightPanetWidth?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.HOME,
-                new Action(() => GoHome?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        GoHome?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.KEY_L,
-                new Action(() => OpenLogViewer?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        OpenLogViewer?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.LEFT,
-                new Action(() => GoBack?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        GoBack?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.RIGHT,
-                new Action(() => GoForward?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        GoForward?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.ADD,
-                new Action(() => ZoomInCoarse?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ZoomInCoarse?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.DELETE,
-                new Action(() => ClearBrowserCacheInclUserData?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ClearBrowserCacheInclUserData?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.KEY_N,
-                new Action(() => OpenEncoderDecoder?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        OpenEncoderDecoder?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.KEY_P,
-                new Action(() => PrintToPdf?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        PrintToPdf?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.KEY_T,
-                new Action(() => ToggleTopMost?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ToggleTopMost?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.OEM_MINUS,
-                new Action(() => ZoomOutCoarse?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ZoomOutCoarse?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.OEM_PLUS,
-                new Action(() => ZoomInCoarse?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ZoomInCoarse?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control | ModifierKeys.Shift, (int)VirtualKeyCode.SUBTRACT,
-                new Action(() => ZoomOutCoarse?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ZoomOutCoarse?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.ADD,
-                new Action(() => ZoomInFine?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ZoomInFine?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.BROWSER_REFRESH,
-                new Action(() => ReloadIgnoreCache?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ReloadIgnoreCache?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.DOWN,
-                new Action(() => CtrlDown?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        CtrlDown?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.END,
-                new Action(() => CtrlEnd?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        CtrlEnd?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.F5,
-                new Action(() => ReloadIgnoreCache?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ReloadIgnoreCache?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.HOME,
-                new Action(() => CtrlHome?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        CtrlHome?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_0,
-                new Action(() => ActualSize?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ActualSize?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_D,
-                new Action(() => AddBookmark?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        AddBookmark?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_E,
-                new Action(() => Export?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Export?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_F,
-                new Action(() => Find?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Find?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_G,
-                new Action(() => ShowPreferences?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ShowPreferences?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_I,
-                new Action(() => OpenWebInfo?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        OpenWebInfo?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_M,
-                new Action(() => MuteAudio?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        MuteAudio?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_O,
-                new Action(() => Open?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Open?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_P,
-                new Action(() => Print?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Print?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_R,
-                new Action(() => Reload?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Reload?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_T,
-                new Action(() => NewTabBetCalculator?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        NewTabBetCalculator?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_U,
-                new Action(() => ViewSource?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ViewSource?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.NEXT,
-                new Action(() => CtrlPageDown?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        CtrlPageDown?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.NUMPAD0,
-                new Action(() => ActualSize?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ActualSize?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.OEM_MINUS,
-                new Action(() => ZoomOutFine?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ZoomOutFine?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.OEM_PLUS,
-                new Action(() => ZoomInFine?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ZoomInFine?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.PRIOR,
-                new Action(() => CtrlPageUp?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        CtrlPageUp?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.SUBTRACT,
-                new Action(() => ZoomOutFine?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ZoomOutFine?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.UP,
-                new Action(() => CtrlUp?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        CtrlUp?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Shift, (int)VirtualKeyCode.F3,
-                new Action(() => FindPrevious?.Invoke(this, EventArgs.Empty)));
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        FindPrevious?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
         }
 
         public void AddForm(Form form) {
-            form.Activated += new EventHandler(Register);
-            form.Deactivate += new EventHandler(Unregister);
-            form.Enter += new EventHandler(Register);
-            form.Leave += new EventHandler(Unregister);
+            this.form = form;
+            this.form.Activated += new EventHandler(Register);
+            this.form.Deactivate += new EventHandler(Unregister);
+            this.form.Enter += new EventHandler(Register);
+            this.form.Leave += new EventHandler(Unregister);
         }
 
         public void Dispose() {

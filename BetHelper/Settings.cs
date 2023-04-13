@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.2.0
  */
 
 using FortSoft.Tools;
@@ -197,6 +197,7 @@ namespace BetHelper {
             allowedAddrHandler = new AllowedAddrHandler();
             numberFormatHandler = new NumberFormatHandler();
             persistentSettings = new PersistentSettings();
+
             try {
                 string telegramAppDirectory = Path.Combine(
                     Environment.GetFolderPath(
@@ -208,25 +209,370 @@ namespace BetHelper {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
+
+            PreferredEditor = GetPreferredEditor();
+
             Load();
         }
 
         /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
+        /// Gets the instance of an AllowedAddrHandler object.
         /// </summary>
-        public string UserAgent {
-            get {
-                return string.IsNullOrEmpty(userAgent) ? userAgents[0] : userAgent;
-            }
-            set {
-                userAgent = value == null || value.Equals(userAgents[0]) ? string.Empty : value;
-            }
-        }
+        public AllowedAddrHandler AllowedAddrHandler => allowedAddrHandler;
 
         /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
+        /// True if the embedded Chromium browser is currently enabled to play
+        /// audio. Otherwise false.
+        /// </summary>
+        public bool AudioEnabled { get; private set; }
+
+        /// <summary>
+        /// Represents the setting if the width of the right pane will be set
+        /// automatically. The default value is true.
+        /// </summary>
+        public bool AutoAdjustRightPaneWidth { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting of whether auto log in will be performed after
+        /// the initial load of the website. The default value is true.
+        /// </summary>
+        public bool AutoLogInAfterInitialLoad { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting to block all requests to URLs not belonging to
+        /// the URL set by their second-level domains or the exception list by
+        /// their hostname. The default value is true.
+        /// </summary>
+        public bool BlockRequestsToForeignUrls { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting if the application should check for updates.
+        /// The default value is true.
+        /// </summary>
+        public bool CheckForUpdates { get; set; } = true;
+
+        /// <summary>
+        /// Represents whether visual styles will be used when rendering
+        /// application windows. The default value is false.
+        /// </summary>
+        public bool DisableThemes { get; set; }
+
+        /// <summary>
+        /// Represents the setting of whether a pop-up warning about closing the
+        /// application will appear before closing the main application window.
+        /// The default value is true.
+        /// </summary>
+        public bool DisplayPromptBeforeClosing { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting to allow the embedded Chromium browser to play
+        /// audio. The default value is true.
+        /// </summary>
+        public bool EnableAudio { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting if the bell will be enabled when a new tip is
+        /// received from the service. The default value is false.
+        /// </summary>
+        public bool EnableBell { get; set; }
+
+        /// <summary>
+        /// Represents the setting of whether the embedded Chromium browser will
+        /// be allowed to use the disk cache. The default value is true.
+        /// </summary>
+        public bool EnableCache { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting to allow the embedded Chromium browser to play
+        /// premium media content. The default value is false.
+        /// </summary>
+        public bool EnableDrmContent { get; set; }
+
+        /// <summary>
+        /// Represents the setting if the log viewer will load only a limited
+        /// length of the log into the window. If not, it will try to load the
+        /// entire log. The default value is true.
+        /// </summary>
+        public bool EnableLogPreloadLimit { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting if the embedded Chromium browser will display
+        /// a preview before printing. The default value is false.
+        /// </summary>
+        public bool EnablePrintPreview { get; set; }
+
+        /// <summary>
+        /// Represents the setting if the proxy server for the embedded Chromium
+        /// browser will be enabled. The default value is false.
+        /// </summary>
+        public bool EnableProxy { get; set; }
+
+        /// <summary>
+        /// Represents the setting if certificate errors from websites running on
+        /// port 443 will be ignored. The default value is false.
+        /// </summary>
+        public bool IgnoreCertificateErrors { get; set; }
+
+        /// <summary>
+        /// Represents the setting to always keep an eye on the client's IP
+        /// address and block all outgoing requests if the client's IP address
+        /// changes. If this setting is enabled, the server infrastructure is
+        /// overloaded. The default value is false.
+        /// </summary>
+        public bool KeepAnEyeOnTheClientsIP { get; set; }
+
+        /// <summary>
+        /// Represents the setting of whether Chromium embedded browser
+        /// JavaScript console messages will be logged or not. The default value
+        /// is false.
+        /// </summary>
+        public bool LogConsoleMessages { get; set; }
+
+        /// <summary>
+        /// Represents the setting to log all requests to URLs not belonging to
+        /// the URL set by their second-level domains or the exception list by
+        /// their hostname. The default value is false.
+        /// </summary>
+        public bool LogForeignUrls { get; set; }
+
+        /// <summary>
+        /// Represents the setting if load errors of the embedded Chromium
+        /// browser will be logged or not. The default value is false.
+        /// </summary>
+        public bool LogLoadErrors { get; set; }
+
+        /// <summary>
+        /// Represents the setting to log the functionality of the
+        /// PopUpFrameHandler object instance. The default value is false.
+        /// </summary>
+        public bool LogPopUpFrameHandler { get; set; }
+
+        /// <summary>
+        /// Represents the setting of whether to outline search results in the
+        /// displayed web page in the Chromium embedded browser. The default
+        /// value is false.
+        /// </summary>
+        public bool OutlineSearchResults { get; set; }
+
+        /// <summary>
+        /// Represents the setting if the embedded Chromium browser will be
+        /// allowed to permanently store session cookies in the disk cache. The
+        /// default value is true.
+        /// </summary>
+        public bool PersistSessionCookies { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting of whether the embedded Chromium browser will
+        /// be allowed to permanently store the user preferences. The default
+        /// value is true.
+        /// </summary>
+        public bool PersistUserPreferences { get; set; } = true;
+
+        /// <summary>
+        /// Represents the printing setting, whether to use soft margins (larger)
+        /// or hard margins (smaller). This setting does not apply to the
+        /// embedded Chromium browser. The default value is true.
+        /// </summary>
+        public bool PrintSoftMargins { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting if the restrictions of some features for large
+        /// log files will be applied. The default value is true.
+        /// </summary>
+        public bool RestrictForLargeLogs { get; set; } = true;
+
+        /// <summary>
+        /// Represents the state of the right panel, whether it is collapsed or
+        /// not. The default value is false.
+        /// </summary>
+        public bool RightPaneCollapsed { get; set; }
+
+        /// <summary>
+        /// Represents the display mode of the riht panel, whether the right
+        /// panel will be set to the default or minimum width to display its
+        /// elements. The default value is false.
+        /// </summary>
+        public bool RightPaneWidth { get; set; }
+
+        /// <summary>
+        /// Represents the setting of whether Chromium embedded browser
+        /// JavaScript console messages will be shown in the status bar. The
+        /// default value is false.
+        /// </summary>
+        public bool ShowConsoleMessages { get; set; }
+
+        /// <summary>
+        /// Represents the setting if load errors of the embedded Chromium
+        /// browser will be displayed in the status bar. The default value is
+        /// false.
+        /// </summary>
+        public bool ShowLoadErrors { get; set; }
+
+        /// <summary>
+        /// Represents the setting of whether the bookmarks will be displayed in
+        /// the list sorted. The default value is true.
+        /// </summary>
+        public bool SortBookmarks { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting if the application should inform the user
+        /// about available updates in the status bar only. If not, a pop-up
+        /// window will appear. The default value is false.
+        /// </summary>
+        public bool StatusBarNotifOnly { get; set; }
+
+        /// <summary>
+        /// Represents the setting of whether the tab headers in the main
+        /// application window will be rendered in color. The default value is
+        /// true.
+        /// </summary>
+        public bool TabsBackgroundColor { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting of whether the tab headers in the main
+        /// application window will be bold. The default value is false.
+        /// </summary>
+        public bool TabsBoldFont { get; set; }
+
+        /// <summary>
+        /// Represents the setting if the titles of bookmarks in the list will be
+        /// abbreviated. The default value is true.
+        /// </summary>
+        public bool TruncateBookmarkTitles { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting of whether attempts will be made to keep a
+        /// user logged in if the user is inactive on a specific site. The
+        /// default value is true.
+        /// </summary>
+        public bool TryToKeepUserLoggedIn { get; set; } = true;
+
+        /// <summary>
+        /// Represents the setting of whether decimal prefixes will be used when
+        /// displaying data size units. If not, the binary unit prefixes will be
+        /// used. The default value is false.
+        /// </summary>
+        public bool UseDecimalPrefix { get; set; }
+
+        /// <summary>
+        /// Represents how the 3D border of the labels will be rendered on the
+        /// status strip in the main application window. The default value is
+        /// Border3DStyle.Adjust.
+        /// </summary>
+        public Border3DStyle Border3DStyle { get; set; } = Border3DStyle.Adjust;
+
+        /// <summary>
+        /// Default tab color with bookmaker website. The default value is
+        /// Color.Pink.
+        /// </summary>
+        public Color BookmakerDefaultColor { get; set; } = Color.Pink;
+
+        /// <summary>
+        /// Default selected tab color with bookmaker website. The default value
+        /// is Color.MistyRose.
+        /// </summary>
+        public Color BookmakerSelectedColor { get; set; } = Color.MistyRose;
+
+        /// <summary>
+        /// Default bet calculator tab color. The default value is
+        /// Color.LightCyan.
+        /// </summary>
+        public Color CalculatorDefaultColor { get; set; } = Color.LightCyan;
+
+        /// <summary>
+        /// Default bet calculator selected tab color. The default value is
+        /// Color.Azure.
+        /// </summary>
+        public Color CalculatorSelectedColor { get; set; } = Color.Azure;
+
+        /// <summary>
+        /// Default dashboard tab color. The default value is Color.LightGreen.
+        /// </summary>
+        public Color DashboardDefaultColor { get; set; } = Color.LightGreen;
+
+        /// <summary>
+        /// Default dashboard selected tab color. The default value is
+        /// Color.PaleGreen.
+        /// </summary>
+        public Color DashboardSelectedColor { get; set; } = Color.PaleGreen;
+
+        /// <summary>
+        /// DOM element inspection overlay form background color. The default
+        /// value is Color.SteelBlue.
+        /// </summary>
+        public Color OverlayBackgroundColor { get; set; } = Color.SteelBlue;
+
+        /// <summary>
+        /// DOM element inspection overlay form crosshair color. The default
+        /// value is Color.Yellow.
+        /// </summary>
+        public Color OverlayCrosshairColor { get; set; } = Color.Yellow;
+
+        /// <summary>
+        /// Sport info 1 website default tab color. The default value is
+        /// Color.LemonChiffon.
+        /// </summary>
+        public Color SportInfo1DefaultColor { get; set; } = Color.LemonChiffon;
+
+        /// <summary>
+        /// Sport info 1 website default selected tab color. The default value is
+        /// Color.LightYellow.
+        /// </summary>
+        public Color SportInfo1SelectedColor { get; set; } = Color.LightYellow;
+
+        /// <summary>
+        /// Sport info 2 website default tab color. The default value is
+        /// Color.PeachPuff.
+        /// </summary>
+        public Color SportInfo2DefaultColor { get; set; } = Color.PeachPuff;
+
+        /// <summary>
+        /// Sport info 2 website default selected tab color. The default value is
+        /// Color.PapayaWhip.
+        /// </summary>
+        public Color SportInfo2SelectedColor { get; set; } = Color.PapayaWhip;
+
+        /// <summary>
+        /// Represents the index of the active tab of the left tab panel.The
+        /// default value is zero.
+        /// </summary>
+        public int ActivePanelLeft { get; set; }
+
+        /// <summary>
+        /// Represents the index of the active tab of the right tab panel. The
+        /// default value is false.
+        /// </summary>
+        public int ActivePanelRight { get; set; }
+
+        /// <summary>
+        /// Represents the index of the active tab of the preferences tab panel.
+        /// The default value is false.
+        /// </summary>
+        public int ActivePreferencesPanel { get; set; }
+
+        /// <summary>
+        /// Last export extension index used. The default value is four.
+        /// </summary>
+        public int ExtensionFilterIndex { get; set; } = 4;
+
+        /// <summary>
+        /// Represents the integer index of the number display format used. The
+        /// default value is zero.
+        /// </summary>
+        public int NumberFormatInt { get; set; }
+
+        /// <summary>
+        /// Gets an instance of an NumberFormatComboBox object.
+        /// </summary>
+        public NumberFormatComboBox NumberFormat => numberFormatHandler.GetNumberFormat(NumberFormatInt);
+
+        /// <summary>
+        /// Gets the instance of an NumberFormatHandler object.
+        /// </summary>
+        public NumberFormatHandler NumberFormatHandler => numberFormatHandler;
+
+        /// <summary>
+        /// Accept-Language string for embedded Chromium browser.
         /// </summary>
         public string AcceptLanguage {
             get {
@@ -238,424 +584,114 @@ namespace BetHelper {
         }
 
         /// <summary>
-        /// UserAgents getter.
-        /// </summary>
-        public string[] UserAgents => userAgents;
-
-        /// <summary>
-        /// AcceptLanguages getter.
-        /// </summary>
-        public string[] AcceptLanguages => acceptLanguages;
-
-        /// <summary>
-        /// NumberFormatHandler getter.
-        /// </summary>
-        public AllowedAddrHandler AllowedAddrHandler => allowedAddrHandler;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public int ActivePanelLeft { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public int ActivePanelRight { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public int ActivePreferencesPanel { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool RightPaneCollapsed { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool RightPaneWidth { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool PrintSoftMargins { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool TabsBoldFont { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool TabsBackgroundColor { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public TabAppearance TabAppearance { get; set; } = TabAppearance.Buttons;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public ToolStripRenderMode StripRenderMode { get; set; } = ToolStripRenderMode.System;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Border3DStyle Border3DStyle { get; set; } = Border3DStyle.Adjust;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool DisableThemes { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public string LastExportDirectory { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public int ExtensionFilterIndex { get; set; } = 4;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool CheckForUpdates { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool StatusBarNotifOnly { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public int NumberFormatInt { get; set; }
-
-        /// <summary>
-        /// NumberFormat getter.
-        /// </summary>
-        public NumberFormatComboBox NumberFormat => numberFormatHandler.GetNumberFormat(NumberFormatInt);
-
-        /// <summary>
-        /// NumberFormatHandler getter.
-        /// </summary>
-        public NumberFormatHandler NumberFormatHandler => numberFormatHandler;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool UseDecimalPrefix { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool EnableCache { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool PersistSessionCookies { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool PersistUserPreferences { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool EnablePrintPreview { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool EnableDrmContent { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool EnableAudio { get; set; } = true;
-
-        /// <summary>
-        /// This setting will not be directly stored in the Windows registry.
-        /// </summary>
-        public bool AudioEnabled { get; private set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool ShowConsoleMessages { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool LogConsoleMessages { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool ShowLoadErrors { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool LogLoadErrors { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool EnableLogPreloadLimit { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public ushort LogPreloadLimit { get; set; } = 64;
-
-        /// <summary>
-        /// LogPreloadLimitMin property.
-        /// </summary>
-        public ushort LogPreloadLimitMin { get; private set; }
-
-        /// <summary>
-        /// LogPreloadLimitMax property.
-        /// </summary>
-        public ushort LogPreloadLimitMax { get; private set; } = 8192;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool RestrictForLargeLogs { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public ushort LargeLogsLimit { get; set; } = 512;
-
-        /// <summary>
-        /// LargeLogsLimitMin property.
-        /// </summary>
-        public ushort LargeLogsLimitMin { get; private set; }
-
-        /// <summary>
-        /// LargeLogsLimitMax property.
-        /// </summary>
-        public ushort LargeLogsLimitMax { get; private set; } = 8192;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool LogForeignUrls { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool LogPopUpFrameHandler { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool OutlineSearchResults { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool AutoAdjustRightPaneWidth { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool AutoLogInAfterInitialLoad { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool DisplayPromptBeforeClosing { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool SortBookmarks { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool TruncateBookmarkTitles { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color BookmakerDefaultColor { get; set; } = Color.Pink;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color BookmakerSelectedColor { get; set; } = Color.MistyRose;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color SportInfo1DefaultColor { get; set; } = Color.LemonChiffon;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color SportInfo1SelectedColor { get; set; } = Color.LightYellow;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color SportInfo2DefaultColor { get; set; } = Color.PeachPuff;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color SportInfo2SelectedColor { get; set; } = Color.PapayaWhip;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color DashboardDefaultColor { get; set; } = Color.LightGreen;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color DashboardSelectedColor { get; set; } = Color.PaleGreen;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color CalculatorDefaultColor { get; set; } = Color.LightCyan;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color CalculatorSelectedColor { get; set; } = Color.Azure;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color OverlayBackgroundColor { get; set; } = Color.SteelBlue;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public Color OverlayCrosshairColor { get; set; } = Color.Yellow;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool BlockRequestsToForeignUrls { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool KeepAnEyeOnTheClientsIP { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool IgnoreCertificateErrors { get; set; }
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
-        /// </summary>
-        public bool TryToKeepUserLoggedIn { get; set; } = true;
-
-        /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
+        /// The config hash string. The default value is null.
         /// </summary>
         public string ConfigHash { get; set; }
 
         /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
+        /// Last export directory path used. The default value is null.
+        /// </summary>
+        public string LastExportDirectory { get; set; }
+
+        /// <summary>
+        /// Full path to the preferred editor executable for viewing log files
+        /// outside the application. The default value is null.
         /// </summary>
         public string PreferredEditor { get; set; }
 
         /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
+        /// Full path to the Telegram Desktop executable. The default value is
+        /// null.
         /// </summary>
         public string TelegramAppDirectory { get; set; }
 
         /// <summary>
-        /// An example of software application setting that will be stored in the
-        /// Windows registry.
+        /// User-Agent string for embedded Chromium browser.
+        /// </summary>
+        public string UserAgent {
+            get {
+                return string.IsNullOrEmpty(userAgent) ? userAgents[0] : userAgent;
+            }
+            set {
+                userAgent = value == null || value.Equals(userAgents[0]) ? string.Empty : value;
+            }
+        }
+
+        /// <summary>
+        /// Gets an array of preset Accept-Language strings.
+        /// </summary>
+        public string[] AcceptLanguages => acceptLanguages;
+
+        /// <summary>
+        /// Gets an array of preset User-Agent strings.
+        /// </summary>
+        public string[] UserAgents => userAgents;
+
+        /// <summary>
+        /// Represents the appearance settings of the tabs in the main program
+        /// window. The default value is TabAppearance.Buttons.
+        /// </summary>
+        public TabAppearance TabAppearance { get; set; } = TabAppearance.Buttons;
+
+        /// <summary>
+        /// Represents the rendering mode of the status strip in the main
+        /// application window. The default value is ToolStripRenderMode.System.
+        /// </summary>
+        public ToolStripRenderMode StripRenderMode { get; set; } = ToolStripRenderMode.System;
+
+        /// <summary>
+        /// DOM element inspection overlay form opacity. The default value is
+        /// 50%.
         /// </summary>
         public ushort InspectOverlayOpacity { get; set; } = 50;
 
         /// <summary>
-        /// InspectOverlayOpacityMin property.
+        /// DOM element inspection overlay form opacity maximum value. The
+        /// default value is 100%.
+        /// </summary>
+        public ushort InspectOverlayOpacityMax { get; private set; } = 100;
+
+        /// <summary>
+        /// DOM element inspection overlay form opacity minimum value. The
+        /// default value is 0%.
         /// </summary>
         public ushort InspectOverlayOpacityMin { get; private set; }
 
         /// <summary>
-        /// InspectOverlayOpacityMax property.
+        /// Log length to limit some features for large log files. The default
+        /// value is 512M.
         /// </summary>
-        public ushort InspectOverlayOpacityMax { get; private set; } = 100;
+        public ushort LargeLogsLimit { get; set; } = 512;
+
+        /// <summary>
+        /// The maximum log length to limit some features for large log files.
+        /// The value is 8192M.
+        /// </summary>
+        public ushort LargeLogsLimitMax { get; private set; } = 8192;
+
+        /// <summary>
+        /// The minimum log length to limit some features for large log files.
+        /// The value is 0M.
+        /// </summary>
+        public ushort LargeLogsLimitMin { get; private set; }
+
+        /// <summary>
+        /// The length of the log that will be loaded into the log viewer window
+        /// if the limit is applied. The default value is 64K.
+        /// </summary>
+        public ushort LogPreloadLimit { get; set; } = 64;
+
+        /// <summary>
+        /// The maximum log length limit that will be loaded into the log viewer
+        /// window if the limit is applied. The value is 8192K.
+        /// </summary>
+        public ushort LogPreloadLimitMax { get; private set; } = 8192;
+
+        /// <summary>
+        /// The minimum log length limit that will be loaded into the log viewer
+        /// window if the limit is applied. The value is 0K.
+        /// </summary>
+        public ushort LogPreloadLimitMin { get; private set; }
 
         /// <summary>
         /// Loads the software application settings from the Windows registry.
@@ -665,8 +701,9 @@ namespace BetHelper {
             userAgent = persistentSettings.Load("UserAgent", userAgent);
 
             IntToActivePanels(persistentSettings.Load("ActivePanels", ActivePanelsToInt()));
-            IntToBitSettings(persistentSettings.Load("BitSettings", BitSettingsToInt()));
-            IntToByteSettings(persistentSettings.Load("ByteSettings", ByteSettingsToInt()));
+            IntToBitSettings1(persistentSettings.Load("BitSettings1", BitSettings1ToInt()));
+            IntToBitSettings2(persistentSettings.Load("BitSettings2", BitSettings2ToInt()));
+            IntToByteSettings1(persistentSettings.Load("ByteSettings1", ByteSettings1ToInt()));
             IntToWordSettings1(persistentSettings.Load("WordSettings1", WordSettings1ToInt()));
             IntToWordSettings2(persistentSettings.Load("WordSettings2", WordSettings2ToInt()));
 
@@ -696,8 +733,9 @@ namespace BetHelper {
             persistentSettings.Save("UserAgent", userAgent);
 
             persistentSettings.Save("ActivePanels", ActivePanelsToInt());
-            persistentSettings.Save("BitSettings", BitSettingsToInt());
-            persistentSettings.Save("ByteSettings", ByteSettingsToInt());
+            persistentSettings.Save("BitSettings1", BitSettings1ToInt());
+            persistentSettings.Save("BitSettings2", BitSettings2ToInt());
+            persistentSettings.Save("ByteSettings1", ByteSettings1ToInt());
             persistentSettings.Save("WordSettings1", WordSettings1ToInt());
             persistentSettings.Save("WordSettings2", WordSettings2ToInt());
 
@@ -723,82 +761,111 @@ namespace BetHelper {
         /// <summary>
         /// Expands an integer value into some boolean settings.
         /// </summary>
-        private void IntToBitSettings(int i) {
+        private void IntToBitSettings1(int i) {
             BitArray bitArray = new BitArray(new int[] { i });
             bool[] bitSettings = new bool[bitArray.Count];
             bitArray.CopyTo(bitSettings, 0);
-            RightPaneCollapsed = bitSettings[31];
-            RightPaneWidth = bitSettings[30];
-            TabsBoldFont = bitSettings[29];
-            TabsBackgroundColor = bitSettings[28];
-            UseDecimalPrefix = bitSettings[27];
-            EnableCache = bitSettings[26];
-            PersistSessionCookies = bitSettings[25];
-            PersistUserPreferences = bitSettings[24];
-            EnablePrintPreview = bitSettings[23];
-            EnableDrmContent = bitSettings[22];
-            EnableAudio = bitSettings[21];
-            AudioEnabled = bitSettings[21];
-            OutlineSearchResults = bitSettings[20];
-            LogForeignUrls = bitSettings[19];
-            LogPopUpFrameHandler = bitSettings[18];
-            ShowLoadErrors = bitSettings[17];
-            LogLoadErrors = bitSettings[16];
-            ShowConsoleMessages = bitSettings[15];
-            LogConsoleMessages = bitSettings[14];
-            EnableLogPreloadLimit = bitSettings[13];
-            RestrictForLargeLogs = bitSettings[12];
-            AutoAdjustRightPaneWidth = bitSettings[11];
-            AutoLogInAfterInitialLoad = bitSettings[10];
-            DisplayPromptBeforeClosing = bitSettings[9];
-            SortBookmarks = bitSettings[8];
-            TruncateBookmarkTitles = bitSettings[7];
-            BlockRequestsToForeignUrls = bitSettings[6];
-            KeepAnEyeOnTheClientsIP = bitSettings[5];
-            IgnoreCertificateErrors = bitSettings[4];
-            PrintSoftMargins = bitSettings[3];
-            CheckForUpdates = bitSettings[2];
-            StatusBarNotifOnly = bitSettings[1];
-            DisableThemes = bitSettings[0];
+            i = bitSettings.Length - 2;
+
+            TryToKeepUserLoggedIn = bitSettings[--i];
+            AutoLogInAfterInitialLoad = bitSettings[--i];
+            BlockRequestsToForeignUrls = bitSettings[--i];
+            KeepAnEyeOnTheClientsIP = bitSettings[--i];
+            IgnoreCertificateErrors = bitSettings[--i];
+            LogConsoleMessages = bitSettings[--i];
+            ShowConsoleMessages = bitSettings[--i];
+            LogPopUpFrameHandler = bitSettings[--i];
+            LogLoadErrors = bitSettings[--i];
+            ShowLoadErrors = bitSettings[--i];
+            LogForeignUrls = bitSettings[--i];
+
+            EnableAudio = bitSettings[--i];
+            AudioEnabled = EnableAudio;
+
+            EnableDrmContent = bitSettings[--i];
+            EnablePrintPreview = bitSettings[--i];
+            PersistUserPreferences = bitSettings[--i];
+            PersistSessionCookies = bitSettings[--i];
+            EnableCache = bitSettings[--i];
+            EnableProxy = bitSettings[--i];
+            OutlineSearchResults = bitSettings[--i];
+            EnableBell = bitSettings[--i];
+            UseDecimalPrefix = bitSettings[--i];
+            TabsBoldFont = bitSettings[--i];
+            TabsBackgroundColor = bitSettings[--i];
+            RestrictForLargeLogs = bitSettings[--i];
+            EnableLogPreloadLimit = bitSettings[--i];
+            DisplayPromptBeforeClosing = bitSettings[--i];
+            DisableThemes = bitSettings[--i];
+            PrintSoftMargins = bitSettings[--i];
+            StatusBarNotifOnly = bitSettings[--i];
+            CheckForUpdates = bitSettings[--i];
         }
 
         /// <summary>
         /// Compacts some boolean settings into an integer value.
         /// </summary>
-        private int BitSettingsToInt() {
-            StringBuilder stringBuilder = new StringBuilder(32)
-                .Append(RightPaneCollapsed ? 1 : 0)
-                .Append(RightPaneWidth ? 1 : 0)
-                .Append(TabsBoldFont ? 1 : 0)
-                .Append(TabsBackgroundColor ? 1 : 0)
-                .Append(UseDecimalPrefix ? 1 : 0)
-                .Append(EnableCache ? 1 : 0)
-                .Append(PersistSessionCookies ? 1 : 0)
-                .Append(PersistUserPreferences ? 1 : 0)
-                .Append(EnablePrintPreview ? 1 : 0)
-                .Append(EnableDrmContent ? 1 : 0)
-                .Append(EnableAudio ? 1 : 0)
-                .Append(OutlineSearchResults ? 1 : 0)
-                .Append(LogForeignUrls ? 1 : 0)
-                .Append(LogPopUpFrameHandler ? 1 : 0)
-                .Append(ShowLoadErrors ? 1 : 0)
-                .Append(LogLoadErrors ? 1 : 0)
-                .Append(ShowConsoleMessages ? 1 : 0)
-                .Append(LogConsoleMessages ? 1 : 0)
-                .Append(EnableLogPreloadLimit ? 1 : 0)
-                .Append(RestrictForLargeLogs ? 1 : 0)
-                .Append(AutoAdjustRightPaneWidth ? 1 : 0)
+        private int BitSettings1ToInt() {
+            StringBuilder stringBuilder = new StringBuilder(string.Empty.PadRight(2, Constants.Zero))
+                .Append(TryToKeepUserLoggedIn ? 1 : 0)
                 .Append(AutoLogInAfterInitialLoad ? 1 : 0)
-                .Append(DisplayPromptBeforeClosing ? 1 : 0)
-                .Append(SortBookmarks ? 1 : 0)
-                .Append(TruncateBookmarkTitles ? 1 : 0)
                 .Append(BlockRequestsToForeignUrls ? 1 : 0)
                 .Append(KeepAnEyeOnTheClientsIP ? 1 : 0)
                 .Append(IgnoreCertificateErrors ? 1 : 0)
+                .Append(LogConsoleMessages ? 1 : 0)
+                .Append(ShowConsoleMessages ? 1 : 0)
+                .Append(LogPopUpFrameHandler ? 1 : 0)
+                .Append(LogLoadErrors ? 1 : 0)
+                .Append(ShowLoadErrors ? 1 : 0)
+                .Append(LogForeignUrls ? 1 : 0)
+                .Append(EnableAudio ? 1 : 0)
+                .Append(EnableDrmContent ? 1 : 0)
+                .Append(EnablePrintPreview ? 1 : 0)
+                .Append(PersistUserPreferences ? 1 : 0)
+                .Append(PersistSessionCookies ? 1 : 0)
+                .Append(EnableCache ? 1 : 0)
+                .Append(EnableProxy ? 1 : 0)
+                .Append(OutlineSearchResults ? 1 : 0)
+                .Append(EnableBell ? 1 : 0)
+                .Append(UseDecimalPrefix ? 1 : 0)
+                .Append(TabsBoldFont ? 1 : 0)
+                .Append(TabsBackgroundColor ? 1 : 0)
+                .Append(RestrictForLargeLogs ? 1 : 0)
+                .Append(EnableLogPreloadLimit ? 1 : 0)
+                .Append(DisplayPromptBeforeClosing ? 1 : 0)
+                .Append(DisableThemes ? 1 : 0)
                 .Append(PrintSoftMargins ? 1 : 0)
-                .Append(CheckForUpdates ? 1 : 0)
                 .Append(StatusBarNotifOnly ? 1 : 0)
-                .Append(DisableThemes ? 1 : 0);
+                .Append(CheckForUpdates ? 1 : 0);
+            return Convert.ToInt32(stringBuilder.ToString(), 2);
+        }
+
+        /// <summary>
+        /// Expands an integer value into some boolean settings.
+        /// </summary>
+        private void IntToBitSettings2(int i) {
+            BitArray bitArray = new BitArray(new int[] { i });
+            bool[] bitSettings = new bool[bitArray.Count];
+            bitArray.CopyTo(bitSettings, 0);
+            i = bitSettings.Length - 27;
+
+            TruncateBookmarkTitles = bitSettings[--i];
+            SortBookmarks = bitSettings[--i];
+            AutoAdjustRightPaneWidth = bitSettings[--i];
+            RightPaneWidth = bitSettings[--i];
+            RightPaneCollapsed = bitSettings[--i];
+        }
+
+        /// <summary>
+        /// Compacts some boolean settings into an integer value.
+        /// </summary>
+        private int BitSettings2ToInt() {
+            StringBuilder stringBuilder = new StringBuilder(string.Empty.PadRight(27, Constants.Zero))
+                .Append(TruncateBookmarkTitles ? 1 : 0)
+                .Append(SortBookmarks ? 1 : 0)
+                .Append(AutoAdjustRightPaneWidth ? 1 : 0)
+                .Append(RightPaneWidth ? 1 : 0)
+                .Append(RightPaneCollapsed ? 1 : 0);
             return Convert.ToInt32(stringBuilder.ToString(), 2);
         }
 
@@ -810,7 +877,6 @@ namespace BetHelper {
             ActivePanelLeft = bytes[0];
             ActivePanelRight = bytes[1];
             ActivePreferencesPanel = bytes[2];
-            TryToKeepUserLoggedIn = bytes[3] > 0;
         }
 
         /// <summary>
@@ -822,7 +888,7 @@ namespace BetHelper {
                 (byte)ActivePanelLeft,
                 (byte)ActivePanelRight,
                 (byte)ActivePreferencesPanel,
-                (byte)(TryToKeepUserLoggedIn ? 1 : 0)
+                0
             };
             return ByteArrayToInt(bytes);
         }
@@ -876,7 +942,7 @@ namespace BetHelper {
         /// <summary>
         /// Expands an integer value into byte values.
         /// </summary>
-        private void IntToByteSettings(int i) {
+        private void IntToByteSettings1(int i) {
             byte[] bytes = IntToByteArray(i);
             TabAppearance = (TabAppearance)(bytes[0] > 2 ? 1 : bytes[0]);
             ExtensionFilterIndex = bytes[1];
@@ -887,7 +953,7 @@ namespace BetHelper {
         /// <summary>
         /// Compacts some byte values into an integer value.
         /// </summary>
-        private int ByteSettingsToInt() {
+        private int ByteSettings1ToInt() {
             byte[] bytes = new byte[] {
                 (byte)TabAppearance,
                 (byte)ExtensionFilterIndex,
@@ -1031,6 +1097,34 @@ namespace BetHelper {
                 BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 0 : 2),
                 BitConverter.ToUInt16(bytes, BitConverter.IsLittleEndian ? 2 : 0)
             };
+        }
+
+        /// <summary>
+        /// Gets the path to the preferred editor executable for viewing log
+        /// files outside the application.
+        /// </summary>
+        private static string GetPreferredEditor() {
+            try {
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                    Constants.PreferredEditorApplicationName, Constants.PreferredEditorFileName);
+                if (File.Exists(path)) {
+                    return path;
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+            try {
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                    Constants.PreferredEditorApplicationName, Constants.PreferredEditorFileName);
+                if (File.Exists(path)) {
+                    return path;
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+            return null;
         }
     }
 }

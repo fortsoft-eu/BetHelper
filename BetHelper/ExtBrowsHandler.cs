@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.2.0
  */
 
 using System;
@@ -66,36 +66,36 @@ namespace BetHelper {
                     throw new NotImplementedException();
             }
             try {
-                string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), lnkFileName);
-                if (File.Exists(shortcutPath)) {
-                    return shortcutPath;
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), lnkFileName);
+                if (File.Exists(path)) {
+                    return path;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
             try {
-                string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms), lnkFileName);
-                if (File.Exists(shortcutPath)) {
-                    return shortcutPath;
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms), lnkFileName);
+                if (File.Exists(path)) {
+                    return path;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
             try {
-                string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), execRelPath);
-                if (File.Exists(shortcutPath)) {
-                    return shortcutPath;
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), execRelPath);
+                if (File.Exists(path)) {
+                    return path;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
             try {
-                string shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), execRelPath);
-                if (File.Exists(shortcutPath)) {
-                    return shortcutPath;
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), execRelPath);
+                if (File.Exists(path)) {
+                    return path;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);

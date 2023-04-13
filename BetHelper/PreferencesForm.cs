@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.1.0
+ * Version 1.1.2.0
  */
 
 using FortSoft.Tools;
@@ -187,6 +187,7 @@ namespace BetHelper {
                 checkBoxEnablePrintPreview.Checked = settings.EnablePrintPreview;
                 checkBoxEnableDrmContent.Checked = settings.EnableDrmContent;
                 checkBoxEnableAudio.Checked = settings.EnableAudio;
+                checkBoxEnableProxy.Checked = settings.EnableProxy;
                 checkBoxOutlineSearchResults.Checked = settings.OutlineSearchResults;
                 checkBoxLogForeignUrls.Checked = settings.LogForeignUrls;
                 checkBoxLogPopUpFrameHandler.Checked = settings.LogPopUpFrameHandler;
@@ -215,6 +216,7 @@ namespace BetHelper {
                 comboBoxNumberFormat.SelectedIndex = settings.NumberFormatInt;
                 checkBoxAutoAdjustRightPaneWidth.Checked = settings.AutoAdjustRightPaneWidth;
                 checkBoxAutoLogInAfterInitialLoad.Checked = settings.AutoLogInAfterInitialLoad;
+                checkBoxEnableBell.Checked = settings.EnableBell;
                 checkBoxDisplayPromptBeforeClosing.Checked = settings.DisplayPromptBeforeClosing;
                 checkBoxSortBookmarks.Checked = settings.SortBookmarks;
                 checkBoxTruncateBookmarkTitles.Checked = settings.TruncateBookmarkTitles;
@@ -681,7 +683,7 @@ namespace BetHelper {
         }
 
         private void OnMouseWheel(object sender, MouseEventArgs e) {
-            if (ActiveForm == (Form)sender) {
+            if (((Form)sender).Equals(ActiveForm)) {
                 Control control = StaticMethods.FindControlAtCursor((Form)sender);
                 if (control is TabControl) {
                     TabControl tabControl = (TabControl)control;
@@ -776,6 +778,7 @@ namespace BetHelper {
             settings.EnablePrintPreview = checkBoxEnablePrintPreview.Checked;
             settings.EnableDrmContent = checkBoxEnableDrmContent.Checked;
             settings.EnableAudio = checkBoxEnableAudio.Checked;
+            settings.EnableProxy = checkBoxEnableProxy.Checked;
             settings.OutlineSearchResults = checkBoxOutlineSearchResults.Checked;
             settings.LogForeignUrls = checkBoxLogForeignUrls.Checked;
             settings.LogPopUpFrameHandler = checkBoxLogPopUpFrameHandler.Checked;
@@ -795,6 +798,7 @@ namespace BetHelper {
             settings.UseDecimalPrefix = comboBoxUnitPrefix.SelectedIndex > 0;
             settings.AutoAdjustRightPaneWidth = checkBoxAutoAdjustRightPaneWidth.Checked;
             settings.AutoLogInAfterInitialLoad = checkBoxAutoLogInAfterInitialLoad.Checked;
+            settings.EnableBell = checkBoxEnableBell.Checked;
             settings.DisplayPromptBeforeClosing = checkBoxDisplayPromptBeforeClosing.Checked;
             settings.SortBookmarks = checkBoxSortBookmarks.Checked;
             settings.TruncateBookmarkTitles = checkBoxTruncateBookmarkTitles.Checked;
@@ -835,6 +839,7 @@ namespace BetHelper {
                     || !settings.AcceptLanguage.Equals(comboBoxAcceptLanguage.Text)
                     || !settings.EnableDrmContent.Equals(checkBoxEnableDrmContent.Checked)
                     || !settings.EnableAudio.Equals(checkBoxEnableAudio.Checked)
+                    || !settings.EnableProxy.Equals(checkBoxEnableProxy.Checked)
                     || !settings.EnablePrintPreview.Equals(checkBoxEnablePrintPreview.Checked)
                     || !settings.EnableCache.Equals(checkBoxEnableCache.Checked)
                     || !settings.PersistSessionCookies.Equals(checkBoxPersistSessionCookies.Checked)

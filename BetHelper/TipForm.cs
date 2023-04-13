@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.2.0
  */
 
 using FortSoft.Tools;
@@ -108,7 +108,7 @@ namespace BetHelper {
                     };
                     matchControl.GameNameChanged += new EventHandler<MatchControlEventArgs>(OnGameNameChanged);
                     TabPage tabPage = new TabPage() {
-                        Text = game.Match.Trim(),
+                        Text = StaticMethods.AbbreviateMatchName(game.Match, tabControl.Font, 180),
                         UseVisualStyleBackColor = true
                     };
                     tabPage.Controls.Add(matchControl);
@@ -250,7 +250,7 @@ namespace BetHelper {
         }
 
         private void OnMouseWheel(object sender, MouseEventArgs e) {
-            if (ActiveForm == (Form)sender) {
+            if (((Form)sender).Equals(ActiveForm)) {
                 Control control = StaticMethods.FindControlAtCursor((Form)sender);
                 if (control is TabControl) {
                     TabControl tabControl = (TabControl)control;

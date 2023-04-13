@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.2.0
  */
 
 using CefSharp;
@@ -63,13 +63,16 @@ namespace BetHelper {
 
         public WebInfoHandler(Form form, decimal[] balances) {
             this.form = form;
+            this.form.Load += new EventHandler((sender, e) => {
+                SetTimer();
+                SetPingTimer();
+            });
             index = -1;
             pingIndex = -1;
             ParseConfig(((MainForm)form).Settings.Config);
             SetBalances(balances);
             SubscribeEvents();
             getTimer = new System.Timers.Timer();
-            getTimer.Interval = Constants.InitialRightPaneInterval;
             getTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
                 getTimer.Interval = Constants.RightPaneInterval;
                 GetBalance();
@@ -83,7 +86,6 @@ namespace BetHelper {
                     webInfos[i].Browser.GetBrowser().Reload();
                 }
             });
-            SetPingTimer();
         }
 
         public decimal Balance => balance;
@@ -375,7 +377,6 @@ namespace BetHelper {
                 current.Resume();
             }
             CurrentSet?.Invoke(this, new FocusEventArgs(current, index));
-            getTimer.Start();
             return;
         }
 
@@ -399,6 +400,21 @@ namespace BetHelper {
             } else {
                 pingTimer.Stop();
             }
+        }
+
+        private void SetTimer() {
+            getTimer.Interval = Constants.InitialRightPaneInterval;
+            getTimer.Start();
+        }
+
+        public void Suspend() {
+            getTimer.Stop();
+            pingTimer.Stop();
+        }
+
+        public void Resume() {
+            SetTimer();
+            SetPingTimer();
         }
 
         private string GetAssemblyName() {

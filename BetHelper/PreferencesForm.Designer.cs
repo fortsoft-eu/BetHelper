@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.2.0
  */
 
 namespace BetHelper {
@@ -55,6 +55,8 @@ namespace BetHelper {
             this.buttonCancel = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageBrowser = new System.Windows.Forms.TabPage();
+            this.groupBoxProxy = new System.Windows.Forms.GroupBox();
+            this.checkBoxEnableProxy = new System.Windows.Forms.CheckBox();
             this.groupBoxHeaders = new System.Windows.Forms.GroupBox();
             this.comboBoxAcceptLanguage = new System.Windows.Forms.ComboBox();
             this.labelAcceptLanguage = new System.Windows.Forms.Label();
@@ -69,6 +71,25 @@ namespace BetHelper {
             this.checkBoxPersistSessionCookies = new System.Windows.Forms.CheckBox();
             this.checkBoxEnableCache = new System.Windows.Forms.CheckBox();
             this.tabPageDebug = new System.Windows.Forms.TabPage();
+            this.groupBoxLogViewer = new System.Windows.Forms.GroupBox();
+            this.labelPreferredEditor = new System.Windows.Forms.Label();
+            this.buttonLogViewer = new System.Windows.Forms.Button();
+            this.buttonBrowse = new System.Windows.Forms.Button();
+            this.textBoxPreferredEditor = new System.Windows.Forms.TextBox();
+            this.labelMiB = new System.Windows.Forms.Label();
+            this.numericUpDownLargeLogsLimit = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxRestrictSomeFeatures = new System.Windows.Forms.CheckBox();
+            this.labelKiB = new System.Windows.Forms.Label();
+            this.numericUpDownPreloadLimit = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxEnableLogPreloadLimit = new System.Windows.Forms.CheckBox();
+            this.groupBoxJSErrors = new System.Windows.Forms.GroupBox();
+            this.checkBoxLogConsoleMessages = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowConsoleMessages = new System.Windows.Forms.CheckBox();
+            this.groupBoxNavigation = new System.Windows.Forms.GroupBox();
+            this.checkBoxLogPopUpFrameHandler = new System.Windows.Forms.CheckBox();
+            this.checkBoxLogLoadErrors = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowLoadErrors = new System.Windows.Forms.CheckBox();
+            this.checkBoxLogForeignUrls = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.comboBoxOverlayCrosshairColor = new System.Windows.Forms.ComboBox();
             this.labelOverlayCrosshairColor = new System.Windows.Forms.Label();
@@ -77,46 +98,28 @@ namespace BetHelper {
             this.labelPerCent = new System.Windows.Forms.Label();
             this.numericUpDownOverlayOpacity = new System.Windows.Forms.NumericUpDown();
             this.labelOverlayOpacity = new System.Windows.Forms.Label();
-            this.groupBoxLogViewer = new System.Windows.Forms.GroupBox();
-            this.buttonBrowse = new System.Windows.Forms.Button();
-            this.textBoxPreferredEditor = new System.Windows.Forms.TextBox();
-            this.labelPreferredEditor = new System.Windows.Forms.Label();
-            this.labelMiB = new System.Windows.Forms.Label();
-            this.numericUpDownLargeLogsLimit = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxRestrictSomeFeatures = new System.Windows.Forms.CheckBox();
-            this.labelKiB = new System.Windows.Forms.Label();
-            this.buttonLogViewer = new System.Windows.Forms.Button();
-            this.numericUpDownPreloadLimit = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxEnableLogPreloadLimit = new System.Windows.Forms.CheckBox();
-            this.groupBoxJSErrors = new System.Windows.Forms.GroupBox();
-            this.checkBoxLogConsoleMessages = new System.Windows.Forms.CheckBox();
-            this.checkBoxShowConsoleMessages = new System.Windows.Forms.CheckBox();
             this.groupBoxFind = new System.Windows.Forms.GroupBox();
             this.checkBoxOutlineSearchResults = new System.Windows.Forms.CheckBox();
-            this.groupBoxNavigation = new System.Windows.Forms.GroupBox();
-            this.checkBoxLogLoadErrors = new System.Windows.Forms.CheckBox();
-            this.checkBoxShowLoadErrors = new System.Windows.Forms.CheckBox();
-            this.checkBoxLogPopUpFrameHandler = new System.Windows.Forms.CheckBox();
-            this.checkBoxLogForeignUrls = new System.Windows.Forms.CheckBox();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
             this.buttonEditRemoteConfig = new System.Windows.Forms.Button();
             this.groupBoxSecurity = new System.Windows.Forms.GroupBox();
-            this.buttonAllowedClientsIP = new System.Windows.Forms.Button();
             this.checkBoxIgnoreCertificateErrors = new System.Windows.Forms.CheckBox();
-            this.checkBoxKeepAnEyeOnTheClientsIP = new System.Windows.Forms.CheckBox();
             this.checkBoxBlockRequestsToForeignUrls = new System.Windows.Forms.CheckBox();
+            this.buttonAllowedClientsIP = new System.Windows.Forms.Button();
+            this.checkBoxKeepAnEyeOnTheClientsIP = new System.Windows.Forms.CheckBox();
             this.groupBoxPrinting = new System.Windows.Forms.GroupBox();
-            this.labelPrinting = new System.Windows.Forms.Label();
             this.radioButtonHardMargins = new System.Windows.Forms.RadioButton();
             this.radioButtonSoftMargins = new System.Windows.Forms.RadioButton();
+            this.labelPrinting = new System.Windows.Forms.Label();
             this.groupBoxApplication = new System.Windows.Forms.GroupBox();
+            this.checkBoxTruncateBookmarkTitles = new System.Windows.Forms.CheckBox();
             this.checkBoxPingWhenIdle = new System.Windows.Forms.CheckBox();
             this.checkBoxSortBookmarks = new System.Windows.Forms.CheckBox();
-            this.checkBoxTruncateBookmarkTitles = new System.Windows.Forms.CheckBox();
+            this.checkBoxDisplayPromptBeforeClosing = new System.Windows.Forms.CheckBox();
+            this.checkBoxEnableBell = new System.Windows.Forms.CheckBox();
+            this.checkBoxAutoLogInAfterInitialLoad = new System.Windows.Forms.CheckBox();
             this.comboBoxUnitPrefix = new System.Windows.Forms.ComboBox();
             this.labelUnitPrefix = new System.Windows.Forms.Label();
-            this.checkBoxDisplayPromptBeforeClosing = new System.Windows.Forms.CheckBox();
-            this.checkBoxAutoLogInAfterInitialLoad = new System.Windows.Forms.CheckBox();
             this.comboBoxNumberFormat = new System.Windows.Forms.ComboBox();
             this.labelNumberFormat = new System.Windows.Forms.Label();
             this.checkBoxStatusBarNotifOnly = new System.Windows.Forms.CheckBox();
@@ -136,8 +139,6 @@ namespace BetHelper {
             this.labelCalculatorSColor = new System.Windows.Forms.Label();
             this.comboBoxCalculatorDColor = new System.Windows.Forms.ComboBox();
             this.labelCalculatorDColor = new System.Windows.Forms.Label();
-            this.comboBoxTabAppearance = new System.Windows.Forms.ComboBox();
-            this.labelTabAppearance = new System.Windows.Forms.Label();
             this.comboBoxDashboardSColor = new System.Windows.Forms.ComboBox();
             this.labelDashboardSColor = new System.Windows.Forms.Label();
             this.comboBoxDashboardDColor = new System.Windows.Forms.ComboBox();
@@ -156,21 +157,24 @@ namespace BetHelper {
             this.labelBookmakerDColor = new System.Windows.Forms.Label();
             this.checkBoxBackgroundColor = new System.Windows.Forms.CheckBox();
             this.checkBoxBoldFont = new System.Windows.Forms.CheckBox();
+            this.comboBoxTabAppearance = new System.Windows.Forms.ComboBox();
+            this.labelTabAppearance = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWarning)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabPageBrowser.SuspendLayout();
+            this.groupBoxProxy.SuspendLayout();
             this.groupBoxHeaders.SuspendLayout();
             this.groupBoxMultimedia.SuspendLayout();
             this.groupBoxCache.SuspendLayout();
             this.tabPageDebug.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOverlayOpacity)).BeginInit();
             this.groupBoxLogViewer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLargeLogsLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPreloadLimit)).BeginInit();
             this.groupBoxJSErrors.SuspendLayout();
-            this.groupBoxFind.SuspendLayout();
             this.groupBoxNavigation.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOverlayOpacity)).BeginInit();
+            this.groupBoxFind.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.groupBoxSecurity.SuspendLayout();
             this.groupBoxPrinting.SuspendLayout();
@@ -242,6 +246,7 @@ namespace BetHelper {
             // 
             // tabPageBrowser
             // 
+            this.tabPageBrowser.Controls.Add(this.groupBoxProxy);
             this.tabPageBrowser.Controls.Add(this.groupBoxHeaders);
             this.tabPageBrowser.Controls.Add(this.groupBoxMultimedia);
             this.tabPageBrowser.Controls.Add(this.groupBoxCache);
@@ -252,6 +257,26 @@ namespace BetHelper {
             this.tabPageBrowser.TabIndex = 0;
             this.tabPageBrowser.Text = "Browser";
             this.tabPageBrowser.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxProxy
+            // 
+            this.groupBoxProxy.Controls.Add(this.checkBoxEnableProxy);
+            this.groupBoxProxy.Location = new System.Drawing.Point(6, 284);
+            this.groupBoxProxy.Name = "groupBoxProxy";
+            this.groupBoxProxy.Size = new System.Drawing.Size(368, 198);
+            this.groupBoxProxy.TabIndex = 3;
+            this.groupBoxProxy.TabStop = false;
+            this.groupBoxProxy.Text = "Proxy server";
+            // 
+            // checkBoxEnableProxy
+            // 
+            this.checkBoxEnableProxy.AutoSize = true;
+            this.checkBoxEnableProxy.Location = new System.Drawing.Point(12, 19);
+            this.checkBoxEnableProxy.Name = "checkBoxEnableProxy";
+            this.checkBoxEnableProxy.Size = new System.Drawing.Size(119, 17);
+            this.checkBoxEnableProxy.TabIndex = 0;
+            this.checkBoxEnableProxy.Text = "Enable pro&xy server";
+            this.checkBoxEnableProxy.UseVisualStyleBackColor = true;
             // 
             // groupBoxHeaders
             // 
@@ -408,11 +433,11 @@ namespace BetHelper {
             // 
             // tabPageDebug
             // 
-            this.tabPageDebug.Controls.Add(this.groupBox1);
             this.tabPageDebug.Controls.Add(this.groupBoxLogViewer);
             this.tabPageDebug.Controls.Add(this.groupBoxJSErrors);
-            this.tabPageDebug.Controls.Add(this.groupBoxFind);
             this.tabPageDebug.Controls.Add(this.groupBoxNavigation);
+            this.tabPageDebug.Controls.Add(this.groupBox1);
+            this.tabPageDebug.Controls.Add(this.groupBoxFind);
             this.tabPageDebug.Location = new System.Drawing.Point(4, 22);
             this.tabPageDebug.Name = "tabPageDebug";
             this.tabPageDebug.Padding = new System.Windows.Forms.Padding(3);
@@ -420,6 +445,210 @@ namespace BetHelper {
             this.tabPageDebug.TabIndex = 1;
             this.tabPageDebug.Text = "Debug";
             this.tabPageDebug.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxLogViewer
+            // 
+            this.groupBoxLogViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxLogViewer.Controls.Add(this.labelPreferredEditor);
+            this.groupBoxLogViewer.Controls.Add(this.buttonLogViewer);
+            this.groupBoxLogViewer.Controls.Add(this.buttonBrowse);
+            this.groupBoxLogViewer.Controls.Add(this.textBoxPreferredEditor);
+            this.groupBoxLogViewer.Controls.Add(this.labelMiB);
+            this.groupBoxLogViewer.Controls.Add(this.numericUpDownLargeLogsLimit);
+            this.groupBoxLogViewer.Controls.Add(this.checkBoxRestrictSomeFeatures);
+            this.groupBoxLogViewer.Controls.Add(this.labelKiB);
+            this.groupBoxLogViewer.Controls.Add(this.numericUpDownPreloadLimit);
+            this.groupBoxLogViewer.Controls.Add(this.checkBoxEnableLogPreloadLimit);
+            this.groupBoxLogViewer.Location = new System.Drawing.Point(6, 344);
+            this.groupBoxLogViewer.Name = "groupBoxLogViewer";
+            this.groupBoxLogViewer.Size = new System.Drawing.Size(368, 138);
+            this.groupBoxLogViewer.TabIndex = 4;
+            this.groupBoxLogViewer.TabStop = false;
+            this.groupBoxLogViewer.Text = "Log Viewer";
+            // 
+            // labelPreferredEditor
+            // 
+            this.labelPreferredEditor.AutoSize = true;
+            this.labelPreferredEditor.Location = new System.Drawing.Point(9, 64);
+            this.labelPreferredEditor.Name = "labelPreferredEditor";
+            this.labelPreferredEditor.Size = new System.Drawing.Size(161, 13);
+            this.labelPreferredEditor.TabIndex = 6;
+            this.labelPreferredEditor.Text = "&Preferred editor executable path:";
+            // 
+            // buttonLogViewer
+            // 
+            this.buttonLogViewer.Location = new System.Drawing.Point(12, 107);
+            this.buttonLogViewer.Name = "buttonLogViewer";
+            this.buttonLogViewer.Size = new System.Drawing.Size(130, 23);
+            this.buttonLogViewer.TabIndex = 9;
+            this.buttonLogViewer.Text = "Open &Log Viewer...";
+            this.buttonLogViewer.UseVisualStyleBackColor = true;
+            this.buttonLogViewer.Click += new System.EventHandler(this.OnLogViewerClick);
+            // 
+            // buttonBrowse
+            // 
+            this.buttonBrowse.Location = new System.Drawing.Point(285, 78);
+            this.buttonBrowse.Name = "buttonBrowse";
+            this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonBrowse.TabIndex = 8;
+            this.buttonBrowse.Text = "Bro&wse...";
+            this.buttonBrowse.UseVisualStyleBackColor = true;
+            this.buttonBrowse.Click += new System.EventHandler(this.OnButtonBrowseClick);
+            // 
+            // textBoxPreferredEditor
+            // 
+            this.textBoxPreferredEditor.Location = new System.Drawing.Point(12, 80);
+            this.textBoxPreferredEditor.Name = "textBoxPreferredEditor";
+            this.textBoxPreferredEditor.Size = new System.Drawing.Size(267, 20);
+            this.textBoxPreferredEditor.TabIndex = 7;
+            this.textBoxPreferredEditor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            this.textBoxPreferredEditor.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
+            // 
+            // labelMiB
+            // 
+            this.labelMiB.AutoSize = true;
+            this.labelMiB.Location = new System.Drawing.Point(313, 42);
+            this.labelMiB.Name = "labelMiB";
+            this.labelMiB.Size = new System.Drawing.Size(25, 13);
+            this.labelMiB.TabIndex = 5;
+            this.labelMiB.Text = "MiB";
+            // 
+            // numericUpDownLargeLogsLimit
+            // 
+            this.numericUpDownLargeLogsLimit.Location = new System.Drawing.Point(257, 40);
+            this.numericUpDownLargeLogsLimit.Name = "numericUpDownLargeLogsLimit";
+            this.numericUpDownLargeLogsLimit.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDownLargeLogsLimit.TabIndex = 4;
+            this.numericUpDownLargeLogsLimit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // checkBoxRestrictSomeFeatures
+            // 
+            this.checkBoxRestrictSomeFeatures.AutoSize = true;
+            this.checkBoxRestrictSomeFeatures.Location = new System.Drawing.Point(12, 41);
+            this.checkBoxRestrictSomeFeatures.Name = "checkBoxRestrictSomeFeatures";
+            this.checkBoxRestrictSomeFeatures.Size = new System.Drawing.Size(221, 17);
+            this.checkBoxRestrictSomeFeatures.TabIndex = 3;
+            this.checkBoxRestrictSomeFeatures.Text = "&Restrict some features for logs larger than";
+            this.checkBoxRestrictSomeFeatures.UseVisualStyleBackColor = true;
+            this.checkBoxRestrictSomeFeatures.CheckedChanged += new System.EventHandler(this.OnRestrictFeaturesCheckedChanged);
+            // 
+            // labelKiB
+            // 
+            this.labelKiB.AutoSize = true;
+            this.labelKiB.Location = new System.Drawing.Point(313, 20);
+            this.labelKiB.Name = "labelKiB";
+            this.labelKiB.Size = new System.Drawing.Size(23, 13);
+            this.labelKiB.TabIndex = 2;
+            this.labelKiB.Text = "KiB";
+            // 
+            // numericUpDownPreloadLimit
+            // 
+            this.numericUpDownPreloadLimit.Location = new System.Drawing.Point(257, 18);
+            this.numericUpDownPreloadLimit.Name = "numericUpDownPreloadLimit";
+            this.numericUpDownPreloadLimit.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDownPreloadLimit.TabIndex = 1;
+            this.numericUpDownPreloadLimit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // checkBoxEnableLogPreloadLimit
+            // 
+            this.checkBoxEnableLogPreloadLimit.AutoSize = true;
+            this.checkBoxEnableLogPreloadLimit.Location = new System.Drawing.Point(12, 19);
+            this.checkBoxEnableLogPreloadLimit.Name = "checkBoxEnableLogPreloadLimit";
+            this.checkBoxEnableLogPreloadLimit.Size = new System.Drawing.Size(180, 17);
+            this.checkBoxEnableLogPreloadLimit.TabIndex = 0;
+            this.checkBoxEnableLogPreloadLimit.Text = "E&nable log preload maximum limit";
+            this.checkBoxEnableLogPreloadLimit.UseVisualStyleBackColor = true;
+            this.checkBoxEnableLogPreloadLimit.CheckedChanged += new System.EventHandler(this.OnMaxPreloadCheckedChanged);
+            // 
+            // groupBoxJSErrors
+            // 
+            this.groupBoxJSErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxJSErrors.Controls.Add(this.checkBoxLogConsoleMessages);
+            this.groupBoxJSErrors.Controls.Add(this.checkBoxShowConsoleMessages);
+            this.groupBoxJSErrors.Location = new System.Drawing.Point(6, 275);
+            this.groupBoxJSErrors.Name = "groupBoxJSErrors";
+            this.groupBoxJSErrors.Size = new System.Drawing.Size(368, 63);
+            this.groupBoxJSErrors.TabIndex = 3;
+            this.groupBoxJSErrors.TabStop = false;
+            this.groupBoxJSErrors.Text = "JavaScript Errors";
+            // 
+            // checkBoxLogConsoleMessages
+            // 
+            this.checkBoxLogConsoleMessages.AutoSize = true;
+            this.checkBoxLogConsoleMessages.Location = new System.Drawing.Point(12, 39);
+            this.checkBoxLogConsoleMessages.Name = "checkBoxLogConsoleMessages";
+            this.checkBoxLogConsoleMessages.Size = new System.Drawing.Size(134, 17);
+            this.checkBoxLogConsoleMessages.TabIndex = 1;
+            this.checkBoxLogConsoleMessages.Text = "Log &console messages";
+            this.checkBoxLogConsoleMessages.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowConsoleMessages
+            // 
+            this.checkBoxShowConsoleMessages.AutoSize = true;
+            this.checkBoxShowConsoleMessages.Location = new System.Drawing.Point(12, 19);
+            this.checkBoxShowConsoleMessages.Name = "checkBoxShowConsoleMessages";
+            this.checkBoxShowConsoleMessages.Size = new System.Drawing.Size(143, 17);
+            this.checkBoxShowConsoleMessages.TabIndex = 0;
+            this.checkBoxShowConsoleMessages.Text = "Show console &messages";
+            this.checkBoxShowConsoleMessages.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxNavigation
+            // 
+            this.groupBoxNavigation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxNavigation.Controls.Add(this.checkBoxLogPopUpFrameHandler);
+            this.groupBoxNavigation.Controls.Add(this.checkBoxLogLoadErrors);
+            this.groupBoxNavigation.Controls.Add(this.checkBoxShowLoadErrors);
+            this.groupBoxNavigation.Controls.Add(this.checkBoxLogForeignUrls);
+            this.groupBoxNavigation.Location = new System.Drawing.Point(6, 153);
+            this.groupBoxNavigation.Name = "groupBoxNavigation";
+            this.groupBoxNavigation.Size = new System.Drawing.Size(368, 116);
+            this.groupBoxNavigation.TabIndex = 2;
+            this.groupBoxNavigation.TabStop = false;
+            this.groupBoxNavigation.Text = "Navigation";
+            // 
+            // checkBoxLogPopUpFrameHandler
+            // 
+            this.checkBoxLogPopUpFrameHandler.AutoSize = true;
+            this.checkBoxLogPopUpFrameHandler.Location = new System.Drawing.Point(12, 92);
+            this.checkBoxLogPopUpFrameHandler.Name = "checkBoxLogPopUpFrameHandler";
+            this.checkBoxLogPopUpFrameHandler.Size = new System.Drawing.Size(162, 17);
+            this.checkBoxLogPopUpFrameHandler.TabIndex = 3;
+            this.checkBoxLogPopUpFrameHandler.Text = "&PopUpFrameHandler logging";
+            this.checkBoxLogPopUpFrameHandler.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLogLoadErrors
+            // 
+            this.checkBoxLogLoadErrors.AutoSize = true;
+            this.checkBoxLogLoadErrors.Location = new System.Drawing.Point(12, 72);
+            this.checkBoxLogLoadErrors.Name = "checkBoxLogLoadErrors";
+            this.checkBoxLogLoadErrors.Size = new System.Drawing.Size(96, 17);
+            this.checkBoxLogLoadErrors.TabIndex = 2;
+            this.checkBoxLogLoadErrors.Text = "Log lo&ad errors";
+            this.checkBoxLogLoadErrors.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowLoadErrors
+            // 
+            this.checkBoxShowLoadErrors.AutoSize = true;
+            this.checkBoxShowLoadErrors.Location = new System.Drawing.Point(12, 52);
+            this.checkBoxShowLoadErrors.Name = "checkBoxShowLoadErrors";
+            this.checkBoxShowLoadErrors.Size = new System.Drawing.Size(105, 17);
+            this.checkBoxShowLoadErrors.TabIndex = 1;
+            this.checkBoxShowLoadErrors.Text = "Show loa&d errors";
+            this.checkBoxShowLoadErrors.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLogForeignUrls
+            // 
+            this.checkBoxLogForeignUrls.AutoSize = true;
+            this.checkBoxLogForeignUrls.Location = new System.Drawing.Point(12, 19);
+            this.checkBoxLogForeignUrls.Name = "checkBoxLogForeignUrls";
+            this.checkBoxLogForeignUrls.Size = new System.Drawing.Size(318, 30);
+            this.checkBoxLogForeignUrls.TabIndex = 0;
+            this.checkBoxLogForeignUrls.Text = "L&og all requests to URLs not belonging to the URL set by their\r\nsecond-level dom" +
+    "ains or the exception list by their hostname.";
+            this.checkBoxLogForeignUrls.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -501,154 +730,6 @@ namespace BetHelper {
             this.labelOverlayOpacity.TabIndex = 0;
             this.labelOverlayOpacity.Text = "O&verlay opacity:";
             // 
-            // groupBoxLogViewer
-            // 
-            this.groupBoxLogViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxLogViewer.Controls.Add(this.buttonBrowse);
-            this.groupBoxLogViewer.Controls.Add(this.textBoxPreferredEditor);
-            this.groupBoxLogViewer.Controls.Add(this.labelPreferredEditor);
-            this.groupBoxLogViewer.Controls.Add(this.labelMiB);
-            this.groupBoxLogViewer.Controls.Add(this.numericUpDownLargeLogsLimit);
-            this.groupBoxLogViewer.Controls.Add(this.checkBoxRestrictSomeFeatures);
-            this.groupBoxLogViewer.Controls.Add(this.labelKiB);
-            this.groupBoxLogViewer.Controls.Add(this.buttonLogViewer);
-            this.groupBoxLogViewer.Controls.Add(this.numericUpDownPreloadLimit);
-            this.groupBoxLogViewer.Controls.Add(this.checkBoxEnableLogPreloadLimit);
-            this.groupBoxLogViewer.Location = new System.Drawing.Point(6, 344);
-            this.groupBoxLogViewer.Name = "groupBoxLogViewer";
-            this.groupBoxLogViewer.Size = new System.Drawing.Size(368, 138);
-            this.groupBoxLogViewer.TabIndex = 4;
-            this.groupBoxLogViewer.TabStop = false;
-            this.groupBoxLogViewer.Text = "Log Viewer";
-            // 
-            // buttonBrowse
-            // 
-            this.buttonBrowse.Location = new System.Drawing.Point(285, 78);
-            this.buttonBrowse.Name = "buttonBrowse";
-            this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
-            this.buttonBrowse.TabIndex = 8;
-            this.buttonBrowse.Text = "Bro&wse...";
-            this.buttonBrowse.UseVisualStyleBackColor = true;
-            this.buttonBrowse.Click += new System.EventHandler(this.OnButtonBrowseClick);
-            // 
-            // textBoxPreferredEditor
-            // 
-            this.textBoxPreferredEditor.Location = new System.Drawing.Point(12, 80);
-            this.textBoxPreferredEditor.Name = "textBoxPreferredEditor";
-            this.textBoxPreferredEditor.Size = new System.Drawing.Size(267, 20);
-            this.textBoxPreferredEditor.TabIndex = 7;
-            this.textBoxPreferredEditor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            this.textBoxPreferredEditor.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
-            // 
-            // labelPreferredEditor
-            // 
-            this.labelPreferredEditor.AutoSize = true;
-            this.labelPreferredEditor.Location = new System.Drawing.Point(9, 64);
-            this.labelPreferredEditor.Name = "labelPreferredEditor";
-            this.labelPreferredEditor.Size = new System.Drawing.Size(161, 13);
-            this.labelPreferredEditor.TabIndex = 6;
-            this.labelPreferredEditor.Text = "&Preferred editor executable path:";
-            // 
-            // labelMiB
-            // 
-            this.labelMiB.AutoSize = true;
-            this.labelMiB.Location = new System.Drawing.Point(313, 42);
-            this.labelMiB.Name = "labelMiB";
-            this.labelMiB.Size = new System.Drawing.Size(25, 13);
-            this.labelMiB.TabIndex = 5;
-            this.labelMiB.Text = "MiB";
-            // 
-            // numericUpDownLargeLogsLimit
-            // 
-            this.numericUpDownLargeLogsLimit.Location = new System.Drawing.Point(257, 40);
-            this.numericUpDownLargeLogsLimit.Name = "numericUpDownLargeLogsLimit";
-            this.numericUpDownLargeLogsLimit.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDownLargeLogsLimit.TabIndex = 4;
-            this.numericUpDownLargeLogsLimit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // checkBoxRestrictSomeFeatures
-            // 
-            this.checkBoxRestrictSomeFeatures.AutoSize = true;
-            this.checkBoxRestrictSomeFeatures.Location = new System.Drawing.Point(12, 41);
-            this.checkBoxRestrictSomeFeatures.Name = "checkBoxRestrictSomeFeatures";
-            this.checkBoxRestrictSomeFeatures.Size = new System.Drawing.Size(221, 17);
-            this.checkBoxRestrictSomeFeatures.TabIndex = 3;
-            this.checkBoxRestrictSomeFeatures.Text = "&Restrict some features for logs larger than";
-            this.checkBoxRestrictSomeFeatures.UseVisualStyleBackColor = true;
-            this.checkBoxRestrictSomeFeatures.CheckedChanged += new System.EventHandler(this.OnRestrictFeaturesCheckedChanged);
-            // 
-            // labelKiB
-            // 
-            this.labelKiB.AutoSize = true;
-            this.labelKiB.Location = new System.Drawing.Point(313, 20);
-            this.labelKiB.Name = "labelKiB";
-            this.labelKiB.Size = new System.Drawing.Size(23, 13);
-            this.labelKiB.TabIndex = 2;
-            this.labelKiB.Text = "KiB";
-            // 
-            // buttonLogViewer
-            // 
-            this.buttonLogViewer.Location = new System.Drawing.Point(12, 107);
-            this.buttonLogViewer.Name = "buttonLogViewer";
-            this.buttonLogViewer.Size = new System.Drawing.Size(130, 23);
-            this.buttonLogViewer.TabIndex = 9;
-            this.buttonLogViewer.Text = "Open &Log Viewer...";
-            this.buttonLogViewer.UseVisualStyleBackColor = true;
-            this.buttonLogViewer.Click += new System.EventHandler(this.OnLogViewerClick);
-            // 
-            // numericUpDownPreloadLimit
-            // 
-            this.numericUpDownPreloadLimit.Location = new System.Drawing.Point(257, 18);
-            this.numericUpDownPreloadLimit.Name = "numericUpDownPreloadLimit";
-            this.numericUpDownPreloadLimit.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDownPreloadLimit.TabIndex = 1;
-            this.numericUpDownPreloadLimit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // checkBoxEnableLogPreloadLimit
-            // 
-            this.checkBoxEnableLogPreloadLimit.AutoSize = true;
-            this.checkBoxEnableLogPreloadLimit.Location = new System.Drawing.Point(12, 19);
-            this.checkBoxEnableLogPreloadLimit.Name = "checkBoxEnableLogPreloadLimit";
-            this.checkBoxEnableLogPreloadLimit.Size = new System.Drawing.Size(180, 17);
-            this.checkBoxEnableLogPreloadLimit.TabIndex = 0;
-            this.checkBoxEnableLogPreloadLimit.Text = "E&nable log preload maximum limit";
-            this.checkBoxEnableLogPreloadLimit.UseVisualStyleBackColor = true;
-            this.checkBoxEnableLogPreloadLimit.CheckedChanged += new System.EventHandler(this.OnMaxPreloadCheckedChanged);
-            // 
-            // groupBoxJSErrors
-            // 
-            this.groupBoxJSErrors.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxJSErrors.Controls.Add(this.checkBoxLogConsoleMessages);
-            this.groupBoxJSErrors.Controls.Add(this.checkBoxShowConsoleMessages);
-            this.groupBoxJSErrors.Location = new System.Drawing.Point(6, 275);
-            this.groupBoxJSErrors.Name = "groupBoxJSErrors";
-            this.groupBoxJSErrors.Size = new System.Drawing.Size(368, 63);
-            this.groupBoxJSErrors.TabIndex = 3;
-            this.groupBoxJSErrors.TabStop = false;
-            this.groupBoxJSErrors.Text = "JavaScript Errors";
-            // 
-            // checkBoxLogConsoleMessages
-            // 
-            this.checkBoxLogConsoleMessages.AutoSize = true;
-            this.checkBoxLogConsoleMessages.Location = new System.Drawing.Point(12, 39);
-            this.checkBoxLogConsoleMessages.Name = "checkBoxLogConsoleMessages";
-            this.checkBoxLogConsoleMessages.Size = new System.Drawing.Size(134, 17);
-            this.checkBoxLogConsoleMessages.TabIndex = 1;
-            this.checkBoxLogConsoleMessages.Text = "Log &console messages";
-            this.checkBoxLogConsoleMessages.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxShowConsoleMessages
-            // 
-            this.checkBoxShowConsoleMessages.AutoSize = true;
-            this.checkBoxShowConsoleMessages.Location = new System.Drawing.Point(12, 19);
-            this.checkBoxShowConsoleMessages.Name = "checkBoxShowConsoleMessages";
-            this.checkBoxShowConsoleMessages.Size = new System.Drawing.Size(143, 17);
-            this.checkBoxShowConsoleMessages.TabIndex = 0;
-            this.checkBoxShowConsoleMessages.Text = "Show console &messages";
-            this.checkBoxShowConsoleMessages.UseVisualStyleBackColor = true;
-            // 
             // groupBoxFind
             // 
             this.groupBoxFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -670,62 +751,6 @@ namespace BetHelper {
             this.checkBoxOutlineSearchResults.TabIndex = 0;
             this.checkBoxOutlineSearchResults.Text = "O&utline search result";
             this.checkBoxOutlineSearchResults.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxNavigation
-            // 
-            this.groupBoxNavigation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxNavigation.Controls.Add(this.checkBoxLogLoadErrors);
-            this.groupBoxNavigation.Controls.Add(this.checkBoxShowLoadErrors);
-            this.groupBoxNavigation.Controls.Add(this.checkBoxLogPopUpFrameHandler);
-            this.groupBoxNavigation.Controls.Add(this.checkBoxLogForeignUrls);
-            this.groupBoxNavigation.Location = new System.Drawing.Point(6, 153);
-            this.groupBoxNavigation.Name = "groupBoxNavigation";
-            this.groupBoxNavigation.Size = new System.Drawing.Size(368, 116);
-            this.groupBoxNavigation.TabIndex = 2;
-            this.groupBoxNavigation.TabStop = false;
-            this.groupBoxNavigation.Text = "Navigation";
-            // 
-            // checkBoxLogLoadErrors
-            // 
-            this.checkBoxLogLoadErrors.AutoSize = true;
-            this.checkBoxLogLoadErrors.Location = new System.Drawing.Point(12, 72);
-            this.checkBoxLogLoadErrors.Name = "checkBoxLogLoadErrors";
-            this.checkBoxLogLoadErrors.Size = new System.Drawing.Size(96, 17);
-            this.checkBoxLogLoadErrors.TabIndex = 2;
-            this.checkBoxLogLoadErrors.Text = "Log lo&ad errors";
-            this.checkBoxLogLoadErrors.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxShowLoadErrors
-            // 
-            this.checkBoxShowLoadErrors.AutoSize = true;
-            this.checkBoxShowLoadErrors.Location = new System.Drawing.Point(12, 52);
-            this.checkBoxShowLoadErrors.Name = "checkBoxShowLoadErrors";
-            this.checkBoxShowLoadErrors.Size = new System.Drawing.Size(105, 17);
-            this.checkBoxShowLoadErrors.TabIndex = 1;
-            this.checkBoxShowLoadErrors.Text = "Show loa&d errors";
-            this.checkBoxShowLoadErrors.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxLogPopUpFrameHandler
-            // 
-            this.checkBoxLogPopUpFrameHandler.AutoSize = true;
-            this.checkBoxLogPopUpFrameHandler.Location = new System.Drawing.Point(12, 92);
-            this.checkBoxLogPopUpFrameHandler.Name = "checkBoxLogPopUpFrameHandler";
-            this.checkBoxLogPopUpFrameHandler.Size = new System.Drawing.Size(162, 17);
-            this.checkBoxLogPopUpFrameHandler.TabIndex = 3;
-            this.checkBoxLogPopUpFrameHandler.Text = "&PopUpFrameHandler logging";
-            this.checkBoxLogPopUpFrameHandler.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxLogForeignUrls
-            // 
-            this.checkBoxLogForeignUrls.AutoSize = true;
-            this.checkBoxLogForeignUrls.Location = new System.Drawing.Point(12, 19);
-            this.checkBoxLogForeignUrls.Name = "checkBoxLogForeignUrls";
-            this.checkBoxLogForeignUrls.Size = new System.Drawing.Size(318, 30);
-            this.checkBoxLogForeignUrls.TabIndex = 0;
-            this.checkBoxLogForeignUrls.Text = "L&og all requests to URLs not belonging to the URL set by their\r\nsecond-level dom" +
-    "ains or the exception list by their hostname.";
-            this.checkBoxLogForeignUrls.UseVisualStyleBackColor = true;
             // 
             // tabPageGeneral
             // 
@@ -755,37 +780,48 @@ namespace BetHelper {
             // 
             this.groupBoxSecurity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxSecurity.Controls.Add(this.buttonAllowedClientsIP);
             this.groupBoxSecurity.Controls.Add(this.checkBoxIgnoreCertificateErrors);
-            this.groupBoxSecurity.Controls.Add(this.checkBoxKeepAnEyeOnTheClientsIP);
             this.groupBoxSecurity.Controls.Add(this.checkBoxBlockRequestsToForeignUrls);
-            this.groupBoxSecurity.Location = new System.Drawing.Point(6, 301);
+            this.groupBoxSecurity.Controls.Add(this.buttonAllowedClientsIP);
+            this.groupBoxSecurity.Controls.Add(this.checkBoxKeepAnEyeOnTheClientsIP);
+            this.groupBoxSecurity.Location = new System.Drawing.Point(6, 311);
             this.groupBoxSecurity.Name = "groupBoxSecurity";
-            this.groupBoxSecurity.Size = new System.Drawing.Size(368, 137);
+            this.groupBoxSecurity.Size = new System.Drawing.Size(368, 131);
             this.groupBoxSecurity.TabIndex = 2;
             this.groupBoxSecurity.TabStop = false;
             this.groupBoxSecurity.Text = "Security";
             // 
-            // buttonAllowedClientsIP
-            // 
-            this.buttonAllowedClientsIP.Location = new System.Drawing.Point(24, 54);
-            this.buttonAllowedClientsIP.Name = "buttonAllowedClientsIP";
-            this.buttonAllowedClientsIP.Size = new System.Drawing.Size(182, 23);
-            this.buttonAllowedClientsIP.TabIndex = 1;
-            this.buttonAllowedClientsIP.Text = "Allo&wed Client\'s IP Addresses...";
-            this.buttonAllowedClientsIP.UseVisualStyleBackColor = true;
-            this.buttonAllowedClientsIP.Click += new System.EventHandler(this.OnAllowedClientsClick);
-            // 
             // checkBoxIgnoreCertificateErrors
             // 
             this.checkBoxIgnoreCertificateErrors.AutoSize = true;
-            this.checkBoxIgnoreCertificateErrors.Location = new System.Drawing.Point(12, 114);
+            this.checkBoxIgnoreCertificateErrors.Location = new System.Drawing.Point(12, 109);
             this.checkBoxIgnoreCertificateErrors.Name = "checkBoxIgnoreCertificateErrors";
             this.checkBoxIgnoreCertificateErrors.Size = new System.Drawing.Size(134, 17);
             this.checkBoxIgnoreCertificateErrors.TabIndex = 3;
             this.checkBoxIgnoreCertificateErrors.Text = "Ignore &certificate errors";
             this.checkBoxIgnoreCertificateErrors.UseVisualStyleBackColor = true;
             this.checkBoxIgnoreCertificateErrors.CheckedChanged += new System.EventHandler(this.SetWarning);
+            // 
+            // checkBoxBlockRequestsToForeignUrls
+            // 
+            this.checkBoxBlockRequestsToForeignUrls.AutoSize = true;
+            this.checkBoxBlockRequestsToForeignUrls.Location = new System.Drawing.Point(12, 78);
+            this.checkBoxBlockRequestsToForeignUrls.Name = "checkBoxBlockRequestsToForeignUrls";
+            this.checkBoxBlockRequestsToForeignUrls.Size = new System.Drawing.Size(327, 30);
+            this.checkBoxBlockRequestsToForeignUrls.TabIndex = 2;
+            this.checkBoxBlockRequestsToForeignUrls.Text = "Block all re&quests to URLs not belonging to the URL set by their\r\nsecond-level d" +
+    "omains or the exception list by their hostname.";
+            this.checkBoxBlockRequestsToForeignUrls.UseVisualStyleBackColor = true;
+            // 
+            // buttonAllowedClientsIP
+            // 
+            this.buttonAllowedClientsIP.Location = new System.Drawing.Point(24, 52);
+            this.buttonAllowedClientsIP.Name = "buttonAllowedClientsIP";
+            this.buttonAllowedClientsIP.Size = new System.Drawing.Size(182, 23);
+            this.buttonAllowedClientsIP.TabIndex = 1;
+            this.buttonAllowedClientsIP.Text = "Allo&wed Client\'s IP Addresses...";
+            this.buttonAllowedClientsIP.UseVisualStyleBackColor = true;
+            this.buttonAllowedClientsIP.Click += new System.EventHandler(this.OnAllowedClientsClick);
             // 
             // checkBoxKeepAnEyeOnTheClientsIP
             // 
@@ -798,30 +834,41 @@ namespace BetHelper {
     "f the client\'s IP address changes.";
             this.checkBoxKeepAnEyeOnTheClientsIP.UseVisualStyleBackColor = true;
             // 
-            // checkBoxBlockRequestsToForeignUrls
-            // 
-            this.checkBoxBlockRequestsToForeignUrls.AutoSize = true;
-            this.checkBoxBlockRequestsToForeignUrls.Location = new System.Drawing.Point(12, 82);
-            this.checkBoxBlockRequestsToForeignUrls.Name = "checkBoxBlockRequestsToForeignUrls";
-            this.checkBoxBlockRequestsToForeignUrls.Size = new System.Drawing.Size(327, 30);
-            this.checkBoxBlockRequestsToForeignUrls.TabIndex = 2;
-            this.checkBoxBlockRequestsToForeignUrls.Text = "&Block all requests to URLs not belonging to the URL set by their\r\nsecond-level d" +
-    "omains or the exception list by their hostname.";
-            this.checkBoxBlockRequestsToForeignUrls.UseVisualStyleBackColor = true;
-            // 
             // groupBoxPrinting
             // 
             this.groupBoxPrinting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxPrinting.Controls.Add(this.labelPrinting);
             this.groupBoxPrinting.Controls.Add(this.radioButtonHardMargins);
             this.groupBoxPrinting.Controls.Add(this.radioButtonSoftMargins);
-            this.groupBoxPrinting.Location = new System.Drawing.Point(6, 218);
+            this.groupBoxPrinting.Controls.Add(this.labelPrinting);
+            this.groupBoxPrinting.Location = new System.Drawing.Point(6, 230);
             this.groupBoxPrinting.Name = "groupBoxPrinting";
-            this.groupBoxPrinting.Size = new System.Drawing.Size(368, 77);
+            this.groupBoxPrinting.Size = new System.Drawing.Size(368, 75);
             this.groupBoxPrinting.TabIndex = 1;
             this.groupBoxPrinting.TabStop = false;
             this.groupBoxPrinting.Text = "Printing";
+            // 
+            // radioButtonHardMargins
+            // 
+            this.radioButtonHardMargins.AutoSize = true;
+            this.radioButtonHardMargins.Location = new System.Drawing.Point(187, 52);
+            this.radioButtonHardMargins.Name = "radioButtonHardMargins";
+            this.radioButtonHardMargins.Size = new System.Drawing.Size(107, 17);
+            this.radioButtonHardMargins.TabIndex = 2;
+            this.radioButtonHardMargins.TabStop = true;
+            this.radioButtonHardMargins.Text = "Use &hard margins";
+            this.radioButtonHardMargins.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonSoftMargins
+            // 
+            this.radioButtonSoftMargins.AutoSize = true;
+            this.radioButtonSoftMargins.Location = new System.Drawing.Point(12, 52);
+            this.radioButtonSoftMargins.Name = "radioButtonSoftMargins";
+            this.radioButtonSoftMargins.Size = new System.Drawing.Size(103, 17);
+            this.radioButtonSoftMargins.TabIndex = 1;
+            this.radioButtonSoftMargins.TabStop = true;
+            this.radioButtonSoftMargins.Text = "&Use soft margins";
+            this.radioButtonSoftMargins.UseVisualStyleBackColor = true;
             // 
             // labelPrinting
             // 
@@ -833,85 +880,94 @@ namespace BetHelper {
             this.labelPrinting.Text = "This setting applies only when printing screenshots or plain text and\r\nnot when p" +
     "rinting from the embedded Chromium web browser.";
             // 
-            // radioButtonHardMargins
-            // 
-            this.radioButtonHardMargins.AutoSize = true;
-            this.radioButtonHardMargins.Location = new System.Drawing.Point(187, 54);
-            this.radioButtonHardMargins.Name = "radioButtonHardMargins";
-            this.radioButtonHardMargins.Size = new System.Drawing.Size(107, 17);
-            this.radioButtonHardMargins.TabIndex = 2;
-            this.radioButtonHardMargins.TabStop = true;
-            this.radioButtonHardMargins.Text = "Use &hard margins";
-            this.radioButtonHardMargins.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonSoftMargins
-            // 
-            this.radioButtonSoftMargins.AutoSize = true;
-            this.radioButtonSoftMargins.Location = new System.Drawing.Point(12, 54);
-            this.radioButtonSoftMargins.Name = "radioButtonSoftMargins";
-            this.radioButtonSoftMargins.Size = new System.Drawing.Size(103, 17);
-            this.radioButtonSoftMargins.TabIndex = 1;
-            this.radioButtonSoftMargins.TabStop = true;
-            this.radioButtonSoftMargins.Text = "&Use soft margins";
-            this.radioButtonSoftMargins.UseVisualStyleBackColor = true;
-            // 
             // groupBoxApplication
             // 
             this.groupBoxApplication.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxApplication.Controls.Add(this.checkBoxTruncateBookmarkTitles);
             this.groupBoxApplication.Controls.Add(this.checkBoxPingWhenIdle);
             this.groupBoxApplication.Controls.Add(this.checkBoxSortBookmarks);
-            this.groupBoxApplication.Controls.Add(this.checkBoxTruncateBookmarkTitles);
+            this.groupBoxApplication.Controls.Add(this.checkBoxDisplayPromptBeforeClosing);
+            this.groupBoxApplication.Controls.Add(this.checkBoxEnableBell);
+            this.groupBoxApplication.Controls.Add(this.checkBoxAutoLogInAfterInitialLoad);
             this.groupBoxApplication.Controls.Add(this.comboBoxUnitPrefix);
             this.groupBoxApplication.Controls.Add(this.labelUnitPrefix);
-            this.groupBoxApplication.Controls.Add(this.checkBoxDisplayPromptBeforeClosing);
-            this.groupBoxApplication.Controls.Add(this.checkBoxAutoLogInAfterInitialLoad);
             this.groupBoxApplication.Controls.Add(this.comboBoxNumberFormat);
             this.groupBoxApplication.Controls.Add(this.labelNumberFormat);
             this.groupBoxApplication.Controls.Add(this.checkBoxStatusBarNotifOnly);
             this.groupBoxApplication.Controls.Add(this.checkBoxCheckForUpdates);
             this.groupBoxApplication.Location = new System.Drawing.Point(6, 6);
             this.groupBoxApplication.Name = "groupBoxApplication";
-            this.groupBoxApplication.Size = new System.Drawing.Size(368, 206);
+            this.groupBoxApplication.Size = new System.Drawing.Size(368, 218);
             this.groupBoxApplication.TabIndex = 0;
             this.groupBoxApplication.TabStop = false;
             this.groupBoxApplication.Text = "Application";
             // 
+            // checkBoxTruncateBookmarkTitles
+            // 
+            this.checkBoxTruncateBookmarkTitles.AutoSize = true;
+            this.checkBoxTruncateBookmarkTitles.Location = new System.Drawing.Point(12, 196);
+            this.checkBoxTruncateBookmarkTitles.Name = "checkBoxTruncateBookmarkTitles";
+            this.checkBoxTruncateBookmarkTitles.Size = new System.Drawing.Size(143, 17);
+            this.checkBoxTruncateBookmarkTitles.TabIndex = 11;
+            this.checkBoxTruncateBookmarkTitles.Text = "&Truncate bookmark titles";
+            this.checkBoxTruncateBookmarkTitles.UseVisualStyleBackColor = true;
+            // 
             // checkBoxPingWhenIdle
             // 
             this.checkBoxPingWhenIdle.AutoSize = true;
-            this.checkBoxPingWhenIdle.Location = new System.Drawing.Point(12, 164);
+            this.checkBoxPingWhenIdle.Location = new System.Drawing.Point(12, 178);
             this.checkBoxPingWhenIdle.Name = "checkBoxPingWhenIdle";
             this.checkBoxPingWhenIdle.Size = new System.Drawing.Size(167, 17);
-            this.checkBoxPingWhenIdle.TabIndex = 9;
+            this.checkBoxPingWhenIdle.TabIndex = 10;
             this.checkBoxPingWhenIdle.Text = "Try to keep the user &logged in";
             this.checkBoxPingWhenIdle.UseVisualStyleBackColor = true;
             // 
             // checkBoxSortBookmarks
             // 
             this.checkBoxSortBookmarks.AutoSize = true;
-            this.checkBoxSortBookmarks.Location = new System.Drawing.Point(12, 145);
+            this.checkBoxSortBookmarks.Location = new System.Drawing.Point(12, 160);
             this.checkBoxSortBookmarks.Name = "checkBoxSortBookmarks";
             this.checkBoxSortBookmarks.Size = new System.Drawing.Size(133, 17);
-            this.checkBoxSortBookmarks.TabIndex = 8;
+            this.checkBoxSortBookmarks.TabIndex = 9;
             this.checkBoxSortBookmarks.Text = "Sort book&marks by title";
             this.checkBoxSortBookmarks.UseVisualStyleBackColor = true;
             // 
-            // checkBoxTruncateBookmarkTitles
+            // checkBoxDisplayPromptBeforeClosing
             // 
-            this.checkBoxTruncateBookmarkTitles.AutoSize = true;
-            this.checkBoxTruncateBookmarkTitles.Location = new System.Drawing.Point(12, 183);
-            this.checkBoxTruncateBookmarkTitles.Name = "checkBoxTruncateBookmarkTitles";
-            this.checkBoxTruncateBookmarkTitles.Size = new System.Drawing.Size(143, 17);
-            this.checkBoxTruncateBookmarkTitles.TabIndex = 10;
-            this.checkBoxTruncateBookmarkTitles.Text = "&Truncate bookmark titles";
-            this.checkBoxTruncateBookmarkTitles.UseVisualStyleBackColor = true;
+            this.checkBoxDisplayPromptBeforeClosing.AutoSize = true;
+            this.checkBoxDisplayPromptBeforeClosing.Location = new System.Drawing.Point(12, 142);
+            this.checkBoxDisplayPromptBeforeClosing.Name = "checkBoxDisplayPromptBeforeClosing";
+            this.checkBoxDisplayPromptBeforeClosing.Size = new System.Drawing.Size(282, 17);
+            this.checkBoxDisplayPromptBeforeClosing.TabIndex = 8;
+            this.checkBoxDisplayPromptBeforeClosing.Text = "&Display prompt before closing main application window";
+            this.checkBoxDisplayPromptBeforeClosing.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnableBell
+            // 
+            this.checkBoxEnableBell.AutoSize = true;
+            this.checkBoxEnableBell.Location = new System.Drawing.Point(12, 124);
+            this.checkBoxEnableBell.Name = "checkBoxEnableBell";
+            this.checkBoxEnableBell.Size = new System.Drawing.Size(78, 17);
+            this.checkBoxEnableBell.TabIndex = 7;
+            this.checkBoxEnableBell.Text = "Enable &bell";
+            this.checkBoxEnableBell.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAutoLogInAfterInitialLoad
+            // 
+            this.checkBoxAutoLogInAfterInitialLoad.AutoSize = true;
+            this.checkBoxAutoLogInAfterInitialLoad.Location = new System.Drawing.Point(12, 106);
+            this.checkBoxAutoLogInAfterInitialLoad.Name = "checkBoxAutoLogInAfterInitialLoad";
+            this.checkBoxAutoLogInAfterInitialLoad.Size = new System.Drawing.Size(149, 17);
+            this.checkBoxAutoLogInAfterInitialLoad.TabIndex = 6;
+            this.checkBoxAutoLogInAfterInitialLoad.Text = "Aut&o log in after initial load";
+            this.checkBoxAutoLogInAfterInitialLoad.UseVisualStyleBackColor = true;
             // 
             // comboBoxUnitPrefix
             // 
             this.comboBoxUnitPrefix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxUnitPrefix.FormattingEnabled = true;
-            this.comboBoxUnitPrefix.Location = new System.Drawing.Point(102, 82);
+            this.comboBoxUnitPrefix.Location = new System.Drawing.Point(102, 80);
             this.comboBoxUnitPrefix.Name = "comboBoxUnitPrefix";
             this.comboBoxUnitPrefix.Size = new System.Drawing.Size(100, 21);
             this.comboBoxUnitPrefix.TabIndex = 5;
@@ -919,37 +975,17 @@ namespace BetHelper {
             // labelUnitPrefix
             // 
             this.labelUnitPrefix.AutoSize = true;
-            this.labelUnitPrefix.Location = new System.Drawing.Point(9, 86);
+            this.labelUnitPrefix.Location = new System.Drawing.Point(9, 84);
             this.labelUnitPrefix.Name = "labelUnitPrefix";
             this.labelUnitPrefix.Size = new System.Drawing.Size(57, 13);
             this.labelUnitPrefix.TabIndex = 4;
             this.labelUnitPrefix.Text = "Unit &prefix:";
             // 
-            // checkBoxDisplayPromptBeforeClosing
-            // 
-            this.checkBoxDisplayPromptBeforeClosing.AutoSize = true;
-            this.checkBoxDisplayPromptBeforeClosing.Location = new System.Drawing.Point(12, 126);
-            this.checkBoxDisplayPromptBeforeClosing.Name = "checkBoxDisplayPromptBeforeClosing";
-            this.checkBoxDisplayPromptBeforeClosing.Size = new System.Drawing.Size(282, 17);
-            this.checkBoxDisplayPromptBeforeClosing.TabIndex = 7;
-            this.checkBoxDisplayPromptBeforeClosing.Text = "&Display prompt before closing main application window";
-            this.checkBoxDisplayPromptBeforeClosing.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxAutoLogInAfterInitialLoad
-            // 
-            this.checkBoxAutoLogInAfterInitialLoad.AutoSize = true;
-            this.checkBoxAutoLogInAfterInitialLoad.Location = new System.Drawing.Point(12, 107);
-            this.checkBoxAutoLogInAfterInitialLoad.Name = "checkBoxAutoLogInAfterInitialLoad";
-            this.checkBoxAutoLogInAfterInitialLoad.Size = new System.Drawing.Size(149, 17);
-            this.checkBoxAutoLogInAfterInitialLoad.TabIndex = 6;
-            this.checkBoxAutoLogInAfterInitialLoad.Text = "Aut&o log in after initial load";
-            this.checkBoxAutoLogInAfterInitialLoad.UseVisualStyleBackColor = true;
-            // 
             // comboBoxNumberFormat
             // 
             this.comboBoxNumberFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxNumberFormat.FormattingEnabled = true;
-            this.comboBoxNumberFormat.Location = new System.Drawing.Point(102, 59);
+            this.comboBoxNumberFormat.Location = new System.Drawing.Point(102, 57);
             this.comboBoxNumberFormat.Name = "comboBoxNumberFormat";
             this.comboBoxNumberFormat.Size = new System.Drawing.Size(220, 21);
             this.comboBoxNumberFormat.TabIndex = 3;
@@ -957,7 +993,7 @@ namespace BetHelper {
             // labelNumberFormat
             // 
             this.labelNumberFormat.AutoSize = true;
-            this.labelNumberFormat.Location = new System.Drawing.Point(9, 62);
+            this.labelNumberFormat.Location = new System.Drawing.Point(9, 60);
             this.labelNumberFormat.Name = "labelNumberFormat";
             this.labelNumberFormat.Size = new System.Drawing.Size(79, 13);
             this.labelNumberFormat.TabIndex = 2;
@@ -966,7 +1002,7 @@ namespace BetHelper {
             // checkBoxStatusBarNotifOnly
             // 
             this.checkBoxStatusBarNotifOnly.AutoSize = true;
-            this.checkBoxStatusBarNotifOnly.Location = new System.Drawing.Point(31, 38);
+            this.checkBoxStatusBarNotifOnly.Location = new System.Drawing.Point(31, 37);
             this.checkBoxStatusBarNotifOnly.Name = "checkBoxStatusBarNotifOnly";
             this.checkBoxStatusBarNotifOnly.Size = new System.Drawing.Size(153, 17);
             this.checkBoxStatusBarNotifOnly.TabIndex = 1;
@@ -1102,8 +1138,6 @@ namespace BetHelper {
             this.groupBoxUserInterface.Controls.Add(this.labelCalculatorSColor);
             this.groupBoxUserInterface.Controls.Add(this.comboBoxCalculatorDColor);
             this.groupBoxUserInterface.Controls.Add(this.labelCalculatorDColor);
-            this.groupBoxUserInterface.Controls.Add(this.comboBoxTabAppearance);
-            this.groupBoxUserInterface.Controls.Add(this.labelTabAppearance);
             this.groupBoxUserInterface.Controls.Add(this.comboBoxDashboardSColor);
             this.groupBoxUserInterface.Controls.Add(this.labelDashboardSColor);
             this.groupBoxUserInterface.Controls.Add(this.comboBoxDashboardDColor);
@@ -1122,6 +1156,8 @@ namespace BetHelper {
             this.groupBoxUserInterface.Controls.Add(this.labelBookmakerDColor);
             this.groupBoxUserInterface.Controls.Add(this.checkBoxBackgroundColor);
             this.groupBoxUserInterface.Controls.Add(this.checkBoxBoldFont);
+            this.groupBoxUserInterface.Controls.Add(this.comboBoxTabAppearance);
+            this.groupBoxUserInterface.Controls.Add(this.labelTabAppearance);
             this.groupBoxUserInterface.Location = new System.Drawing.Point(6, 6);
             this.groupBoxUserInterface.Name = "groupBoxUserInterface";
             this.groupBoxUserInterface.Size = new System.Drawing.Size(368, 314);
@@ -1164,24 +1200,6 @@ namespace BetHelper {
             this.labelCalculatorDColor.Size = new System.Drawing.Size(136, 13);
             this.labelCalculatorDColor.TabIndex = 20;
             this.labelCalculatorDColor.Text = "Bet c&alculator default color:";
-            // 
-            // comboBoxTabAppearance
-            // 
-            this.comboBoxTabAppearance.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTabAppearance.FormattingEnabled = true;
-            this.comboBoxTabAppearance.Location = new System.Drawing.Point(196, 17);
-            this.comboBoxTabAppearance.Name = "comboBoxTabAppearance";
-            this.comboBoxTabAppearance.Size = new System.Drawing.Size(164, 21);
-            this.comboBoxTabAppearance.TabIndex = 1;
-            // 
-            // labelTabAppearance
-            // 
-            this.labelTabAppearance.AutoSize = true;
-            this.labelTabAppearance.Location = new System.Drawing.Point(9, 20);
-            this.labelTabAppearance.Name = "labelTabAppearance";
-            this.labelTabAppearance.Size = new System.Drawing.Size(130, 13);
-            this.labelTabAppearance.TabIndex = 0;
-            this.labelTabAppearance.Text = "&Tab headers appearance:";
             // 
             // comboBoxDashboardSColor
             // 
@@ -1347,6 +1365,24 @@ namespace BetHelper {
             this.checkBoxBoldFont.Text = "&Bold font in tab headers";
             this.checkBoxBoldFont.UseVisualStyleBackColor = true;
             // 
+            // comboBoxTabAppearance
+            // 
+            this.comboBoxTabAppearance.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTabAppearance.FormattingEnabled = true;
+            this.comboBoxTabAppearance.Location = new System.Drawing.Point(196, 17);
+            this.comboBoxTabAppearance.Name = "comboBoxTabAppearance";
+            this.comboBoxTabAppearance.Size = new System.Drawing.Size(164, 21);
+            this.comboBoxTabAppearance.TabIndex = 1;
+            // 
+            // labelTabAppearance
+            // 
+            this.labelTabAppearance.AutoSize = true;
+            this.labelTabAppearance.Location = new System.Drawing.Point(9, 20);
+            this.labelTabAppearance.Name = "labelTabAppearance";
+            this.labelTabAppearance.Size = new System.Drawing.Size(130, 13);
+            this.labelTabAppearance.TabIndex = 0;
+            this.labelTabAppearance.Text = "&Tab headers appearance:";
+            // 
             // PreferencesForm
             // 
             this.AcceptButton = this.buttonSave;
@@ -1375,6 +1411,8 @@ namespace BetHelper {
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWarning)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.tabPageBrowser.ResumeLayout(false);
+            this.groupBoxProxy.ResumeLayout(false);
+            this.groupBoxProxy.PerformLayout();
             this.groupBoxHeaders.ResumeLayout(false);
             this.groupBoxHeaders.PerformLayout();
             this.groupBoxMultimedia.ResumeLayout(false);
@@ -1382,19 +1420,19 @@ namespace BetHelper {
             this.groupBoxCache.ResumeLayout(false);
             this.groupBoxCache.PerformLayout();
             this.tabPageDebug.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOverlayOpacity)).EndInit();
             this.groupBoxLogViewer.ResumeLayout(false);
             this.groupBoxLogViewer.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLargeLogsLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownPreloadLimit)).EndInit();
             this.groupBoxJSErrors.ResumeLayout(false);
             this.groupBoxJSErrors.PerformLayout();
-            this.groupBoxFind.ResumeLayout(false);
-            this.groupBoxFind.PerformLayout();
             this.groupBoxNavigation.ResumeLayout(false);
             this.groupBoxNavigation.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOverlayOpacity)).EndInit();
+            this.groupBoxFind.ResumeLayout(false);
+            this.groupBoxFind.PerformLayout();
             this.tabPageGeneral.ResumeLayout(false);
             this.groupBoxSecurity.ResumeLayout(false);
             this.groupBoxSecurity.PerformLayout();
@@ -1525,5 +1563,8 @@ namespace BetHelper {
         private System.Windows.Forms.TextBox textBoxPreferredEditor;
         private System.Windows.Forms.Label labelPreferredEditor;
         private System.Windows.Forms.CheckBox checkBoxPingWhenIdle;
+        private System.Windows.Forms.CheckBox checkBoxEnableBell;
+        private System.Windows.Forms.GroupBox groupBoxProxy;
+        private System.Windows.Forms.CheckBox checkBoxEnableProxy;
     }
 }

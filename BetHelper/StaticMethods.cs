@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.2.0
  */
 
 using System;
@@ -32,6 +32,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -39,6 +40,92 @@ using WebPWrapper;
 
 namespace BetHelper {
     public static class StaticMethods {
+        public static string AbbreviateMatchName(string text, Font font, int width) {
+            char[] separators = new char[] { Constants.EnDash, Constants.EmDash };
+            Regex regex = new Regex(Constants.SplitWordsPattern, RegexOptions.Singleline);
+            if (text.IndexOfAny(separators) > -1) {
+                string[] split = text.Split(separators, 2);
+                string[] left = regex.Split(split[0])
+                    .Where(new Func<string, bool>(item => !string.IsNullOrEmpty(item)))
+                    .ToArray();
+                string[] right = regex.Split(split[1])
+                    .Where(new Func<string, bool>(item => !string.IsNullOrEmpty(item)))
+                    .ToArray();
+                StringBuilder leftPart = new StringBuilder();
+                StringBuilder rightPart = new StringBuilder();
+                for (int i = 0; i < Math.Max(left.Length, right.Length); i++) {
+                    if (i.Equals(0)) {
+                        if (left.Length > i) {
+                            leftPart.Append(left[i]);
+                        }
+                        if (right.Length > i) {
+                            rightPart.Append(right[i]);
+                        }
+                    } else {
+                        StringBuilder builder = new StringBuilder(leftPart.ToString());
+                        if (left.Length > i) {
+                            builder.Append(Constants.Space)
+                                .Append(left[i]);
+                        }
+                        builder.Append(Constants.Space)
+                            .Append(Constants.EnDash)
+                            .Append(rightPart.ToString());
+                        if (right.Length > i) {
+                            builder.Append(Constants.Space).Append(right[i]);
+                        }
+                        if (TextRenderer.MeasureText(builder.ToString(), font).Width <= width) {
+                            if (left.Length > i) {
+                                leftPart.Append(Constants.Space)
+                                    .Append(left[i]);
+                            }
+                            if (right.Length > i) {
+                                rightPart.Append(Constants.Space)
+                                    .Append(right[i]);
+                            }
+                        } else {
+                            return new StringBuilder()
+                                .Append(leftPart.ToString())
+                                .Append(Constants.Space)
+                                .Append(Constants.EnDash)
+                                .Append(Constants.Space)
+                                .Append(rightPart.ToString())
+                                .ToString();
+                        }
+                    }
+                }
+                return new StringBuilder()
+                    .Append(leftPart.ToString())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(rightPart.ToString())
+                    .ToString();
+            } else {
+                StringBuilder builder = new StringBuilder();
+                foreach (string word in regex.Split(text)
+                        .Where(new Func<string, bool>(item => !string.IsNullOrEmpty(item)))
+                        .ToArray()) {
+
+                    if (builder.Length.Equals(0)) {
+                        builder.Append(word);
+                    } else {
+                        string str = new StringBuilder()
+                            .Append(builder.ToString())
+                            .Append(Constants.Space)
+                            .Append(word)
+                            .ToString();
+                        if (TextRenderer.MeasureText(str, font).Width <= width) {
+                            builder.Append(Constants.Space)
+                                .Append(word);
+                        } else {
+                            return builder.ToString();
+                        }
+                    }
+                }
+                return builder.ToString();
+            }
+        }
+
         public static bool CheckSelectedUrl(TextBox textBox) {
             if (textBox.SelectionLength <= 3072) {
                 string trimmed = textBox.SelectedText.TrimStart();

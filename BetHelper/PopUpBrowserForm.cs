@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.2.0
  */
 
 using CefSharp;
@@ -74,8 +74,6 @@ namespace BetHelper {
             closeTimer.Interval = 1500;
             closeTimer.Elapsed += new System.Timers.ElapsedEventHandler(SafeClose);
             mainForm.FormClosed += new FormClosedEventHandler(SafeClose);
-
-            mainForm.ShortcutManager.AddForm(this);
 
             InitializeComponent();
             SuspendLayout();
