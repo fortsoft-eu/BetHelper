@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 2.3.2.0
+ * Version 2.3.2.2
  */
 
 using Microsoft.Win32;
@@ -94,6 +94,7 @@ namespace FortSoft.Tools {
         private IntPtr parentHandle;
         private Point nLocation;
         private Size nSize;
+        private string initialTitle;
 
         /// <summary>
         /// Occurs on error accessing the Windows registry.
@@ -129,6 +130,11 @@ namespace FortSoft.Tools {
         /// Allows saving TopMost property of the parent form.
         /// </summary>
         public bool AllowSaveTopMost { get; set; }
+
+        /// <summary>
+        /// Other opened windows detection options.
+        /// </summary>
+        public WindowDetectionOptions DetectionOptions { get; set; }
 
         /// <summary>
         /// Disables saving height od the parent form.
@@ -176,6 +182,7 @@ namespace FortSoft.Tools {
                 parent = value;
                 parent.Load += new EventHandler(OnLoad);
                 parent.FormClosed += new FormClosedEventHandler((sender, e) => Save());
+                initialTitle = parent.Text;
             }
         }
 
@@ -197,6 +204,56 @@ namespace FortSoft.Tools {
         /// Windows registry.)
         /// </summary>
         public PersistWindowStateSavingOptions SavingOptions { get; set; }
+
+        /// <summary>
+        /// Checks if another same window of the application is already running
+        /// to prevent multiple windows from having the same initial position.
+        /// </summary>
+        /// <returns>
+        /// True if another same window is already running; otherwise false.
+        /// </returns>
+        private bool AlreadyRunning() {
+            if (DetectionOptions.Equals(WindowDetectionOptions.NoDetection)) {
+                return false;
+            }
+            Process process = Process.GetCurrentProcess();
+            FileSystemInfo processFileInfo = new FileInfo(process.MainModule.FileName);
+            foreach (Process p in Process.GetProcessesByName(process.ProcessName)
+                    .Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId)))
+                    .ToArray()) {
+
+                if (!p.Id.Equals(process.Id)
+                        && !p.MainWindowHandle.Equals(IntPtr.Zero)
+                        && processFileInfo.Name.Equals(new FileInfo(p.MainModule.FileName).Name)) {
+
+                    switch (DetectionOptions) {
+                        case WindowDetectionOptions.TitleContains:
+                            if (p.MainWindowTitle.Contains(initialTitle)) {
+                                return true;
+                            }
+                            break;
+                        case WindowDetectionOptions.TitleStartsWith:
+                            if (p.MainWindowTitle.StartsWith(initialTitle)) {
+                                return true;
+                            }
+                            break;
+                        case WindowDetectionOptions.TitleEndsWith:
+                            if (p.MainWindowTitle.EndsWith(initialTitle)) {
+                                return true;
+                            }
+                            break;
+                        case WindowDetectionOptions.TitleEquals:
+                            if (p.MainWindowTitle.Equals(initialTitle)) {
+                                return true;
+                            }
+                            break;
+                        default:
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         /// Thread-safe brings the parent form to the front of the z-order. This
@@ -496,29 +553,6 @@ namespace FortSoft.Tools {
         }
 
         /// <summary>
-        /// Checks if another instance of the application is already running to
-        /// prevent multiple forms from having the same position.
-        /// </summary>
-        /// <returns>
-        /// True if another instance is already running; otherwise false.
-        /// </returns>
-        private static bool AlreadyRunning() {
-            Process process = Process.GetCurrentProcess();
-            FileSystemInfo processFileInfo = new FileInfo(process.MainModule.FileName);
-            foreach (Process p in Process.GetProcessesByName(process.ProcessName)
-                    .Where(new Func<Process, bool>(p => p.SessionId.Equals(process.SessionId))).ToArray()) {
-
-                if (!p.Id.Equals(process.Id)
-                        && !p.MainWindowHandle.Equals(IntPtr.Zero)
-                        && processFileInfo.Name.Equals(new FileInfo(p.MainModule.FileName).Name)) {
-
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
         /// Converts System.Int32 to System.Drawing.Point.
         /// </summary>
         /// <param name="val">An integer value stored in the registry.</param>
@@ -618,6 +652,37 @@ namespace FortSoft.Tools {
                 BitConverter.IsLittleEndian ? 2 : 0,
                 2);
             return BitConverter.ToInt32(bytes, 0);
+        }
+
+        /// <summary>
+        /// Other opened windows detection options.
+        /// </summary>
+        public enum WindowDetectionOptions {
+            /// <summary>
+            /// The default detection method by process file name.
+            /// </summary>
+            Default,
+            /// <summary>
+            /// The already opened window will be determined by title comparison.
+            /// </summary>
+            TitleContains,
+            /// <summary>
+            /// The already opened window will be determined by title comparison.
+            /// </summary>
+            TitleStartsWith,
+            /// <summary>
+            /// The already opened window will be determined by title comparison.
+            /// </summary>
+            TitleEndsWith,
+            /// <summary>
+            /// The already opened window will be determined by title comparison.
+            /// </summary>
+            TitleEquals,
+            /// <summary>
+            /// No detection of other form instances will be performed. Use this
+            /// option only for one instance forms.
+            /// </summary>
+            NoDetection
         }
 
         /// <summary>

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.3.1
  */
 
 using FortSoft.Tools;
@@ -43,7 +43,6 @@ using System.Windows.Forms;
 namespace BetHelper {
     public partial class ConfigEditForm : Form {
         private bool cancel, dirty, invertDirection, lastMatch, searching, userClosing;
-        private CalculatorExtractor calculatorExtractor;
         private CountDownForm countDownForm;
         private FileExtensionFilter fileExtensionFilter;
         private FindForm findForm;
@@ -69,8 +68,6 @@ namespace BetHelper {
         private UpdateChecker updateChecker;
 
         public ConfigEditForm(Settings settings) {
-            calculatorExtractor = new CalculatorExtractor();
-
             this.settings = settings;
 
             Icon = Properties.Resources.Config;
@@ -91,6 +88,7 @@ namespace BetHelper {
 
             fileExtensionFilter = new FileExtensionFilter(settings.ExtensionFilterIndex);
             persistWindowState = new PersistWindowState();
+            persistWindowState.DetectionOptions = PersistWindowState.WindowDetectionOptions.NoDetection;
             persistWindowState.Parent = this;
 
             InitializePrintAsync();
