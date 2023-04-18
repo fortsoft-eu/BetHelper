@@ -21,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.3.0
  */
 
 using System;
 using System.Windows.Forms;
 
 namespace BetHelper {
-    public class UpdateCheckerEventArgs : EventArgs {
+    public class UpdateCheckEventArgs : EventArgs {
 
         public Form Dialog { get; private set; }
 
@@ -36,7 +36,7 @@ namespace BetHelper {
 
         public string Message { get; private set; }
 
-        public UpdateCheckerEventArgs(Form dialog, UpdateChecker.State state, string message) {
+        public UpdateCheckEventArgs(Form dialog, UpdateChecker.State state, string message) {
             Dialog = dialog;
             State = state;
             Message = message;

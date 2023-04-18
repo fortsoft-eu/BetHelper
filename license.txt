@@ -1,3 +1,5 @@
+MIT License
+
 Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
 Copyright (c) 2020-2021 Jose M. Piñeiro [WebPWrapper.cs]
 Copyright (c) 2018-2020 Kfir Eichenblat [NonInvasiveKeyboardHookLibrary.dll]
@@ -19,7 +21,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
 ------------------------------------------------------------------------------
+
+BSD License
+
 Copyright (c) 2012-2023 The CefSharp Authors [CefSharp]
 Copyright (c) 2006-2023 The Chromium Authors [Chromium]
 Copyright (c) 2008-2023 Marshall A. Greenblatt. Portions Copyright (c)

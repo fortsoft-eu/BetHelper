@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.3.0
  */
 
 using FortSoft.Tools;
@@ -186,7 +186,7 @@ namespace BetHelper {
                     new EventHandler((sender, e) => ((MenuItem)sender).Checked = !((MenuItem)sender).Checked)));
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTripleClickCopies,
                     new EventHandler((sender, e) => ((MenuItem)sender).Checked = !((MenuItem)sender).Checked)));
-                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInPreferredEditor,
+                menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInExternalEditor,
                     new EventHandler(OpenInEditor), Shortcut.CtrlU));
                 menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemOpenInDefaultEditor,
                     new EventHandler(OpenInDefaultEditor)));
@@ -240,8 +240,8 @@ namespace BetHelper {
                     menuItemTools.MenuItems[10].Enabled = StaticMethods.CheckSelectedUrl(logViewerStates[selectedIndex].TextBox);
                     menuItemTools.MenuItems[0].Enabled = false;
                     try {
-                        menuItemTools.MenuItems[0].Enabled = !string.IsNullOrWhiteSpace(settings.PreferredEditor)
-                            && File.Exists(settings.PreferredEditor);
+                        menuItemTools.MenuItems[0].Enabled = !string.IsNullOrWhiteSpace(settings.ExternalEditor)
+                            && File.Exists(settings.ExternalEditor);
                     } catch (Exception exception) {
                         Debug.WriteLine(exception);
                         ErrorLog.WriteLine(exception);
@@ -327,7 +327,7 @@ namespace BetHelper {
             await Task.Run(new Action(() => {
                 updateChecker = new UpdateChecker(settings);
                 updateChecker.Parent = this;
-                updateChecker.StateChanged += new EventHandler<UpdateCheckerEventArgs>(OnUpdateCheckerStateChanged);
+                updateChecker.StateChanged += new EventHandler<UpdateCheckEventArgs>(OnUpdateCheckerStateChanged);
                 updateChecker.Help += new HelpEventHandler(OpenHelp);
             }));
         }
@@ -1040,7 +1040,7 @@ namespace BetHelper {
             }
         }
 
-        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckerEventArgs e) {
+        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckEventArgs e) {
             statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, e.Message);
             if (dialog == null || !dialog.Visible) {
                 dialog = e.Dialog;
@@ -1485,8 +1485,8 @@ namespace BetHelper {
                 Invoke(new EventHandler(OpenInEditor), sender, e);
             } else {
                 try {
-                    if (!string.IsNullOrWhiteSpace(settings.PreferredEditor) && File.Exists(settings.PreferredEditor)) {
-                        Process.Start(settings.PreferredEditor, StaticMethods.EscapeArgument(logViewerStates[selectedIndex].Path));
+                    if (!string.IsNullOrWhiteSpace(settings.ExternalEditor) && File.Exists(settings.ExternalEditor)) {
+                        Process.Start(settings.ExternalEditor, StaticMethods.EscapeArgument(logViewerStates[selectedIndex].Path));
                     }
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);

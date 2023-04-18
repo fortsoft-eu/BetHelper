@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.3.0
  */
 
 using FortSoft.Tools;
@@ -44,7 +44,7 @@ namespace BetHelper {
     public sealed class Settings : IDisposable {
 
         /// <summary>
-        /// Fields
+        /// Fields.
         /// </summary>
         private AllowedAddrHandler allowedAddrHandler;
         private ConfigHandler configHandler;
@@ -210,7 +210,7 @@ namespace BetHelper {
                 ErrorLog.WriteLine(exception);
             }
 
-            PreferredEditor = GetPreferredEditor();
+            ExternalEditor = GetExternalEditor();
 
             Load();
         }
@@ -306,6 +306,12 @@ namespace BetHelper {
         /// browser will be enabled. The default value is false.
         /// </summary>
         public bool EnableProxy { get; set; }
+
+        /// <summary>
+        /// Represents the setting if F3 pressed at the MainForm gives the focus
+        /// to opened FindForm. The default value is false.
+        /// </summary>
+        public bool F3MainFormFocusesFindForm { get; set; }
 
         /// <summary>
         /// Represents the setting if certificate errors from websites running on
@@ -589,15 +595,15 @@ namespace BetHelper {
         public string ConfigHash { get; set; }
 
         /// <summary>
+        /// Full path to the external editor executable for viewing log files
+        /// outside the application. The default value is null.
+        /// </summary>
+        public string ExternalEditor { get; set; }
+
+        /// <summary>
         /// Last export directory path used. The default value is null.
         /// </summary>
         public string LastExportDirectory { get; set; }
-
-        /// <summary>
-        /// Full path to the preferred editor executable for viewing log files
-        /// outside the application. The default value is null.
-        /// </summary>
-        public string PreferredEditor { get; set; }
 
         /// <summary>
         /// Full path to the Telegram Desktop executable. The default value is
@@ -709,7 +715,7 @@ namespace BetHelper {
 
             ConfigHash = persistentSettings.Load("ConfigHash", ConfigHash);
             LastExportDirectory = persistentSettings.Load("LastExportDir", LastExportDirectory);
-            PreferredEditor = persistentSettings.Load("PreferredEditor", PreferredEditor);
+            ExternalEditor = persistentSettings.Load("ExternalEditor", ExternalEditor);
             TelegramAppDirectory = persistentSettings.Load("TelegramAppDir", TelegramAppDirectory);
             BookmakerDefaultColor = persistentSettings.Load("BookmakerDefaultColor", BookmakerDefaultColor);
             BookmakerSelectedColor = persistentSettings.Load("BookmakerSelectedColor", BookmakerSelectedColor);
@@ -741,7 +747,7 @@ namespace BetHelper {
 
             persistentSettings.Save("ConfigHash", ConfigHash);
             persistentSettings.Save("LastExportDir", LastExportDirectory);
-            persistentSettings.Save("PreferredEditor", PreferredEditor);
+            persistentSettings.Save("ExternalEditor", ExternalEditor);
             persistentSettings.Save("TelegramAppDir", TelegramAppDirectory);
             persistentSettings.Save("BookmakerDefaultColor", BookmakerDefaultColor);
             persistentSettings.Save("BookmakerSelectedColor", BookmakerSelectedColor);
@@ -765,7 +771,7 @@ namespace BetHelper {
             BitArray bitArray = new BitArray(new int[] { i });
             bool[] bitSettings = new bool[bitArray.Count];
             bitArray.CopyTo(bitSettings, 0);
-            i = bitSettings.Length - 2;
+            i = bitSettings.Length - 1;
 
             TryToKeepUserLoggedIn = bitSettings[--i];
             AutoLogInAfterInitialLoad = bitSettings[--i];
@@ -788,6 +794,7 @@ namespace BetHelper {
             PersistSessionCookies = bitSettings[--i];
             EnableCache = bitSettings[--i];
             EnableProxy = bitSettings[--i];
+            F3MainFormFocusesFindForm = bitSettings[--i];
             OutlineSearchResults = bitSettings[--i];
             EnableBell = bitSettings[--i];
             UseDecimalPrefix = bitSettings[--i];
@@ -806,7 +813,7 @@ namespace BetHelper {
         /// Compacts some boolean settings into an integer value.
         /// </summary>
         private int BitSettings1ToInt() {
-            StringBuilder stringBuilder = new StringBuilder(string.Empty.PadRight(2, Constants.Zero))
+            StringBuilder stringBuilder = new StringBuilder(string.Empty.PadRight(1, Constants.Zero))
                 .Append(TryToKeepUserLoggedIn ? 1 : 0)
                 .Append(AutoLogInAfterInitialLoad ? 1 : 0)
                 .Append(BlockRequestsToForeignUrls ? 1 : 0)
@@ -825,6 +832,7 @@ namespace BetHelper {
                 .Append(PersistSessionCookies ? 1 : 0)
                 .Append(EnableCache ? 1 : 0)
                 .Append(EnableProxy ? 1 : 0)
+                .Append(F3MainFormFocusesFindForm ? 1 : 0)
                 .Append(OutlineSearchResults ? 1 : 0)
                 .Append(EnableBell ? 1 : 0)
                 .Append(UseDecimalPrefix ? 1 : 0)
@@ -1100,13 +1108,13 @@ namespace BetHelper {
         }
 
         /// <summary>
-        /// Gets the path to the preferred editor executable for viewing log
+        /// Gets the path to the external editor executable for viewing log
         /// files outside the application.
         /// </summary>
-        private static string GetPreferredEditor() {
+        private static string GetExternalEditor() {
             try {
                 string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                    Constants.PreferredEditorApplicationName, Constants.PreferredEditorFileName);
+                    Constants.ExternalEditorApplicationName, Constants.ExternalEditorFileName);
                 if (File.Exists(path)) {
                     return path;
                 }
@@ -1116,7 +1124,7 @@ namespace BetHelper {
             }
             try {
                 string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-                    Constants.PreferredEditorApplicationName, Constants.PreferredEditorFileName);
+                    Constants.ExternalEditorApplicationName, Constants.ExternalEditorFileName);
                 if (File.Exists(path)) {
                     return path;
                 }

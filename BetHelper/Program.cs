@@ -24,6 +24,7 @@
  * Version 1.1.1.0
  */
 
+using FortSoft.Tools;
 using System;
 using System.Diagnostics;
 using System.Reflection;

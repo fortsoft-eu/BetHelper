@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.3.0
  */
 
 using FortSoft.Tools;
@@ -41,7 +41,6 @@ using System.Windows.Forms;
 namespace BetHelper {
     public partial class EncDecForm : Form {
         private bool cancel, topMost, undone;
-        private CalculatorExtractor calculatorExtractor;
         private FileExtensionFilter fileExtensionFilter;
         private Font printFont;
         private Form dialog;
@@ -65,8 +64,6 @@ namespace BetHelper {
         public EncDecForm(Settings settings) : this(settings, null) { }
 
         public EncDecForm(Settings settings, string str) {
-            calculatorExtractor = new CalculatorExtractor();
-
             this.settings = settings;
 
             Icon = Properties.Resources.Binary;
@@ -323,7 +320,7 @@ namespace BetHelper {
             await Task.Run(new Action(() => {
                 updateChecker = new UpdateChecker(settings);
                 updateChecker.Parent = this;
-                updateChecker.StateChanged += new EventHandler<UpdateCheckerEventArgs>(OnUpdateCheckerStateChanged);
+                updateChecker.StateChanged += new EventHandler<UpdateCheckEventArgs>(OnUpdateCheckerStateChanged);
                 updateChecker.Help += new HelpEventHandler(OpenHelp);
             }));
         }
@@ -335,7 +332,7 @@ namespace BetHelper {
                 textBoxOutput.Text = WebUtility.UrlEncode(textBoxInput.Text);
                 statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, true);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -348,7 +345,7 @@ namespace BetHelper {
                 textBoxOutput.Text = Uri.EscapeDataString(textBoxInput.Text);
                 statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, true);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -361,7 +358,7 @@ namespace BetHelper {
                 textBoxOutput.Text = Convert.ToBase64String(Encoding.UTF8.GetBytes(textBoxInput.Text));
                 statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, true);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -374,7 +371,7 @@ namespace BetHelper {
                 textBoxOutput.Text = ParseUrl(textBoxInput.Text.TrimStart(), UriFormat.UriEscaped);
                 statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, false);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -389,7 +386,7 @@ namespace BetHelper {
                     : WebUtility.UrlDecode(textBoxInput.Text);
                 statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, false);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -402,7 +399,7 @@ namespace BetHelper {
                 textBoxOutput.Text = Encoding.UTF8.GetString(Convert.FromBase64String(textBoxInput.Text));
                 statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, false);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -414,7 +411,7 @@ namespace BetHelper {
             try {
                 textBoxOutput.Text = ASCII.Convert(textBoxInput.Text, Encoding.UTF8, ASCII.ConversionOptions.Full);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, true);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -426,7 +423,7 @@ namespace BetHelper {
             try {
                 textBoxOutput.Text = ASCII.Convert(textBoxInput.Text, Encoding.UTF8, ASCII.ConversionOptions.SafePath);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, true);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -438,7 +435,7 @@ namespace BetHelper {
             try {
                 textBoxOutput.Text = ASCII.Convert(textBoxInput.Text, Encoding.UTF8, ASCII.ConversionOptions.SafeFileName);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, true);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -450,7 +447,7 @@ namespace BetHelper {
             try {
                 textBoxOutput.Text = ASCII.Convert(textBoxInput.Text, Encoding.UTF8, ASCII.ConversionOptions.Alphanumeric);
             } catch (Exception exception) {
-                ShowException(exception);
+                ShowException(exception, true);
             } finally {
                 Cursor = Cursors.Default;
             }
@@ -514,7 +511,7 @@ namespace BetHelper {
                         Properties.Resources.MessageExportFinished);
                 }
             } catch (Exception exception) {
-                ShowException(exception, Properties.Resources.MessageExportFailed);
+                ShowException(exception, Properties.Resources.MessageExportFailed, true);
             }
         }
 
@@ -527,7 +524,7 @@ namespace BetHelper {
                     printDocument.Print();
                 }
             } catch (Exception exception) {
-                ShowException(exception, Properties.Resources.MessagePrintingFailed);
+                ShowException(exception, Properties.Resources.MessagePrintingFailed, true);
             }
         }
 
@@ -544,7 +541,7 @@ namespace BetHelper {
                     printDocument.Print();
                 }
             } catch (Exception exception) {
-                ShowException(exception, Properties.Resources.MessagePrintingFailed);
+                ShowException(exception, Properties.Resources.MessagePrintingFailed, true);
             }
         }
 
@@ -557,7 +554,7 @@ namespace BetHelper {
                     printDocument.Print();
                 }
             } catch (Exception exception) {
-                ShowException(exception, Properties.Resources.MessagePrintingFailed);
+                ShowException(exception, Properties.Resources.MessagePrintingFailed, true);
             }
         }
 
@@ -574,15 +571,17 @@ namespace BetHelper {
                     printDocument.Print();
                 }
             } catch (Exception exception) {
-                ShowException(exception, Properties.Resources.MessagePrintingFailed);
+                ShowException(exception, Properties.Resources.MessagePrintingFailed, true);
             }
         }
 
-        private void ShowException(Exception exception) => ShowException(exception, null);
+        private void ShowException(Exception exception, bool log) => ShowException(exception, null, log);
 
-        private void ShowException(Exception exception, string statusMessage) {
+        private void ShowException(Exception exception, string statusMessage, bool log) {
             Debug.WriteLine(exception);
-            ErrorLog.WriteLine(exception);
+            if (log) {
+                ErrorLog.WriteLine(exception);
+            }
             statusStripHandler.SetMessage(
                 StatusStripHandler.StatusMessageType.PersistentB,
                 string.IsNullOrEmpty(statusMessage) ? exception.Message : statusMessage);
@@ -629,7 +628,7 @@ namespace BetHelper {
                 }
                 e.Cancel = cancel;
             } catch (Exception exception) {
-                ShowException(exception, Properties.Resources.MessagePrintingFailed);
+                ShowException(exception, Properties.Resources.MessagePrintingFailed, true);
             }
         }
 
@@ -886,7 +885,7 @@ namespace BetHelper {
                 textBoxOutput.WordWrap = textBoxInput.WordWrap;
                 Menu.MenuItems[2].MenuItems[2].Checked = textBoxInput.WordWrap;
             } catch (OutOfMemoryException exception) {
-                ShowException(exception, Properties.Resources.MessageOutOfMemoryError);
+                ShowException(exception, Properties.Resources.MessageOutOfMemoryError, true);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -915,7 +914,7 @@ namespace BetHelper {
                         .Append(Constants.Slash);
                     Process.Start(url.ToString());
                 } catch (Exception exception) {
-                    ShowException(exception);
+                    ShowException(exception, true);
                 }
             }
         }
@@ -1022,7 +1021,7 @@ namespace BetHelper {
             }
         }
 
-        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckerEventArgs e) {
+        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckEventArgs e) {
             statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, e.Message);
             if (dialog == null || !dialog.Visible) {
                 dialog = e.Dialog;
@@ -1084,7 +1083,7 @@ namespace BetHelper {
                     .GetComponents(UriComponents.UserInfo, uriFormat)
                     .Split(new char[] { Constants.Colon }, 2);
                 if (userInfo.Length > 1) {
-                    list.Add(new NameValuePair(Constants.UriUsername, userInfo[0]));
+                    list.Add(new NameValuePair(Constants.UriUserName, userInfo[0]));
                     list.Add(new NameValuePair(Constants.UriPassword, userInfo[1]));
                 } else {
                     list.Add(new NameValuePair(Constants.UriUserInfo, userInfo[0]));
@@ -1096,9 +1095,23 @@ namespace BetHelper {
             if (uri.Port >= 0) {
                 list.Add(new NameValuePair(Constants.UriPort, uri.GetComponents(UriComponents.StrongPort, uriFormat)));
             }
+            StringBuilder stringBuilder;
             if (!string.IsNullOrEmpty(uri.AbsolutePath)) {
-                list.Add(new NameValuePair(
-                    Constants.UriPath, uri.AbsolutePath.Substring(0, 1) + uri.GetComponents(UriComponents.Path, uriFormat)));
+                string path = uri.GetComponents(UriComponents.Path, uriFormat);
+                stringBuilder = new StringBuilder();
+                if (string.IsNullOrEmpty(path)) {
+                    stringBuilder.Append(uri.AbsolutePath);
+                } else {
+                    char[] absolutePath = uri.AbsolutePath.ToCharArray();
+                    char[] pathCharArray = path.ToCharArray();
+                    if (!absolutePath[0].Equals(pathCharArray[0]) && (absolutePath[0].Equals(Path.DirectorySeparatorChar)
+                            || absolutePath[0].Equals(Path.AltDirectorySeparatorChar))) {
+
+                        stringBuilder.Append(absolutePath[0]);
+                    }
+                    stringBuilder.Append(path);
+                }
+                list.Add(new NameValuePair(Constants.UriPath, stringBuilder.ToString()));
             }
             if (!string.IsNullOrEmpty(uri.Query)) {
                 list.Add(new NameValuePair(Constants.UriQuery, uri.GetComponents(UriComponents.Query, uriFormat)));
@@ -1106,7 +1119,7 @@ namespace BetHelper {
             if (!string.IsNullOrEmpty(uri.Fragment)) {
                 list.Add(new NameValuePair(Constants.UriFragment, uri.GetComponents(UriComponents.Fragment, uriFormat)));
             }
-            StringBuilder stringBuilder = new StringBuilder(Format(list, Constants.Colon));
+            stringBuilder = new StringBuilder(Format(list, Constants.Colon));
             if (!string.IsNullOrEmpty(uri.Query)) {
                 stringBuilder.AppendLine()
                     .Append(Constants.UriVariables)

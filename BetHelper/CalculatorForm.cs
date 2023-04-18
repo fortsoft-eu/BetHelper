@@ -223,7 +223,7 @@ namespace BetHelper {
             await Task.Run(new Action(() => {
                 updateChecker = new UpdateChecker(settings);
                 updateChecker.Parent = this;
-                updateChecker.StateChanged += new EventHandler<UpdateCheckerEventArgs>(OnUpdateCheckerStateChanged);
+                updateChecker.StateChanged += new EventHandler<UpdateCheckEventArgs>(OnUpdateCheckerStateChanged);
                 updateChecker.Help += new HelpEventHandler(OpenHelp);
             }));
         }
@@ -626,7 +626,7 @@ namespace BetHelper {
                     : Properties.Resources.MessagePrintingFinished);
         }
 
-        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckerEventArgs e) {
+        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckEventArgs e) {
             statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, e.Message);
             if (dialog == null || !dialog.Visible) {
                 dialog = e.Dialog;

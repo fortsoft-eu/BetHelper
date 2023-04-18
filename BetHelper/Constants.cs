@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2020-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.3.0
  */
 
 namespace BetHelper {
@@ -410,7 +410,7 @@ namespace BetHelper {
         public const string ConfigUrlLive = "URL_LIVE";
         public const string ConfigUrlTips = "URL_TIPS";
         public const string ConfigUrlToLoad = "URL_NEXT";
-        public const string ConfigUsername = "USERNAME";
+        public const string ConfigUserName = "USERNAME";
         public const string ConfigYes = "YES";
         public const string ConsoleMessageLogFileName = "ConsoleMessages.log";
         public const string DOMRootElementName = "document";
@@ -443,7 +443,7 @@ namespace BetHelper {
         public const string ExtensionWebP = ".webp";
         public const string FieldBalance = "Balance";
         public const string FieldDisplayName = "DisplayName";
-        public const string FieldUsername = "Username";
+        public const string FieldUserName = "UserName";
         public const string ForbiddenHostContents = "casino,poker,vegas";
         public const string ForbiddenPathContents = "priloha";
         public const string ForeignUrlsLogFileName = "ForeignUrls.log";
@@ -479,8 +479,8 @@ namespace BetHelper {
         public const string OneDecimalDigitFormat = "f1";
         public const string PopUpFrameHandlerLogFileName = "PopUpFrameHandler.log";
         public const string PopUpFrameHandlerLogFormat = "frameIdentifier{0} = {1}";
-        public const string PreferredEditorApplicationName = "Notepad++";
-        public const string PreferredEditorFileName = "notepad++.exe";
+        public const string ExternalEditorApplicationName = "Notepad++";
+        public const string ExternalEditorFileName = "notepad++.exe";
         public const string PrintOutputInput = "Input";
         public const string PrintOutputOutput = "Output";
         public const string RemoteApiScriptName = "api.php";
@@ -589,7 +589,7 @@ namespace BetHelper {
         public const string UriQuery = "Query String";
         public const string UriScheme = "Scheme";
         public const string UriUserInfo = "User Info";
-        public const string UriUsername = "User Name";
+        public const string UriUserName = "User Name";
         public const string UriVariables = "Variables";
         public const string UserDataRelativePath = "UserData";
         public const string VersionRegexPattern = "^\\d+\\.\\d+\\.\\d+\\.\\d$";

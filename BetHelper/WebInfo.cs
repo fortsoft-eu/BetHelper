@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.1.0
+ * Version 1.1.3.0
  */
 
 using CefSharp;
@@ -139,7 +139,7 @@ namespace BetHelper {
 
         public string UrlTips { get; set; }
 
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         public string Password { get; set; }
 
@@ -342,14 +342,14 @@ namespace BetHelper {
                                 Array.FindIndex(fields,
                                     new Predicate<string>(field => field.Contains(Constants.FieldDisplayName))) + 1));
                     }
-                } else if (fields.Contains(Constants.FieldUsername)) {
+                } else if (fields.Contains(Constants.FieldUserName)) {
                     if (string.IsNullOrEmpty(Pattern)) {
                         return fields.Length.Equals(1) ? response : null;
                     } else {
                         return Regex.Replace(response, Pattern,
                             string.Format(Constants.ReplaceIndex,
                                 Array.FindIndex(fields,
-                                    new Predicate<string>(field => field.Contains(Constants.FieldUsername))) + 1));
+                                    new Predicate<string>(field => field.Contains(Constants.FieldUserName))) + 1));
                     }
                 }
             } catch (Exception exception) {
@@ -366,8 +366,8 @@ namespace BetHelper {
                 .ToArray();
             if (fields.Contains(Constants.FieldDisplayName)) {
                 return DisplayName;
-            } else if (fields.Contains(Constants.FieldUsername)) {
-                return Username;
+            } else if (fields.Contains(Constants.FieldUserName)) {
+                return UserName;
             }
             return null;
         }
@@ -549,7 +549,7 @@ namespace BetHelper {
         public void Initialize() {
             Settings settings = ((MainForm)Parent.Form).Settings;
             if (settings.AutoLogInAfterInitialLoad
-                    && !string.IsNullOrWhiteSpace(Username)
+                    && !string.IsNullOrWhiteSpace(UserName)
                     && !string.IsNullOrEmpty(Password)
                     && !string.IsNullOrWhiteSpace(Script)) {
 
@@ -616,7 +616,7 @@ namespace BetHelper {
                 HeartBeatReset();
                 if (loaded++ < 1) {
                     if (settings.AutoLogInAfterInitialLoad
-                            && !string.IsNullOrWhiteSpace(Username)
+                            && !string.IsNullOrWhiteSpace(UserName)
                             && !string.IsNullOrEmpty(Password)
                             && !string.IsNullOrWhiteSpace(Script)) {
 
@@ -675,7 +675,7 @@ namespace BetHelper {
         }
 
         public async void LogInAsync(bool initialPage) {
-            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrEmpty(Password) || string.IsNullOrWhiteSpace(Script)) {
+            if (string.IsNullOrWhiteSpace(UserName) || string.IsNullOrEmpty(Password) || string.IsNullOrWhiteSpace(Script)) {
                 return;
             }
             if (Browser.Address.Equals(Url) || !initialPage && EqualsSecondLevelDomain(Browser.Address)) {

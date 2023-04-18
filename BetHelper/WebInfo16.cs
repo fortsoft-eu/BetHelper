@@ -49,7 +49,7 @@ namespace BetHelper {
 
             do {
                 Sleep(50);
-                OnProgress(Properties.Resources.MessageClearingUsernameBox);
+                OnProgress(Properties.Resources.MessageClearingUserNameBox);
                 browser.ExecuteScriptAsync("document.getElementById('login-email').value = '';");
                 Wait(browser);
                 Sleep(30);
@@ -61,9 +61,9 @@ namespace BetHelper {
                 }
                 Sleep(200);
 
-                OnProgress(Properties.Resources.MessageSendingUsername);
-                SendString(browser, Username);
-            } while (!GetValueById("login-email").Equals(Username));
+                OnProgress(Properties.Resources.MessageSendingUserName);
+                SendString(browser, UserName);
+            } while (!GetValueById("login-email").Equals(UserName));
 
             OnProgress(Properties.Resources.MessageLoggingIn);
             browser.ExecuteScriptAsync("document.getElementById('login-btn').click();");

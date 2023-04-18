@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.3.0
  */
 
 using FortSoft.Tools;
@@ -189,6 +189,7 @@ namespace BetHelper {
                 checkBoxEnableAudio.Checked = settings.EnableAudio;
                 checkBoxEnableProxy.Checked = settings.EnableProxy;
                 checkBoxOutlineSearchResults.Checked = settings.OutlineSearchResults;
+                checkBoxF3MainFormFind.Checked = settings.F3MainFormFocusesFindForm;
                 checkBoxLogForeignUrls.Checked = settings.LogForeignUrls;
                 checkBoxLogPopUpFrameHandler.Checked = settings.LogPopUpFrameHandler;
                 checkBoxShowLoadErrors.Checked = settings.ShowLoadErrors;
@@ -203,23 +204,23 @@ namespace BetHelper {
                 numericUpDownLargeLogsLimit.Minimum = settings.LargeLogsLimitMin;
                 numericUpDownLargeLogsLimit.Maximum = settings.LargeLogsLimitMax;
                 numericUpDownLargeLogsLimit.Value = settings.LargeLogsLimit;
-                textBoxPreferredEditor.Text = settings.PreferredEditor;
+                textBoxExternalEditor.Text = settings.ExternalEditor;
                 numericUpDownOverlayOpacity.Minimum = settings.InspectOverlayOpacityMin;
                 numericUpDownOverlayOpacity.Maximum = settings.InspectOverlayOpacityMax;
                 numericUpDownOverlayOpacity.Value = settings.InspectOverlayOpacity;
                 checkBoxCheckForUpdates.Checked = settings.CheckForUpdates;
                 checkBoxStatusBarNotifOnly.Checked = settings.StatusBarNotifOnly;
-                checkBoxPingWhenIdle.Checked = settings.TryToKeepUserLoggedIn;
                 comboBoxUnitPrefix.SelectedIndex = settings.UseDecimalPrefix ? 1 : 0;
                 labelKiB.Text = settings.UseDecimalPrefix ? Constants.Kilobyte : Constants.Kibibyte;
                 comboBoxNumberFormat.DataSource = settings.NumberFormatHandler.NumberFormats;
                 comboBoxNumberFormat.SelectedIndex = settings.NumberFormatInt;
                 checkBoxAutoAdjustRightPaneWidth.Checked = settings.AutoAdjustRightPaneWidth;
                 checkBoxAutoLogInAfterInitialLoad.Checked = settings.AutoLogInAfterInitialLoad;
-                checkBoxEnableBell.Checked = settings.EnableBell;
                 checkBoxDisplayPromptBeforeClosing.Checked = settings.DisplayPromptBeforeClosing;
+                checkBoxEnableBell.Checked = settings.EnableBell;
                 checkBoxSortBookmarks.Checked = settings.SortBookmarks;
                 checkBoxTruncateBookmarkTitles.Checked = settings.TruncateBookmarkTitles;
+                checkBoxPingWhenIdle.Checked = settings.TryToKeepUserLoggedIn;
                 checkBoxBlockRequestsToForeignUrls.Checked = settings.BlockRequestsToForeignUrls;
                 checkBoxKeepAnEyeOnTheClientsIP.Checked = settings.KeepAnEyeOnTheClientsIP;
                 checkBoxIgnoreCertificateErrors.Checked = settings.IgnoreCertificateErrors;
@@ -419,8 +420,25 @@ namespace BetHelper {
                         ErrorLog.WriteLine(exception);
                     }
                 });
-                textBoxPreferredEditor.ContextMenu = contextMenu;
+                textBoxExternalEditor.ContextMenu = contextMenu;
             }));
+        }
+
+        private void EditRemoteConfig(object sender, EventArgs e) {
+            try {
+                Process.Start(Application.ExecutablePath, Constants.CommandLineSwitchWE);
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+                dialog.ShowDialog(this);
+            }
         }
 
         private Color GetNamedColor(Color color) {
@@ -444,15 +462,15 @@ namespace BetHelper {
 
         private void OnButtonBrowseClick(object sender, EventArgs e) {
             try {
-                if (!string.IsNullOrWhiteSpace(textBoxPreferredEditor.Text)) {
-                    if (File.Exists(textBoxPreferredEditor.Text)) {
-                        openFileDialog.InitialDirectory = Path.GetDirectoryName(textBoxPreferredEditor.Text);
-                        openFileDialog.FileName = Path.GetFileName(textBoxPreferredEditor.Text);
-                    } else if (Directory.Exists(textBoxPreferredEditor.Text)) {
-                        openFileDialog.InitialDirectory = textBoxPreferredEditor.Text;
+                if (!string.IsNullOrWhiteSpace(textBoxExternalEditor.Text)) {
+                    if (File.Exists(textBoxExternalEditor.Text)) {
+                        openFileDialog.InitialDirectory = Path.GetDirectoryName(textBoxExternalEditor.Text);
+                        openFileDialog.FileName = Path.GetFileName(textBoxExternalEditor.Text);
+                    } else if (Directory.Exists(textBoxExternalEditor.Text)) {
+                        openFileDialog.InitialDirectory = textBoxExternalEditor.Text;
                         openFileDialog.FileName = string.Empty;
                     } else {
-                        string path = Path.GetDirectoryName(textBoxPreferredEditor.Text);
+                        string path = Path.GetDirectoryName(textBoxExternalEditor.Text);
                         if (Directory.Exists(path)) {
                             openFileDialog.InitialDirectory = path;
                             openFileDialog.FileName = string.Empty;
@@ -465,7 +483,7 @@ namespace BetHelper {
             }
             try {
                 if (openFileDialog.ShowDialog().Equals(DialogResult.OK)) {
-                    textBoxPreferredEditor.Text = openFileDialog.FileName;
+                    textBoxExternalEditor.Text = openFileDialog.FileName;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -604,23 +622,6 @@ namespace BetHelper {
             comboBox.DropDownWidth = dropDownWidth;
         }
 
-        private void OnEditRemoteConfigClick(object sender, EventArgs e) {
-            try {
-                Process.Start(Application.ExecutablePath, Constants.CommandLineSwitchWE);
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-                StringBuilder title = new StringBuilder()
-                    .Append(Program.GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
-            }
-        }
-
         private void OnEnableCacheCheckedChanged(object sender, EventArgs e) {
             if (checkBoxEnableCache.Checked) {
                 checkBoxPersistSessionCookies.Enabled = true;
@@ -747,18 +748,18 @@ namespace BetHelper {
         }
 
         private void Save(object sender, EventArgs e) {
-            string preferredEditor = string.Empty;
+            string externalEditor = string.Empty;
             try {
-                if (!string.IsNullOrWhiteSpace(textBoxPreferredEditor.Text)) {
-                    if (File.Exists(textBoxPreferredEditor.Text)) {
-                        preferredEditor = textBoxPreferredEditor.Text;
+                if (!string.IsNullOrWhiteSpace(textBoxExternalEditor.Text)) {
+                    if (File.Exists(textBoxExternalEditor.Text)) {
+                        externalEditor = textBoxExternalEditor.Text;
                     } else {
-                        dialog = new MessageForm(this, Properties.Resources.MessagePreferredEditorWarning, null, MessageForm.Buttons.OK,
+                        dialog = new MessageForm(this, Properties.Resources.MessageExternalEditorWarning, null, MessageForm.Buttons.OK,
                             MessageForm.BoxIcon.Exclamation);
                         dialog.ShowDialog(this);
                         tabControl.SelectedIndex = 1;
-                        textBoxPreferredEditor.Focus();
-                        textBoxPreferredEditor.SelectAll();
+                        textBoxExternalEditor.Focus();
+                        textBoxExternalEditor.SelectAll();
                         return;
                     }
                 }
@@ -769,7 +770,7 @@ namespace BetHelper {
 
             SetWarning();
 
-            settings.PreferredEditor = preferredEditor;
+            settings.ExternalEditor = externalEditor;
             settings.UserAgent = comboBoxUserAgent.Text;
             settings.AcceptLanguage = comboBoxAcceptLanguage.Text;
             settings.EnableCache = checkBoxEnableCache.Checked;
@@ -780,6 +781,7 @@ namespace BetHelper {
             settings.EnableAudio = checkBoxEnableAudio.Checked;
             settings.EnableProxy = checkBoxEnableProxy.Checked;
             settings.OutlineSearchResults = checkBoxOutlineSearchResults.Checked;
+            settings.F3MainFormFocusesFindForm = checkBoxF3MainFormFind.Checked;
             settings.LogForeignUrls = checkBoxLogForeignUrls.Checked;
             settings.LogPopUpFrameHandler = checkBoxLogPopUpFrameHandler.Checked;
             settings.ShowLoadErrors = checkBoxShowLoadErrors.Checked;
@@ -793,15 +795,15 @@ namespace BetHelper {
             settings.InspectOverlayOpacity = (ushort)numericUpDownOverlayOpacity.Value;
             settings.CheckForUpdates = checkBoxCheckForUpdates.Checked;
             settings.StatusBarNotifOnly = checkBoxStatusBarNotifOnly.Checked;
-            settings.TryToKeepUserLoggedIn = checkBoxPingWhenIdle.Checked;
             settings.NumberFormatInt = comboBoxNumberFormat.SelectedIndex;
             settings.UseDecimalPrefix = comboBoxUnitPrefix.SelectedIndex > 0;
             settings.AutoAdjustRightPaneWidth = checkBoxAutoAdjustRightPaneWidth.Checked;
             settings.AutoLogInAfterInitialLoad = checkBoxAutoLogInAfterInitialLoad.Checked;
-            settings.EnableBell = checkBoxEnableBell.Checked;
             settings.DisplayPromptBeforeClosing = checkBoxDisplayPromptBeforeClosing.Checked;
+            settings.EnableBell = checkBoxEnableBell.Checked;
             settings.SortBookmarks = checkBoxSortBookmarks.Checked;
             settings.TruncateBookmarkTitles = checkBoxTruncateBookmarkTitles.Checked;
+            settings.TryToKeepUserLoggedIn = checkBoxPingWhenIdle.Checked;
             settings.BlockRequestsToForeignUrls = checkBoxBlockRequestsToForeignUrls.Checked;
             settings.KeepAnEyeOnTheClientsIP = checkBoxKeepAnEyeOnTheClientsIP.Checked;
             settings.IgnoreCertificateErrors = checkBoxIgnoreCertificateErrors.Checked;

@@ -351,7 +351,7 @@
   <data name="MessageSendingPassword" xml:space="preserve">
     <value>Sending password...</value>
   </data>
-  <data name="MessageSendingUsername" xml:space="preserve">
+  <data name="MessageSendingUserName" xml:space="preserve">
     <value>Sending username...</value>
   </data>
   <data name="MessageDisplayingLoginBlock" xml:space="preserve">
@@ -360,7 +360,7 @@
   <data name="MessageSettingInputFocus" xml:space="preserve">
     <value>Setting input focus...</value>
   </data>
-  <data name="MessageClearingUsernameBox" xml:space="preserve">
+  <data name="MessageClearingUserNameBox" xml:space="preserve">
     <value>Clearing username box...</value>
   </data>
   <data name="MessageDisplayingBalance" xml:space="preserve">
@@ -817,8 +817,8 @@
   <data name="MenuItemOpenInDefaultEditor" xml:space="preserve">
     <value>Op&amp;en Log in Default Editor...</value>
   </data>
-  <data name="MenuItemOpenInPreferredEditor" xml:space="preserve">
-    <value>&amp;Open Log in Preferred Editor...</value>
+  <data name="MenuItemOpenInExternalEditor" xml:space="preserve">
+    <value>&amp;Open Log in External Editor...</value>
   </data>
   <data name="MenuItemOpenLogLocation" xml:space="preserve">
     <value>Open &amp;Log Location...</value>
@@ -871,8 +871,8 @@
   <data name="MenuItemAnalyzeUrl" xml:space="preserve">
     <value>Analy&amp;ze URL...</value>
   </data>
-  <data name="MessagePreferredEditorWarning" xml:space="preserve">
-    <value>Preferred editor does not exist.</value>
+  <data name="MessageExternalEditorWarning" xml:space="preserve">
+    <value>External editor was not found.</value>
   </data>
   <data name="MenuItemASCIIAlphanumeric" xml:space="preserve">
     <value>To Alphanu&amp;meric ASCII Only</value>
@@ -1012,8 +1012,8 @@
   <data name="MenuItemStopRinging" xml:space="preserve">
     <value>&amp;Stop Ringing</value>
   </data>
-  <data name="MenuItemBell" xml:space="preserve">
-    <value>&amp;Bell</value>
+  <data name="MenuItemEnableBell" xml:space="preserve">
+    <value>Enable &amp;Bell</value>
   </data>
   <data name="MenuItemBellTest" xml:space="preserve">
     <value>Bell &amp;Test</value>

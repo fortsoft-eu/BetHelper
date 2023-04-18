@@ -835,15 +835,6 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Bell.
-        /// </summary>
-        internal static string MenuItemBell {
-            get {
-                return ResourceManager.GetString("MenuItemBell", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Bell &amp;Test.
         /// </summary>
         internal static string MenuItemBellTest {
@@ -1101,6 +1092,15 @@ namespace BetHelper.Properties {
         internal static string MenuItemEditItem {
             get {
                 return ResourceManager.GetString("MenuItemEditItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable &amp;Bell.
+        /// </summary>
+        internal static string MenuItemEnableBell {
+            get {
+                return ResourceManager.GetString("MenuItemEnableBell", resourceCulture);
             }
         }
         
@@ -1447,6 +1447,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Open Log in External Editor....
+        /// </summary>
+        internal static string MenuItemOpenInExternalEditor {
+            get {
+                return ResourceManager.GetString("MenuItemOpenInExternalEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open in &amp;Google Chrome....
         /// </summary>
         internal static string MenuItemOpenInGoogleChrome {
@@ -1461,15 +1470,6 @@ namespace BetHelper.Properties {
         internal static string MenuItemOpenInMozillaFirefox {
             get {
                 return ResourceManager.GetString("MenuItemOpenInMozillaFirefox", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &amp;Open Log in Preferred Editor....
-        /// </summary>
-        internal static string MenuItemOpenInPreferredEditor {
-            get {
-                return ResourceManager.GetString("MenuItemOpenInPreferredEditor", resourceCulture);
             }
         }
         
@@ -2124,9 +2124,9 @@ namespace BetHelper.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Clearing username box....
         /// </summary>
-        internal static string MessageClearingUsernameBox {
+        internal static string MessageClearingUserNameBox {
             get {
-                return ResourceManager.GetString("MessageClearingUsernameBox", resourceCulture);
+                return ResourceManager.GetString("MessageClearingUserNameBox", resourceCulture);
             }
         }
         
@@ -2271,6 +2271,15 @@ namespace BetHelper.Properties {
         internal static string MessageExporting {
             get {
                 return ResourceManager.GetString("MessageExporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to External editor was not found..
+        /// </summary>
+        internal static string MessageExternalEditorWarning {
+            get {
+                return ResourceManager.GetString("MessageExternalEditorWarning", resourceCulture);
             }
         }
         
@@ -2424,15 +2433,6 @@ namespace BetHelper.Properties {
         internal static string MessagePreferencesSaved {
             get {
                 return ResourceManager.GetString("MessagePreferencesSaved", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Preferred editor does not exist..
-        /// </summary>
-        internal static string MessagePreferredEditorWarning {
-            get {
-                return ResourceManager.GetString("MessagePreferredEditorWarning", resourceCulture);
             }
         }
         
@@ -2592,9 +2592,9 @@ namespace BetHelper.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Sending username....
         /// </summary>
-        internal static string MessageSendingUsername {
+        internal static string MessageSendingUserName {
             get {
-                return ResourceManager.GetString("MessageSendingUsername", resourceCulture);
+                return ResourceManager.GetString("MessageSendingUserName", resourceCulture);
             }
         }
         

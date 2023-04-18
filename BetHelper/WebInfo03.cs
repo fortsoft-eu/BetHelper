@@ -71,7 +71,7 @@ namespace BetHelper {
 
             do {
                 Sleep(50);
-                OnProgress(Properties.Resources.MessageClearingUsernameBox);
+                OnProgress(Properties.Resources.MessageClearingUserNameBox);
                 browser.ExecuteScriptAsync(
                     "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username').value = '';");
                 Wait(browser);
@@ -90,10 +90,10 @@ namespace BetHelper {
                     return;
                 }
 
-                OnProgress(Properties.Resources.MessageSendingUsername);
-                SendString(browser, Username);
+                OnProgress(Properties.Resources.MessageSendingUserName);
+                SendString(browser, UserName);
             } while (!GetValueById("username", "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
-                .Equals(Username));
+                .Equals(UserName));
 
             Wait(browser);
             Sleep(200);

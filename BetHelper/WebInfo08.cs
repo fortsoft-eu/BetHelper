@@ -69,7 +69,7 @@ namespace BetHelper {
 
             do {
                 Sleep(500);
-                OnProgress(Properties.Resources.MessageClearingUsernameBox);
+                OnProgress(Properties.Resources.MessageClearingUserNameBox);
                 browser.ExecuteScriptAsync("document.getElementById('email').value = '';");
                 Wait(browser);
                 Sleep(100);
@@ -85,9 +85,9 @@ namespace BetHelper {
                     OnFinished();
                     return;
                 }
-                OnProgress(Properties.Resources.MessageSendingUsername);
-                SendString(browser, Username);
-            } while (!GetValueById("email").Equals(Username));
+                OnProgress(Properties.Resources.MessageSendingUserName);
+                SendString(browser, UserName);
+            } while (!GetValueById("email").Equals(UserName));
 
             do {
                 Sleep(500);

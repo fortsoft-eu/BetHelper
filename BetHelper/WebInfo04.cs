@@ -73,7 +73,7 @@ namespace BetHelper {
                 Wait(browser);
                 Sleep(200);
 
-                OnProgress(Properties.Resources.MessageClearingUsernameBox);
+                OnProgress(Properties.Resources.MessageClearingUserNameBox);
                 browser.ExecuteScriptAsync("document.getElementsByName('username')[0].value = '';");
                 Wait(browser);
                 Sleep(30);
@@ -85,9 +85,9 @@ namespace BetHelper {
                 }
                 Sleep(200);
 
-                OnProgress(Properties.Resources.MessageSendingUsername);
-                SendString(browser, Username);
-            } while (!GetValueBy(ElementAttribute.Name, "username").Equals(Username));
+                OnProgress(Properties.Resources.MessageSendingUserName);
+                SendString(browser, UserName);
+            } while (!GetValueBy(ElementAttribute.Name, "username").Equals(UserName));
 
             do {
                 Sleep(30);
@@ -156,7 +156,7 @@ namespace BetHelper {
                 Wait(browser);
                 Sleep(500);
 
-                OnProgress(Properties.Resources.MessageClearingUsernameBox);
+                OnProgress(Properties.Resources.MessageClearingUserNameBox);
                 browser.ExecuteScriptAsync("document.getElementsByName('username')[0].value = '';");
                 Wait(browser);
                 Sleep(30);
@@ -172,9 +172,9 @@ namespace BetHelper {
                     OnFinished();
                     return;
                 }
-                OnProgress(Properties.Resources.MessageSendingUsername);
-                SendString(browser, Username);
-            } while (!GetValueBy(ElementAttribute.Name, "username").Equals(Username));
+                OnProgress(Properties.Resources.MessageSendingUserName);
+                SendString(browser, UserName);
+            } while (!GetValueBy(ElementAttribute.Name, "username").Equals(UserName));
 
             do {
                 Sleep(30);

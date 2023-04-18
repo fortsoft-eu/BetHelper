@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.3.0
  */
 
 using FortSoft.Tools;
@@ -76,7 +76,7 @@ namespace BetHelper {
             textBoxUrlLive.Text = string.IsNullOrEmpty(webInfo.UrlLive) ? Properties.Resources.CaptionNotSet : webInfo.UrlLive;
             textBoxUrlNext.Text = string.IsNullOrEmpty(webInfo.UrlNext) ? Properties.Resources.CaptionNotSet : webInfo.UrlNext;
             textBoxTips.Text = string.IsNullOrEmpty(webInfo.UrlTips) ? Properties.Resources.CaptionNotSet : webInfo.UrlTips;
-            textBoxUserName.Text = string.IsNullOrEmpty(webInfo.Username) ? Properties.Resources.CaptionNotSet : webInfo.Username;
+            textBoxUserName.Text = string.IsNullOrEmpty(webInfo.UserName) ? Properties.Resources.CaptionNotSet : webInfo.UserName;
             maskedTextBoxPassword.Text = webInfo.Password;
             maskedTextBoxPassword.Visible = !string.IsNullOrEmpty(webInfo.Password);
             textBoxPassword.Text = Properties.Resources.CaptionNotSet;
@@ -123,7 +123,7 @@ namespace BetHelper {
             }
 
             buttonCopyUrl.Enabled = !string.IsNullOrEmpty(webInfo.Url);
-            buttonCopyUserName.Enabled = !string.IsNullOrEmpty(webInfo.Username);
+            buttonCopyUserName.Enabled = !string.IsNullOrEmpty(webInfo.UserName);
             buttonCopyPassword.Enabled = !string.IsNullOrWhiteSpace(webInfo.Password);
             ResumeLayout(false);
             PerformLayout();
@@ -252,8 +252,8 @@ namespace BetHelper {
         }
 
         private void OnCopyUserNameClick(object sender, EventArgs e) {
-            if (!string.IsNullOrWhiteSpace(webInfo.Username)) {
-                Copy(webInfo.Username);
+            if (!string.IsNullOrWhiteSpace(webInfo.UserName)) {
+                Copy(webInfo.UserName);
             }
         }
 

@@ -41,7 +41,7 @@ namespace BetHelper {
 
             do {
                 Sleep(50);
-                OnProgress(Properties.Resources.MessageClearingUsernameBox);
+                OnProgress(Properties.Resources.MessageClearingUserNameBox);
                 browser.ExecuteScriptAsync("document.getElementById('user_login').value = '';");
                 Wait(browser);
                 Sleep(50);
@@ -53,9 +53,9 @@ namespace BetHelper {
                 }
                 Sleep(50);
 
-                OnProgress(Properties.Resources.MessageSendingUsername);
-                SendString(browser, Username);
-            } while (!GetValueById("user_login").Equals(Username));
+                OnProgress(Properties.Resources.MessageSendingUserName);
+                SendString(browser, UserName);
+            } while (!GetValueById("user_login").Equals(UserName));
 
             SendKey(browser, Keys.Tab);
 

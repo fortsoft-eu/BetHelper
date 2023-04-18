@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.3.0
  */
 
 using CefSharp;
@@ -108,6 +108,7 @@ namespace BetHelper {
                     if (webInfo == null) {
                         webInfo = GetWebInfo();
                     }
+                    string value = configLine[1].Trim();
                     int val;
                     switch (configLine[0].Trim()) {
                         case Constants.ConfigTitle:
@@ -115,138 +116,138 @@ namespace BetHelper {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.Title = configLine[1].Trim();
+                            webInfo.Title = value;
                             break;
                         case Constants.ConfigUrl:
                             if (!string.IsNullOrEmpty(webInfo.Url)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.Url = configLine[1].Trim();
+                            webInfo.Url = value;
                             break;
                         case Constants.ConfigUrlLive:
                             if (!string.IsNullOrEmpty(webInfo.UrlLive)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.UrlLive = configLine[1].Trim();
+                            webInfo.UrlLive = value;
                             break;
                         case Constants.ConfigUrlToLoad:
                             if (!string.IsNullOrEmpty(webInfo.UrlToLoad)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.UrlNext = configLine[1].Trim();
+                            webInfo.UrlNext = value;
                             break;
                         case Constants.ConfigUrlTips:
                             if (!string.IsNullOrEmpty(webInfo.UrlTips)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.UrlTips = configLine[1].Trim();
+                            webInfo.UrlTips = value;
                             break;
-                        case Constants.ConfigUsername:
-                            if (!string.IsNullOrEmpty(webInfo.Username)) {
+                        case Constants.ConfigUserName:
+                            if (!string.IsNullOrEmpty(webInfo.UserName)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.Username = configLine[1].Trim();
+                            webInfo.UserName = value;
                             break;
                         case Constants.ConfigPassword:
                             if (!string.IsNullOrEmpty(webInfo.Password)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.Password = configLine[1].Trim();
+                            webInfo.Password = value;
                             break;
                         case Constants.ConfigScript:
                             if (!string.IsNullOrEmpty(webInfo.Script)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.Script = configLine[1].Trim();
+                            webInfo.Script = value;
                             break;
                         case Constants.ConfigPattern:
                             if (!string.IsNullOrEmpty(webInfo.Pattern)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.Pattern = configLine[1].Trim();
+                            webInfo.Pattern = value;
                             break;
                         case Constants.ConfigIetfLanguageTag:
                             if (!string.IsNullOrEmpty(webInfo.IetfLanguageTag)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.IetfLanguageTag = configLine[1].Trim();
+                            webInfo.IetfLanguageTag = value;
                             break;
                         case Constants.ConfigFields:
                             if (!string.IsNullOrEmpty(webInfo.Fields)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.Fields = configLine[1].Trim();
+                            webInfo.Fields = value;
                             break;
                         case Constants.ConfigDisplayName:
                             if (!string.IsNullOrEmpty(webInfo.DisplayName)) {
                                 webInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
-                            webInfo.DisplayName = configLine[1].Trim();
+                            webInfo.DisplayName = value;
                             break;
                         case Constants.ConfigPopUpWidth:
-                            if (int.TryParse(configLine[1].Trim(), out val)) {
+                            if (int.TryParse(value, out val)) {
                                 webInfo.PopUpWidth = val;
                             }
                             break;
                         case Constants.ConfigPopUpHeight:
-                            if (int.TryParse(configLine[1].Trim(), out val)) {
+                            if (int.TryParse(value, out val)) {
                                 webInfo.PopUpHeight = val;
                             }
                             break;
                         case Constants.ConfigPopUpLeft:
-                            if (int.TryParse(configLine[1].Trim(), out val)) {
+                            if (int.TryParse(value, out val)) {
                                 webInfo.PopUpLeft = val;
                             }
                             break;
                         case Constants.ConfigPopUpTop:
-                            if (int.TryParse(configLine[1].Trim(), out val)) {
+                            if (int.TryParse(value, out val)) {
                                 webInfo.PopUpTop = val;
                             }
                             break;
                         case Constants.ConfigService:
                             webInfo.IsService = string
-                                .Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
+                                .Compare(value, Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
                                 .Equals(0);
                             break;
                         case Constants.ConfigMute:
                             webInfo.AudioMutedByDefault = string
-                                .Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
+                                .Compare(value, Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
                                 .Equals(0);
                             break;
                         case Constants.ConfigHandlePopUps:
                             webInfo.HandlePopUps = string
-                                .Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
+                                .Compare(value, Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
                                 .Equals(0);
                             break;
                         case Constants.ConfigTabNavigation:
                             webInfo.TabNavigation = string
-                                .Compare(configLine[1].Trim(), Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
+                                .Compare(value, Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
                                 .Equals(0);
                             break;
                         case Constants.ConfigBackNavigation:
                             webInfo.BackNavigation = (WebInfo.BackNavigationType)Enum
-                                .Parse(typeof(WebInfo.BackNavigationType), configLine[1].Trim(), true);
+                                .Parse(typeof(WebInfo.BackNavigationType), value, true);
                             break;
                         case Constants.ConfigAllowedHosts:
                             webInfo.AllowedHosts = webInfo.AllowedHosts ?? new List<string>();
-                            foreach (string host in configLine[1].Split(Constants.Comma)) {
+                            foreach (string host in value.Split(Constants.Comma)) {
                                 webInfo.AllowedHosts.Add(host.Trim());
                             }
                             break;
                         case Constants.ConfigChat:
                             webInfo.ChatHosts = webInfo.ChatHosts ?? new List<string>();
-                            foreach (string host in configLine[1].Split(Constants.Comma)) {
+                            foreach (string host in value.Split(Constants.Comma)) {
                                 webInfo.ChatHosts.Add(host.Trim());
                             }
                             break;

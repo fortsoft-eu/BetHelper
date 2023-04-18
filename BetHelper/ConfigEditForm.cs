@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.3.0
  */
 
 using FortSoft.Tools;
@@ -286,7 +286,7 @@ namespace BetHelper {
             await Task.Run(new Action(() => {
                 updateChecker = new UpdateChecker(settings);
                 updateChecker.Parent = this;
-                updateChecker.StateChanged += new EventHandler<UpdateCheckerEventArgs>(OnUpdateCheckerStateChanged);
+                updateChecker.StateChanged += new EventHandler<UpdateCheckEventArgs>(OnUpdateCheckerStateChanged);
                 updateChecker.Help += new HelpEventHandler(OpenHelp);
             }));
         }
@@ -742,7 +742,7 @@ namespace BetHelper {
             Cursor = Cursors.Default;
         }
 
-        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckerEventArgs e) {
+        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckEventArgs e) {
             statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, e.Message);
             if (dialog == null || !dialog.Visible) {
                 dialog = e.Dialog;
@@ -1095,9 +1095,6 @@ namespace BetHelper {
                 } else if (searching) {
                     statusStripHandler.ClearSearchResult();
                     searching = false;
-                } else {
-                    Menu.MenuItems[2].MenuItems[0].Checked = true;
-                    statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, Properties.Resources.MessagePaused);
                 }
             } else {
                 statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);

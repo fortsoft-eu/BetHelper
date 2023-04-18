@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.3.0
  */
 
 using CefSharp;
@@ -256,7 +256,7 @@ namespace BetHelper {
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTryToKeepUserLoggedIn,
                     new EventHandler(TryToKeepUserLoggedIn)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemBell,
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemEnableBell,
                     new EventHandler(ToggleBell)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemBellTest,
@@ -718,7 +718,7 @@ namespace BetHelper {
             await Task.Run(new Action(() => {
                 updateChecker = new UpdateChecker(settings);
                 updateChecker.Parent = this;
-                updateChecker.StateChanged += new EventHandler<UpdateCheckerEventArgs>(OnUpdateCheckerStateChanged);
+                updateChecker.StateChanged += new EventHandler<UpdateCheckEventArgs>(OnUpdateCheckerStateChanged);
                 updateChecker.Help += new HelpEventHandler(OpenHelp);
             }));
         }
@@ -1367,7 +1367,7 @@ namespace BetHelper {
         }
 
 
-        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckerEventArgs e) {
+        private void OnUpdateCheckerStateChanged(object sender, UpdateCheckEventArgs e) {
             statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, e.Message);
             if (dialog == null || !dialog.Visible) {
                 dialog = e.Dialog;
@@ -1548,18 +1548,19 @@ namespace BetHelper {
         }
 
         private void FindNext(object sender, EventArgs e) {
-            if (findThread != null && findThread.IsAlive) {
+            if (settings.F3MainFormFocusesFindForm && findThread != null && findThread.IsAlive) {
                 try {
                     findForm.SafeSelect();
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
                 }
-            } else {
-                if (webInfoHandler.Current != null && webInfoHandler.Current.Browser != null && !string.IsNullOrEmpty(search.searchString)) {
-                    searching = true;
-                    webInfoHandler.Current.Browser.Find(search.searchString, !search.backward, search.caseSensitive, true);
-                }
+            } else if (webInfoHandler.Current != null
+                    && webInfoHandler.Current.Browser != null
+                    && !string.IsNullOrEmpty(search.searchString)) {
+
+                searching = true;
+                webInfoHandler.Current.Browser.Find(search.searchString, !search.backward, search.caseSensitive, true);
             }
         }
 

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.3.0
  */
 
 using CefSharp;
@@ -51,7 +51,7 @@ namespace BetHelper {
 
             do {
                 Sleep(100);
-                OnProgress(Properties.Resources.MessageClearingUsernameBox);
+                OnProgress(Properties.Resources.MessageClearingUserNameBox);
                 browser.ExecuteScriptAsync("document.getElementById('userNameId').value = '';");
                 Wait(browser);
                 Sleep(100);
@@ -60,9 +60,9 @@ namespace BetHelper {
                     OnFinished();
                     return;
                 }
-                OnProgress(Properties.Resources.MessageSendingUsername);
-                SendString(browser, Username);
-            } while (!GetValueById("userNameId").Equals(Username));
+                OnProgress(Properties.Resources.MessageSendingUserName);
+                SendString(browser, UserName);
+            } while (!GetValueById("userNameId").Equals(UserName));
 
             SendKey(browser, Keys.Tab);
 

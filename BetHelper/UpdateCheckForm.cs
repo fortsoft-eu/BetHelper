@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2021-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.3.0
  */
 
 using System;
@@ -44,7 +44,7 @@ namespace BetHelper {
         private delegate void HandleErrorCallback(Exception exception);
         private delegate void ResponseCallback(string version);
 
-        public event EventHandler<UpdateCheckerEventArgs> StateSet;
+        public event EventHandler<UpdateCheckEventArgs> StateSet;
 
         public UpdateCheckForm(string version) {
             Text = new StringBuilder()
@@ -234,7 +234,7 @@ namespace BetHelper {
                     label5.Text = string.IsNullOrEmpty(message) ? Properties.Resources.MessageUpdateCheckError : message;
                     break;
             }
-            StateSet?.Invoke(this, new UpdateCheckerEventArgs(this, state, label5.Text));
+            StateSet?.Invoke(this, new UpdateCheckEventArgs(this, state, label5.Text));
         }
 
         private void OnFormClosing(object sender, FormClosingEventArgs e) {
