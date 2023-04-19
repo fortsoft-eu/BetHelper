@@ -1018,4 +1018,7 @@
   <data name="MenuItemBellTest" xml:space="preserve">
     <value>Bell &amp;Test</value>
   </data>
+  <data name="MessageClosing" xml:space="preserve">
+    <value>Closing...</value>
+  </data>
 </root>

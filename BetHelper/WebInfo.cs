@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.4.0
  */
 
 using CefSharp;
@@ -1218,10 +1218,25 @@ namespace BetHelper {
             }
         }
 
-        protected void Reload(ChromiumWebBrowser browser) {
+        protected bool Reload(ChromiumWebBrowser browser) {
             if (CanReload) {
                 browser.GetBrowser().Reload();
+                return true;
             }
+            return false;
+        }
+
+        protected bool ReloadIfRequired(ChromiumWebBrowser browser) {
+            if (CanReload && frameInitialLoadEnded) {
+                browser.GetBrowser().Reload();
+                return true;
+            }
+            return false;
+        }
+
+        protected void LoadInitialPage(ChromiumWebBrowser browser) {
+            browser.GetBrowser().StopLoad();
+            browser.Load(Url);
         }
 
         protected static void Sleep(int millisecondsTimeout) => Thread.Sleep(millisecondsTimeout);

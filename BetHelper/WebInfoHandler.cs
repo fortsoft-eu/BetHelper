@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.4.0
  */
 
 using CefSharp;
@@ -34,16 +34,14 @@ using System.Reflection;
 
 namespace BetHelper {
     public sealed class WebInfoHandler : IDisposable {
-        private decimal balance;
-        private Form form;
-        private int index, ordinal, pingIndex;
-        private List<WebInfo> webInfos;
+        private bool stopped;
+        private int index, n, ordinal, pingIndex;
         private string assemblyName;
-        private System.Timers.Timer getTimer, pingTimer;
-        private Tip[] tips;
-        private WebInfo current;
+        private System.Timers.Timer getTimer, pingTimer, suspendTimer;
 
-        public event EventHandler BalanceGot, BrowserInitializedChanged, Enter, TipsGot, ZoomLevelChanged;
+        private delegate void WebInfoHandlerCallback();
+
+        public event EventHandler BalanceGot, BrowserInitializedChanged, Enter, Suspended, TipsGot, ZoomLevelChanged;
         public event EventHandler<AddressChangedEventArgs> AddressChanged;
         public event EventHandler<CanceledEventArgs> Canceled;
         public event EventHandler<ConsoleMessageEventArgs> BrowserConsoleMessage;
@@ -62,8 +60,8 @@ namespace BetHelper {
         public event HelpEventHandler Help;
 
         public WebInfoHandler(Form form, decimal[] balances) {
-            this.form = form;
-            this.form.Load += new EventHandler((sender, e) => {
+            Form = form;
+            Form.Load += new EventHandler((sender, e) => {
                 SetTimer();
                 SetPingTimer();
             });
@@ -83,24 +81,62 @@ namespace BetHelper {
             pingTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
                 int i = NextPing();
                 if (i >= 0) {
-                    webInfos[i].Browser.GetBrowser().Reload();
+                    WebInfos[i].Browser.GetBrowser().Reload();
+                }
+            });
+            suspendTimer = new System.Timers.Timer();
+            suspendTimer.Interval = Constants.HeartBeatInterval * 2;
+            suspendTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
+                if (n++ < 1) {
+                    CloseBrowsers();
+                } else if (stopped) {
+                    suspendTimer.Stop();
+                    IsSuspended = true;
+                    Suspended?.Invoke(this, EventArgs.Empty);
+                } else {
+                    foreach (WebInfo webInfo in WebInfos) {
+                        if (webInfo != null && webInfo.Browser != null && webInfo.Browser.IsLoading) {
+                            return;
+                        }
+                    }
+                    stopped = true;
                 }
             });
         }
 
-        public decimal Balance => balance;
+        public bool IsSuspended { get; private set; }
 
-        public Form Form => form;
+        public decimal Balance { get; private set; }
 
-        public List<WebInfo> WebInfos => webInfos;
+        public Form Form { get; private set; }
 
-        public Tip[] Tips => tips;
+        public List<WebInfo> WebInfos { get; private set; }
 
-        public WebInfo Current => current;
+        public Tip[] Tips { get; private set; }
+
+        public WebInfo Current { get; private set; }
+
+        private void CloseBrowsers() {
+            if (Form.InvokeRequired) {
+                Form.Invoke(new WebInfoHandlerCallback(CloseBrowsers));
+            } else {
+                foreach (WebInfo webInfo in WebInfos) {
+                    if (webInfo != null && webInfo.Browser != null) {
+                        try {
+                            webInfo.Browser.Stop();
+                            webInfo.Browser.GetBrowser().CloseBrowser(true);
+                        } catch (Exception exception) {
+                            Debug.WriteLine(exception);
+                            ErrorLog.WriteLine(exception);
+                        }
+                    }
+                }
+            }
+        }
 
         private void ParseConfig(string config) {
             WebInfo webInfo = null;
-            webInfos = new List<WebInfo>();
+            WebInfos = new List<WebInfo>();
             StringReader stringReader = new StringReader(config);
             for (string line; (line = stringReader.ReadLine()) != null;) {
                 string[] configLine = line.Split(new char[] { Constants.EqualSign }, 2);
@@ -113,84 +149,84 @@ namespace BetHelper {
                     switch (configLine[0].Trim()) {
                         case Constants.ConfigTitle:
                             if (!string.IsNullOrEmpty(webInfo.Title)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Title = value;
                             break;
                         case Constants.ConfigUrl:
                             if (!string.IsNullOrEmpty(webInfo.Url)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Url = value;
                             break;
                         case Constants.ConfigUrlLive:
                             if (!string.IsNullOrEmpty(webInfo.UrlLive)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.UrlLive = value;
                             break;
                         case Constants.ConfigUrlToLoad:
                             if (!string.IsNullOrEmpty(webInfo.UrlToLoad)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.UrlNext = value;
                             break;
                         case Constants.ConfigUrlTips:
                             if (!string.IsNullOrEmpty(webInfo.UrlTips)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.UrlTips = value;
                             break;
                         case Constants.ConfigUserName:
                             if (!string.IsNullOrEmpty(webInfo.UserName)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.UserName = value;
                             break;
                         case Constants.ConfigPassword:
                             if (!string.IsNullOrEmpty(webInfo.Password)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Password = value;
                             break;
                         case Constants.ConfigScript:
                             if (!string.IsNullOrEmpty(webInfo.Script)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Script = value;
                             break;
                         case Constants.ConfigPattern:
                             if (!string.IsNullOrEmpty(webInfo.Pattern)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Pattern = value;
                             break;
                         case Constants.ConfigIetfLanguageTag:
                             if (!string.IsNullOrEmpty(webInfo.IetfLanguageTag)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.IetfLanguageTag = value;
                             break;
                         case Constants.ConfigFields:
                             if (!string.IsNullOrEmpty(webInfo.Fields)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Fields = value;
                             break;
                         case Constants.ConfigDisplayName:
                             if (!string.IsNullOrEmpty(webInfo.DisplayName)) {
-                                webInfos.Add(webInfo);
+                                WebInfos.Add(webInfo);
                                 webInfo = GetWebInfo();
                             }
                             webInfo.DisplayName = value;
@@ -255,20 +291,20 @@ namespace BetHelper {
                 }
             }
             if (webInfo != null && !string.IsNullOrEmpty(webInfo.Title)) {
-                webInfos.Add(webInfo);
+                WebInfos.Add(webInfo);
             }
         }
 
         private void SetBalances(decimal[] balances) {
             if (balances != null) {
-                for (int i = 0; i < webInfos.Count; i++) {
-                    webInfos[i].SetBalance(i < balances.Length ? balances[i] : decimal.MinValue);
+                for (int i = 0; i < WebInfos.Count; i++) {
+                    WebInfos[i].SetBalance(i < balances.Length ? balances[i] : decimal.MinValue);
                 }
             }
         }
 
         private void SubscribeEvents() {
-            foreach (WebInfo webInfo in webInfos) {
+            foreach (WebInfo webInfo in WebInfos) {
                 webInfo.Parent = this;
                 webInfo.AddressChanged += new EventHandler<AddressChangedEventArgs>(OnAddressChanged);
                 webInfo.BrowserConsoleMessage += new EventHandler<ConsoleMessageEventArgs>(OnBrowserConsoleMessage);
@@ -295,44 +331,45 @@ namespace BetHelper {
         }
 
         public void Dispose() {
-            foreach (WebInfo webInfo in webInfos) {
+            foreach (WebInfo webInfo in WebInfos) {
                 webInfo.Dispose();
             }
             getTimer.Stop();
             getTimer.Dispose();
             pingTimer.Stop();
             pingTimer.Dispose();
+            suspendTimer.Dispose();
         }
 
         private void GetBalance() {
             decimal balance = decimal.Zero;
-            foreach (WebInfo webInfo in webInfos) {
+            foreach (WebInfo webInfo in WebInfos) {
                 decimal bal = webInfo.GetBalance();
                 if (bal != decimal.MinValue) {
                     balance += bal;
                 }
             }
-            this.balance = balance;
+            Balance = balance;
             BalanceGot?.Invoke(this, EventArgs.Empty);
         }
 
         public decimal[] GetBalances() {
-            decimal[] balances = new decimal[webInfos.Count];
-            for (int i = 0; i < webInfos.Count; i++) {
-                balances[i] = webInfos[i].GetBalance();
+            decimal[] balances = new decimal[WebInfos.Count];
+            for (int i = 0; i < WebInfos.Count; i++) {
+                balances[i] = WebInfos[i].GetBalance();
             }
             return balances;
         }
 
         public string GetCurrentAddress() {
-            if (current != null) {
-                if (!string.IsNullOrWhiteSpace(current.BrowserAddress) && current.BrowserAddress.StartsWith(Constants.SchemeHttps)) {
-                    return current.BrowserAddress;
-                } else if (current.Browser != null
-                        && !string.IsNullOrWhiteSpace(current.Browser.Address)
-                        && current.Browser.Address.StartsWith(Constants.SchemeHttps)) {
+            if (Current != null) {
+                if (!string.IsNullOrWhiteSpace(Current.BrowserAddress) && Current.BrowserAddress.StartsWith(Constants.SchemeHttps)) {
+                    return Current.BrowserAddress;
+                } else if (Current.Browser != null
+                        && !string.IsNullOrWhiteSpace(Current.Browser.Address)
+                        && Current.Browser.Address.StartsWith(Constants.SchemeHttps)) {
 
-                    return current.Browser.Address;
+                    return Current.Browser.Address;
                 }
             }
             return null;
@@ -340,7 +377,7 @@ namespace BetHelper {
 
         private void GetTips() {
             List<Tip> list = new List<Tip>();
-            foreach (WebInfo webInfo in webInfos) {
+            foreach (WebInfo webInfo in WebInfos) {
                 if (webInfo.IsService) {
                     Tip[] tips = webInfo.GetTips();
                     if (tips != null) {
@@ -348,15 +385,15 @@ namespace BetHelper {
                     }
                 }
             }
-            this.tips = list.ToArray();
+            Tips = list.ToArray();
             TipsGot?.Invoke(this, EventArgs.Empty);
         }
 
         public int LoadUrl(string url) {
-            for (int i = 0; i < webInfos.Count; i++) {
-                if (webInfos[i].EqualsSecondLevelDomain(url)) {
+            for (int i = 0; i < WebInfos.Count; i++) {
+                if (WebInfos[i].EqualsSecondLevelDomain(url)) {
                     SetCurrent(i);
-                    webInfos[i].SetUrlToLoad(url);
+                    WebInfos[i].SetUrlToLoad(url);
                     return i;
                 }
             }
@@ -368,21 +405,21 @@ namespace BetHelper {
                 return;
             }
             this.index = index;
-            if (current != null) {
-                current.Suspend();
+            if (Current != null) {
+                Current.Suspend();
             }
-            current = webInfos[index];
-            if (current.Browser == null) {
-                current.Initialize();
+            Current = WebInfos[index];
+            if (Current.Browser == null) {
+                Current.Initialize();
             } else {
-                current.Resume();
+                Current.Resume();
             }
-            CurrentSet?.Invoke(this, new FocusEventArgs(current, index));
+            CurrentSet?.Invoke(this, new FocusEventArgs(Current, index));
             return;
         }
 
         public void StopFinding() {
-            foreach (WebInfo webInfo in webInfos) {
+            foreach (WebInfo webInfo in WebInfos) {
                 if (webInfo.Browser != null) {
                     webInfo.StopFinding(false);
                 }
@@ -390,13 +427,13 @@ namespace BetHelper {
         }
 
         public void SendKey(Keys key) {
-            if (current != null) {
-                current.SendKey(key);
+            if (Current != null) {
+                Current.SendKey(key);
             }
         }
 
         public void SetPingTimer() {
-            if (((MainForm)form).Settings.TryToKeepUserLoggedIn) {
+            if (((MainForm)Form).Settings.TryToKeepUserLoggedIn) {
                 pingTimer.Start();
             } else {
                 pingTimer.Stop();
@@ -411,11 +448,7 @@ namespace BetHelper {
         public void Suspend() {
             getTimer.Stop();
             pingTimer.Stop();
-        }
-
-        public void Resume() {
-            SetTimer();
-            SetPingTimer();
+            suspendTimer.Start();
         }
 
         private string GetAssemblyName() {
@@ -479,18 +512,18 @@ namespace BetHelper {
         private int NextPing() {
             int i = 0;
             do {
-                if (++pingIndex == webInfos.Count) {
+                if (++pingIndex == WebInfos.Count) {
                     pingIndex = 0;
                 }
-            } while (++i < webInfos.Count && !webInfos[pingIndex].IsBookmaker && !webInfos[pingIndex].IsService);
-            return webInfos[pingIndex].CanPing ? pingIndex : -1;
+            } while (++i < WebInfos.Count && !WebInfos[pingIndex].IsBookmaker && !WebInfos[pingIndex].IsService);
+            return WebInfos[pingIndex].CanPing ? pingIndex : -1;
         }
 
         private void OnCancel(object sender, CanceledEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<CanceledEventArgs>(OnCancel), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<CanceledEventArgs>(OnCancel), sender, e);
                     } else {
                         Canceled?.Invoke(sender, e);
                     }
@@ -502,10 +535,10 @@ namespace BetHelper {
         }
 
         private void OnError(object sender, ErrorEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<ErrorEventArgs>(OnError), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<ErrorEventArgs>(OnError), sender, e);
                     } else {
                         Error?.Invoke(sender, e);
                     }
@@ -517,10 +550,10 @@ namespace BetHelper {
         }
 
         private void OnFind(object sender, FindEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<FindEventArgs>(OnFind), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<FindEventArgs>(OnFind), sender, e);
                     } else {
                         Find?.Invoke(sender, e);
                     }
@@ -532,10 +565,10 @@ namespace BetHelper {
         }
 
         private void OnFinished(object sender, FinishedEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<FinishedEventArgs>(OnFinished), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<FinishedEventArgs>(OnFinished), sender, e);
                     } else {
                         Finished?.Invoke(sender, e);
                     }
@@ -549,10 +582,10 @@ namespace BetHelper {
         private void OnFocus(object sender, EventArgs e) => SetCurrent(((WebInfo)sender).Ordinal - 1);
 
         private void OnInitialized(object sender, FocusEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<FocusEventArgs>(OnInitialized), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<FocusEventArgs>(OnInitialized), sender, e);
                     } else {
                         Initialized?.Invoke(sender, e);
                     }
@@ -564,10 +597,10 @@ namespace BetHelper {
         }
 
         private void OnProgress(object sender, ProgressEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<ProgressEventArgs>(OnProgress), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<ProgressEventArgs>(OnProgress), sender, e);
                     } else {
                         Progress?.Invoke(sender, e);
                     }
@@ -579,10 +612,10 @@ namespace BetHelper {
         }
 
         private void OnRelay(object sender, UrlEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<UrlEventArgs>(OnRelay), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<UrlEventArgs>(OnRelay), sender, e);
                     } else {
                         LoadUrl(e.Url);
                     }
@@ -594,10 +627,10 @@ namespace BetHelper {
         }
 
         private void OnStarted(object sender, StartedEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<StartedEventArgs>(OnStarted), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<StartedEventArgs>(OnStarted), sender, e);
                     } else {
                         Started?.Invoke(sender, e);
                     }
@@ -609,10 +642,10 @@ namespace BetHelper {
         }
 
         private void OnAddressChanged(object sender, AddressChangedEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<AddressChangedEventArgs>(OnAddressChanged), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<AddressChangedEventArgs>(OnAddressChanged), sender, e);
                     } else {
                         AddressChanged?.Invoke(sender, e);
                     }
@@ -624,10 +657,10 @@ namespace BetHelper {
         }
 
         private void OnBrowserConsoleMessage(object sender, ConsoleMessageEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<ConsoleMessageEventArgs>(OnBrowserConsoleMessage), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<ConsoleMessageEventArgs>(OnBrowserConsoleMessage), sender, e);
                     } else {
                         BrowserConsoleMessage?.Invoke(sender, e);
                     }
@@ -639,10 +672,10 @@ namespace BetHelper {
         }
 
         private void OnBrowserInitializedChanged(object sender, EventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler(OnBrowserInitializedChanged), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler(OnBrowserInitializedChanged), sender, e);
                     } else {
                         BrowserInitializedChanged?.Invoke(sender, e);
                     }
@@ -654,10 +687,10 @@ namespace BetHelper {
         }
 
         private void OnFrameLoadEnd(object sender, FrameLoadEndEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<FrameLoadEndEventArgs>(OnFrameLoadEnd), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<FrameLoadEndEventArgs>(OnFrameLoadEnd), sender, e);
                     } else {
                         FrameLoadEnd?.Invoke(sender, e);
                     }
@@ -669,10 +702,10 @@ namespace BetHelper {
         }
 
         private void OnFrameLoadStart(object sender, FrameLoadStartEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<FrameLoadStartEventArgs>(OnFrameLoadStart), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<FrameLoadStartEventArgs>(OnFrameLoadStart), sender, e);
                     } else {
                         FrameLoadStart?.Invoke(sender, e);
                     }
@@ -684,10 +717,10 @@ namespace BetHelper {
         }
 
         private void OnLoadError(object sender, LoadErrorEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<LoadErrorEventArgs>(OnLoadError), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<LoadErrorEventArgs>(OnLoadError), sender, e);
                     } else {
                         LoadError?.Invoke(sender, e);
                     }
@@ -699,10 +732,10 @@ namespace BetHelper {
         }
 
         private void OnLoadingStateChanged(object sender, LoadingStateChangedEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<LoadingStateChangedEventArgs>(OnLoadingStateChanged), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<LoadingStateChangedEventArgs>(OnLoadingStateChanged), sender, e);
                     } else {
                         LoadingStateChanged?.Invoke(sender, e);
                     }
@@ -714,10 +747,10 @@ namespace BetHelper {
         }
 
         private void OnStatusMessage(object sender, StatusMessageEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<StatusMessageEventArgs>(OnStatusMessage), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<StatusMessageEventArgs>(OnStatusMessage), sender, e);
                     } else {
                         StatusMessage?.Invoke(sender, e);
                     }
@@ -729,10 +762,10 @@ namespace BetHelper {
         }
 
         private void OnTitleChanged(object sender, TitleChangedEventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 try {
-                    if (form.InvokeRequired) {
-                        form.Invoke(new EventHandler<TitleChangedEventArgs>(OnTitleChanged), sender, e);
+                    if (Form.InvokeRequired) {
+                        Form.Invoke(new EventHandler<TitleChangedEventArgs>(OnTitleChanged), sender, e);
                     } else {
                         TitleChanged?.Invoke(sender, e);
                     }
@@ -744,50 +777,50 @@ namespace BetHelper {
         }
 
         private void OnEnter(object sender, EventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 Enter?.Invoke(((WebInfo)sender).Browser, e);
             }
         }
 
         private void OnHelp(object sender, HelpEventArgs hlpEvent) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 Help?.Invoke(sender, hlpEvent);
             }
         }
 
         private void OnZoomLevelChanged(object sender, EventArgs e) {
-            if (current.Equals(sender)) {
+            if (Current.Equals(sender)) {
                 ZoomLevelChanged?.Invoke(sender, e);
             }
         }
 
         public void ZoomInCoarse() {
-            if (current != null) {
-                current.ZoomInCoarseAsync();
+            if (Current != null) {
+                Current.ZoomInCoarseAsync();
             }
         }
 
         public void ZoomOutCoarse() {
-            if (current != null) {
-                current.ZoomOutCoarseAsync();
+            if (Current != null) {
+                Current.ZoomOutCoarseAsync();
             }
         }
 
         public void ZoomInFine() {
-            if (current != null) {
-                current.ZoomInFineAsync();
+            if (Current != null) {
+                Current.ZoomInFineAsync();
             }
         }
 
         public void ZoomOutFine() {
-            if (current != null) {
-                current.ZoomOutFineAsync();
+            if (Current != null) {
+                Current.ZoomOutFineAsync();
             }
         }
 
         public void ActualSize() {
-            if (current != null) {
-                current.ActualSizeAsync();
+            if (Current != null) {
+                Current.ActualSizeAsync();
             }
         }
     }

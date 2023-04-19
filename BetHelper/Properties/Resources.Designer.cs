@@ -2149,6 +2149,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Closing....
+        /// </summary>
+        internal static string MessageClosing {
+            get {
+                return ResourceManager.GetString("MessageClosing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Closing advertisement....
         /// </summary>
         internal static string MessageClosingAdvertisement {

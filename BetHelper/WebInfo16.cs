@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.4.0
  */
 
 using CefSharp;
@@ -90,7 +90,8 @@ namespace BetHelper {
             OnProgress(Properties.Resources.MessageLoggingIn);
             browser.ExecuteScriptAsync("document.getElementById('login-btn').click();");
             Wait(browser);
-
+            Sleep(1800);
+            LoadInitialPage(browser);
             OnFinished();
         }
 

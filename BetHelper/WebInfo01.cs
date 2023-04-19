@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.4.0
  */
 
 using CefSharp;
@@ -32,7 +32,7 @@ namespace BetHelper {
     public class WebInfo01 : WebInfo {
 
         protected override void LogIn(ChromiumWebBrowser browser) {
-            OnStarted(6);
+            OnStarted(8);
 
             if (ElementExistsAndVisible(browser,
                     "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1]", false)) {
@@ -56,10 +56,15 @@ namespace BetHelper {
                 Wait(browser);
                 Sleep(100);
 
-                if (IsLoggedIn()) {
-                    OnFinished();
+                OnProgress(Properties.Resources.MessageSettingInputFocus);
+                if (ElementExists(browser, "document.getElementById('userNameId')", true)) {
+                    browser.ExecuteScriptAsync("document.getElementById('userNameId').focus();");
+                    Sleep(250);
+                } else {
+                    OnError();
                     return;
                 }
+
                 OnProgress(Properties.Resources.MessageSendingUserName);
                 SendString(browser, UserName);
             } while (!GetValueById("userNameId").Equals(UserName));
@@ -73,10 +78,15 @@ namespace BetHelper {
                 Wait(browser);
                 Sleep(100);
 
-                if (IsLoggedIn()) {
-                    OnFinished();
+                OnProgress(Properties.Resources.MessageSettingInputFocus);
+                if (ElementExists(browser, "document.getElementById('passwordId')", true)) {
+                    browser.ExecuteScriptAsync("document.getElementById('passwordId').focus();");
+                    Sleep(250);
+                } else {
+                    OnError();
                     return;
                 }
+
                 OnProgress(Properties.Resources.MessageSendingPassword);
                 SendString(browser, Password);
             } while (!GetValueById("passwordId").Equals(Password));

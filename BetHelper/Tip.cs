@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.4.0
  */
 
 using FortSoft.Tools;
@@ -32,8 +32,8 @@ using System.Text;
 
 namespace BetHelper {
 
-    [Serializable()]
-    public class Tip : ISerializable {
+    [Serializable]
+    public sealed class Tip : ISerializable {
 
         public Tip(
                 DateTime dateTime,
@@ -54,7 +54,7 @@ namespace BetHelper {
             SetUid();
         }
 
-        public Tip(SerializationInfo info, StreamingContext ctxt) {
+        private Tip(SerializationInfo info, StreamingContext ctxt) {
             Bookmaker = (string)info.GetValue("Bookmaker", typeof(string));
             DateTime = (DateTime)info.GetValue("DateTime", typeof(DateTime));
             Games = (Game[])info.GetValue("Games", typeof(Game[]));

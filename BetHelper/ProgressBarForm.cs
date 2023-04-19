@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.4.0
  */
 
 using System;
@@ -86,7 +86,7 @@ namespace BetHelper {
             if (InvokeRequired) {
                 Invoke(new SetMessageCallback(SetMessage), message);
             } else {
-                label.Text = message;
+                labelMessage.Text = message;
             }
         }
 
@@ -128,7 +128,7 @@ namespace BetHelper {
                 progressBar.Maximum = 1;
                 progressBar.Value = 1;
                 progressBar.Invalidate();
-                label.Text = message;
+                labelMessage.Text = message;
                 labelProgress.Text = new StringBuilder()
                     .Append(100)
                     .Append(Constants.Space)

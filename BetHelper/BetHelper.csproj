@@ -151,6 +151,7 @@
       <DependentUpon>EncDecForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FocusEventArgs.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Hash.cs" />
     <Compile Include="LinkLabel.cs">
       <SubType>Component</SubType>

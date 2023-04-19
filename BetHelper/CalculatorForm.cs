@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.1.0
+ * Version 1.1.4.0
  */
 
 using CefSharp;
@@ -819,6 +819,9 @@ namespace BetHelper {
                     if (countDownForm.Visible) {
                         countDownForm.SafeClose();
                     }
+                }
+                if (bitmap != null) {
+                    bitmap.Dispose();
                 }
                 browserCacheManager.Dispose();
                 settings.Dispose();

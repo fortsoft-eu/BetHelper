@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.4.0
  */
 
 using System;
@@ -31,7 +31,7 @@ using System.Windows.Forms;
 
 namespace BetHelper {
 
-    [Serializable()]
+    [Serializable]
     public struct Data {
         public decimal balance;
         public decimal[] balances;
@@ -71,7 +71,7 @@ namespace BetHelper {
             this.trustDegrees = trustDegrees;
         }
 
-        public Data(SerializationInfo info, StreamingContext ctxt) {
+        private Data(SerializationInfo info, StreamingContext ctxt) {
             balance = (decimal)info.GetValue("Balance", typeof(decimal));
             balances = (decimal[])info.GetValue("Balances", typeof(decimal[]));
             movements = (Dictionary<DateTime, decimal>)info.GetValue("Movements", typeof(Dictionary<DateTime, decimal>));

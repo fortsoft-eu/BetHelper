@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.4.0
  */
 
 namespace BetHelper {
@@ -49,38 +49,45 @@ namespace BetHelper {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.label = new System.Windows.Forms.Label();
+            this.labelMessage = new System.Windows.Forms.Label();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.labelProgress = new System.Windows.Forms.Label();
             this.button = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label
+            // labelMessage
             // 
-            this.label.Location = new System.Drawing.Point(12, 7);
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(370, 23);
-            this.label.TabIndex = 0;
-            this.label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.labelMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelMessage.Location = new System.Drawing.Point(12, 7);
+            this.labelMessage.Name = "labelMessage";
+            this.labelMessage.Size = new System.Drawing.Size(360, 23);
+            this.labelMessage.TabIndex = 0;
+            this.labelMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // progressBar
             // 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.Location = new System.Drawing.Point(12, 59);
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(360, 23);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBar.TabIndex = 1;
+            this.progressBar.TabIndex = 2;
             // 
             // labelProgress
             // 
-            this.labelProgress.Location = new System.Drawing.Point(272, 33);
+            this.labelProgress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelProgress.Location = new System.Drawing.Point(12, 33);
             this.labelProgress.Name = "labelProgress";
-            this.labelProgress.Size = new System.Drawing.Size(100, 23);
-            this.labelProgress.TabIndex = 2;
+            this.labelProgress.Size = new System.Drawing.Size(360, 23);
+            this.labelProgress.TabIndex = 1;
             this.labelProgress.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // button
             // 
+            this.button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button.Location = new System.Drawing.Point(297, 106);
             this.button.Name = "button";
@@ -98,7 +105,7 @@ namespace BetHelper {
             this.ClientSize = new System.Drawing.Size(384, 141);
             this.Controls.Add(this.button);
             this.Controls.Add(this.progressBar);
-            this.Controls.Add(this.label);
+            this.Controls.Add(this.labelMessage);
             this.Controls.Add(this.labelProgress);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -114,7 +121,7 @@ namespace BetHelper {
 
         #endregion
 
-        private System.Windows.Forms.Label label;
+        private System.Windows.Forms.Label labelMessage;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label labelProgress;
         private System.Windows.Forms.Button button;

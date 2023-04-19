@@ -21,13 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.1.0
+ * Version 1.1.4.0
  */
 
 using FortSoft.Tools;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
 
@@ -82,7 +84,23 @@ namespace BetHelper {
                 } else {
                     noSwitch = true;
                     settings.LoadConfig();
-                    SingleInstance.Run(new MainForm(settings), GetTitle(), StringComparison.InvariantCulture);
+                    MainForm mainForm = new MainForm(settings);
+                    SingleInstance.Run(mainForm, GetTitle(), StringComparison.InvariantCulture);
+                    string dataFilePath = Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath),
+                        Constants.RightPaneDataFileName);
+                    try {
+                        if (!mainForm.SuppressSaveData) {
+                            using (FileStream fileStream = File.Create(dataFilePath)) {
+                                new BinaryFormatter().Serialize(fileStream, mainForm.Data);
+                            }
+                        }
+                    } catch (Exception exception) {
+                        Debug.WriteLine(exception);
+                        ErrorLog.WriteLine(exception);
+                    }
+                    if (mainForm.Restart) {
+                        Application.Restart();
+                    }
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.1
+ * Version 1.1.4.0
  */
 
 using CefSharp;
@@ -48,14 +48,12 @@ namespace BetHelper {
     public partial class MainForm : Form {
         private Bitmap bitmap;
         private BookmarkManager bookmarkManager;
-        private bool close, restart, searching, servicesAlreadySorted, suppressSaveData, tipsAlreadySorted, undone;
-        private BrowserCacheManager browserCacheManager;
+        private bool suppressDialogs, searching, servicesAlreadySorted, tipsAlreadySorted, undone;
         private CalculatorExtractor calculatorExtractor;
         private CalculatorHandler calculatorHandler;
         private ControlInfo controlInfo;
         private CountDownForm countDownForm;
         private decimal[] trustDegrees;
-        private ExtBrowsHandler extBrowsHandler;
         private FileExtensionFilter fileExtensionFilter;
         private FindForm findForm;
         private Form dialog, form;
@@ -73,9 +71,7 @@ namespace BetHelper {
         private PrintPreviewDialog printPreviewDialog;
         private SaveFileDialog saveFileDialog;
         private Search search;
-        private Settings settings;
         private ShortcutManager shortcutManager;
-        private StatusStripHandler statusStripHandler;
         private string dataFilePath, undoneNotes;
         private TelephoneBell telephoneBell;
         private Thread findThread, turnOffThread;
@@ -88,12 +84,12 @@ namespace BetHelper {
         private delegate void InspectDomElementCallback();
 
         public MainForm(Settings settings) {
-            browserCacheManager = new BrowserCacheManager();
+            BrowserCacheManager = new BrowserCacheManager();
             calculatorExtractor = new CalculatorExtractor();
-            extBrowsHandler = new ExtBrowsHandler();
+            ExtBrowsHandler = new ExtBrowsHandler();
             telephoneBell = new TelephoneBell();
 
-            this.settings = settings;
+            Settings = settings;
             trustDegrees = new decimal[10];
 
             Icon = Properties.Resources.Icon;
@@ -106,7 +102,7 @@ namespace BetHelper {
                 textBoxClicks = 0;
             });
 
-            fileExtensionFilter = new FileExtensionFilter(settings.ExtensionFilterIndex);
+            fileExtensionFilter = new FileExtensionFilter(Settings.ExtensionFilterIndex);
 
             persistWindowState = new PersistWindowState();
             persistWindowState.DetectionOptions = PersistWindowState.WindowDetectionOptions.NoDetection;
@@ -137,17 +133,19 @@ namespace BetHelper {
             SetTabControls();
         }
 
-        public BrowserCacheManager BrowserCacheManager => browserCacheManager;
+        public bool Restart { get; private set; }
 
-        public ExtBrowsHandler ExtBrowsHandler => extBrowsHandler;
+        public bool SuppressSaveData { get; private set; }
 
-        public Settings Settings => settings;
+        public BrowserCacheManager BrowserCacheManager { get; private set; }
 
-        public ShortcutManager ShortcutManager => shortcutManager;
+        public Data Data { get; private set; }
 
-        public StatusStripHandler StatusStripHandler => statusStripHandler;
+        public ExtBrowsHandler ExtBrowsHandler { get; private set; }
 
-        public TabControl TabControlLeft => tabControlLeft;
+        public Settings Settings { get; private set; }
+
+        public StatusStripHandler StatusStripHandler { get; private set; }
 
         private async void BuildMainMenuAsync() {
             await Task.Run(new Action(() => {
@@ -266,7 +264,7 @@ namespace BetHelper {
                     new EventHandler((sender, e) => telephoneBell.Stop())));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemResetIpCheckLock + Constants.ShortcutF7,
-                    new EventHandler((sender, e) => settings.AllowedAddrHandler.Reset())));
+                    new EventHandler((sender, e) => Settings.AllowedAddrHandler.Reset())));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemClearBrowserCache,
                     new EventHandler(ClearBrowserCache)));
@@ -370,11 +368,11 @@ namespace BetHelper {
                         && bookmarkManager.Contains(webInfoHandler.Current.BrowserAddress);
                 });
                 menuItemOptions.Popup += new EventHandler((sender, e) => {
-                    menuItemOptions.MenuItems[0].Checked = settings.AutoAdjustRightPaneWidth;
-                    menuItemOptions.MenuItems[2].Checked = settings.AutoLogInAfterInitialLoad;
-                    menuItemOptions.MenuItems[3].Checked = settings.TryToKeepUserLoggedIn;
-                    menuItemOptions.MenuItems[5].Checked = settings.EnableBell;
-                    menuItemOptions.MenuItems[10].Enabled = settings.AllowedAddrHandler.Locked;
+                    menuItemOptions.MenuItems[0].Checked = Settings.AutoAdjustRightPaneWidth;
+                    menuItemOptions.MenuItems[2].Checked = Settings.AutoLogInAfterInitialLoad;
+                    menuItemOptions.MenuItems[3].Checked = Settings.TryToKeepUserLoggedIn;
+                    menuItemOptions.MenuItems[5].Checked = Settings.EnableBell;
+                    menuItemOptions.MenuItems[10].Enabled = Settings.AllowedAddrHandler.Locked;
                 });
                 menuItemTools.Popup += new EventHandler((sender, e) => {
                     bool enabled = !string.IsNullOrEmpty(webInfoHandler.GetCurrentAddress());
@@ -382,9 +380,9 @@ namespace BetHelper {
                     menuItemTools.MenuItems[4].Enabled = enabled;
                     menuItemTools.MenuItems[6].Enabled = enabled;
                     menuItemTools.MenuItems[7].Enabled = enabled
-                        && extBrowsHandler.Exists(ExtBrowsHandler.Browser.GoogleChrome);
+                        && ExtBrowsHandler.Exists(ExtBrowsHandler.Browser.GoogleChrome);
                     menuItemTools.MenuItems[8].Enabled = enabled
-                        && extBrowsHandler.Exists(ExtBrowsHandler.Browser.Firefox);
+                        && ExtBrowsHandler.Exists(ExtBrowsHandler.Browser.Firefox);
                     menuItemTools.MenuItems[10].Enabled = enabled;
                     menuItemTools.MenuItems[12].Enabled = enabled;
                     menuItemTools.MenuItems[13].Enabled = enabled
@@ -392,7 +390,7 @@ namespace BetHelper {
                     menuItemTools.MenuItems[15].Enabled = enabled;
                     enabled = false;
                     try {
-                        enabled = File.Exists(Path.Combine(settings.TelegramAppDirectory, Constants.TelegramDesktopFileName));
+                        enabled = File.Exists(Path.Combine(Settings.TelegramAppDirectory, Constants.TelegramDesktopFileName));
                     } catch (Exception exception) {
                         Debug.WriteLine(exception);
                         ErrorLog.WriteLine(exception);
@@ -717,7 +715,7 @@ namespace BetHelper {
 
         private async void InitializeUpdateCheckerAsync() {
             await Task.Run(new Action(() => {
-                updateChecker = new UpdateChecker(settings);
+                updateChecker = new UpdateChecker(Settings);
                 updateChecker.Parent = this;
                 updateChecker.StateChanged += new EventHandler<UpdateCheckEventArgs>(OnUpdateCheckerStateChanged);
                 updateChecker.Help += new HelpEventHandler(OpenHelp);
@@ -726,9 +724,9 @@ namespace BetHelper {
 
         private async void InitializeSaveFileDialogAsync() {
             await Task.Run(new Action(() => {
-                string initialDirectory = string.IsNullOrEmpty(settings.LastExportDirectory)
+                string initialDirectory = string.IsNullOrEmpty(Settings.LastExportDirectory)
                     ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
-                    : settings.LastExportDirectory;
+                    : Settings.LastExportDirectory;
                 saveFileDialog = new SaveFileDialog() {
                     AddExtension = true,
                     CheckPathExists = true,
@@ -742,13 +740,13 @@ namespace BetHelper {
 
         private async void SetTabControlAsync() {
             await Task.Run(new Action(() => {
-                tabControlLeft.Appearance = settings.TabAppearance;
+                tabControlLeft.Appearance = Settings.TabAppearance;
                 tabControlLeft.DrawMode = TabDrawMode.OwnerDrawFixed;
-                tabControlLeft.Font = new Font(SystemFonts.CaptionFont, settings.TabsBoldFont ? FontStyle.Bold : FontStyle.Regular);
+                tabControlLeft.Font = new Font(SystemFonts.CaptionFont, Settings.TabsBoldFont ? FontStyle.Bold : FontStyle.Regular);
                 tabControlLeft.DrawItem += new DrawItemEventHandler(DrawTabPageHeader);
-                tabControlRight.Appearance = settings.TabAppearance;
+                tabControlRight.Appearance = Settings.TabAppearance;
                 tabControlRight.DrawMode = TabDrawMode.OwnerDrawFixed;
-                tabControlRight.Font = new Font(SystemFonts.CaptionFont, settings.TabsBoldFont ? FontStyle.Bold : FontStyle.Regular);
+                tabControlRight.Font = new Font(SystemFonts.CaptionFont, Settings.TabsBoldFont ? FontStyle.Bold : FontStyle.Regular);
                 tabControlRight.DrawItem += new DrawItemEventHandler(DrawTabPageHeader);
                 tabPageDashboard.Font = SystemFonts.DefaultFont;
                 tabPageServices.Font = SystemFonts.DefaultFont;
@@ -760,30 +758,30 @@ namespace BetHelper {
                 foreach (WebInfo webInfo in webInfoHandler.WebInfos) {
                     tabControlLeft.TabPages.Add(new TabPage() { Text = webInfo.Title });
                 }
-                tabControlLeft.SelectedIndex = settings.ActivePanelLeft < 0 || settings.ActivePanelLeft > tabControlLeft.TabCount - 1
+                tabControlLeft.SelectedIndex = Settings.ActivePanelLeft < 0 || Settings.ActivePanelLeft > tabControlLeft.TabCount - 1
                     ? 0
-                    : settings.ActivePanelLeft;
-                tabControlRight.SelectedIndex = settings.ActivePanelRight < 0 || settings.ActivePanelRight > tabControlRight.TabCount - 1
+                    : Settings.ActivePanelLeft;
+                tabControlRight.SelectedIndex = Settings.ActivePanelRight < 0 || Settings.ActivePanelRight > tabControlRight.TabCount - 1
                     ? 0
-                    : settings.ActivePanelRight;
+                    : Settings.ActivePanelRight;
             }))
             .ContinueWith(new Action<Task>(task => SubscribeEvents()));
         }
 
         private void InitializeBookmarkManager(MenuItem menuItem) {
-            bookmarkManager = new BookmarkManager(settings);
+            bookmarkManager = new BookmarkManager(Settings);
             bookmarkManager.Activated += new EventHandler<UrlEventArgs>((sender, e) => webInfoHandler.LoadUrl(e.Url));
-            bookmarkManager.Added += new EventHandler((sender, e) => statusStripHandler.SetMessage(
+            bookmarkManager.Added += new EventHandler((sender, e) => StatusStripHandler.SetMessage(
                 StatusStripHandler.StatusMessageType.Temporary,
                 Properties.Resources.MessageBookmarkAdded));
-            bookmarkManager.Removed += new EventHandler((sender, e) => statusStripHandler.SetMessage(
+            bookmarkManager.Removed += new EventHandler((sender, e) => StatusStripHandler.SetMessage(
                 StatusStripHandler.StatusMessageType.Temporary,
                 Properties.Resources.MessageBookmarkRemoved));
             bookmarkManager.MenuItem = menuItem;
         }
 
         private void InitializeStatusStripHandler() {
-            statusStripHandler = new StatusStripHandler(statusStrip, StatusStripHandler.DisplayMode.Standard, settings, extBrowsHandler);
+            StatusStripHandler = new StatusStripHandler(statusStrip, StatusStripHandler.DisplayMode.Standard, Settings, ExtBrowsHandler);
         }
 
         private void InitializeCalculatorHandler() {
@@ -860,7 +858,7 @@ namespace BetHelper {
             shortcutManager.PrintToPdf += new EventHandler(PrintToPdf);
             shortcutManager.Reload += new EventHandler(Reload);
             shortcutManager.ReloadIgnoreCache += new EventHandler(ReloadIgnoreCache);
-            shortcutManager.ResetIpCheckLock += new EventHandler((sender, e) => settings.AllowedAddrHandler.Reset());
+            shortcutManager.ResetIpCheckLock += new EventHandler((sender, e) => Settings.AllowedAddrHandler.Reset());
             shortcutManager.ShowPreferences += new EventHandler(ShowPreferences);
             shortcutManager.StopLoad += new EventHandler(StopLoad);
             shortcutManager.StopRinging += new EventHandler((sender, e) => telephoneBell.Stop());
@@ -879,7 +877,7 @@ namespace BetHelper {
         private void InitializeWebInfoHandler(decimal[] balances) {
             webInfoHandler = new WebInfoHandler(this, balances);
             webInfoHandler.AddressChanged += new EventHandler<AddressChangedEventArgs>((sender, e) =>
-                statusStripHandler.SetUrl(e.Address));
+                StatusStripHandler.SetUrl(e.Address));
             webInfoHandler.BalanceGot += new EventHandler(ShowBalance);
             webInfoHandler.BrowserConsoleMessage += new EventHandler<ConsoleMessageEventArgs>((sender, e) =>
                 SetConsoleMessage(e.Line, e.Source, e.Message));
@@ -893,37 +891,38 @@ namespace BetHelper {
             webInfoHandler.Finished += new EventHandler<FinishedEventArgs>(OnLogInFinished);
             webInfoHandler.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(async (sender, e) => {
                 UpdateViewMenuItemsAsync(sender, e);
-                statusStripHandler.SetZoomLevel(await ((WebInfo)sender).Browser.GetZoomLevelAsync());
-                statusStripHandler.SetFinished();
+                StatusStripHandler.SetZoomLevel(await ((WebInfo)sender).Browser.GetZoomLevelAsync());
+                StatusStripHandler.SetFinished();
             });
-            webInfoHandler.FrameLoadStart += new EventHandler<FrameLoadStartEventArgs>((sender, e) => statusStripHandler.SetMaximum(0));
+            webInfoHandler.FrameLoadStart += new EventHandler<FrameLoadStartEventArgs>((sender, e) => StatusStripHandler.SetMaximum(0));
             webInfoHandler.Help += new HelpEventHandler(OpenHelp);
             webInfoHandler.Initialized += new EventHandler<FocusEventArgs>((sender, e) => {
                 if (!tabControlLeft.SelectedIndex.Equals(e.Index)) {
                     tabControlLeft.SelectedIndex = e.Index;
                 }
-                TabControlLeft.SelectedTab.Controls.Add(((WebInfo)sender).Browser);
+                tabControlLeft.SelectedTab.Controls.Add(((WebInfo)sender).Browser);
                 AdjustSize(new Size(Constants.BrowserMinWidth, Constants.BrowserMinHeight));
             });
             webInfoHandler.LoadError += new EventHandler<LoadErrorEventArgs>((sender, e) =>
                 SetLoadErrorMessage(e.ErrorCode, e.ErrorText, e.FailedUrl));
             webInfoHandler.LoadingStateChanged += new EventHandler<LoadingStateChangedEventArgs>(async (sender, e) => {
                 UpdateViewMenuItemsAsync(sender, e);
-                statusStripHandler.SetZoomLevel(await ((WebInfo)sender).Browser.GetZoomLevelAsync());
+                StatusStripHandler.SetZoomLevel(await ((WebInfo)sender).Browser.GetZoomLevelAsync());
                 if (e.IsLoading) {
-                    statusStripHandler.SetMaximum(0);
+                    StatusStripHandler.SetMaximum(0);
                 } else {
-                    statusStripHandler.SetFinished();
+                    StatusStripHandler.SetFinished();
                 }
             });
             webInfoHandler.Progress += new EventHandler<ProgressEventArgs>(OnLogInProgress);
             webInfoHandler.Started += new EventHandler<StartedEventArgs>(OnLogInStarted);
             webInfoHandler.StatusMessage += new EventHandler<StatusMessageEventArgs>((sender, e) =>
-                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Value));
+                StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Value));
+            webInfoHandler.Suspended += new EventHandler(OnSuspended);
             webInfoHandler.TipsGot += new EventHandler(SetTips);
             webInfoHandler.TitleChanged += new EventHandler<TitleChangedEventArgs>((sender, e) => SetText(e.Title));
             webInfoHandler.ZoomLevelChanged += new EventHandler((sender, e) =>
-                statusStripHandler.SetZoomLevel(((WebInfo)sender).ZoomLevel));
+                StatusStripHandler.SetZoomLevel(((WebInfo)sender).ZoomLevel));
         }
 
         private void SubscribeEvents() {
@@ -964,10 +963,9 @@ namespace BetHelper {
             Load += new EventHandler(OnFormLoad);
             Activated += new EventHandler(OnFormActivated);
             FormClosing += new FormClosingEventHandler(OnFormClosing);
-            FormClosed += new FormClosedEventHandler(OnFormClosed);
 
-            browserCacheManager.CacheSizeComputed += new EventHandler<BrowserCacheEventArgs>((sender, e) =>
-                statusStripHandler.SetDataSize(e.BrowserCacheSize));
+            BrowserCacheManager.CacheSizeComputed += new EventHandler<BrowserCacheEventArgs>((sender, e) =>
+                StatusStripHandler.SetDataSize(e.BrowserCacheSize));
 
             splitContainerMain.Paint += new PaintEventHandler((sender, e) =>
                 e.Graphics.FillRectangle(SystemBrushes.ControlLight, ((SplitContainer)sender).SplitterRectangle));
@@ -1016,7 +1014,7 @@ namespace BetHelper {
         private void OnEscape(object sender, EventArgs e) {
             if (searching) {
                 webInfoHandler.StopFinding();
-                statusStripHandler.ClearSearchResult();
+                StatusStripHandler.ClearSearchResult();
                 searching = false;
             }
             if (webInfoHandler.Current != null && webInfoHandler.Current.Browser != null) {
@@ -1055,7 +1053,7 @@ namespace BetHelper {
                             .ToString();
 
                         if (saveFileDialog.ShowDialog(this).Equals(DialogResult.OK)) {
-                            statusStripHandler.SetMessage(
+                            StatusStripHandler.SetMessage(
                                 StatusStripHandler.StatusMessageType.Temporary,
                                 Properties.Resources.MessageExporting);
 
@@ -1076,10 +1074,10 @@ namespace BetHelper {
                                     }
                                     StaticMethods.SaveBitmap(bitmap, saveFileDialog.FileName);
                                     fileExtensionFilter.SetFilterIndex(saveFileDialog.FilterIndex);
-                                    settings.ExtensionFilterIndex = saveFileDialog.FilterIndex;
-                                    settings.LastExportDirectory = Path.GetDirectoryName(saveFileDialog.FileName);
+                                    Settings.ExtensionFilterIndex = saveFileDialog.FilterIndex;
+                                    Settings.LastExportDirectory = Path.GetDirectoryName(saveFileDialog.FileName);
                                 }))
-                                .ContinueWith(new Action<Task>(task => statusStripHandler.SetMessage(
+                                .ContinueWith(new Action<Task>(task => StatusStripHandler.SetMessage(
                                     StatusStripHandler.StatusMessageType.Temporary,
                                     Properties.Resources.MessageExportFinished)));
                             }
@@ -1106,7 +1104,7 @@ namespace BetHelper {
                         .ToString();
 
                     if (saveFileDialog.ShowDialog(this).Equals(DialogResult.OK)) {
-                        statusStripHandler.SetMessage(
+                        StatusStripHandler.SetMessage(
                             StatusStripHandler.StatusMessageType.Temporary,
                             Properties.Resources.MessageExporting);
 
@@ -1124,10 +1122,10 @@ namespace BetHelper {
                                 }
                                 StaticMethods.SaveBitmap(bitmap, saveFileDialog.FileName);
                                 fileExtensionFilter.SetFilterIndex(saveFileDialog.FilterIndex);
-                                settings.ExtensionFilterIndex = saveFileDialog.FilterIndex;
-                                settings.LastExportDirectory = Path.GetDirectoryName(saveFileDialog.FileName);
+                                Settings.ExtensionFilterIndex = saveFileDialog.FilterIndex;
+                                Settings.LastExportDirectory = Path.GetDirectoryName(saveFileDialog.FileName);
                             }))
-                            .ContinueWith(new Action<Task>(task => statusStripHandler.SetMessage(
+                            .ContinueWith(new Action<Task>(task => StatusStripHandler.SetMessage(
                                 StatusStripHandler.StatusMessageType.Temporary,
                                 Properties.Resources.MessageExportFinished)));
                         }
@@ -1147,7 +1145,7 @@ namespace BetHelper {
                     if (controlInfo != null && controlInfo.Browser != null) {
                         controlInfo.Browser.Print();
                     }
-                    statusStripHandler.SetMessage(
+                    StatusStripHandler.SetMessage(
                         StatusStripHandler.StatusMessageType.Temporary,
                         Properties.Resources.MessagePrintingFinished);
                 } catch (Exception exception) {
@@ -1176,12 +1174,12 @@ namespace BetHelper {
                             .ToString();
 
                         if (saveFileDialog.ShowDialog(this).Equals(DialogResult.OK)) {
-                            statusStripHandler.SetMessage(
+                            StatusStripHandler.SetMessage(
                                 StatusStripHandler.StatusMessageType.Temporary,
                                 Properties.Resources.MessagePrinting);
                             controlInfo.Browser.PrintToPdfAsync(saveFileDialog.FileName)
                                 .ContinueWith(
-                                    new Action<Task>(task => statusStripHandler.SetMessage(
+                                    new Action<Task>(task => StatusStripHandler.SetMessage(
                                         StatusStripHandler.StatusMessageType.Temporary,
                                         Properties.Resources.MessagePrintingFinished)));
                         }
@@ -1308,7 +1306,7 @@ namespace BetHelper {
         private void ShowException(Exception exception, string statusMessage) {
             Debug.WriteLine(exception);
             ErrorLog.WriteLine(exception);
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB,
+            StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB,
                 string.IsNullOrEmpty(statusMessage) ? exception.Message : statusMessage);
             StringBuilder title = new StringBuilder()
                 .Append(Program.GetTitle())
@@ -1319,16 +1317,16 @@ namespace BetHelper {
             dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
             dialog.HelpRequested += new HelpEventHandler(OpenHelp);
             dialog.ShowDialog(this);
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB);
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary,
+            StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB);
+            StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary,
                 string.IsNullOrEmpty(statusMessage) ? exception.Message : statusMessage);
         }
 
         private void BeginPrint(object sender, PrintEventArgs e) {
             if (bitmap != null) {
                 printAction = e.PrintAction;
-                printDocument.OriginAtMargins = settings.PrintSoftMargins;
-                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary,
+                printDocument.OriginAtMargins = Settings.PrintSoftMargins;
+                StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary,
                     e.PrintAction.Equals(PrintAction.PrintToPreview)
                         ? Properties.Resources.MessageGeneratingPreview
                         : Properties.Resources.MessagePrinting);
@@ -1360,7 +1358,7 @@ namespace BetHelper {
         }
 
         private void EndPrint(object sender, PrintEventArgs e) {
-            statusStripHandler.SetMessage(
+            StatusStripHandler.SetMessage(
                 StatusStripHandler.StatusMessageType.Temporary,
                 e.PrintAction.Equals(PrintAction.PrintToPreview)
                     ? Properties.Resources.MessagePreviewGenerated
@@ -1369,7 +1367,7 @@ namespace BetHelper {
 
 
         private void OnUpdateCheckerStateChanged(object sender, UpdateCheckEventArgs e) {
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, e.Message);
+            StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary, e.Message);
             if (dialog == null || !dialog.Visible) {
                 dialog = e.Dialog;
             }
@@ -1429,7 +1427,7 @@ namespace BetHelper {
                 Invoke(new EventHandler(FocusTrustDegrees), sender, e);
             } else {
                 Activate();
-                settings.RightPaneCollapsed = false;
+                Settings.RightPaneCollapsed = false;
                 SetRightPaneCollapsed(false);
                 tabControlRight.SelectedIndex = 0;
                 textBox10.Focus();
@@ -1514,7 +1512,7 @@ namespace BetHelper {
 
         private void OnFindFormClosed(object sender, FormClosedEventArgs e) {
             webInfoHandler.StopFinding();
-            statusStripHandler.ClearSearchResult();
+            StatusStripHandler.ClearSearchResult();
         }
 
         private void OnHomePressed(object sender, EventArgs e) => webInfoHandler.SendKey(Keys.Home);
@@ -1538,7 +1536,7 @@ namespace BetHelper {
                 } else {
                     if (string.IsNullOrEmpty(e.Search.searchString)) {
                         webInfoHandler.Current.StopFinding(true);
-                        statusStripHandler.ClearSearchResult();
+                        StatusStripHandler.ClearSearchResult();
                     } else {
                         search = e.Search;
                         webInfoHandler.Current.Browser.Find(search.searchString, !search.backward, search.caseSensitive, true);
@@ -1549,7 +1547,7 @@ namespace BetHelper {
         }
 
         private void FindNext(object sender, EventArgs e) {
-            if (settings.F3MainFormFocusesFindForm && findThread != null && findThread.IsAlive) {
+            if (Settings.F3MainFormFocusesFindForm && findThread != null && findThread.IsAlive) {
                 try {
                     findForm.SafeSelect();
                 } catch (Exception exception) {
@@ -1574,17 +1572,17 @@ namespace BetHelper {
 
         private void OnFind(object sender, FindEventArgs e) {
             if (e.EmptyResult) {
-                statusStripHandler.ClearSearchResult();
+                StatusStripHandler.ClearSearchResult();
                 return;
             }
-            statusStripHandler.SetSearchResult(e.Count, e.ActiveMatchOrdinal);
+            StatusStripHandler.SetSearchResult(e.Count, e.ActiveMatchOrdinal);
             Point point = webInfoHandler.Current.Browser.PointToScreen(new Point(e.SelectionRect.X, e.SelectionRect.Y));
             Size size = new Size(e.SelectionRect.Width, e.SelectionRect.Height);
             Rectangle rectangle = new Rectangle(point, size);
             if (findForm != null && findForm.Visible) {
                 findForm.SafeLocation(GetNewLocation(rectangle, new Rectangle(findForm.Location, findForm.Size)));
             }
-            if (settings.OutlineSearchResults) {
+            if (Settings.OutlineSearchResults) {
                 OutlineSearchResultAsync(rectangle);
             }
         }
@@ -1632,12 +1630,12 @@ namespace BetHelper {
         }
 
         private void ToggleMuteAudio(object sender, EventArgs e) {
-            if (settings.AudioEnabled && webInfoHandler.Current != null && webInfoHandler.Current.Browser != null) {
+            if (Settings.AudioEnabled && webInfoHandler.Current != null && webInfoHandler.Current.Browser != null) {
                 webInfoHandler.Current.SetAudioMuted(!webInfoHandler.Current.IsAudioMuted);
-                Menu.MenuItems[2].MenuItems[19].Text = (!settings.AudioEnabled || webInfoHandler.Current.IsAudioMuted
+                Menu.MenuItems[2].MenuItems[19].Text = (!Settings.AudioEnabled || webInfoHandler.Current.IsAudioMuted
                     ? Properties.Resources.MenuItemUnmuteAudio
                     : Properties.Resources.MenuItemMuteAudio) + Constants.ShortcutCtrlM;
-                statusStripHandler.SetMuted(webInfoHandler.Current.IsAudioMuted);
+                StatusStripHandler.SetMuted(webInfoHandler.Current.IsAudioMuted);
             }
         }
 
@@ -1690,26 +1688,26 @@ namespace BetHelper {
         }
 
         private void AutoAdjustRightPaneWidth(object sender, EventArgs e) {
-            settings.AutoAdjustRightPaneWidth = !settings.AutoAdjustRightPaneWidth;
-            ((MenuItem)sender).Checked = settings.AutoAdjustRightPaneWidth;
-            if (settings.AutoAdjustRightPaneWidth) {
+            Settings.AutoAdjustRightPaneWidth = !Settings.AutoAdjustRightPaneWidth;
+            ((MenuItem)sender).Checked = Settings.AutoAdjustRightPaneWidth;
+            if (Settings.AutoAdjustRightPaneWidth) {
                 AdjustRightPaneWidth();
             }
         }
 
         private void AutoLogInAfterInitialLoad(object sender, EventArgs e) {
-            settings.AutoLogInAfterInitialLoad = !settings.AutoLogInAfterInitialLoad;
-            ((MenuItem)sender).Checked = settings.AutoLogInAfterInitialLoad;
+            Settings.AutoLogInAfterInitialLoad = !Settings.AutoLogInAfterInitialLoad;
+            ((MenuItem)sender).Checked = Settings.AutoLogInAfterInitialLoad;
         }
 
         private void TryToKeepUserLoggedIn(object sender, EventArgs e) {
-            settings.TryToKeepUserLoggedIn = !settings.TryToKeepUserLoggedIn;
-            ((MenuItem)sender).Checked = settings.TryToKeepUserLoggedIn;
+            Settings.TryToKeepUserLoggedIn = !Settings.TryToKeepUserLoggedIn;
+            ((MenuItem)sender).Checked = Settings.TryToKeepUserLoggedIn;
         }
 
         private void ToggleBell(object sender, EventArgs e) {
-            settings.EnableBell = !settings.EnableBell;
-            ((MenuItem)sender).Checked = settings.EnableBell;
+            Settings.EnableBell = !Settings.EnableBell;
+            ((MenuItem)sender).Checked = Settings.EnableBell;
         }
 
         private void ClearBrowserCache(object sender, EventArgs e) {
@@ -1724,7 +1722,7 @@ namespace BetHelper {
                 dialog.HelpRequested += new HelpEventHandler(OpenHelp);
 
                 if (dialog.ShowDialog(this).Equals(DialogResult.OK)) {
-                    browserCacheManager.Set(BrowserCacheManager.ClearSet.BrowserCacheOnly);
+                    BrowserCacheManager.Set(BrowserCacheManager.ClearSet.BrowserCacheOnly);
                     RestartApplication();
                 }
             }
@@ -1744,7 +1742,7 @@ namespace BetHelper {
                 dialog.HelpRequested += new HelpEventHandler(OpenHelp);
 
                 if (dialog.ShowDialog(this).Equals(DialogResult.OK)) {
-                    browserCacheManager.Set(BrowserCacheManager.ClearSet.BrowserCacheIncludingUserData);
+                    BrowserCacheManager.Set(BrowserCacheManager.ClearSet.BrowserCacheIncludingUserData);
                     RestartApplication();
                 }
             }
@@ -1768,15 +1766,15 @@ namespace BetHelper {
                     if (findForm != null && findForm.Visible) {
                         findForm.SafeClose();
                     }
-                    browserCacheManager.Set(BrowserCacheManager.ClearSet.BrowserCacheIncludingUserData);
+                    BrowserCacheManager.Set(BrowserCacheManager.ClearSet.BrowserCacheIncludingUserData);
                     new SearchHandler(Constants.BrowserSearchFileName).Delete();
                     new SearchHandler(Constants.ConfigSearchFileName).Delete();
                     new SearchHandler(Constants.LogSearchFileName).Delete();
                     new TypedUrlsHandler().Delete();
                     bookmarkManager.Delete();
                     DeleteRightPaneData();
-                    settings.Clear();
-                    suppressSaveData = true;
+                    Settings.Clear();
+                    SuppressSaveData = true;
                     RestartApplication();
                 }
             }
@@ -1785,10 +1783,11 @@ namespace BetHelper {
         private void RestartApplication() {
             GC.Collect(2, GCCollectionMode.Forced, true);
             if (Program.IsDebugging) {
-                close = true;
+                suppressDialogs = true;
                 Close();
             } else {
-                restart = true;
+                suppressDialogs = true;
+                Restart = true;
                 Close();
             }
         }
@@ -1800,7 +1799,7 @@ namespace BetHelper {
                 PreferencesForm preferencesForm = new PreferencesForm();
                 preferencesForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
                 preferencesForm.HelpRequested += new HelpEventHandler(OpenHelp);
-                preferencesForm.Settings = settings;
+                preferencesForm.Settings = Settings;
                 dialog = preferencesForm;
 
                 if (preferencesForm.ShowDialog(this).Equals(DialogResult.OK)) {
@@ -1808,26 +1807,19 @@ namespace BetHelper {
                     bookmarkManager.Populate();
                     SetTabControlsAppearance();
                     UpdateTrustDegrees();
-                    statusStripHandler.SetMessage(
+                    StatusStripHandler.SetMessage(
                         StatusStripHandler.StatusMessageType.Temporary,
                         Properties.Resources.MessagePreferencesSaved);
-                    Menu.MenuItems[4].MenuItems[0].Checked = settings.AutoAdjustRightPaneWidth;
-                    Menu.MenuItems[4].MenuItems[1].Checked = settings.AutoLogInAfterInitialLoad;
-                    if (settings.AutoAdjustRightPaneWidth) {
+                    Menu.MenuItems[4].MenuItems[0].Checked = Settings.AutoAdjustRightPaneWidth;
+                    Menu.MenuItems[4].MenuItems[1].Checked = Settings.AutoLogInAfterInitialLoad;
+                    if (Settings.AutoAdjustRightPaneWidth) {
                         AdjustRightPaneWidth();
                     }
                     if (preferencesForm.RestartRequired) {
-                        GC.Collect(2, GCCollectionMode.Forced, true);
-                        if (Program.IsDebugging) {
-                            close = true;
-                            Close();
-                        } else {
-                            restart = true;
-                            Close();
-                        }
+                        RestartApplication();
                     }
                 } else {
-                    settings.ActivePreferencesPanel = preferencesForm.TabControl.SelectedIndex;
+                    Settings.ActivePreferencesPanel = preferencesForm.TabControl.SelectedIndex;
                 }
             }
         }
@@ -1836,10 +1828,10 @@ namespace BetHelper {
             if (InvokeRequired) {
                 Invoke(new SetTabControlCallback(SetTabControlsAppearance));
             } else {
-                tabControlLeft.Appearance = settings.TabAppearance;
-                tabControlRight.Appearance = settings.TabAppearance;
-                tabControlLeft.Font = new Font(SystemFonts.CaptionFont, settings.TabsBoldFont ? FontStyle.Bold : FontStyle.Regular);
-                tabControlRight.Font = new Font(SystemFonts.CaptionFont, settings.TabsBoldFont ? FontStyle.Bold : FontStyle.Regular);
+                tabControlLeft.Appearance = Settings.TabAppearance;
+                tabControlRight.Appearance = Settings.TabAppearance;
+                tabControlLeft.Font = new Font(SystemFonts.CaptionFont, Settings.TabsBoldFont ? FontStyle.Bold : FontStyle.Regular);
+                tabControlRight.Font = new Font(SystemFonts.CaptionFont, Settings.TabsBoldFont ? FontStyle.Bold : FontStyle.Regular);
                 tabControlLeft.Invalidate();
                 tabControlRight.Invalidate();
             }
@@ -1847,20 +1839,20 @@ namespace BetHelper {
 
         private void SetRightPaneCollapsed(bool toggle) {
             if (toggle) {
-                settings.RightPaneCollapsed = !settings.RightPaneCollapsed;
+                Settings.RightPaneCollapsed = !Settings.RightPaneCollapsed;
             }
-            splitContainerMain.Panel2Collapsed = settings.RightPaneCollapsed;
+            splitContainerMain.Panel2Collapsed = Settings.RightPaneCollapsed;
         }
 
         private void SetRightPaneWidth(bool toggle) {
             if (toggle) {
-                settings.RightPaneWidth = !settings.RightPaneWidth;
+                Settings.RightPaneWidth = !Settings.RightPaneWidth;
             }
             if (splitContainerMain.Width - splitContainerMain.Panel2MinSize - splitContainerMain.Panel1MinSize < 0) {
                 return;
             }
             int splitterDistance;
-            if (settings.RightPaneWidth) {
+            if (Settings.RightPaneWidth) {
                 splitterDistance = splitContainerMain.Width - splitContainerMain.Panel2MinSize;
             } else {
                 splitterDistance = (int)(splitContainerMain.Width /
@@ -1880,7 +1872,7 @@ namespace BetHelper {
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
-                    statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
+                    StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
                 }
             }
         }
@@ -1889,11 +1881,11 @@ namespace BetHelper {
             string currentAddress = webInfoHandler.GetCurrentAddress();
             if (!string.IsNullOrEmpty(currentAddress)) {
                 try {
-                    extBrowsHandler.Open(ExtBrowsHandler.Browser.GoogleChrome, currentAddress);
+                    ExtBrowsHandler.Open(ExtBrowsHandler.Browser.GoogleChrome, currentAddress);
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
-                    statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
+                    StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
                 }
             }
         }
@@ -1902,11 +1894,11 @@ namespace BetHelper {
             string currentAddress = webInfoHandler.GetCurrentAddress();
             if (!string.IsNullOrEmpty(currentAddress)) {
                 try {
-                    extBrowsHandler.Open(ExtBrowsHandler.Browser.Firefox, currentAddress);
+                    ExtBrowsHandler.Open(ExtBrowsHandler.Browser.Firefox, currentAddress);
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
-                    statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
+                    StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
                 }
             }
         }
@@ -1923,7 +1915,7 @@ namespace BetHelper {
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
-                    statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
+                    StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
                 }
             }
         }
@@ -1936,7 +1928,7 @@ namespace BetHelper {
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
-                    statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
+                    StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
                 }
             }
         }
@@ -1948,14 +1940,19 @@ namespace BetHelper {
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
-                    statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
+                    StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB, exception.Message);
                 }
             }
         }
 
         private void UnloadPage(object sender, EventArgs e) {
-            if (webInfoHandler.Current != null && webInfoHandler.Current.Browser != null) {
-                webInfoHandler.Current.Browser.Load(Constants.BlankPageUri);
+            if (InvokeRequired) {
+                Invoke(new EventHandler(UnloadPage), sender, e);
+            } else {
+                if (webInfoHandler.Current != null && webInfoHandler.Current.Browser != null) {
+                    webInfoHandler.Current.Browser.Stop();
+                    webInfoHandler.Current.Browser.Load(Constants.BlankPageUri);
+                }
             }
         }
 
@@ -1988,12 +1985,15 @@ namespace BetHelper {
             form = new Form() {
                 FormBorderStyle = FormBorderStyle.None,
                 Location = rectangle.Location,
-                Opacity = settings.InspectOverlayOpacity / 100d,
+                Opacity = Settings.InspectOverlayOpacity / 100d,
                 ShowInTaskbar = false,
                 Size = rectangle.Size,
                 StartPosition = FormStartPosition.Manual
             };
-            form.FormClosed += new FormClosedEventHandler((sender, e) => crosshairPen.Dispose());
+            form.FormClosed += new FormClosedEventHandler((sender, e) => {
+                crosshairPen.Dispose();
+                image.Dispose();
+            });
             form.KeyDown += new KeyEventHandler((sender, e) => form.Close());
             form.MouseDown += new MouseEventHandler((sender, e) => {
                 if (e.Button.Equals(MouseButtons.Left)) {
@@ -2002,7 +2002,7 @@ namespace BetHelper {
             });
             form.MouseLeave += new EventHandler((sender, e) => form.Close());
             form.MouseMove += new MouseEventHandler((sender, e) => {
-                graphics.Clear(settings.OverlayBackgroundColor);
+                graphics.Clear(Settings.OverlayBackgroundColor);
                 graphics.DrawLine(crosshairPen, e.X, 0, e.X, form.Height);
                 graphics.DrawLine(crosshairPen, 0, e.Y, form.Width, e.Y);
             });
@@ -2017,7 +2017,7 @@ namespace BetHelper {
                 }
             });
             form.Paint += new PaintEventHandler((sender, e) => e.Graphics.DrawImageUnscaled(image, Point.Empty));
-            crosshairPen = new Pen(settings.OverlayCrosshairColor, 1);
+            crosshairPen = new Pen(Settings.OverlayCrosshairColor, 1);
             graphics = form.CreateGraphics();
             image = new Bitmap(form.Width, form.Height, graphics);
             form.Show();
@@ -2122,7 +2122,7 @@ namespace BetHelper {
 
         private void LaunchTelegram(object sender, EventArgs e) {
             try {
-                Process.Start(Path.Combine(settings.TelegramAppDirectory, Constants.TelegramDesktopFileName));
+                Process.Start(Path.Combine(Settings.TelegramAppDirectory, Constants.TelegramDesktopFileName));
             } catch (Exception exception) {
                 ShowException(exception);
             }
@@ -2153,21 +2153,46 @@ namespace BetHelper {
             dialog.ShowDialog(this);
         }
 
+        private void OnCurrentSet(object sender, FocusEventArgs e) {
+            if (!tabControlLeft.SelectedIndex.Equals(e.Index)) {
+                tabControlLeft.SelectedIndex = e.Index;
+            }
+            if (webInfoHandler.Current.IsLoading) {
+                StatusStripHandler.SetMaximum(0);
+            } else {
+                StatusStripHandler.ResetProgressBar();
+            }
+            SetText(e.WebInfo.BrowserTitle);
+            StatusStripHandler.SetMessage();
+            SetConsoleMessage(e.WebInfo.ConsoleLine, e.WebInfo.ConsoleSource, e.WebInfo.ConsoleMessage);
+            SetLoadErrorMessage(e.WebInfo.ErrorCode, e.WebInfo.ErrorText, e.WebInfo.FailedUrl);
+            StatusStripHandler.SetUrl(e.WebInfo.BrowserAddress);
+            StatusStripHandler.SetZoomLevel(e.WebInfo.ZoomLevel);
+            controlInfo = new ControlInfo(e.WebInfo.Browser, e.WebInfo.BrowserTitle);
+            StatusStripHandler.SetMuted(!Settings.AudioEnabled || e.WebInfo.IsAudioMuted);
+            Menu.MenuItems[2].MenuItems[19].Text = (!Settings.AudioEnabled || e.WebInfo.IsAudioMuted
+                ? Properties.Resources.MenuItemUnmuteAudio
+                : Properties.Resources.MenuItemMuteAudio) + Constants.ShortcutCtrlM;
+            Menu.MenuItems[2].MenuItems[20].Text = e.WebInfo.IsChatHidden
+                ? Properties.Resources.MenuItemShowChat
+                : Properties.Resources.MenuItemHideChat;
+        }
+
         private void OnFormLoad(object sender, EventArgs e) {
             SetRightPaneCollapsed(false);
             SetRightPaneWidth(false);
-            if (settings.AutoAdjustRightPaneWidth) {
+            if (Settings.AutoAdjustRightPaneWidth) {
                 AdjustRightPaneWidth();
             }
             tabControlLeft.SelectedIndexChanged += new EventHandler((s, t) =>
                 webInfoHandler.SetCurrent(tabControlLeft.SelectedIndex));
             tabControlRight.SelectedIndexChanged += new EventHandler((s, t) => {
-                if (settings.AutoAdjustRightPaneWidth) {
+                if (Settings.AutoAdjustRightPaneWidth) {
                     AdjustRightPaneWidth();
                 }
             });
             webInfoHandler.SetCurrent(tabControlLeft.SelectedIndex);
-            settings.Save();
+            Settings.Save();
             TipsEnableControls(sender, e);
             ServicesEnableControls(sender, e);
             SendKeys.Send(Constants.SendKeysTab);
@@ -2185,8 +2210,14 @@ namespace BetHelper {
                 Invoke(new FormClosingEventHandler(OnFormClosing), sender, e);
             } else {
                 if (dialog != null && dialog.Visible) {
-                    e.Cancel = true;
-                    return;
+                    if (suppressDialogs || !e.CloseReason.Equals(CloseReason.UserClosing)) {
+                        if (!webInfoHandler.IsSuspended && !(dialog is ProgressBarForm)) {
+                            dialog.Close();
+                        }
+                    } else {
+                        e.Cancel = true;
+                        return;
+                    }
                 }
                 if (countDownForm != null) {
                     countDownForm.HelpRequested -= new HelpEventHandler(OpenHelp);
@@ -2194,26 +2225,18 @@ namespace BetHelper {
                         countDownForm.SafeClose();
                     }
                 }
-
-                webInfoHandler.Suspend();
-                Thread.Sleep(250);
-                SaveRightPaneData();
-
-                if (!close && !restart && settings.DisplayPromptBeforeClosing && e.CloseReason.Equals(CloseReason.UserClosing)) {
+                if (!suppressDialogs && Settings.DisplayPromptBeforeClosing && e.CloseReason.Equals(CloseReason.UserClosing)) {
                     dialog = new MessageForm(this, Properties.Resources.MessageQuestionBeforeClosing,
                         Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question);
                     dialog.HelpRequested += new HelpEventHandler(OpenHelp);
                     if (!dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
-                        webInfoHandler.Resume();
                         e.Cancel = true;
                         return;
                     }
                 }
-
                 if (bitmap != null) {
                     bitmap.Dispose();
                 }
-
                 if (findForm != null) {
                     findForm.AltCtrlShiftEPressed -= new EventHandler(ExportWindowAsync);
                     findForm.AltCtrlShiftPPressed -= new EventHandler(PrintImage);
@@ -2269,29 +2292,47 @@ namespace BetHelper {
                         findForm.SafeClose();
                     }
                 }
-
-                if (suppressSaveData) {
-                    persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
+                if (dialog != null && dialog is ProgressBarForm && dialog.Visible) {
+                    ProgressBarForm progressBarForm = (ProgressBarForm)dialog;
+                    progressBarForm.DisableClose = true;
+                    progressBarForm.ProgressBarMarquee = true;
+                    progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
+                    progressBarForm.Cursor = Cursors.WaitCursor;
                 } else {
-                    settings.ActivePanelLeft = tabControlLeft.SelectedIndex;
-                    settings.ActivePanelRight = tabControlRight.SelectedIndex;
-                    settings.Save();
+                    ProgressBarForm progressBarForm = new ProgressBarForm();
+                    progressBarForm.DisableClose = true;
+                    progressBarForm.ProgressBarMarquee = true;
+                    progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
+                    dialog = progressBarForm;
+                    progressBarForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                    progressBarForm.Cursor = Cursors.WaitCursor;
+                    progressBarForm.Show(this);
                 }
-                settings.Dispose();
-                telephoneBell.Dispose();
-                webInfoHandler.Dispose();
-                browserCacheManager.Dispose();
-                calculatorHandler.Dispose();
-                shortcutManager.Dispose();
-                statusStripHandler.Dispose();
-                updateChecker.Dispose();
-                textBoxClicksTimer.Dispose();
-            }
-        }
-
-        private void OnFormClosed(object sender, FormClosedEventArgs e) {
-            if (restart) {
-                Application.Restart();
+                StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessagePleaseWait);
+                SetControlsEnabled(false);
+                webInfoHandler.Suspend();
+                if (webInfoHandler.IsSuspended) {
+                    StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageClosing);
+                    if (SuppressSaveData) {
+                        persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
+                    } else {
+                        PrepareRightPaneData();
+                        Settings.ActivePanelLeft = tabControlLeft.SelectedIndex;
+                        Settings.ActivePanelRight = tabControlRight.SelectedIndex;
+                        Settings.Save();
+                    }
+                    Settings.Dispose();
+                    telephoneBell.Dispose();
+                    webInfoHandler.Dispose();
+                    BrowserCacheManager.Dispose();
+                    calculatorHandler.Dispose();
+                    shortcutManager.Dispose();
+                    StatusStripHandler.Dispose();
+                    updateChecker.Dispose();
+                    textBoxClicksTimer.Dispose();
+                } else {
+                    e.Cancel = true;
+                }
             }
         }
 
@@ -2313,13 +2354,24 @@ namespace BetHelper {
                 progressBarForm.Cursor = Cursors.AppStarting;
                 progressBarForm.Show(this);
             }
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessagePleaseWait);
-            statusStripHandler.SetMaximum(e.ItemsTotal);
-            Cursor = Cursors.WaitCursor;
-            splitContainerMain.Enabled = false;
-            statusStripHandler.EnableContextMenu = false;
+            StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessagePleaseWait);
+            StatusStripHandler.SetMaximum(e.ItemsTotal);
+            SetControlsEnabled(false);
+        }
+
+        private void SetControlsEnabled(bool enabled) {
+            Cursor = enabled ? Cursors.Default : Cursors.WaitCursor;
+            foreach (MenuItem menuItem in Menu.MenuItems) {
+                menuItem.Enabled = enabled;
+            }
+            splitContainerMain.Enabled = enabled;
+            StatusStripHandler.EnableContextMenu = enabled;
             if (findForm != null && findForm.Visible) {
-                findForm.SafeDisable();
+                if (enabled) {
+                    findForm.SafeEnable();
+                } else {
+                    findForm.SafeDisable();
+                }
             }
         }
 
@@ -2330,9 +2382,9 @@ namespace BetHelper {
                 progressBarForm.SetMessage(e.Message);
                 progressBarForm.SetValue(e.CurrentItem);
             }
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Message);
-            statusStripHandler.SetMaximum(e.ItemsTotal);
-            statusStripHandler.SetValue(e.CurrentItem);
+            StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Message);
+            StatusStripHandler.SetMaximum(e.ItemsTotal);
+            StatusStripHandler.SetValue(e.CurrentItem);
         }
 
         private void OnLogInFinished(object sender, FinishedEventArgs e) {
@@ -2340,14 +2392,9 @@ namespace BetHelper {
                 ((ProgressBarForm)dialog).SetFinished(e.Message);
             }
             GC.Collect(2, GCCollectionMode.Forced, true);
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Message);
-            statusStripHandler.SetFinished();
-            Cursor = Cursors.Default;
-            splitContainerMain.Enabled = true;
-            statusStripHandler.EnableContextMenu = true;
-            if (findForm != null && findForm.Visible) {
-                findForm.SafeEnable();
-            }
+            StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Message);
+            StatusStripHandler.SetFinished();
+            SetControlsEnabled(true);
         }
 
         private void OnLogInError(object sender, ErrorEventArgs e) {
@@ -2355,14 +2402,9 @@ namespace BetHelper {
                 ((ProgressBarForm)dialog).SetFinished(e.ErrorMessage);
             }
             GC.Collect(2, GCCollectionMode.Forced, true);
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.ErrorMessage);
-            statusStripHandler.SetFinished();
-            Cursor = Cursors.Default;
-            splitContainerMain.Enabled = true;
-            statusStripHandler.EnableContextMenu = true;
-            if (findForm != null && findForm.Visible) {
-                findForm.SafeEnable();
-            }
+            StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.ErrorMessage);
+            StatusStripHandler.SetFinished();
+            SetControlsEnabled(true);
         }
 
         private void OnLogInCanceled(object sender, CanceledEventArgs e) {
@@ -2370,14 +2412,9 @@ namespace BetHelper {
                 ((ProgressBarForm)dialog).SetFinished(e.CancelMessage);
             }
             GC.Collect(2, GCCollectionMode.Forced, true);
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.CancelMessage);
-            statusStripHandler.SetFinished();
-            Cursor = Cursors.Default;
-            splitContainerMain.Enabled = true;
-            statusStripHandler.EnableContextMenu = true;
-            if (findForm != null && findForm.Visible) {
-                findForm.SafeEnable();
-            }
+            StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.CancelMessage);
+            StatusStripHandler.SetFinished();
+            SetControlsEnabled(true);
         }
 
         private void OnMouseWheel(object sender, MouseEventArgs e) {
@@ -2395,41 +2432,45 @@ namespace BetHelper {
         private void OnProgressBarFormClosed(object sender, FormClosedEventArgs e) {
             webInfoHandler.Current.CancelLogIn();
             SendKeys.Send(Constants.SendKeysTab);
-            Cursor = Cursors.Default;
-            splitContainerMain.Enabled = true;
-            statusStripHandler.EnableContextMenu = true;
-            if (findForm != null && findForm.Visible) {
-                findForm.SafeEnable();
+            SetControlsEnabled(true);
+        }
+
+        private void OnSuspended(object sender, EventArgs e) {
+            if (InvokeRequired) {
+                Invoke(new EventHandler(OnSuspended), sender, e);
+            } else {
+                suppressDialogs = true;
+                Close();
             }
         }
 
         private void DrawTabPageHeader(object sender, DrawItemEventArgs e) {
             TabControl tabControl = (TabControl)sender;
             Color color = e.State.Equals(DrawItemState.Selected) ? Color.White : SystemColors.Control;
-            if (settings.TabsBackgroundColor) {
+            if (Settings.TabsBackgroundColor) {
                 if (tabControl.Name.EndsWith(Constants.TabControlLeftNameEnd, StringComparison.OrdinalIgnoreCase)) {
                     if (webInfoHandler.WebInfos[e.Index].IsBookmaker) {
                         color = e.State.Equals(DrawItemState.Selected)
-                            ? settings.BookmakerSelectedColor
-                            : settings.BookmakerDefaultColor;
+                            ? Settings.BookmakerSelectedColor
+                            : Settings.BookmakerDefaultColor;
                     } else if (webInfoHandler.WebInfos[e.Index].IsService) {
                         color = e.State.Equals(DrawItemState.Selected)
-                            ? settings.SportInfo2SelectedColor
-                            : settings.SportInfo2DefaultColor;
+                            ? Settings.SportInfo2SelectedColor
+                            : Settings.SportInfo2DefaultColor;
                     } else {
                         color = e.State.Equals(DrawItemState.Selected)
-                            ? settings.SportInfo1SelectedColor
-                            : settings.SportInfo1DefaultColor;
+                            ? Settings.SportInfo1SelectedColor
+                            : Settings.SportInfo1DefaultColor;
                     }
                 } else if (tabControl.Name.EndsWith(Constants.TabControlRightNameEnd, StringComparison.OrdinalIgnoreCase)) {
                     if (e.Index > 1) {
                         color = e.State.Equals(DrawItemState.Selected)
-                            ? settings.CalculatorSelectedColor
-                            : settings.CalculatorDefaultColor;
+                            ? Settings.CalculatorSelectedColor
+                            : Settings.CalculatorDefaultColor;
                     } else {
                         color = e.State.Equals(DrawItemState.Selected)
-                            ? settings.DashboardSelectedColor
-                            : settings.DashboardDefaultColor;
+                            ? Settings.DashboardSelectedColor
+                            : Settings.DashboardDefaultColor;
                     }
                 }
             }
@@ -2450,39 +2491,14 @@ namespace BetHelper {
             e.DrawFocusRectangle();
         }
 
-        private void OnCurrentSet(object sender, FocusEventArgs e) {
-            if (!tabControlLeft.SelectedIndex.Equals(e.Index)) {
-                tabControlLeft.SelectedIndex = e.Index;
-            }
-            if (webInfoHandler.Current.IsLoading) {
-                statusStripHandler.SetMaximum(0);
-            } else {
-                statusStripHandler.ResetProgressBar();
-            }
-            SetText(e.WebInfo.BrowserTitle);
-            statusStripHandler.SetMessage();
-            SetConsoleMessage(e.WebInfo.ConsoleLine, e.WebInfo.ConsoleSource, e.WebInfo.ConsoleMessage);
-            SetLoadErrorMessage(e.WebInfo.ErrorCode, e.WebInfo.ErrorText, e.WebInfo.FailedUrl);
-            statusStripHandler.SetUrl(e.WebInfo.BrowserAddress);
-            statusStripHandler.SetZoomLevel(e.WebInfo.ZoomLevel);
-            controlInfo = new ControlInfo(e.WebInfo.Browser, e.WebInfo.BrowserTitle);
-            statusStripHandler.SetMuted(!settings.AudioEnabled || e.WebInfo.IsAudioMuted);
-            Menu.MenuItems[2].MenuItems[19].Text = (!settings.AudioEnabled || e.WebInfo.IsAudioMuted
-                ? Properties.Resources.MenuItemUnmuteAudio
-                : Properties.Resources.MenuItemMuteAudio) + Constants.ShortcutCtrlM;
-            Menu.MenuItems[2].MenuItems[20].Text = e.WebInfo.IsChatHidden
-                ? Properties.Resources.MenuItemShowChat
-                : Properties.Resources.MenuItemHideChat;
-        }
-
         private async void UpdateViewMenuItemsAsync(object sender, EventArgs e) {
-            Menu.MenuItems[2].MenuItems[0].Text = (settings.RightPaneCollapsed
+            Menu.MenuItems[2].MenuItems[0].Text = (Settings.RightPaneCollapsed
                     ? Properties.Resources.MenuItemShowRightPane
                     : Properties.Resources.MenuItemHideRightPane) + Constants.ShortcutF9;
-            Menu.MenuItems[2].MenuItems[1].Text = (settings.RightPaneWidth
+            Menu.MenuItems[2].MenuItems[1].Text = (Settings.RightPaneWidth
                     ? Properties.Resources.MenuItemSetRightPaneDefaultWidth
                     : Properties.Resources.MenuItemSetRightPaneMinimumWidth) + Constants.ShortcutAltF9;
-            Menu.MenuItems[2].MenuItems[19].Text = (!settings.AudioEnabled
+            Menu.MenuItems[2].MenuItems[19].Text = (!Settings.AudioEnabled
                 || webInfoHandler.Current != null && webInfoHandler.Current.IsAudioMuted
                     ? Properties.Resources.MenuItemUnmuteAudio
                     : Properties.Resources.MenuItemMuteAudio) + Constants.ShortcutCtrlM;
@@ -2530,7 +2546,7 @@ namespace BetHelper {
                     Menu.MenuItems[2].MenuItems[15].Enabled = webInfoHandler.Current.CanReload
                         && !webInfoHandler.Current.Browser.Address.Equals(Constants.BlankPageUri);
                     Menu.MenuItems[2].MenuItems[17].Enabled = !webInfoHandler.Current.Browser.Address.Equals(Constants.BlankPageUri);
-                    Menu.MenuItems[2].MenuItems[19].Enabled = settings.AudioEnabled;
+                    Menu.MenuItems[2].MenuItems[19].Enabled = Settings.AudioEnabled;
                     Menu.MenuItems[2].MenuItems[20].Enabled = webInfoHandler.Current.HasChat;
                     Menu.MenuItems[2].MenuItems[22].Enabled = !isLoggedIn;
                     Menu.MenuItems[2].MenuItems[23].Enabled = !isLoggedIn
@@ -2540,7 +2556,7 @@ namespace BetHelper {
         }
 
         private void AdjustRightPaneWidth() {
-            settings.RightPaneWidth = tabControlRight.SelectedIndex < 2;
+            Settings.RightPaneWidth = tabControlRight.SelectedIndex < 2;
             SetRightPaneWidth(false);
             splitContainerMain.Invalidate();
         }
@@ -2560,8 +2576,8 @@ namespace BetHelper {
         }
 
         private void SetConsoleMessage(int line, string source, string message) {
-            if (settings.ShowConsoleMessages && !string.IsNullOrEmpty(source)) {
-                statusStripHandler.SetMessage(
+            if (Settings.ShowConsoleMessages && !string.IsNullOrEmpty(source)) {
+                StatusStripHandler.SetMessage(
                     StatusStripHandler.StatusMessageType.PersistentB,
                     string.IsNullOrWhiteSpace(message)
                         ? string.Format(Constants.BrowserConsoleMessageFormat2, line, source.Trim())
@@ -2570,12 +2586,12 @@ namespace BetHelper {
         }
 
         private void SetLoadErrorMessage(CefErrorCode errorCode, string errorText, string failedUrl) {
-            if (settings.ShowLoadErrors
+            if (Settings.ShowLoadErrors
                     && !errorCode.Equals(CefErrorCode.None)
                     && !string.IsNullOrEmpty(errorText)
                     && !string.IsNullOrEmpty(failedUrl)) {
 
-                statusStripHandler.SetMessage(
+                StatusStripHandler.SetMessage(
                     StatusStripHandler.StatusMessageType.PersistentB,
                     string.Format(Constants.BrowserLoadErrorMessageFormat1, errorText.Trim(), failedUrl.Trim()));
             }
@@ -2591,7 +2607,7 @@ namespace BetHelper {
 
         private string FormatBalance(decimal balance) {
             StringBuilder stringBuilder = new StringBuilder()
-                .Append(balance.ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo))
+                .Append(balance.ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
                 .Replace(Constants.Hyphen, Constants.MinusSign)
                 .Append(Constants.Space)
                 .Append(Properties.Resources.LabelCurrencySymbol);
@@ -2601,7 +2617,7 @@ namespace BetHelper {
         private void SetTips(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(SetTips), sender, e);
-            } else if (AddTips(webInfoHandler.Tips) && settings.EnableBell) {
+            } else if (AddTips(webInfoHandler.Tips) && Settings.EnableBell) {
                 telephoneBell.Ring();
             }
         }
@@ -2704,11 +2720,11 @@ namespace BetHelper {
                         Tag = league
                     },
                     new ListViewItem.ListViewSubItem() {
-                        Text = dateTime.ToString(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern),
+                        Text = dateTime.ToString(Settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern),
                         Tag = dateTime
                     },
                     new ListViewItem.ListViewSubItem() {
-                        Text = dateTime.ToString(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortTimePattern),
+                        Text = dateTime.ToString(Settings.NumberFormat.cultureInfo.DateTimeFormat.ShortTimePattern),
                         Tag = dateTime
                     },
                     new ListViewItem.ListViewSubItem() {
@@ -2720,12 +2736,12 @@ namespace BetHelper {
                         Tag = tip.Bookmaker
                     },
                     new ListViewItem.ListViewSubItem() {
-                        Text = tip.Odd.ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo),
+                        Text = tip.Odd.ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo),
                         Tag = tip.Odd
                     },
                     new ListViewItem.ListViewSubItem() {
                         Text = new StringBuilder()
-                            .Append(tip.TrustDegree.ToString(Constants.ZeroDecimalDigitsFormat, settings.NumberFormat.cultureInfo))
+                            .Append(tip.TrustDegree.ToString(Constants.ZeroDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
                             .Append(Constants.Slash)
                             .Append(10)
                             .ToString(),
@@ -2767,18 +2783,18 @@ namespace BetHelper {
             listViewItem.SubItems[1].Tag = match;
             listViewItem.SubItems[2].Text = league;
             listViewItem.SubItems[2].Tag = league;
-            listViewItem.SubItems[3].Text = dateTime.ToString(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern);
+            listViewItem.SubItems[3].Text = dateTime.ToString(Settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern);
             listViewItem.SubItems[3].Tag = dateTime;
-            listViewItem.SubItems[4].Text = dateTime.ToString(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortTimePattern);
+            listViewItem.SubItems[4].Text = dateTime.ToString(Settings.NumberFormat.cultureInfo.DateTimeFormat.ShortTimePattern);
             listViewItem.SubItems[4].Tag = dateTime;
             listViewItem.SubItems[5].Text = opportunity;
             listViewItem.SubItems[5].Tag = opportunity;
             listViewItem.SubItems[6].Text = tip.Bookmaker;
             listViewItem.SubItems[6].Tag = tip.Bookmaker;
-            listViewItem.SubItems[7].Text = tip.Odd.ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo);
+            listViewItem.SubItems[7].Text = tip.Odd.ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo);
             listViewItem.SubItems[7].Tag = tip.Odd;
             listViewItem.SubItems[8].Text = new StringBuilder()
-                .Append(tip.TrustDegree.ToString(Constants.ZeroDecimalDigitsFormat, settings.NumberFormat.cultureInfo))
+                .Append(tip.TrustDegree.ToString(Constants.ZeroDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
                 .Append(Constants.Slash)
                 .Append(10)
                 .ToString();
@@ -2808,11 +2824,11 @@ namespace BetHelper {
                         Tag = service.Span * GetSpanUnitMultiplier(service.Unit)
                     },
                     new ListViewItem.ListViewSubItem() {
-                        Text = service.Expiration.ToString(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern),
+                        Text = service.Expiration.ToString(Settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern),
                         Tag = service.Expiration
                     },
                     new ListViewItem.ListViewSubItem() {
-                        Text = service.Subscribed.ToString(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern),
+                        Text = service.Subscribed.ToString(Settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern),
                         Tag = service.Subscribed
                     },
                     new ListViewItem.ListViewSubItem() {
@@ -2833,10 +2849,10 @@ namespace BetHelper {
             listViewItem.SubItems[2].Text = ShowSpan(service.Span, service.Unit);
             listViewItem.SubItems[2].Tag = service.Span * GetSpanUnitMultiplier(service.Unit);
             listViewItem.SubItems[3].Text = service.Expiration.ToString(
-                settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern);
+                Settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern);
             listViewItem.SubItems[3].Tag = service.Expiration;
             listViewItem.SubItems[4].Text = service.Subscribed.ToString(
-                settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern);
+                Settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern);
             listViewItem.SubItems[4].Tag = service.Subscribed;
             listViewItem.SubItems[5].Text = service.Status.ToString();
             listViewItem.SubItems[5].Tag = service.Status.ToString();
@@ -2858,7 +2874,7 @@ namespace BetHelper {
 
         private string ShowPrice(decimal price) {
             StringBuilder stringBuilder = new StringBuilder()
-                .Append(price.ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo))
+                .Append(price.ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
                 .Append(Constants.Space)
                 .Append(Properties.Resources.LabelCurrencySymbol);
             return stringBuilder.ToString();
@@ -3446,11 +3462,11 @@ namespace BetHelper {
         private void OnButton10Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox10.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees10();
                 textBox10.Focus();
                 textBox10.Select(0, trustDegrees[9]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3460,11 +3476,11 @@ namespace BetHelper {
         private void OnButton9Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox9.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees9();
                 textBox9.Focus();
                 textBox9.Select(0, trustDegrees[8]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3474,11 +3490,11 @@ namespace BetHelper {
         private void OnButton8Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox8.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees8();
                 textBox8.Focus();
                 textBox8.Select(0, trustDegrees[7]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3488,11 +3504,11 @@ namespace BetHelper {
         private void OnButton7Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox7.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees7();
                 textBox7.Focus();
                 textBox7.Select(0, trustDegrees[6]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3502,11 +3518,11 @@ namespace BetHelper {
         private void OnButton6Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox6.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees6();
                 textBox6.Focus();
                 textBox6.Select(0, trustDegrees[5]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3516,11 +3532,11 @@ namespace BetHelper {
         private void OnButton5Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox5.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees5();
                 textBox5.Focus();
                 textBox5.Select(0, trustDegrees[4]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3530,11 +3546,11 @@ namespace BetHelper {
         private void OnButton4Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox4.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees4();
                 textBox4.Focus();
                 textBox4.Select(0, trustDegrees[3]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3544,11 +3560,11 @@ namespace BetHelper {
         private void OnButton3Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox3.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees3();
                 textBox3.Focus();
                 textBox3.Select(0, trustDegrees[2]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3558,11 +3574,11 @@ namespace BetHelper {
         private void OnButton2Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox2.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees2();
                 textBox2.Focus();
                 textBox2.Select(0, trustDegrees[1]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3572,11 +3588,11 @@ namespace BetHelper {
         private void OnButton1Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox1.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees1();
                 textBox1.Focus();
                 textBox1.Select(0, trustDegrees[0]
-                    .ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3599,7 +3615,7 @@ namespace BetHelper {
                 textBoxNotes.Clear();
                 undoneNotes = str;
                 textBoxNotes.Focus();
-                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);
+                StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary);
             }
         }
 
@@ -3644,7 +3660,7 @@ namespace BetHelper {
         }
 
         private void NewTip(object sender, EventArgs e) {
-            TipForm tipForm = new TipForm(settings);
+            TipForm tipForm = new TipForm(Settings);
             tipForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
             tipForm.HelpRequested += new HelpEventHandler(OpenHelp);
             dialog = tipForm;
@@ -3656,7 +3672,7 @@ namespace BetHelper {
 
         private void EditTip(object sender, EventArgs e) {
             if (listViewTips.SelectedItems.Count.Equals(1)) {
-                TipForm tipForm = new TipForm(settings);
+                TipForm tipForm = new TipForm(Settings);
                 tipForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
                 tipForm.HelpRequested += new HelpEventHandler(OpenHelp);
                 tipForm.Tip = (Tip)listViewTips.SelectedItems[0].Tag;
@@ -3685,7 +3701,7 @@ namespace BetHelper {
         }
 
         private void NewService(object sender, EventArgs e) {
-            ServiceForm serviceForm = new ServiceForm(settings);
+            ServiceForm serviceForm = new ServiceForm(Settings);
             serviceForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
             serviceForm.HelpRequested += new HelpEventHandler(OpenHelp);
             dialog = serviceForm;
@@ -3697,7 +3713,7 @@ namespace BetHelper {
 
         private void EditService(object sender, EventArgs e) {
             if (listViewServices.SelectedItems.Count.Equals(1)) {
-                ServiceForm serviceForm = new ServiceForm(settings);
+                ServiceForm serviceForm = new ServiceForm(Settings);
                 serviceForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
                 serviceForm.HelpRequested += new HelpEventHandler(OpenHelp);
                 serviceForm.Service = (Service)listViewServices.SelectedItems[0].Tag;
@@ -3922,7 +3938,7 @@ namespace BetHelper {
             return null;
         }
 
-        private void SaveRightPaneData() {
+        private void PrepareRightPaneData() {
             List<Tip> tips = new List<Tip>(listViewTips.Items.Count);
             foreach (ListViewItem listViewItem in listViewTips.Items) {
                 tips.Add((Tip)listViewItem.Tag);
@@ -3931,8 +3947,7 @@ namespace BetHelper {
             foreach (ListViewItem listViewItem in listViewServices.Items) {
                 services.Add((Service)listViewItem.Tag);
             }
-
-            Data data = new Data(
+            Data = new Data(
                 webInfoHandler.Balance,
                 webInfoHandler.GetBalances(),
                 trustDegrees,
@@ -3944,15 +3959,6 @@ namespace BetHelper {
                 services.ToArray(),
                 listViewServicesSorter.SortColumn,
                 listViewServicesSorter.SortOrder);
-
-            try {
-                using (FileStream fileStream = File.Create(dataFilePath)) {
-                    new BinaryFormatter().Serialize(fileStream, data);
-                }
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-            }
         }
 
         private void DeleteRightPaneData() {
