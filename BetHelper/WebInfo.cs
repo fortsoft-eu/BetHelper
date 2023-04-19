@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.4.1
  */
 
 using CefSharp;
@@ -45,7 +45,7 @@ namespace BetHelper {
         protected bool frameInitialLoadEnded, audioMutedByDefault, pingTimerElapsed;
         protected decimal balance;
         protected FindEventArgs findEventArgs;
-        protected int currentItem, heartBeatTimerRun, heartBeatTimerStart, itemsTotal, loaded, loadingBeforeLogIn;
+        protected int currentItem, finished, heartBeatTimerRun, heartBeatTimerStart, itemsTotal, loaded, loadingBeforeLogIn;
         protected PersistWindowState persistWindowState;
         protected Regex secondLevelDomain, urlScheme;
         protected SemaphoreSlim heartBeatSemaphore, loadingBeforeLogInSemaphore;
@@ -91,6 +91,7 @@ namespace BetHelper {
                     loadingBeforeLogInTimer.Stop();
                     if (IsLoggedIn()) {
                         NoLogIn(Browser);
+                        SetFinished();
                         Finished?.Invoke(this, new FinishedEventArgs(Properties.Resources.MessageActionFinished));
                         LoadUrlToLoad();
                     } else {
@@ -444,6 +445,12 @@ namespace BetHelper {
             pingTimer.Start();
         }
 
+        private void SetFinished() {
+            if (finished++ > 0) {
+                finished = 1;
+            }
+        }
+
         private void SetZoomLevel(double zoomLevel) {
             if (Browser != null) {
                 ZoomLevel = zoomLevel;
@@ -682,6 +689,7 @@ namespace BetHelper {
                 await Task.Run(new Action(() => {
                     if (IsLoggedIn()) {
                         NoLogIn(Browser);
+                        SetFinished();
                         Finished?.Invoke(this, new FinishedEventArgs(Properties.Resources.MessageActionFinished));
                         LoadUrlToLoad();
                     } else {
@@ -807,6 +815,7 @@ namespace BetHelper {
         protected virtual void OnFinished() {
             loadingBeforeLogInTimer.Stop();
             currentItem = 0;
+            SetFinished();
             Finished?.Invoke(this, new FinishedEventArgs(Properties.Resources.MessageActionFinished));
             LoadUrlToLoad();
         }
@@ -1227,7 +1236,7 @@ namespace BetHelper {
         }
 
         protected bool ReloadIfRequired(ChromiumWebBrowser browser) {
-            if (CanReload && frameInitialLoadEnded) {
+            if (CanReload && finished > 0) {
                 browser.GetBrowser().Reload();
                 return true;
             }
