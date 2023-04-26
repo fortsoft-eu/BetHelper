@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.5.0
  */
 
 using CefSharp;
@@ -85,7 +85,7 @@ namespace BetHelper {
                 }
             });
             suspendTimer = new System.Timers.Timer();
-            suspendTimer.Interval = Constants.HeartBeatInterval * 2;
+            suspendTimer.Interval = Constants.WebInfoHeartBeatInterval * 2;
             suspendTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
                 if (n++ < 1) {
                     CloseBrowsers();

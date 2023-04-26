@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.5.0
  */
 
 namespace BetHelper {
@@ -100,21 +100,6 @@ namespace BetHelper {
         public const int GameTabsMaxCounts = 100;
 
         /// <summary>
-        /// Number of heart beats cycles.
-        /// </summary>
-        public const int HeartBeatCycles = 3;
-
-        /// <summary>
-        /// The time interval in milliseconds between each heart beat.
-        /// </summary>
-        public const int HeartBeatInterval = 500;
-
-        /// <summary>
-        /// Initial heart beat time interval in milliseconds.
-        /// </summary>
-        public const int InitialHeartBeatInterval = 10;
-
-        /// <summary>
         /// Initial time interval in milliseconds to get balances and tips
         /// displayed at right pane.
         /// </summary>
@@ -166,6 +151,12 @@ namespace BetHelper {
         public const int PrefsMaxDropDownItems = 30;
 
         /// <summary>
+        /// The delay in milliseconds after ProgressBarForm ProgressBar progress
+        /// is complete.
+        /// </summary>
+        public const int ProgressBarFormFinishDelay = 300;
+
+        /// <summary>
         /// The time interval in milliseconds for smooth ProgressBar shift in the
         /// ProgressBarForm.
         /// </summary>
@@ -200,10 +191,22 @@ namespace BetHelper {
         public const int SplitContainerMaxWidth = 1920;
 
         /// <summary>
+        /// The time interval in milliseconds between each heart beat. Applies to
+        /// StatusStrip.
+        /// </summary>
+        public const int StripHeartBeatInterval = 250;
+
+        /// <summary>
         /// Maximum internal width in pixels for calculations of the ProgressBar
         /// in the StatusStrip regardless of displayed size.
         /// </summary>
         public const int StripProgressBarInternalMax = 360;
+
+        /// <summary>
+        /// The delay in milliseconds after StatusStrip ProgressBar progress is
+        /// complete.
+        /// </summary>
+        public const int StripProgressBarFinishDelay = 500;
 
         /// <summary>
         /// The time interval in milliseconds for smooth ProgressBar shift in the
@@ -222,6 +225,11 @@ namespace BetHelper {
         /// its width.
         /// </summary>
         public const int StripProgressBarWRatio = 18;
+
+        /// <summary>
+        /// The time interval in seconds to refresh the StatusStrip labels.
+        /// </summary>
+        public const int StripStatusLblInterval = 30;
 
         /// <summary>
         /// Width limit in pixels for displaying the browser cache size label in
@@ -263,6 +271,22 @@ namespace BetHelper {
         /// spaces for displaying in the log viewer window and when printing.
         /// </summary>
         public const int VerticalTabNumberOfSpaces = 3;
+
+        /// <summary>
+        /// Number of heart beats cycles. Applies to WebInfo.
+        /// </summary>
+        public const int WebInfoHeartBeatCycles = 3;
+
+        /// <summary>
+        /// The time interval in milliseconds between each heart beat. Applies to
+        /// WebInfo.
+        /// </summary>
+        public const int WebInfoHeartBeatInterval = 500;
+
+        /// <summary>
+        /// Initial heart beat time interval in milliseconds. Applies to WebInfo.
+        /// </summary>
+        public const int WebInfoInitialHeartBeatInterval = 10;
 
         /// <summary>
         /// Windows API constants.

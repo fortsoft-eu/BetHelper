@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.1
+ * Version 1.1.5.0
  */
 
 using CefSharp;
@@ -101,17 +101,17 @@ namespace BetHelper {
                 loadingBeforeLogInSemaphore.Release();
             });
             heartBeatTimer = new System.Timers.Timer();
-            heartBeatTimer.Interval = Constants.InitialHeartBeatInterval;
+            heartBeatTimer.Interval = Constants.WebInfoInitialHeartBeatInterval;
             heartBeatTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
-                heartBeatTimer.Interval = Constants.HeartBeatInterval;
-                if (heartBeatTimerRun++ < Constants.HeartBeatCycles) {
+                heartBeatTimer.Interval = Constants.WebInfoHeartBeatInterval;
+                if (heartBeatTimerRun++ < Constants.WebInfoHeartBeatCycles) {
                     heartBeatSemaphore.Wait();
                     if (Browser.CanExecuteJavascriptInMainFrame) {
                         HeartBeat(Browser);
                     }
                     heartBeatSemaphore.Release();
                 } else {
-                    heartBeatTimerRun = Constants.HeartBeatCycles;
+                    heartBeatTimerRun = Constants.WebInfoHeartBeatCycles;
                 }
             });
             pingTimer = new System.Timers.Timer();
@@ -404,30 +404,31 @@ namespace BetHelper {
                 .Split(Constants.Comma)
                 .Select(new Func<string, string>(field => field.Trim()))
                 .ToArray();
+            decimal val = decimal.MinValue;
             try {
                 if (fields.Contains(Constants.FieldBalance)) {
                     if (string.IsNullOrEmpty(Pattern)) {
-                        return fields.Length.Equals(1)
-                            ? decimal.Parse(
-                                Regex.Replace(response, Constants.JSBalancePattern, string.Empty),
-                                CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag))
-                            : decimal.MinValue;
+                        if (fields.Length.Equals(1)) {
+                            decimal.TryParse(Regex.Replace(response, Constants.JSBalancePattern, string.Empty),
+                                NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
+                                CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag), out val);
+                        }
                     } else {
-                        return decimal.Parse(
-                            Regex.Replace(
-                                Regex.Replace(response, Pattern,
-                                    string.Format(Constants.ReplaceIndex,
-                                        Array.FindIndex(fields,
-                                            new Predicate<string>(field => field.Contains(Constants.FieldBalance))) + 1)),
-                                Constants.JSBalancePattern, string.Empty),
-                            CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag));
+                        string prepared = Regex.Replace(
+                            Regex.Replace(response, Pattern,
+                                string.Format(Constants.ReplaceIndex,
+                                    Array.FindIndex(fields,
+                                        new Predicate<string>(field => field.Contains(Constants.FieldBalance))) + 1)),
+                            Constants.JSBalancePattern, string.Empty);
+                        decimal.TryParse(prepared, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
+                            CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag), out val);
                     }
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
-            return decimal.MinValue;
+            return val;
         }
 
         private void HeartBeatReset() {
@@ -511,7 +512,7 @@ namespace BetHelper {
         }
 
         public void Resume() {
-            heartBeatTimer.Interval = Constants.InitialHeartBeatInterval;
+            heartBeatTimer.Interval = Constants.WebInfoInitialHeartBeatInterval;
             heartBeatTimer.Enabled = true;
             Find?.Invoke(this, findEventArgs);
         }

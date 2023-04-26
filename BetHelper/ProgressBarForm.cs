@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.5.0
  */
 
 using System;
@@ -42,7 +42,7 @@ namespace BetHelper {
             progressBar.Minimum = 0;
             progressBar.Style = ProgressBarStyle.Continuous;
             timer = new Timer();
-            timer.Interval = 300;
+            timer.Interval = Constants.ProgressBarFormFinishDelay;
             timer.Tick += new EventHandler((sender, e) => {
                 timer.Stop();
                 Close();

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.5.0
  */
 
 using FortSoft.Tools;
@@ -981,9 +981,7 @@ namespace BetHelper {
         /// </summary>
         public string Config { get; set; }
 
-        /// <summary>
-        /// Loads remote configuration file.
-        /// </summary>
+        /// <summary>Loads remote configuration file.</summary>
         public void LoadConfig() {
             if (string.IsNullOrEmpty(ConfigHash)) {
                 if (SingleInstance.FocusRunning(Application.ExecutablePath, Program.GetTitle())) {
@@ -1013,9 +1011,7 @@ namespace BetHelper {
             }
         }
 
-        /// <summary>
-        /// Saves remote configuration file.
-        /// </summary>
+        /// <summary>Saves remote configuration file.</summary>
         public async Task<bool> SaveConfigAsync() {
             string responseString = await configHandler.SaveConfigAsync();
             XmlDocument xmlDocument = new XmlDocument();
@@ -1036,9 +1032,7 @@ namespace BetHelper {
             allowedAddrHandler.Delete();
         }
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
+        /// <summary>Clean up any resources being used.</summary>
         public void Dispose() {
             allowedAddrHandler.Dispose();
             persistentSettings.Dispose();

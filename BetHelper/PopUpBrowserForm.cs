@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.5.0
  */
 
 using CefSharp;
@@ -58,16 +58,16 @@ namespace BetHelper {
 
             heartBeatSemaphore = new SemaphoreSlim(0, 1);
             heartBeatTimer = new System.Timers.Timer();
-            heartBeatTimer.Interval = Constants.HeartBeatInterval;
+            heartBeatTimer.Interval = Constants.WebInfoHeartBeatInterval;
             heartBeatTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
-                if (heartBeatTimerRun++ < Constants.HeartBeatCycles) {
+                if (heartBeatTimerRun++ < Constants.WebInfoHeartBeatCycles) {
                     heartBeatSemaphore.Wait();
                     if (Browser.CanExecuteJavascriptInMainFrame) {
                         webInfo.HeartBeat(Browser);
                     }
                     heartBeatSemaphore.Release();
                 } else {
-                    heartBeatTimerRun = Constants.HeartBeatCycles;
+                    heartBeatTimerRun = Constants.WebInfoHeartBeatCycles;
                 }
             });
             closeTimer = new System.Timers.Timer();

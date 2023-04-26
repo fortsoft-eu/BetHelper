@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.5.0
  */
 
 using System;
@@ -369,7 +369,7 @@ namespace BetHelper {
 
         private void InitializeHeartBeatTimer() {
             heartBeatTimer = new System.Windows.Forms.Timer();
-            heartBeatTimer.Interval = 250;
+            heartBeatTimer.Interval = Constants.StripHeartBeatInterval;
             heartBeatTimer.Tick += new EventHandler((sender, e) => {
                 bool capsChanged = SetStatusLabelCaps();
                 bool numChanged = SetStatusLabelNum();
@@ -384,7 +384,7 @@ namespace BetHelper {
 
         private void InitializeStatusLabelTimer() {
             labelTimer = new System.Windows.Forms.Timer();
-            labelTimer.Interval = 30000;
+            labelTimer.Interval = Constants.StripStatusLblInterval * 1000;
             labelTimer.Tick += new EventHandler((sender, e) => {
                 labelTimer.Stop();
                 labelMessage.Text = Properties.Resources.MessageReady;
@@ -392,7 +392,7 @@ namespace BetHelper {
         }
 
         private void InitializeProgressBarFinishedTimer() {
-            finishedTimer = new System.Timers.Timer(500);
+            finishedTimer = new System.Timers.Timer(Constants.StripProgressBarFinishDelay);
             finishedTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => ResetProgressBar());
         }
 

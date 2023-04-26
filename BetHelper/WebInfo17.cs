@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.5.0
  */
 
 using CefSharp;
@@ -187,8 +187,8 @@ namespace BetHelper {
                             int.Parse(tipLineItems[6].Substring(7, 4)),
                             int.Parse(tipLineItems[6].Substring(3, 2)),
                             int.Parse(tipLineItems[6].Substring(0, 2)),
-                            int.Parse(tipLineItems[7]),
-                            0,
+                            int.Parse(tipLineItems[7].Substring(0, 2)),
+                            int.Parse(tipLineItems[7].Substring(3, 2)),
                             0);
                         Game game = new Game(
                             dateTime,

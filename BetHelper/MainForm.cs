@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.5.0
  */
 
 using CefSharp;
@@ -1066,10 +1066,7 @@ namespace BetHelper {
                                 await Task.Run(new Action(() => {
                                     Thread.Sleep(Constants.ScreenFormCaptureDelay);
                                     using (Graphics graphics = Graphics.FromImage(bitmap)) {
-                                        graphics.CopyFromScreen(
-                                            upperLeftSource,
-                                            Point.Empty,
-                                            bitmap.Size,
+                                        graphics.CopyFromScreen(upperLeftSource, Point.Empty, bitmap.Size,
                                             CopyPixelOperation.SourceCopy);
                                     }
                                     StaticMethods.SaveBitmap(bitmap, saveFileDialog.FileName);
