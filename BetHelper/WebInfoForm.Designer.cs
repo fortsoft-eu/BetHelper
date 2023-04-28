@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.6.0
  */
 
 namespace BetHelper {
@@ -91,7 +91,6 @@ namespace BetHelper {
             this.textBoxUrlLive = new System.Windows.Forms.TextBox();
             this.checkBoxIsService = new System.Windows.Forms.CheckBox();
             this.checkBoxAudioMutedByDefault = new System.Windows.Forms.CheckBox();
-            this.labelOrdinal = new System.Windows.Forms.Label();
             this.labelUrlNext = new System.Windows.Forms.Label();
             this.textBoxUrlNext = new System.Windows.Forms.TextBox();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
@@ -102,6 +101,7 @@ namespace BetHelper {
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.panelChatHosts = new System.Windows.Forms.Panel();
             this.panelAllowedHosts = new System.Windows.Forms.Panel();
+            this.checkBoxTopMost = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel.SuspendLayout();
             this.panelChatHosts.SuspendLayout();
             this.panelAllowedHosts.SuspendLayout();
@@ -114,7 +114,7 @@ namespace BetHelper {
             this.labelTitle.Name = "labelTitle";
             this.labelTitle.Size = new System.Drawing.Size(30, 13);
             this.labelTitle.TabIndex = 0;
-            this.labelTitle.Text = "&Title:";
+            this.labelTitle.Text = "Titl&e:";
             // 
             // textBoxTitle
             // 
@@ -134,7 +134,7 @@ namespace BetHelper {
             this.labelUrl.Location = new System.Drawing.Point(12, 38);
             this.labelUrl.Name = "labelUrl";
             this.labelUrl.Size = new System.Drawing.Size(32, 13);
-            this.labelUrl.TabIndex = 3;
+            this.labelUrl.TabIndex = 2;
             this.labelUrl.Text = "U&RL:";
             // 
             // textBoxUrl
@@ -145,7 +145,7 @@ namespace BetHelper {
             this.textBoxUrl.Name = "textBoxUrl";
             this.textBoxUrl.ReadOnly = true;
             this.textBoxUrl.Size = new System.Drawing.Size(253, 20);
-            this.textBoxUrl.TabIndex = 4;
+            this.textBoxUrl.TabIndex = 3;
             this.textBoxUrl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxUrl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -155,7 +155,7 @@ namespace BetHelper {
             this.buttonCopyUrl.Location = new System.Drawing.Point(397, 33);
             this.buttonCopyUrl.Name = "buttonCopyUrl";
             this.buttonCopyUrl.Size = new System.Drawing.Size(75, 23);
-            this.buttonCopyUrl.TabIndex = 5;
+            this.buttonCopyUrl.TabIndex = 4;
             this.buttonCopyUrl.Text = "Co&py";
             this.buttonCopyUrl.UseVisualStyleBackColor = true;
             this.buttonCopyUrl.Click += new System.EventHandler(this.OnCopyUrlClick);
@@ -166,7 +166,7 @@ namespace BetHelper {
             this.labelUserName.Location = new System.Drawing.Point(12, 130);
             this.labelUserName.Name = "labelUserName";
             this.labelUserName.Size = new System.Drawing.Size(61, 13);
-            this.labelUserName.TabIndex = 12;
+            this.labelUserName.TabIndex = 11;
             this.labelUserName.Text = "User na&me:";
             // 
             // textBoxUserName
@@ -177,7 +177,7 @@ namespace BetHelper {
             this.textBoxUserName.Name = "textBoxUserName";
             this.textBoxUserName.ReadOnly = true;
             this.textBoxUserName.Size = new System.Drawing.Size(253, 20);
-            this.textBoxUserName.TabIndex = 13;
+            this.textBoxUserName.TabIndex = 12;
             this.textBoxUserName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxUserName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -198,7 +198,7 @@ namespace BetHelper {
             this.labelPassword.Location = new System.Drawing.Point(12, 153);
             this.labelPassword.Name = "labelPassword";
             this.labelPassword.Size = new System.Drawing.Size(56, 13);
-            this.labelPassword.TabIndex = 15;
+            this.labelPassword.TabIndex = 13;
             this.labelPassword.Text = "Pass&word:";
             // 
             // maskedTextBoxPassword
@@ -209,7 +209,7 @@ namespace BetHelper {
             this.maskedTextBoxPassword.Name = "maskedTextBoxPassword";
             this.maskedTextBoxPassword.ReadOnly = true;
             this.maskedTextBoxPassword.Size = new System.Drawing.Size(253, 20);
-            this.maskedTextBoxPassword.TabIndex = 17;
+            this.maskedTextBoxPassword.TabIndex = 14;
             this.maskedTextBoxPassword.UseSystemPasswordChar = true;
             this.maskedTextBoxPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnPasswordKeyDown);
             this.maskedTextBoxPassword.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnPasswordMouseDown);
@@ -220,7 +220,7 @@ namespace BetHelper {
             this.buttonCopyPassword.Location = new System.Drawing.Point(397, 148);
             this.buttonCopyPassword.Name = "buttonCopyPassword";
             this.buttonCopyPassword.Size = new System.Drawing.Size(75, 23);
-            this.buttonCopyPassword.TabIndex = 18;
+            this.buttonCopyPassword.TabIndex = 16;
             this.buttonCopyPassword.Text = "&Copy";
             this.buttonCopyPassword.UseVisualStyleBackColor = true;
             this.buttonCopyPassword.Click += new System.EventHandler(this.OnCopyPasswordClick);
@@ -231,7 +231,7 @@ namespace BetHelper {
             this.labelScript.Location = new System.Drawing.Point(12, 176);
             this.labelScript.Name = "labelScript";
             this.labelScript.Size = new System.Drawing.Size(60, 13);
-            this.labelScript.TabIndex = 19;
+            this.labelScript.TabIndex = 17;
             this.labelScript.Text = "&JavaScript:";
             // 
             // textBoxScript
@@ -242,7 +242,7 @@ namespace BetHelper {
             this.textBoxScript.Name = "textBoxScript";
             this.textBoxScript.ReadOnly = true;
             this.textBoxScript.Size = new System.Drawing.Size(253, 20);
-            this.textBoxScript.TabIndex = 20;
+            this.textBoxScript.TabIndex = 18;
             this.textBoxScript.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxScript.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -252,7 +252,7 @@ namespace BetHelper {
             this.labelPattern.Location = new System.Drawing.Point(12, 199);
             this.labelPattern.Name = "labelPattern";
             this.labelPattern.Size = new System.Drawing.Size(44, 13);
-            this.labelPattern.TabIndex = 21;
+            this.labelPattern.TabIndex = 19;
             this.labelPattern.Text = "Patter&n:";
             // 
             // textBoxPattern
@@ -263,7 +263,7 @@ namespace BetHelper {
             this.textBoxPattern.Name = "textBoxPattern";
             this.textBoxPattern.ReadOnly = true;
             this.textBoxPattern.Size = new System.Drawing.Size(253, 20);
-            this.textBoxPattern.TabIndex = 22;
+            this.textBoxPattern.TabIndex = 20;
             this.textBoxPattern.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPattern.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -273,7 +273,7 @@ namespace BetHelper {
             this.labelFields.Location = new System.Drawing.Point(12, 222);
             this.labelFields.Name = "labelFields";
             this.labelFields.Size = new System.Drawing.Size(37, 13);
-            this.labelFields.TabIndex = 23;
+            this.labelFields.TabIndex = 21;
             this.labelFields.Text = "&Fields:";
             // 
             // textBoxFields
@@ -284,7 +284,7 @@ namespace BetHelper {
             this.textBoxFields.Name = "textBoxFields";
             this.textBoxFields.ReadOnly = true;
             this.textBoxFields.Size = new System.Drawing.Size(253, 20);
-            this.textBoxFields.TabIndex = 24;
+            this.textBoxFields.TabIndex = 22;
             this.textBoxFields.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxFields.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -294,7 +294,7 @@ namespace BetHelper {
             this.labelDisplayName.Location = new System.Drawing.Point(12, 245);
             this.labelDisplayName.Name = "labelDisplayName";
             this.labelDisplayName.Size = new System.Drawing.Size(73, 13);
-            this.labelDisplayName.TabIndex = 25;
+            this.labelDisplayName.TabIndex = 23;
             this.labelDisplayName.Text = "Displa&y name:";
             // 
             // textBoxDisplayName
@@ -305,7 +305,7 @@ namespace BetHelper {
             this.textBoxDisplayName.Name = "textBoxDisplayName";
             this.textBoxDisplayName.ReadOnly = true;
             this.textBoxDisplayName.Size = new System.Drawing.Size(253, 20);
-            this.textBoxDisplayName.TabIndex = 26;
+            this.textBoxDisplayName.TabIndex = 24;
             this.textBoxDisplayName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxDisplayName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -315,7 +315,7 @@ namespace BetHelper {
             this.checkBoxHandlePopUps.Location = new System.Drawing.Point(15, 285);
             this.checkBoxHandlePopUps.Name = "checkBoxHandlePopUps";
             this.checkBoxHandlePopUps.Size = new System.Drawing.Size(98, 17);
-            this.checkBoxHandlePopUps.TabIndex = 29;
+            this.checkBoxHandlePopUps.TabIndex = 27;
             this.checkBoxHandlePopUps.Text = "Handle popups";
             this.checkBoxHandlePopUps.UseVisualStyleBackColor = true;
             this.checkBoxHandlePopUps.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
@@ -326,7 +326,7 @@ namespace BetHelper {
             this.labelPopUpWidth.Location = new System.Drawing.Point(12, 326);
             this.labelPopUpWidth.Name = "labelPopUpWidth";
             this.labelPopUpWidth.Size = new System.Drawing.Size(72, 13);
-            this.labelPopUpWidth.TabIndex = 33;
+            this.labelPopUpWidth.TabIndex = 31;
             this.labelPopUpWidth.Text = "Pop up wi&dth:";
             // 
             // textBoxPopUpWidth
@@ -335,7 +335,7 @@ namespace BetHelper {
             this.textBoxPopUpWidth.Name = "textBoxPopUpWidth";
             this.textBoxPopUpWidth.ReadOnly = true;
             this.textBoxPopUpWidth.Size = new System.Drawing.Size(55, 20);
-            this.textBoxPopUpWidth.TabIndex = 34;
+            this.textBoxPopUpWidth.TabIndex = 32;
             this.textBoxPopUpWidth.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPopUpWidth.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -345,7 +345,7 @@ namespace BetHelper {
             this.labelPopUpHeight.Location = new System.Drawing.Point(210, 326);
             this.labelPopUpHeight.Name = "labelPopUpHeight";
             this.labelPopUpHeight.Size = new System.Drawing.Size(76, 13);
-            this.labelPopUpHeight.TabIndex = 35;
+            this.labelPopUpHeight.TabIndex = 33;
             this.labelPopUpHeight.Text = "Pop up &height:";
             // 
             // textBoxPopUpHeight
@@ -354,7 +354,7 @@ namespace BetHelper {
             this.textBoxPopUpHeight.Name = "textBoxPopUpHeight";
             this.textBoxPopUpHeight.ReadOnly = true;
             this.textBoxPopUpHeight.Size = new System.Drawing.Size(55, 20);
-            this.textBoxPopUpHeight.TabIndex = 36;
+            this.textBoxPopUpHeight.TabIndex = 34;
             this.textBoxPopUpHeight.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPopUpHeight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -364,7 +364,7 @@ namespace BetHelper {
             this.labelPopUpLeft.Location = new System.Drawing.Point(12, 349);
             this.labelPopUpLeft.Name = "labelPopUpLeft";
             this.labelPopUpLeft.Size = new System.Drawing.Size(61, 13);
-            this.labelPopUpLeft.TabIndex = 37;
+            this.labelPopUpLeft.TabIndex = 35;
             this.labelPopUpLeft.Text = "Pop up &left:";
             // 
             // textBoxPopUpLeft
@@ -373,7 +373,7 @@ namespace BetHelper {
             this.textBoxPopUpLeft.Name = "textBoxPopUpLeft";
             this.textBoxPopUpLeft.ReadOnly = true;
             this.textBoxPopUpLeft.Size = new System.Drawing.Size(55, 20);
-            this.textBoxPopUpLeft.TabIndex = 38;
+            this.textBoxPopUpLeft.TabIndex = 36;
             this.textBoxPopUpLeft.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPopUpLeft.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -383,7 +383,7 @@ namespace BetHelper {
             this.labelPopUpTop.Location = new System.Drawing.Point(210, 349);
             this.labelPopUpTop.Name = "labelPopUpTop";
             this.labelPopUpTop.Size = new System.Drawing.Size(62, 13);
-            this.labelPopUpTop.TabIndex = 39;
+            this.labelPopUpTop.TabIndex = 37;
             this.labelPopUpTop.Text = "Pop &up top:";
             // 
             // textBoxPopUpTop
@@ -392,7 +392,7 @@ namespace BetHelper {
             this.textBoxPopUpTop.Name = "textBoxPopUpTop";
             this.textBoxPopUpTop.ReadOnly = true;
             this.textBoxPopUpTop.Size = new System.Drawing.Size(55, 20);
-            this.textBoxPopUpTop.TabIndex = 40;
+            this.textBoxPopUpTop.TabIndex = 38;
             this.textBoxPopUpTop.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPopUpTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -402,7 +402,7 @@ namespace BetHelper {
             this.labelIetfLanguageTag.Location = new System.Drawing.Point(12, 372);
             this.labelIetfLanguageTag.Name = "labelIetfLanguageTag";
             this.labelIetfLanguageTag.Size = new System.Drawing.Size(98, 13);
-            this.labelIetfLanguageTag.TabIndex = 41;
+            this.labelIetfLanguageTag.TabIndex = 39;
             this.labelIetfLanguageTag.Text = "IETF lan&guage tag:";
             // 
             // textBoxIetfLanguageTag
@@ -411,7 +411,7 @@ namespace BetHelper {
             this.textBoxIetfLanguageTag.Name = "textBoxIetfLanguageTag";
             this.textBoxIetfLanguageTag.ReadOnly = true;
             this.textBoxIetfLanguageTag.Size = new System.Drawing.Size(55, 20);
-            this.textBoxIetfLanguageTag.TabIndex = 42;
+            this.textBoxIetfLanguageTag.TabIndex = 40;
             this.textBoxIetfLanguageTag.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxIetfLanguageTag.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -421,7 +421,7 @@ namespace BetHelper {
             this.labelBackNavigation.Location = new System.Drawing.Point(210, 372);
             this.labelBackNavigation.Name = "labelBackNavigation";
             this.labelBackNavigation.Size = new System.Drawing.Size(87, 13);
-            this.labelBackNavigation.TabIndex = 43;
+            this.labelBackNavigation.TabIndex = 41;
             this.labelBackNavigation.Text = "&Back navigation:";
             // 
             // textBoxBackNavigation
@@ -430,7 +430,7 @@ namespace BetHelper {
             this.textBoxBackNavigation.Name = "textBoxBackNavigation";
             this.textBoxBackNavigation.ReadOnly = true;
             this.textBoxBackNavigation.Size = new System.Drawing.Size(55, 20);
-            this.textBoxBackNavigation.TabIndex = 44;
+            this.textBoxBackNavigation.TabIndex = 42;
             this.textBoxBackNavigation.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxBackNavigation.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -465,8 +465,8 @@ namespace BetHelper {
             this.buttonOk.Location = new System.Drawing.Point(397, 462);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
-            this.buttonOk.TabIndex = 46;
-            this.buttonOk.Text = "Clos&e";
+            this.buttonOk.TabIndex = 44;
+            this.buttonOk.Text = "O&K";
             this.buttonOk.UseVisualStyleBackColor = true;
             // 
             // checkBoxWillHandlePopUps
@@ -476,7 +476,7 @@ namespace BetHelper {
             this.checkBoxWillHandlePopUps.Location = new System.Drawing.Point(15, 304);
             this.checkBoxWillHandlePopUps.Name = "checkBoxWillHandlePopUps";
             this.checkBoxWillHandlePopUps.Size = new System.Drawing.Size(155, 17);
-            this.checkBoxWillHandlePopUps.TabIndex = 31;
+            this.checkBoxWillHandlePopUps.TabIndex = 29;
             this.checkBoxWillHandlePopUps.Text = "Will actually handle popups";
             this.checkBoxWillHandlePopUps.UseVisualStyleBackColor = true;
             this.checkBoxWillHandlePopUps.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
@@ -511,7 +511,7 @@ namespace BetHelper {
             this.labelUrlLive.Location = new System.Drawing.Point(12, 61);
             this.labelUrlLive.Name = "labelUrlLive";
             this.labelUrlLive.Size = new System.Drawing.Size(55, 13);
-            this.labelUrlLive.TabIndex = 6;
+            this.labelUrlLive.TabIndex = 5;
             this.labelUrlLive.Text = "Li&ve URL:";
             // 
             // textBoxUrlLive
@@ -522,7 +522,7 @@ namespace BetHelper {
             this.textBoxUrlLive.Name = "textBoxUrlLive";
             this.textBoxUrlLive.ReadOnly = true;
             this.textBoxUrlLive.Size = new System.Drawing.Size(253, 20);
-            this.textBoxUrlLive.TabIndex = 7;
+            this.textBoxUrlLive.TabIndex = 6;
             this.textBoxUrlLive.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxUrlLive.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -532,7 +532,7 @@ namespace BetHelper {
             this.checkBoxIsService.Location = new System.Drawing.Point(15, 266);
             this.checkBoxIsService.Name = "checkBoxIsService";
             this.checkBoxIsService.Size = new System.Drawing.Size(71, 17);
-            this.checkBoxIsService.TabIndex = 27;
+            this.checkBoxIsService.TabIndex = 25;
             this.checkBoxIsService.Text = "Is service";
             this.checkBoxIsService.UseVisualStyleBackColor = true;
             this.checkBoxIsService.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
@@ -543,20 +543,10 @@ namespace BetHelper {
             this.checkBoxAudioMutedByDefault.Location = new System.Drawing.Point(213, 266);
             this.checkBoxAudioMutedByDefault.Name = "checkBoxAudioMutedByDefault";
             this.checkBoxAudioMutedByDefault.Size = new System.Drawing.Size(134, 17);
-            this.checkBoxAudioMutedByDefault.TabIndex = 28;
+            this.checkBoxAudioMutedByDefault.TabIndex = 26;
             this.checkBoxAudioMutedByDefault.Text = "Audio muted by default";
             this.checkBoxAudioMutedByDefault.UseVisualStyleBackColor = true;
             this.checkBoxAudioMutedByDefault.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
-            // 
-            // labelOrdinal
-            // 
-            this.labelOrdinal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelOrdinal.AutoSize = true;
-            this.labelOrdinal.Location = new System.Drawing.Point(397, 15);
-            this.labelOrdinal.Name = "labelOrdinal";
-            this.labelOrdinal.Size = new System.Drawing.Size(62, 13);
-            this.labelOrdinal.TabIndex = 2;
-            this.labelOrdinal.Text = "labelOrdinal";
             // 
             // labelUrlNext
             // 
@@ -564,7 +554,7 @@ namespace BetHelper {
             this.labelUrlNext.Location = new System.Drawing.Point(12, 84);
             this.labelUrlNext.Name = "labelUrlNext";
             this.labelUrlNext.Size = new System.Drawing.Size(92, 13);
-            this.labelUrlNext.TabIndex = 8;
+            this.labelUrlNext.TabIndex = 7;
             this.labelUrlNext.Text = "Ne&xt URL to load:";
             // 
             // textBoxUrlNext
@@ -575,7 +565,7 @@ namespace BetHelper {
             this.textBoxUrlNext.Name = "textBoxUrlNext";
             this.textBoxUrlNext.ReadOnly = true;
             this.textBoxUrlNext.Size = new System.Drawing.Size(253, 20);
-            this.textBoxUrlNext.TabIndex = 9;
+            this.textBoxUrlNext.TabIndex = 8;
             this.textBoxUrlNext.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxUrlNext.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -587,7 +577,7 @@ namespace BetHelper {
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.ReadOnly = true;
             this.textBoxPassword.Size = new System.Drawing.Size(253, 20);
-            this.textBoxPassword.TabIndex = 16;
+            this.textBoxPassword.TabIndex = 15;
             this.textBoxPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxPassword.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -597,7 +587,7 @@ namespace BetHelper {
             this.checkBoxTabNavigation.Location = new System.Drawing.Point(213, 285);
             this.checkBoxTabNavigation.Name = "checkBoxTabNavigation";
             this.checkBoxTabNavigation.Size = new System.Drawing.Size(170, 17);
-            this.checkBoxTabNavigation.TabIndex = 30;
+            this.checkBoxTabNavigation.TabIndex = 28;
             this.checkBoxTabNavigation.Text = "Allow navigation between tabs";
             this.checkBoxTabNavigation.UseVisualStyleBackColor = true;
             this.checkBoxTabNavigation.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
@@ -609,7 +599,7 @@ namespace BetHelper {
             this.checkBoxWillTryToKeep.Location = new System.Drawing.Point(213, 304);
             this.checkBoxWillTryToKeep.Name = "checkBoxWillTryToKeep";
             this.checkBoxWillTryToKeep.Size = new System.Drawing.Size(183, 17);
-            this.checkBoxWillTryToKeep.TabIndex = 32;
+            this.checkBoxWillTryToKeep.TabIndex = 30;
             this.checkBoxWillTryToKeep.Text = "Will try to keep the user logged in";
             this.checkBoxWillTryToKeep.UseVisualStyleBackColor = true;
             this.checkBoxWillTryToKeep.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
@@ -620,7 +610,7 @@ namespace BetHelper {
             this.labelTips.Location = new System.Drawing.Point(12, 107);
             this.labelTips.Name = "labelTips";
             this.labelTips.Size = new System.Drawing.Size(55, 13);
-            this.labelTips.TabIndex = 10;
+            this.labelTips.TabIndex = 9;
             this.labelTips.Text = "T&ips URL:";
             // 
             // textBoxTips
@@ -631,7 +621,7 @@ namespace BetHelper {
             this.textBoxTips.Name = "textBoxTips";
             this.textBoxTips.ReadOnly = true;
             this.textBoxTips.Size = new System.Drawing.Size(253, 20);
-            this.textBoxTips.TabIndex = 11;
+            this.textBoxTips.TabIndex = 10;
             this.textBoxTips.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxTips.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             // 
@@ -650,7 +640,7 @@ namespace BetHelper {
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel.Size = new System.Drawing.Size(379, 93);
-            this.tableLayoutPanel.TabIndex = 45;
+            this.tableLayoutPanel.TabIndex = 43;
             // 
             // panelChatHosts
             // 
@@ -674,12 +664,24 @@ namespace BetHelper {
             this.panelAllowedHosts.Size = new System.Drawing.Size(379, 46);
             this.panelAllowedHosts.TabIndex = 0;
             // 
+            // checkBoxTopMost
+            // 
+            this.checkBoxTopMost.AutoSize = true;
+            this.checkBoxTopMost.Location = new System.Drawing.Point(398, 14);
+            this.checkBoxTopMost.Name = "checkBoxTopMost";
+            this.checkBoxTopMost.Size = new System.Drawing.Size(70, 17);
+            this.checkBoxTopMost.TabIndex = 45;
+            this.checkBoxTopMost.Text = "&Top most";
+            this.checkBoxTopMost.UseVisualStyleBackColor = true;
+            this.checkBoxTopMost.CheckedChanged += new System.EventHandler(this.OnTopMostCheckedChanged);
+            // 
             // WebInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonOk;
             this.ClientSize = new System.Drawing.Size(484, 497);
+            this.Controls.Add(this.checkBoxTopMost);
             this.Controls.Add(this.tableLayoutPanel);
             this.Controls.Add(this.textBoxTips);
             this.Controls.Add(this.labelTips);
@@ -688,7 +690,6 @@ namespace BetHelper {
             this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.textBoxUrlNext);
             this.Controls.Add(this.labelUrlNext);
-            this.Controls.Add(this.labelOrdinal);
             this.Controls.Add(this.checkBoxAudioMutedByDefault);
             this.Controls.Add(this.checkBoxIsService);
             this.Controls.Add(this.textBoxUrlLive);
@@ -786,7 +787,6 @@ namespace BetHelper {
         private System.Windows.Forms.TextBox textBoxUrlLive;
         private System.Windows.Forms.CheckBox checkBoxIsService;
         private System.Windows.Forms.CheckBox checkBoxAudioMutedByDefault;
-        private System.Windows.Forms.Label labelOrdinal;
         private System.Windows.Forms.Label labelUrlNext;
         private System.Windows.Forms.TextBox textBoxUrlNext;
         private System.Windows.Forms.TextBox textBoxPassword;
@@ -797,5 +797,6 @@ namespace BetHelper {
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.Panel panelChatHosts;
         private System.Windows.Forms.Panel panelAllowedHosts;
+        private System.Windows.Forms.CheckBox checkBoxTopMost;
     }
 }

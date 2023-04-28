@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.5.0
+ * Version 1.1.6.0
  */
 
 using CefSharp;
@@ -79,6 +79,7 @@ namespace BetHelper {
             urlScheme = new Regex(Constants.SchemePresenceTestPattern, RegexOptions.IgnoreCase);
             findEventArgs = new FindEventArgs();
             persistWindowState = new PersistWindowState();
+            persistWindowState.AllowSaveTopMost = true;
             persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
             heartBeatSemaphore = new SemaphoreSlim(0, 1);
             loadingBeforeLogInSemaphore = new SemaphoreSlim(0, 1);
@@ -280,7 +281,7 @@ namespace BetHelper {
         }
 
         private void Info() {
-            webInfoForm = new WebInfoForm(this);
+            webInfoForm = new WebInfoForm(this, persistWindowState);
             persistWindowState.Parent = webInfoForm;
             webInfoForm.HelpRequested += new HelpEventHandler((sender, hlpevent) => Help?.Invoke(sender, hlpevent));
             webInfoForm.ShowDialog();

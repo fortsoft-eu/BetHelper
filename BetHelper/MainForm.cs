@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.5.0
+ * Version 1.1.6.0
  */
 
 using CefSharp;
@@ -302,7 +302,7 @@ namespace BetHelper {
                     new EventHandler(CopyCurrentTitle)));
                 menuItemTools.MenuItems.Add(Constants.Hyphen.ToString());
                 menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemWebInfo + Constants.ShortcutCtrlI,
-                    new EventHandler(OpenWebInfo)));
+                    new EventHandler(ShowWebInfo)));
                 menuItemTools.MenuItems.Add(Constants.Hyphen.ToString());
                 menuItemTools.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemLogViewer + Constants.ShortcutAltL,
                     new EventHandler(OpenLogViewer)));
@@ -852,7 +852,6 @@ namespace BetHelper {
             shortcutManager.OpenEncoderDecoder += new EventHandler(OpenEncoderDecoder);
             shortcutManager.OpenHelp += new EventHandler(OpenHelp);
             shortcutManager.OpenLogViewer += new EventHandler(OpenLogViewer);
-            shortcutManager.OpenWebInfo += new EventHandler(OpenWebInfo);
             shortcutManager.Print += new EventHandler(Print);
             shortcutManager.PrintImage += new EventHandler(PrintImage);
             shortcutManager.PrintToPdf += new EventHandler(PrintToPdf);
@@ -860,6 +859,7 @@ namespace BetHelper {
             shortcutManager.ReloadIgnoreCache += new EventHandler(ReloadIgnoreCache);
             shortcutManager.ResetIpCheckLock += new EventHandler((sender, e) => Settings.AllowedAddrHandler.Reset());
             shortcutManager.ShowPreferences += new EventHandler(ShowPreferences);
+            shortcutManager.ShowWebInfo += new EventHandler(ShowWebInfo);
             shortcutManager.StopLoad += new EventHandler(StopLoad);
             shortcutManager.StopRinging += new EventHandler((sender, e) => telephoneBell.Stop());
             shortcutManager.ToggleRightPane += new EventHandler(ToggleRightPane);
@@ -1470,8 +1470,7 @@ namespace BetHelper {
                 findForm.CtrlF5Pressed += new EventHandler(ReloadIgnoreCache);
                 findForm.CtrlF5Pressed += new EventHandler(ReloadIgnoreCache);
                 findForm.CtrlGPressed += new EventHandler(ShowPreferences);
-                findForm.CtrlIPressed += new EventHandler(OpenWebInfo);
-                findForm.CtrlIPressed += new EventHandler(OpenWebInfo);
+                findForm.CtrlIPressed += new EventHandler(ShowWebInfo);
                 findForm.CtrlMinusPressed += new EventHandler(ZoomOutFine);
                 findForm.CtrlMPressed += new EventHandler(ToggleMuteAudio);
                 findForm.CtrlOPressed += new EventHandler(Open);
@@ -2020,7 +2019,7 @@ namespace BetHelper {
             form.Show();
         }
 
-        private void OpenWebInfo(object sender, EventArgs e) {
+        private void ShowWebInfo(object sender, EventArgs e) {
             if (!string.IsNullOrEmpty(webInfoHandler.GetCurrentAddress())) {
                 webInfoHandler.Current.ShowInfo();
             }
@@ -2252,8 +2251,7 @@ namespace BetHelper {
                     findForm.CtrlF5Pressed -= new EventHandler(ReloadIgnoreCache);
                     findForm.CtrlF5Pressed -= new EventHandler(ReloadIgnoreCache);
                     findForm.CtrlGPressed -= new EventHandler(ShowPreferences);
-                    findForm.CtrlIPressed -= new EventHandler(OpenWebInfo);
-                    findForm.CtrlIPressed -= new EventHandler(OpenWebInfo);
+                    findForm.CtrlIPressed -= new EventHandler(ShowWebInfo);
                     findForm.CtrlMinusPressed -= new EventHandler(ZoomOutFine);
                     findForm.CtrlMPressed -= new EventHandler(ToggleMuteAudio);
                     findForm.CtrlOPressed -= new EventHandler(Open);

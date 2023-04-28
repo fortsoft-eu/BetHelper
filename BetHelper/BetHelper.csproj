@@ -349,27 +349,12 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="AllowedAddrForm.resx">
-      <DependentUpon>AllowedAddrForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="CalculatorForm.resx">
       <DependentUpon>CalculatorForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConfigHashForm.resx">
-      <DependentUpon>ConfigHashForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="CountDownForm.resx">
-      <DependentUpon>CountDownForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="EncDecForm.resx">
       <DependentUpon>EncDecForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FindForm.resx">
-      <DependentUpon>FindForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LogViewerForm.resx">
       <DependentUpon>LogViewerForm.cs</DependentUpon>
@@ -382,16 +367,8 @@
     <EmbeddedResource Include="MatchControl.resx">
       <DependentUpon>MatchControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OpenForm.resx">
-      <DependentUpon>OpenForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="PopUpBrowserForm.resx">
       <DependentUpon>PopUpBrowserForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PreferencesForm.resx">
-      <DependentUpon>PreferencesForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -402,15 +379,6 @@
     <EmbeddedResource Include="ConfigEditForm.resx">
       <DependentUpon>ConfigEditForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ServiceForm.resx">
-      <DependentUpon>ServiceForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TipForm.resx">
-      <DependentUpon>TipForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="WebInfoForm.resx">
-      <DependentUpon>WebInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />

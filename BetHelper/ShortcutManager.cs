@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.6.0
  */
 
 using FortSoft.Tools;
@@ -67,7 +67,7 @@ namespace BetHelper {
         public event EventHandler OpenEncoderDecoder;
         public event EventHandler OpenHelp;
         public event EventHandler OpenLogViewer;
-        public event EventHandler OpenWebInfo;
+        public event EventHandler ShowWebInfo;
         public event EventHandler Print;
         public event EventHandler PrintImage;
         public event EventHandler PrintToPdf;
@@ -91,6 +91,26 @@ namespace BetHelper {
         public ShortcutManager() {
             keyboardHookManager = new KeyboardHookManager();
             keyboardHookManager.Start();
+        }
+
+        public void AddForm(Form form) {
+            if (this.form == null) {
+                this.form = form;
+                this.form.Activated += new EventHandler(Register);
+                this.form.Deactivate += new EventHandler(Unregister);
+                this.form.Enter += new EventHandler(Register);
+                this.form.Leave += new EventHandler(Unregister);
+            } else {
+                throw new ApplicationException();
+            }
+        }
+
+        public void Dispose() {
+            if (keyboardHookManager != null) {
+                keyboardHookManager.UnregisterAll();
+                keyboardHookManager.Stop();
+                keyboardHookManager = null;
+            }
         }
 
         private void Register() {
@@ -390,7 +410,7 @@ namespace BetHelper {
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_I,
                 new Action(() => {
                     if (!form.WindowState.Equals(FormWindowState.Minimized)) {
-                        OpenWebInfo?.Invoke(this, EventArgs.Empty);
+                        ShowWebInfo?.Invoke(this, EventArgs.Empty);
                     }
                 }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Control, (int)VirtualKeyCode.KEY_M,
@@ -477,22 +497,6 @@ namespace BetHelper {
                         FindPrevious?.Invoke(this, EventArgs.Empty);
                     }
                 }));
-        }
-
-        public void AddForm(Form form) {
-            this.form = form;
-            this.form.Activated += new EventHandler(Register);
-            this.form.Deactivate += new EventHandler(Unregister);
-            this.form.Enter += new EventHandler(Register);
-            this.form.Leave += new EventHandler(Unregister);
-        }
-
-        public void Dispose() {
-            if (keyboardHookManager != null) {
-                keyboardHookManager.UnregisterAll();
-                keyboardHookManager.Stop();
-                keyboardHookManager = null;
-            }
         }
 
         private void Register(object sender, EventArgs e) {

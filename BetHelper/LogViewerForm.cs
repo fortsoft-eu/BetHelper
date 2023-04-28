@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.1
+ * Version 1.1.6.0
  */
 
 using FortSoft.Tools;
@@ -575,8 +575,10 @@ namespace BetHelper {
 
         private void OnWindowStateLoaded(object sender, PersistWindowStateEventArgs e) {
             try {
-                byteSettings = Settings.IntToByteArray(
-                    (int)e.RegistryKey.GetValue(Name + Constants.Settings, Settings.ByteArrayToInt(byteSettings)));
+                if (e.RegistryKey != null) {
+                    byteSettings = Settings.IntToByteArray(
+                        (int)e.RegistryKey.GetValue(Name + Constants.Settings, Settings.ByteArrayToInt(byteSettings)));
+                }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -593,7 +595,9 @@ namespace BetHelper {
             byteSettings[2] = (byte)(Menu.MenuItems[3].MenuItems[5].Checked ? 1 : 0);
             byteSettings[3] = (byte)(Menu.MenuItems[3].MenuItems[6].Checked ? 1 : 0);
             try {
-                e.RegistryKey.SetValue(Name + Constants.Settings, Settings.ByteArrayToInt(byteSettings));
+                if (e.RegistryKey != null) {
+                    e.RegistryKey.SetValue(Name + Constants.Settings, Settings.ByteArrayToInt(byteSettings));
+                }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);

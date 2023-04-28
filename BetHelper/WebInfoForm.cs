@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.6.0
  */
 
 using FortSoft.Tools;
@@ -43,12 +43,17 @@ namespace BetHelper {
         private delegate void WebInfoFormCallback();
         private delegate void CopyCallback(string str);
 
-        public WebInfoForm(WebInfo webInfo) {
+        public WebInfoForm(WebInfo webInfo, PersistWindowState persistWindowState) {
             this.webInfo = webInfo;
+            this.persistWindowState = persistWindowState;
 
             Icon = Properties.Resources.Form;
             Text = new StringBuilder()
                 .Append(Properties.Resources.CaptionWebInfo)
+                .Append(Constants.Space)
+                .Append(Constants.NumberSign)
+                .Append(Constants.Space)
+                .Append(webInfo.Ordinal)
                 .Append(Constants.Space)
                 .Append(Constants.EnDash)
                 .Append(Constants.Space)
@@ -62,15 +67,12 @@ namespace BetHelper {
                 textBoxClicks = 0;
             });
 
-            persistWindowState = new PersistWindowState();
-            persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
-            persistWindowState.Parent = this;
+            persistWindowState.Loaded += new EventHandler<PersistWindowStateEventArgs>((sender, e) => checkBoxTopMost.Checked = TopMost);
 
             InitializeComponent();
             BuildContextMenuAsync();
 
             SuspendLayout();
-            labelOrdinal.Text = Constants.NumberSign.ToString() + Constants.Space.ToString() + webInfo.Ordinal.ToString();
             textBoxTitle.Text = string.IsNullOrEmpty(webInfo.Title) ? Properties.Resources.CaptionNotSet : webInfo.Title;
             textBoxUrl.Text = string.IsNullOrEmpty(webInfo.Url) ? Properties.Resources.CaptionNotSet : webInfo.Url;
             textBoxUrlLive.Text = string.IsNullOrEmpty(webInfo.UrlLive) ? Properties.Resources.CaptionNotSet : webInfo.UrlLive;
@@ -347,6 +349,13 @@ namespace BetHelper {
                 maskedTextBox.Focus();
             } else {
                 textBoxClicksTimer.Start();
+            }
+        }
+
+        private void OnTopMostCheckedChanged(object sender, EventArgs e) {
+            TopMost = checkBoxTopMost.Checked;
+            if (!TopMost) {
+                SendToBack();
             }
         }
     }
