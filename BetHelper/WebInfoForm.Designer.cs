@@ -666,6 +666,7 @@ namespace BetHelper {
             // 
             // checkBoxTopMost
             // 
+            this.checkBoxTopMost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxTopMost.AutoSize = true;
             this.checkBoxTopMost.Location = new System.Drawing.Point(398, 14);
             this.checkBoxTopMost.Name = "checkBoxTopMost";
