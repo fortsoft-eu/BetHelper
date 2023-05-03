@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.5.0
+ * Version 1.1.7.0
  */
 
 using System;
@@ -33,11 +33,13 @@ using System.Windows.Forms;
 
 namespace BetHelper {
     public sealed class StatusStripHandler : IDisposable {
+        private BellMode bellMode;
         private bool muted;
         private ContextMenu contextMenu;
         private DisplayMode displayMode;
         private double zoomLevel;
         private ExtBrowsHandler extBrowsHandler;
+        private Font defaultFont, boldFont;
         private int maximum, temp;
         private long dataSize;
         private Settings settings;
@@ -46,6 +48,7 @@ namespace BetHelper {
         private System.Timers.Timer finishedTimer;
         private System.Windows.Forms.Timer heartBeatTimer, labelTimer, timer;
         private ToolStripProgressBar progressBar;
+        private ToolStripStatusLabel labelBell;
         private ToolStripStatusLabel labelCache;
         private ToolStripStatusLabel labelCaps;
         private ToolStripStatusLabel labelIns;
@@ -158,6 +161,18 @@ namespace BetHelper {
             labelCache.MouseUp += new MouseEventHandler(SetStatusLabelText);
             labelCache.MouseMove += new MouseEventHandler(SetStatusLabelText);
 
+            labelBell = new ToolStripStatusLabel() {
+                Alignment = ToolStripItemAlignment.Right,
+                TextAlign = ContentAlignment.MiddleCenter,
+                BorderSides = ToolStripStatusLabelBorderSides.All,
+                Padding = Padding.Empty,
+                Margin = Padding.Empty,
+                AutoSize = false
+            };
+            labelBell.MouseDown += new MouseEventHandler(SetStatusLabelText);
+            labelBell.MouseUp += new MouseEventHandler(SetStatusLabelText);
+            labelBell.MouseMove += new MouseEventHandler(SetStatusLabelText);
+
             labelCaps = new ToolStripStatusLabel() {
                 Alignment = ToolStripItemAlignment.Right,
                 TextAlign = ContentAlignment.MiddleCenter,
@@ -224,6 +239,9 @@ namespace BetHelper {
             statusStrip.Items.Add(labelMuted);
             statusStrip.Items.Add(labelZoomLvl);
             statusStrip.Items.Add(labelCache);
+            if (displayMode.Equals(DisplayMode.Standard)) {
+                statusStrip.Items.Add(labelBell);
+            }
             statusStrip.Items.Add(labelCaps);
             statusStrip.Items.Add(labelNum);
             if (displayMode.Equals(DisplayMode.Basic)) {
@@ -248,16 +266,22 @@ namespace BetHelper {
             if (displayMode.Equals(DisplayMode.None)) {
                 statusStrip.Visible = false;
             }
+            bellMode = settings.EnableBell ? BellMode.Warning : BellMode.Off;
             this.displayMode = displayMode;
             this.extBrowsHandler = extBrowsHandler;
             this.settings = settings;
             this.statusStrip = statusStrip;
+            defaultFont = statusStrip.Font;
+            if (settings.BoldBellStatus) {
+                boldFont = new Font(defaultFont, FontStyle.Bold);
+            }
             settings.Saved += new EventHandler((sender, e) => {
                 SetRenderMode();
                 SetBorderStyle();
                 SetMuted();
                 SetZoomLevel();
                 SetDataSize();
+                SetBell();
             });
             settings.AllowedAddrHandler.IpCheckFailed += new EventHandler((sender, e) => {
                 SetMessage(StatusMessageType.PersistentB, Properties.Resources.MessageCheckYourIpAddress);
@@ -340,12 +364,11 @@ namespace BetHelper {
                     }
                 })));
             contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-            contextMenu.MenuItems.Add(new MenuItem(string.Empty,
-                new EventHandler((sender, e) => {
-                    if (!string.IsNullOrEmpty(msg4CtxMenu)) {
-                        ClipboardSetText(msg4CtxMenu);
-                    }
-                })));
+            contextMenu.MenuItems.Add(new MenuItem(string.Empty, new EventHandler((sender, e) => {
+                if (!string.IsNullOrEmpty(msg4CtxMenu)) {
+                    ClipboardSetText(msg4CtxMenu);
+                }
+            })));
             contextMenu.Popup += new EventHandler((sender, e) => {
                 bool isLink = !string.IsNullOrEmpty(msg4CtxMenu)
                     && msg4CtxMenu.StartsWith(Constants.SchemeHttps, StringComparison.OrdinalIgnoreCase);
@@ -367,6 +390,35 @@ namespace BetHelper {
             });
         }
 
+        public void ClearSearchResult() {
+            try {
+                if (statusStrip.InvokeRequired) {
+                    statusStrip.Invoke(new StatusStripHandlerCallback(ClearSearchResult));
+                } else {
+                    labelSearchResult.Text = string.Empty;
+                    SetStatusStripControlsSize();
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
+
+        public void Dispose() {
+            if (boldFont != null) {
+                boldFont.Dispose();
+            }
+            labelTimer.Stop();
+            labelTimer.Dispose();
+            finishedTimer.Stop();
+            finishedTimer.Dispose();
+            timer.Stop();
+            timer.Dispose();
+            heartBeatTimer.Stop();
+            heartBeatTimer.Dispose();
+            contextMenu.Dispose();
+        }
+
         private void InitializeHeartBeatTimer() {
             heartBeatTimer = new System.Windows.Forms.Timer();
             heartBeatTimer.Interval = Constants.StripHeartBeatInterval;
@@ -380,15 +432,6 @@ namespace BetHelper {
                 }
             });
             heartBeatTimer.Start();
-        }
-
-        private void InitializeStatusLabelTimer() {
-            labelTimer = new System.Windows.Forms.Timer();
-            labelTimer.Interval = Constants.StripStatusLblInterval * 1000;
-            labelTimer.Tick += new EventHandler((sender, e) => {
-                labelTimer.Stop();
-                labelMessage.Text = Properties.Resources.MessageReady;
-            });
         }
 
         private void InitializeProgressBarFinishedTimer() {
@@ -423,29 +466,83 @@ namespace BetHelper {
             });
         }
 
-        private void SetStatusStripControlsSize() {
-            labelSearchResult.Size = new Size(97, 10);
-            labelMuted.Size = new Size(48, 10);
-            labelZoomLvl.Size = new Size(48, 10);
-            labelCache.Size = new Size(59, 10);
-            Size size = new Size(39, 10);
-            labelCaps.Size = size;
-            labelNum.Size = size;
-            labelIns.Size = size;
-            labelScrl.Size = size;
+        private void InitializeStatusLabelTimer() {
+            labelTimer = new System.Windows.Forms.Timer();
+            labelTimer.Interval = Constants.StripStatusLblInterval * 1000;
+            labelTimer.Tick += new EventHandler((sender, e) => {
+                labelTimer.Stop();
+                labelMessage.Text = Properties.Resources.MessageReady;
+            });
         }
 
-        private void SetRenderMode() {
+        private void OnStatusStripSizeChanged(object sender, EventArgs e) {
+            StatusStrip statusStrip = (StatusStrip)sender;
+            labelUrl.Visible = statusStrip.Width > Constants.StripStatusLblUrlVLimit;
+            labelSearchResult.Visible = statusStrip.Width > Constants.StripStatusLblSearchResVLimit;
+            progressBar.Visible = statusStrip.Width > Constants.StripProgressBarVLimit;
+            progressBar.ProgressBar.Width = statusStrip.Width / Constants.StripProgressBarWRatio;
+            bool visible = statusStrip.Width > (displayMode.Equals(DisplayMode.Standard)
+                ? Constants.StripStatusLblCacheVLimit
+                : Constants.StripStatusLblCacheVLimitReduced);
+            labelMuted.Visible = visible;
+            labelZoomLvl.Visible = visible;
+            labelCache.Visible = visible;
+            labelBell.Visible = visible;
+        }
+
+        public void ResetProgressBar() {
             try {
                 if (statusStrip.InvokeRequired) {
-                    statusStrip.Invoke(new StatusStripHandlerCallback(SetRenderMode));
+                    statusStrip.Invoke(new StatusStripHandlerCallback(ResetProgressBar));
                 } else {
-                    statusStrip.RenderMode = settings.StripRenderMode == 0 ? ToolStripRenderMode.System : settings.StripRenderMode;
+                    timer.Stop();
+                    finishedTimer.Stop();
+                    progressBar.Value = 0;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
+        }
+
+        private void SetBell() {
+            try {
+                if (statusStrip.InvokeRequired) {
+                    statusStrip.Invoke(new StatusStripHandlerCallback(SetBell));
+                } else {
+                    switch (bellMode) {
+                        case BellMode.On:
+                            labelBell.Font = defaultFont;
+                            labelBell.ForeColor = SystemColors.ControlText;
+                            labelBell.Text = Constants.StripBell;
+                            break;
+                        case BellMode.Ringing:
+                            labelBell.Font = settings.BoldBellStatus ? boldFont : defaultFont;
+                            labelBell.ForeColor = SystemColors.ControlText;
+                            labelBell.Text = Constants.StripBell;
+                            break;
+                        case BellMode.Warning:
+                            labelBell.Font = settings.BoldBellStatus ? boldFont : defaultFont;
+                            labelBell.ForeColor = Color.Crimson;
+                            labelBell.Text = Constants.StripBell;
+                            break;
+                        default:
+                            labelBell.Font = defaultFont;
+                            labelBell.ForeColor = SystemColors.ControlText;
+                            labelBell.Text = string.Empty;
+                            break;
+                    }
+                    SetStatusStripControlsSize();
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
+
+        public void SetBell(BellMode bellMode) {
+            this.bellMode = bellMode;
+            SetBell();
         }
 
         private void SetBorderStyle() {
@@ -467,13 +564,39 @@ namespace BetHelper {
             }
         }
 
-        public void ClearSearchResult() {
+        private void SetDataSize() {
+            if (dataSize > 0) {
+                try {
+                    if (statusStrip.InvokeRequired) {
+                        statusStrip.Invoke(new StatusStripHandlerCallback(SetDataSize));
+                    } else {
+                        labelCache.Text = StaticMethods.ShowSize(
+                            dataSize,
+                            settings.NumberFormat.cultureInfo,
+                            settings.UseDecimalPrefix);
+                        SetStatusStripControlsSize();
+                    }
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+            }
+        }
+
+        public void SetDataSize(long dataSize) {
+            this.dataSize = dataSize;
+            SetDataSize();
+        }
+
+        public void SetFinished() {
             try {
                 if (statusStrip.InvokeRequired) {
-                    statusStrip.Invoke(new StatusStripHandlerCallback(ClearSearchResult));
+                    statusStrip.Invoke(new StatusStripHandlerCallback(SetFinished));
                 } else {
-                    labelSearchResult.Text = string.Empty;
-                    SetStatusStripControlsSize();
+                    progressBar.Maximum = 1;
+                    progressBar.Value = 1;
+                    timer.Stop();
+                    finishedTimer.Start();
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -481,19 +604,19 @@ namespace BetHelper {
             }
         }
 
-        private void SetStatusLabelText(object sender, EventArgs e) => msg4CtxMenu = ((ToolStripStatusLabel)sender).Text;
-
-        private void SetStatusLabelText(object sender, MouseEventArgs e) {
-            if (e.Button.Equals(MouseButtons.Right)) {
-                msg4CtxMenu = ((ToolStripStatusLabel)sender).Text;
-            }
-        }
-
-        private void SetNull(object sender, EventArgs e) => msg4CtxMenu = null;
-
-        private void SetNull(object sender, MouseEventArgs e) {
-            if (e.Button.Equals(MouseButtons.Right)) {
-                msg4CtxMenu = null;
+        public void SetMaximum(int maximum) {
+            try {
+                if (statusStrip.InvokeRequired) {
+                    statusStrip.Invoke(new SetMaximumCallback(SetMaximum), maximum);
+                } else {
+                    timer.Interval = Constants.StripProgressBarInterval;
+                    progressBar.Maximum = Constants.StripProgressBarInternalMax;
+                    this.maximum = maximum;
+                    timer.Start();
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
             }
         }
 
@@ -585,15 +708,39 @@ namespace BetHelper {
             }
         }
 
-        public void SetUrl(string url) {
-            if (Constants.BlankPageUri.Equals(url)) {
-                url = string.Empty;
-            }
+        private void SetMuted() {
             try {
                 if (statusStrip.InvokeRequired) {
-                    statusStrip.Invoke(new SetUrlCallback(SetUrl), url);
+                    statusStrip.Invoke(new StatusStripHandlerCallback(SetMuted));
                 } else {
-                    labelUrl.Text = url;
+                    labelMuted.Text = muted ? Constants.StripMuted : Constants.StripSound;
+                    SetStatusStripControlsSize();
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
+
+        public void SetMuted(bool muted) {
+            this.muted = muted;
+            SetMuted();
+        }
+
+        private void SetNull(object sender, EventArgs e) => msg4CtxMenu = null;
+
+        private void SetNull(object sender, MouseEventArgs e) {
+            if (e.Button.Equals(MouseButtons.Right)) {
+                msg4CtxMenu = null;
+            }
+        }
+
+        private void SetRenderMode() {
+            try {
+                if (statusStrip.InvokeRequired) {
+                    statusStrip.Invoke(new StatusStripHandlerCallback(SetRenderMode));
+                } else {
+                    statusStrip.RenderMode = settings.StripRenderMode == 0 ? ToolStripRenderMode.System : settings.StripRenderMode;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -635,77 +782,80 @@ namespace BetHelper {
             }
         }
 
-        public void SetMuted(bool muted) {
-            this.muted = muted;
-            SetMuted();
+        private bool SetStatusLabelCaps() {
+            string str = Control.IsKeyLocked(Keys.CapsLock)
+                ? Properties.Resources.CaptionCapsLock
+                : string.Empty;
+            if (str.Equals(labelCaps.Text)) {
+                return false;
+            }
+            labelCaps.Text = str;
+            return true;
         }
 
-        private void SetMuted() {
-            try {
-                if (statusStrip.InvokeRequired) {
-                    statusStrip.Invoke(new StatusStripHandlerCallback(SetMuted));
-                } else {
-                    labelMuted.Text = muted ? Constants.Muted : string.Empty;
-                    SetStatusStripControlsSize();
-                }
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
+        private bool SetStatusLabelIns() {
+            string str = Control.IsKeyLocked(Keys.Insert)
+                ? Properties.Resources.CaptionOverWrite
+                : Properties.Resources.CaptionInsert;
+            if (str.Equals(labelIns.Text)) {
+                return false;
+            }
+            labelIns.Text = str;
+            return true;
+        }
+
+        private bool SetStatusLabelNum() {
+            string str = Control.IsKeyLocked(Keys.NumLock)
+                ? Properties.Resources.CaptionNumLock
+                : string.Empty;
+            if (str.Equals(labelNum.Text)) {
+                return false;
+            }
+            labelNum.Text = str;
+            return true;
+        }
+
+        private bool SetStatusLabelScrl() {
+            string str = Control.IsKeyLocked(Keys.Scroll)
+                ? Properties.Resources.CaptionScrollLock
+                : string.Empty;
+            if (str.Equals(labelScrl.Text)) {
+                return false;
+            }
+            labelScrl.Text = str;
+            return true;
+        }
+
+        private void SetStatusLabelText(object sender, EventArgs e) => msg4CtxMenu = ((ToolStripStatusLabel)sender).Text;
+
+        private void SetStatusLabelText(object sender, MouseEventArgs e) {
+            if (e.Button.Equals(MouseButtons.Right)) {
+                msg4CtxMenu = ((ToolStripStatusLabel)sender).Text;
             }
         }
 
-        public void SetZoomLevel(double zoomLevel) {
-            this.zoomLevel = zoomLevel;
-            SetZoomLevel();
+        private void SetStatusStripControlsSize() {
+            labelSearchResult.Size = new Size(97, 10);
+            labelMuted.Size = new Size(48, 10);
+            labelZoomLvl.Size = new Size(48, 10);
+            labelCache.Size = new Size(59, 10);
+            Size size = new Size(39, 10);
+            labelBell.Size = size;
+            labelCaps.Size = size;
+            labelNum.Size = size;
+            labelIns.Size = size;
+            labelScrl.Size = size;
         }
 
-        private void SetZoomLevel() {
+        public void SetUrl(string url) {
+            if (Constants.BlankPageUri.Equals(url)) {
+                url = string.Empty;
+            }
             try {
                 if (statusStrip.InvokeRequired) {
-                    statusStrip.Invoke(new StatusStripHandlerCallback(SetZoomLevel));
+                    statusStrip.Invoke(new SetUrlCallback(SetUrl), url);
                 } else {
-                    labelZoomLvl.Text = ShowZoomLevel(zoomLevel, settings.NumberFormat.cultureInfo);
-                    SetStatusStripControlsSize();
-                }
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-            }
-        }
-
-        public void SetDataSize(long dataSize) {
-            this.dataSize = dataSize;
-            SetDataSize();
-        }
-
-        private void SetDataSize() {
-            if (dataSize > 0) {
-                try {
-                    if (statusStrip.InvokeRequired) {
-                        statusStrip.Invoke(new StatusStripHandlerCallback(SetDataSize));
-                    } else {
-                        labelCache.Text = StaticMethods.ShowSize(
-                            dataSize,
-                            settings.NumberFormat.cultureInfo,
-                            settings.UseDecimalPrefix);
-                        SetStatusStripControlsSize();
-                    }
-                } catch (Exception exception) {
-                    Debug.WriteLine(exception);
-                    ErrorLog.WriteLine(exception);
-                }
-            }
-        }
-
-        public void SetMaximum(int maximum) {
-            try {
-                if (statusStrip.InvokeRequired) {
-                    statusStrip.Invoke(new SetMaximumCallback(SetMaximum), maximum);
-                } else {
-                    timer.Interval = Constants.StripProgressBarInterval;
-                    progressBar.Maximum = Constants.StripProgressBarInternalMax;
-                    this.maximum = maximum;
-                    timer.Start();
+                    labelUrl.Text = url;
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -735,15 +885,13 @@ namespace BetHelper {
             }
         }
 
-        public void SetFinished() {
+        private void SetZoomLevel() {
             try {
                 if (statusStrip.InvokeRequired) {
-                    statusStrip.Invoke(new StatusStripHandlerCallback(SetFinished));
+                    statusStrip.Invoke(new StatusStripHandlerCallback(SetZoomLevel));
                 } else {
-                    progressBar.Maximum = 1;
-                    progressBar.Value = 1;
-                    timer.Stop();
-                    finishedTimer.Start();
+                    labelZoomLvl.Text = ShowZoomLevel(zoomLevel, settings.NumberFormat.cultureInfo);
+                    SetStatusStripControlsSize();
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -751,89 +899,9 @@ namespace BetHelper {
             }
         }
 
-        public void ResetProgressBar() {
-            try {
-                if (statusStrip.InvokeRequired) {
-                    statusStrip.Invoke(new StatusStripHandlerCallback(ResetProgressBar));
-                } else {
-                    timer.Stop();
-                    finishedTimer.Stop();
-                    progressBar.Value = 0;
-                }
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-            }
-        }
-
-        private bool SetStatusLabelCaps() {
-            string str = Control.IsKeyLocked(Keys.CapsLock)
-                ? Properties.Resources.CaptionCapsLock
-                : string.Empty;
-            if (str.Equals(labelCaps.Text)) {
-                return false;
-            }
-            labelCaps.Text = str;
-            return true;
-        }
-
-        private bool SetStatusLabelNum() {
-            string str = Control.IsKeyLocked(Keys.NumLock)
-                ? Properties.Resources.CaptionNumLock
-                : string.Empty;
-            if (str.Equals(labelNum.Text)) {
-                return false;
-            }
-            labelNum.Text = str;
-            return true;
-        }
-
-        private bool SetStatusLabelIns() {
-            string str = Control.IsKeyLocked(Keys.Insert)
-                ? Properties.Resources.CaptionOverWrite
-                : Properties.Resources.CaptionInsert;
-            if (str.Equals(labelIns.Text)) {
-                return false;
-            }
-            labelIns.Text = str;
-            return true;
-        }
-
-        private bool SetStatusLabelScrl() {
-            string str = Control.IsKeyLocked(Keys.Scroll)
-                ? Properties.Resources.CaptionScrollLock
-                : string.Empty;
-            if (str.Equals(labelScrl.Text)) {
-                return false;
-            }
-            labelScrl.Text = str;
-            return true;
-        }
-
-        private void OnStatusStripSizeChanged(object sender, EventArgs e) {
-            StatusStrip statusStrip = (StatusStrip)sender;
-            labelUrl.Visible = statusStrip.Width > Constants.StripStatusLblUrlVLimit;
-            labelSearchResult.Visible = statusStrip.Width > Constants.StripStatusLblSearchResVLimit;
-            progressBar.Visible = statusStrip.Width > Constants.StripProgressBarVLimit;
-            progressBar.ProgressBar.Width = statusStrip.Width / Constants.StripProgressBarWRatio;
-            bool visible = statusStrip.Width > (displayMode.Equals(DisplayMode.Standard)
-                ? Constants.StripStatusLblCacheVLimit
-                : Constants.StripStatusLblCacheVLimitReduced);
-            labelMuted.Visible = visible;
-            labelZoomLvl.Visible = visible;
-            labelCache.Visible = visible;
-        }
-
-        public void Dispose() {
-            labelTimer.Stop();
-            labelTimer.Dispose();
-            finishedTimer.Stop();
-            finishedTimer.Dispose();
-            timer.Stop();
-            timer.Dispose();
-            heartBeatTimer.Stop();
-            heartBeatTimer.Dispose();
-            contextMenu.Dispose();
+        public void SetZoomLevel(double zoomLevel) {
+            this.zoomLevel = zoomLevel;
+            SetZoomLevel();
         }
 
         private static void ClipboardSetText(string text) {
@@ -862,6 +930,13 @@ namespace BetHelper {
                 .Append(Constants.Space)
                 .Append(Constants.Percent)
                 .ToString();
+        }
+
+        public enum BellMode {
+            Off,
+            On,
+            Ringing,
+            Warning
         }
 
         public enum DisplayMode {

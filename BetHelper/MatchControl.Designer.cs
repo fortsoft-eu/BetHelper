@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.7.0
  */
 
 namespace BetHelper {
@@ -160,7 +160,7 @@ namespace BetHelper {
             this.labelSport.Name = "labelSport";
             this.labelSport.Size = new System.Drawing.Size(35, 13);
             this.labelSport.TabIndex = 0;
-            this.labelSport.Text = "Sp&ort:";
+            this.labelSport.Text = "S&port:";
             // 
             // textBoxClicksTimer
             // 

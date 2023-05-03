@@ -63,9 +63,9 @@ namespace BetHelper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Bell {
+        internal static byte[] bell {
             get {
-                object obj = ResourceManager.GetObject("Bell", resourceCulture);
+                object obj = ResourceManager.GetObject("bell", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -76,6 +76,16 @@ namespace BetHelper.Properties {
         internal static System.Drawing.Icon Binary {
             get {
                 object obj = ResourceManager.GetObject("Binary", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Bookmark {
+            get {
+                object obj = ResourceManager.GetObject("Bookmark", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
@@ -226,6 +236,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bookmaker.
+        /// </summary>
+        internal static string CaptionBookmaker {
+            get {
+                return ResourceManager.GetString("CaptionBookmaker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculator.
         /// </summary>
         internal static string CaptionCalculator {
@@ -240,6 +259,15 @@ namespace BetHelper.Properties {
         internal static string CaptionCapsLock {
             get {
                 return ResourceManager.GetString("CaptionCapsLock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        internal static string CaptionDate {
+            get {
+                return ResourceManager.GetString("CaptionDate", resourceCulture);
             }
         }
         
@@ -289,6 +317,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expiration.
+        /// </summary>
+        internal static string CaptionExpiration {
+            get {
+                return ResourceManager.GetString("CaptionExpiration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export.
         /// </summary>
         internal static string CaptionExport {
@@ -334,11 +371,38 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to League.
+        /// </summary>
+        internal static string CaptionLeague {
+            get {
+                return ResourceManager.GetString("CaptionLeague", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log Viewer.
         /// </summary>
         internal static string CaptionLogViewer {
             get {
                 return ResourceManager.GetString("CaptionLogViewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match.
+        /// </summary>
+        internal static string CaptionMatch {
+            get {
+                return ResourceManager.GetString("CaptionMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string CaptionName {
+            get {
+                return ResourceManager.GetString("CaptionName", resourceCulture);
             }
         }
         
@@ -379,11 +443,47 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Odd.
+        /// </summary>
+        internal static string CaptionOdd {
+            get {
+                return ResourceManager.GetString("CaptionOdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opportunity.
+        /// </summary>
+        internal static string CaptionOpportunity {
+            get {
+                return ResourceManager.GetString("CaptionOpportunity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OVR.
         /// </summary>
         internal static string CaptionOverWrite {
             get {
                 return ResourceManager.GetString("CaptionOverWrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Period.
+        /// </summary>
+        internal static string CaptionPeriod {
+            get {
+                return ResourceManager.GetString("CaptionPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Price.
+        /// </summary>
+        internal static string CaptionPrice {
+            get {
+                return ResourceManager.GetString("CaptionPrice", resourceCulture);
             }
         }
         
@@ -424,11 +524,83 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service.
+        /// </summary>
+        internal static string CaptionService {
+            get {
+                return ResourceManager.GetString("CaptionService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sport.
+        /// </summary>
+        internal static string CaptionSport {
+            get {
+                return ResourceManager.GetString("CaptionSport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        internal static string CaptionStatus {
+            get {
+                return ResourceManager.GetString("CaptionStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subscribed.
+        /// </summary>
+        internal static string CaptionSubscribed {
+            get {
+                return ResourceManager.GetString("CaptionSubscribed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time.
+        /// </summary>
+        internal static string CaptionTime {
+            get {
+                return ResourceManager.GetString("CaptionTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string CaptionTitle {
+            get {
+                return ResourceManager.GetString("CaptionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trust Degree.
+        /// </summary>
+        internal static string CaptionTrustDegree {
+            get {
+                return ResourceManager.GetString("CaptionTrustDegree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Check.
         /// </summary>
         internal static string CaptionUpdateCheck {
             get {
                 return ResourceManager.GetString("CaptionUpdateCheck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL.
+        /// </summary>
+        internal static string CaptionUrl {
+            get {
+                return ResourceManager.GetString("CaptionUrl", resourceCulture);
             }
         }
         
@@ -1047,15 +1219,6 @@ namespace BetHelper.Properties {
         internal static string MenuItemDelete {
             get {
                 return ResourceManager.GetString("MenuItemDelete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to De&amp;select Item.
-        /// </summary>
-        internal static string MenuItemDeselectItem {
-            get {
-                return ResourceManager.GetString("MenuItemDeselectItem", resourceCulture);
             }
         }
         
@@ -1753,15 +1916,6 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Select Item.
-        /// </summary>
-        internal static string MenuItemSelectItem {
-            get {
-                return ResourceManager.GetString("MenuItemSelectItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Select N&amp;one.
         /// </summary>
         internal static string MenuItemSelectNone {
@@ -1870,7 +2024,7 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Try to keep the user &amp;logged in.
+        ///   Looks up a localized string similar to Try to Keep the User &amp;Logged in.
         /// </summary>
         internal static string MenuItemTryToKeepUserLoggedIn {
             get {
@@ -1915,7 +2069,7 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Unselect.
+        ///   Looks up a localized string similar to Un&amp;select.
         /// </summary>
         internal static string MenuItemUnselect {
             get {
@@ -2077,6 +2231,78 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The remaining service cannot be removed..
+        /// </summary>
+        internal static string MessageCannotDeleteRService {
+            get {
+                return ResourceManager.GetString("MessageCannotDeleteRService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The other {0} services cannot be removed..
+        /// </summary>
+        internal static string MessageCannotDeleteRServices {
+            get {
+                return ResourceManager.GetString("MessageCannotDeleteRServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The remaining tip cannot be removed..
+        /// </summary>
+        internal static string MessageCannotDeleteRTip {
+            get {
+                return ResourceManager.GetString("MessageCannotDeleteRTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The other {0} tips cannot be removed..
+        /// </summary>
+        internal static string MessageCannotDeleteRTips {
+            get {
+                return ResourceManager.GetString("MessageCannotDeleteRTips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot delete selected service..
+        /// </summary>
+        internal static string MessageCannotDeleteService {
+            get {
+                return ResourceManager.GetString("MessageCannotDeleteService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot delete selected {0} services..
+        /// </summary>
+        internal static string MessageCannotDeleteServices {
+            get {
+                return ResourceManager.GetString("MessageCannotDeleteServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot delete selected tip..
+        /// </summary>
+        internal static string MessageCannotDeleteTip {
+            get {
+                return ResourceManager.GetString("MessageCannotDeleteTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot delete selected {0} tips..
+        /// </summary>
+        internal static string MessageCannotDeleteTips {
+            get {
+                return ResourceManager.GetString("MessageCannotDeleteTips", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot open &quot;{0}&quot;..
         /// </summary>
         internal static string MessageCannotOpen {
@@ -2199,6 +2425,42 @@ namespace BetHelper.Properties {
         internal static string MessageCopiedToClipboard {
             get {
                 return ResourceManager.GetString("MessageCopiedToClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the selected bookmark?.
+        /// </summary>
+        internal static string MessageDeleteBookmark {
+            get {
+                return ResourceManager.GetString("MessageDeleteBookmark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the selected {0} bookmarks?.
+        /// </summary>
+        internal static string MessageDeleteBookmarks {
+            get {
+                return ResourceManager.GetString("MessageDeleteBookmarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the selected IP address?.
+        /// </summary>
+        internal static string MessageDeleteIpAddress {
+            get {
+                return ResourceManager.GetString("MessageDeleteIpAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete the selected {0} IP addresses?.
+        /// </summary>
+        internal static string MessageDeleteIpAddresses {
+            get {
+                return ResourceManager.GetString("MessageDeleteIpAddresses", resourceCulture);
             }
         }
         
@@ -2763,6 +3025,16 @@ namespace BetHelper.Properties {
         internal static System.Drawing.Icon Table {
             get {
                 object obj = ResourceManager.GetObject("Table", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Tip {
+            get {
+                object obj = ResourceManager.GetObject("Tip", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

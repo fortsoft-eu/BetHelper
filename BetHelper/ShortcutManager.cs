@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.6.0
+ * Version 1.1.7.0
  */
 
 using FortSoft.Tools;
@@ -77,6 +77,7 @@ namespace BetHelper {
         public event EventHandler ShowPreferences;
         public event EventHandler StopLoad;
         public event EventHandler StopRinging;
+        public event EventHandler TestBell;
         public event EventHandler ToggleRightPane;
         public event EventHandler ToggleRightPanetWidth;
         public event EventHandler ToggleTopMost;
@@ -114,7 +115,7 @@ namespace BetHelper {
         }
 
         private void Register() {
-            if (registered++ > 1) {
+            if (registered++ > 0) {
                 return;
             }
             registered = 1;
@@ -203,16 +204,10 @@ namespace BetHelper {
                         Reload?.Invoke(this, EventArgs.Empty);
                     }
                 }));
-            keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F6,
-                new Action(() => {
-                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
-                        StopRinging?.Invoke(this, EventArgs.Empty);
-                    }
-                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F7,
                 new Action(() => {
                     if (!form.WindowState.Equals(FormWindowState.Minimized)) {
-                        ResetIpCheckLock?.Invoke(this, EventArgs.Empty);
+                        StopRinging?.Invoke(this, EventArgs.Empty);
                     }
                 }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F8,
@@ -255,6 +250,18 @@ namespace BetHelper {
                 new Action(() => {
                     if (!form.WindowState.Equals(FormWindowState.Minimized)) {
                         LaunchNotepad?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
+            keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F6,
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        ResetIpCheckLock?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
+            keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F7,
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        TestBell?.Invoke(this, EventArgs.Empty);
                     }
                 }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F8,

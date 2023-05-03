@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.1.0
+ * Version 1.1.7.0
  */
 
 using System;
@@ -50,6 +50,24 @@ namespace BetHelper {
             bookmarks = new Dictionary<string, string>();
             bookmarksFilePath = Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath), Constants.BookmarksFileName);
             Load();
+        }
+
+        public List<KeyValuePair<string, string>> Bookmarks {
+            get {
+                List<KeyValuePair<string, string>> list = bookmarks.ToList();
+                if (settings.SortBookmarks) {
+                    list.Sort(new Comparison<KeyValuePair<string, string>>(
+                        (keyValuePairA, keyValuePairB) => keyValuePairA.Value.CompareTo(keyValuePairB.Value)));
+                }
+                if (settings.TruncateBookmarkTitles) {
+                    list = list
+                        .ToDictionary(
+                            new Func<KeyValuePair<string, string>, string>(keyValuePair => keyValuePair.Key),
+                            new Func<KeyValuePair<string, string>, string>(keyValuePair => TruncateBookmarkTitle(keyValuePair.Value)))
+                        .ToList();
+                }
+                return list;
+            }
         }
 
         public MenuItem MenuItem {
@@ -138,7 +156,8 @@ namespace BetHelper {
             }
             List<KeyValuePair<string, string>> list = bookmarks.ToList();
             if (settings.SortBookmarks) {
-                list.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+                list.Sort(new Comparison<KeyValuePair<string, string>>(
+                    (keyValuePairA, keyValuePairB) => keyValuePairA.Value.CompareTo(keyValuePairB.Value)));
             }
             foreach (KeyValuePair<string, string> keyValuePair in list) {
                 AddMenuItem(keyValuePair.Key, keyValuePair.Value);
@@ -148,6 +167,19 @@ namespace BetHelper {
         public void Remove(string url) {
             if (bookmarks.ContainsKey(url)) {
                 bookmarks.Remove(url);
+                Populate();
+                Save(Action.Remove);
+            }
+        }
+
+        public void Remove(string[] urls) {
+            int count = bookmarks.Count;
+            foreach (string url in urls) {
+                if (bookmarks.ContainsKey(url)) {
+                    bookmarks.Remove(url);
+                }
+            }
+            if (bookmarks.Count < count) {
                 Populate();
                 Save(Action.Remove);
             }

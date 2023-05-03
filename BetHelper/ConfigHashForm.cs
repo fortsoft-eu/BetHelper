@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.7.0
  */
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Text;
@@ -194,5 +195,32 @@ namespace BetHelper {
                 textBoxClicksTimer.Start();
             }
         }
+
+        private void OpenHelp() {
+            try {
+                StringBuilder url = new StringBuilder()
+                    .Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant())
+                    .Append(Constants.Slash)
+                    .Append(Application.ProductName.ToLowerInvariant())
+                    .Append(Constants.Slash);
+                Process.Start(url.ToString());
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                    MessageForm.BoxIcon.Error);
+                dialog.ShowDialog(this);
+            }
+        }
+
+        private void OpenHelp(object sender, CancelEventArgs e) => OpenHelp();
+
+        private void OpenHelp(object sender, HelpEventArgs hlpevent) => OpenHelp();
     }
 }

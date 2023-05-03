@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.7.0
  */
 
 namespace BetHelper {
@@ -64,6 +64,7 @@ namespace BetHelper {
             this.comboBoxStatus = new System.Windows.Forms.ComboBox();
             this.labelService = new System.Windows.Forms.Label();
             this.textBoxService = new System.Windows.Forms.TextBox();
+            this.checkBoxTopMost = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // labelBookmaker
@@ -95,7 +96,7 @@ namespace BetHelper {
             this.labelOdd.Name = "labelOdd";
             this.labelOdd.Size = new System.Drawing.Size(30, 13);
             this.labelOdd.TabIndex = 3;
-            this.labelOdd.Text = "O&dd:";
+            this.labelOdd.Text = "&Odd:";
             // 
             // textBoxOdd
             // 
@@ -116,7 +117,7 @@ namespace BetHelper {
             this.labelTrustDegree.Name = "labelTrustDegree";
             this.labelTrustDegree.Size = new System.Drawing.Size(70, 13);
             this.labelTrustDegree.TabIndex = 7;
-            this.labelTrustDegree.Text = "&Trust degree:";
+            this.labelTrustDegree.Text = "Trust &degree:";
             // 
             // textBoxTrustDegree
             // 
@@ -226,6 +227,18 @@ namespace BetHelper {
             this.textBoxService.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxService.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
             // 
+            // checkBoxTopMost
+            // 
+            this.checkBoxTopMost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxTopMost.AutoSize = true;
+            this.checkBoxTopMost.Location = new System.Drawing.Point(298, 12);
+            this.checkBoxTopMost.Name = "checkBoxTopMost";
+            this.checkBoxTopMost.Size = new System.Drawing.Size(70, 17);
+            this.checkBoxTopMost.TabIndex = 15;
+            this.checkBoxTopMost.Text = "&Top most";
+            this.checkBoxTopMost.UseVisualStyleBackColor = true;
+            this.checkBoxTopMost.CheckedChanged += new System.EventHandler(this.OnTopMostCheckedChanged);
+            // 
             // TipForm
             // 
             this.AcceptButton = this.buttonSave;
@@ -233,6 +246,7 @@ namespace BetHelper {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(404, 268);
+            this.Controls.Add(this.checkBoxTopMost);
             this.Controls.Add(this.textBoxService);
             this.Controls.Add(this.labelService);
             this.Controls.Add(this.comboBoxStatus);
@@ -248,14 +262,9 @@ namespace BetHelper {
             this.Controls.Add(this.labelOdd);
             this.Controls.Add(this.textBoxBookmaker);
             this.Controls.Add(this.labelBookmaker);
-            this.HelpButton = true;
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(380, 307);
             this.Name = "TipForm";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Activated += new System.EventHandler(this.OnFormActivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnFormLoad);
@@ -280,5 +289,6 @@ namespace BetHelper {
         private System.Windows.Forms.ComboBox comboBoxStatus;
         private System.Windows.Forms.Label labelService;
         private System.Windows.Forms.TextBox textBoxService;
+        private System.Windows.Forms.CheckBox checkBoxTopMost;
     }
 }

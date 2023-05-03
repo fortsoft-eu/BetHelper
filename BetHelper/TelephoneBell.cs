@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.7.0
  */
 
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WMPLib;
@@ -35,22 +36,25 @@ namespace BetHelper {
 
     /// <summary>
     /// Implements standard landline telephone ringing based on the Tesla P51p
-    /// telephone exchange. It requires an imported MP3 file in the resources
-    /// called 'Bell'. The ring duration in this file must be one second.
+    /// telephone exchange. It requires an imported ZIP file in the resources
+    /// called 'bell'.
     /// </summary>
     public class TelephoneBell : IDisposable {
 
         /// <summary>
-        /// The name of the destination MP3 file where the telephone bell sound
-        /// will be saved and made available to Windows Media Player.
+        /// Index of the selected telephone bell.
         /// </summary>
-        private const string bellFileName = "Bell.mp3";
+        private int index;
 
         /// <summary>
-        /// Field with the full path to the extracted MP3 file with the telephone
-        /// bell sound.
+        /// Field with the bell file names.
         /// </summary>
-        private string bellFilePath;
+        private string[] telephoneBellFileNames;
+
+        /// <summary>
+        /// Field with the bell directory full path.
+        /// </summary>
+        private string telephoneBellDirectoryPath;
 
         /// <summary>
         /// Field with a Timer object.
@@ -66,31 +70,126 @@ namespace BetHelper {
         /// Initializes a new instance of the <see cref="TelephoneBell"/> class.
         /// </summary>
         public TelephoneBell() {
+            telephoneBellFileNames = new string[] {
+                Constants.TelephoneBellFileName01,
+                Constants.TelephoneBellFileName02,
+                Constants.TelephoneBellFileName03,
+                Constants.TelephoneBellFileName04,
+                Constants.TelephoneBellFileName05,
+                Constants.TelephoneBellFileName06
+            };
+
+            Titles = new string[] {
+                Constants.TelephoneBellTitle01,
+                Constants.TelephoneBellTitle02,
+                Constants.TelephoneBellTitle03,
+                Constants.TelephoneBellTitle04,
+                Constants.TelephoneBellTitle05,
+                Constants.TelephoneBellTitle06
+            };
+
+            string appDataPath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
+            telephoneBellDirectoryPath = Path.Combine(appDataPath, Constants.TelephoneBellDirectoryName);
             ExtractBellAsync();
-
-            bellFilePath = Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath), bellFileName);
-
             windowsMediaPlayer = new WindowsMediaPlayer();
 
-            timer = new System.Timers.Timer(5000);
-            timer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
-                if (File.Exists(bellFilePath)) {
-                    windowsMediaPlayer.controls.play();
-                }
-            });
+            timer = new System.Timers.Timer(Constants.TelephoneBellRingPeriod);
+            timer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => Chime());
         }
 
         /// <summary>
-        /// Extracts the telephone bell sound in the MP3 file imported in the
-        /// resources called 'Bell' and saves it to the application data folder
-        /// as an MP3 file.
+        /// A property to determine if the bell is ringing.
         /// </summary>
-        private static async void ExtractBellAsync() {
+        public bool IsRinging => timer.Enabled;
+
+        /// <summary>
+        /// Property with the bell titles.
+        /// </summary>
+        public string[] Titles { get; private set; }
+
+        /// <summary>
+        /// Performs chime.
+        /// </summary>
+        public void Chime() {
+            try {
+                if (File.Exists(Path.Combine(telephoneBellDirectoryPath, telephoneBellFileNames[index]))) {
+                    windowsMediaPlayer.controls.play();
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
+
+        /// <summary>
+        /// Performs chime.
+        /// </summary>
+        public void Chime(int index) {
+            timer.Stop();
+            if (index < 0 || index > telephoneBellFileNames.Length - 1) {
+                index = 0;
+            }
+            this.index = index;
+            string filePath = Path.Combine(telephoneBellDirectoryPath, telephoneBellFileNames[index]);
+            try {
+                if (File.Exists(filePath)) {
+                    windowsMediaPlayer.URL = filePath;
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
+
+        /// <summary>
+        /// Disposes the timer.
+        /// </summary>
+        public void Dispose() => timer.Dispose();
+
+        /// <summary>
+        /// Checks if exists all bell sound files.
+        /// </summary>
+        private bool ExistsAll() {
+            foreach (string fileName in telephoneBellFileNames) {
+                if (!File.Exists(Path.Combine(telephoneBellDirectoryPath, fileName))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Extracts the telephone bell sounds in the ZIP file imported in the
+        /// resources called 'bell' and saves it to the application data folder
+        /// as an MP3 files.
+        /// </summary>
+        private async void ExtractBellAsync() {
             await Task.Run(new Action(() => {
                 try {
-                    string bellFilePath = Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath), bellFileName);
-                    if (!File.Exists(bellFilePath)) {
-                        File.WriteAllBytes(bellFilePath, Properties.Resources.Bell);
+                    if (!Directory.Exists(telephoneBellDirectoryPath)) {
+                        Directory.CreateDirectory(telephoneBellDirectoryPath);
+                    }
+                    if (!ExistsAll()) {
+                        string telephoneBellZipFilePath = Path.Combine(telephoneBellDirectoryPath, Constants.TelephoneBellZipFileName);
+                        if (!File.Exists(telephoneBellZipFilePath)) {
+                            File.WriteAllBytes(telephoneBellZipFilePath, Properties.Resources.bell);
+                        }
+                        using (ZipArchive zipArchive = ZipFile.OpenRead(telephoneBellZipFilePath)) {
+                            foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.Entries) {
+                                string filePath = Path.Combine(telephoneBellDirectoryPath, zipArchiveEntry.Name);
+                                try {
+                                    if (!File.Exists(filePath)) {
+                                        using (Stream stream = zipArchiveEntry.Open()) {
+                                            File.WriteAllBytes(filePath, StaticMethods.ReadToEnd(stream));
+                                        }
+                                    }
+                                } catch (Exception exception) {
+                                    Debug.WriteLine(exception);
+                                    ErrorLog.WriteLine(exception);
+                                }
+                            }
+                        }
+                        File.Delete(telephoneBellZipFilePath);
                     }
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
@@ -100,15 +199,22 @@ namespace BetHelper {
         }
 
         /// <summary>
-        /// Disposes the timer.
-        /// </summary>
-        public void Dispose() => timer.Dispose();
-
-        /// <summary>
         /// Starts ringing.
         /// </summary>
-        public void Ring() {
-            windowsMediaPlayer.URL = bellFilePath;
+        public void Ring(int index) {
+            if (index < 0 || index > telephoneBellFileNames.Length - 1) {
+                index = 0;
+            }
+            this.index = index;
+            string filePath = Path.Combine(telephoneBellDirectoryPath, telephoneBellFileNames[index]);
+            try {
+                if (File.Exists(filePath)) {
+                    windowsMediaPlayer.URL = filePath;
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
             timer.Start();
         }
 

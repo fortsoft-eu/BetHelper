@@ -21,19 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.7.0
  */
 
 using FortSoft.Tools;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace BetHelper {
 
     [Serializable]
     public sealed class Tip : ISerializable {
+        private Thread thread;
+        private TipForm form;
+        private TipStatus status;
+
+        public event EventHandler StatusChanged, Update;
 
         public Tip(
                 DateTime dateTime,
@@ -49,7 +57,7 @@ namespace BetHelper {
             Games = games;
             Odd = odd;
             Service = service;
-            Status = status;
+            this.status = status;
             TrustDegree = trustDegree;
             SetUid();
         }
@@ -60,10 +68,12 @@ namespace BetHelper {
             Games = (Game[])info.GetValue("Games", typeof(Game[]));
             Odd = (float)info.GetValue("Odd", typeof(float));
             Service = (string)info.GetValue("Service", typeof(string));
-            Status = (TipStatus)info.GetValue("Status", typeof(TipStatus));
+            status = (TipStatus)info.GetValue("Status", typeof(TipStatus));
             TrustDegree = (float)info.GetValue("TrustDegree", typeof(float));
             Uid = (string)info.GetValue("Uid", typeof(string));
         }
+
+        public bool IsOpened => thread != null && thread.IsAlive;
 
         public DateTime DateTime { get; set; }
 
@@ -73,13 +83,60 @@ namespace BetHelper {
 
         public Game[] Games { get; set; }
 
+        public ListViewItem ListViewItem { get; set; }
+
+        public PersistWindowState PersistWindowState { get; set; }
+
+        public Settings Settings { get; set; }
+
         public string Bookmaker { get; set; }
 
         public string Service { get; set; }
 
         public string Uid { get; private set; }
 
-        public TipStatus Status { get; set; }
+        public TipStatus Status {
+            get {
+                return status;
+            }
+            set {
+                status = value;
+                StatusChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public void Close() {
+            if (IsOpened) {
+                try {
+                    form.SafeClose();
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+            }
+        }
+
+        public void Edit() {
+            if (IsOpened) {
+                try {
+                    form.SafeSelect();
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+            } else {
+                thread = new Thread(new ThreadStart(EditThread));
+                thread.Start();
+            }
+        }
+
+        private void EditThread() {
+            form = new TipForm(Settings, PersistWindowState);
+            form.Tip = this;
+            if (form.ShowDialog().Equals(DialogResult.OK)) {
+                Update?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt) {
             info.AddValue("Bookmaker", Bookmaker);
@@ -87,7 +144,7 @@ namespace BetHelper {
             info.AddValue("Games", Games);
             info.AddValue("Odd", Odd);
             info.AddValue("Service", Service);
-            info.AddValue("Status", Status);
+            info.AddValue("Status", status);
             info.AddValue("TrustDegree", TrustDegree);
             info.AddValue("Uid", Uid);
         }
@@ -129,7 +186,7 @@ namespace BetHelper {
                 .Append("Status")
                 .Append(Constants.Colon)
                 .Append(Constants.Space)
-                .AppendLine(Status.ToString())
+                .AppendLine(status.ToString())
                 .Append("Uid")
                 .Append(Constants.Colon)
                 .Append(Constants.Space)

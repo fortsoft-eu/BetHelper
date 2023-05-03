@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.7.0
  */
 
 using FortSoft.Tools;
@@ -48,8 +48,13 @@ namespace BetHelper {
         private Timer focusTimer, textBoxClicksTimer;
         private Tip tip;
 
-        public TipForm(Settings settings) {
+        private delegate void TipFormFormCallback();
+
+        public TipForm(Settings settings) : this(settings, null) { }
+
+        public TipForm(Settings settings, PersistWindowState persistWindowState) {
             this.settings = settings;
+            this.persistWindowState = persistWindowState;
             matchOrdinal = 1;
 
             focusTimer = new Timer();
@@ -66,13 +71,18 @@ namespace BetHelper {
                 textBoxClicks = 0;
             });
 
-            text = Properties.Resources.CaptionNewTip;
+            Icon = Properties.Resources.Tip;
             Text = Properties.Resources.CaptionNewTip;
+            text = Properties.Resources.CaptionNewTip;
 
-            persistWindowState = new PersistWindowState();
-            persistWindowState.DisableSaveWindowState = true;
-            persistWindowState.FixHeight = true;
-            persistWindowState.Parent = this;
+            if (this.persistWindowState == null) {
+                this.persistWindowState = new PersistWindowState();
+                this.persistWindowState.AllowSaveTopMost = true;
+                this.persistWindowState.FixHeight = true;
+                this.persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
+            }
+            this.persistWindowState.Parent = this;
+            this.persistWindowState.Loaded += new EventHandler<PersistWindowStateEventArgs>((sender, e) => checkBoxTopMost.Checked = TopMost);
 
             InitializeComponent();
             BuildContextMenuAsync();
@@ -129,6 +139,9 @@ namespace BetHelper {
                 }
                 buttonAddGame.Enabled = tabControl.TabPages.Count < Constants.GameTabsMaxCounts;
                 buttonRemoveGame.Enabled = tabControl.TabPages.Count > 1;
+                tip.PersistWindowState = persistWindowState;
+                tip.Settings = settings;
+                tip.StatusChanged += new EventHandler(OnStatusChanged);
             }
         }
 
@@ -189,7 +202,7 @@ namespace BetHelper {
             matchControl.GameNameChanged += new EventHandler<MatchControlEventArgs>(OnGameNameChanged);
             TabPage tabPage = new TabPage() {
                 Text = new StringBuilder()
-                    .Append(Constants.ColumnHeaderMatch)
+                    .Append(Properties.Resources.CaptionMatch)
                     .Append(Constants.Space)
                     .Append(matchOrdinal++)
                     .ToString(),
@@ -219,7 +232,7 @@ namespace BetHelper {
         private void OnGameNameChanged(object sender, MatchControlEventArgs e) {
             if (string.IsNullOrWhiteSpace(e.GameName)) {
                 e.TabPage.Text = new StringBuilder()
-                    .Append(Constants.ColumnHeaderMatch)
+                    .Append(Properties.Resources.CaptionMatch)
                     .Append(Constants.Space)
                     .Append(e.Ordinal)
                     .ToString();
@@ -264,6 +277,14 @@ namespace BetHelper {
         private void OnSelectedIndexChanged(object sender, EventArgs e) {
             buttonAddGame.Enabled = tabControl.TabPages.Count < Constants.GameTabsMaxCounts;
             buttonRemoveGame.Enabled = tabControl.TabPages.Count > 1;
+        }
+
+        private void OnStatusChanged(object sender, EventArgs e) {
+            if (InvokeRequired) {
+                Invoke(new EventHandler(OnStatusChanged), sender, e);
+            } else {
+                comboBoxStatus.SelectedIndex = (int)((Tip)sender).Status;
+            }
         }
 
         private void OnTextBoxMouseDown(object sender, MouseEventArgs e) {
@@ -313,6 +334,53 @@ namespace BetHelper {
             }
         }
 
+        private void OnTextBoxOddLeave(object sender, EventArgs e) {
+            float.TryParse(
+                Regex.Replace(textBoxOdd.Text.Replace(Constants.Comma, Constants.Period), Constants.OddPattern, string.Empty),
+                NumberStyles.AllowDecimalPoint,
+                CultureInfo.InvariantCulture,
+                out odd);
+            textBoxOdd.Text = ShowOdd(odd);
+        }
+
+        private void OnTextBoxTrustDegreeLeave(object sender, EventArgs e) {
+            float.TryParse(
+                Regex.Replace(textBoxTrustDegree.Text, Constants.TrustDegreePattern, Constants.ReplaceFirst),
+                NumberStyles.None,
+                CultureInfo.InvariantCulture,
+                out trustDegree);
+            textBoxTrustDegree.Text = ShowTrustDegree(trustDegree);
+        }
+
+        private void OnTopMostCheckedChanged(object sender, EventArgs e) {
+            TopMost = checkBoxTopMost.Checked;
+            if (!TopMost) {
+                SendToBack();
+            }
+        }
+
+        private void OpenHelp(object sender, EventArgs e) {
+            try {
+                StringBuilder url = new StringBuilder()
+                    .Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant())
+                    .Append(Constants.Slash)
+                    .Append(Application.ProductName.ToLowerInvariant())
+                    .Append(Constants.Slash);
+                Process.Start(url.ToString());
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+                dialog.ShowDialog(this);
+            }
+        }
+
         private static float ParseOdd(string str) {
             return float.Parse(Regex.Replace(str.Replace(Constants.Comma, Constants.Period), Constants.OddPattern, string.Empty),
                 CultureInfo.InvariantCulture);
@@ -341,22 +409,37 @@ namespace BetHelper {
             }
         }
 
-        private void OnTextBoxOddLeave(object sender, EventArgs e) {
-            float.TryParse(
-                Regex.Replace(textBoxOdd.Text.Replace(Constants.Comma, Constants.Period), Constants.OddPattern, string.Empty),
-                NumberStyles.AllowDecimalPoint,
-                CultureInfo.InvariantCulture,
-                out odd);
-            textBoxOdd.Text = ShowOdd(odd);
+        public void SafeClose() {
+            if (InvokeRequired) {
+                Invoke(new TipFormFormCallback(SafeClose));
+            } else {
+                Close();
+            }
         }
 
-        private void OnTextBoxTrustDegreeLeave(object sender, EventArgs e) {
-            float.TryParse(
-                Regex.Replace(textBoxTrustDegree.Text, Constants.TrustDegreePattern, Constants.ReplaceFirst),
-                NumberStyles.None,
-                CultureInfo.InvariantCulture,
-                out trustDegree);
-            textBoxTrustDegree.Text = ShowTrustDegree(trustDegree);
+        public void SafeHide() {
+            if (InvokeRequired) {
+                Invoke(new TipFormFormCallback(SafeHide));
+            } else if (!WindowState.Equals(FormWindowState.Minimized)) {
+                WindowState = FormWindowState.Minimized;
+            }
+        }
+
+        public void SafeShow() {
+            if (InvokeRequired) {
+                Invoke(new TipFormFormCallback(SafeShow));
+            } else {
+                persistWindowState.Restore();
+            }
+        }
+
+        public void SafeSelect() {
+            if (InvokeRequired) {
+                Invoke(new TipFormFormCallback(SafeSelect));
+            } else {
+                persistWindowState.Restore();
+                persistWindowState.BringToFront();
+            }
         }
 
         private void Save(object sender, EventArgs e) {
@@ -375,32 +458,14 @@ namespace BetHelper {
             try {
                 odd = ParseOdd(textBoxOdd.Text);
             } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-                StringBuilder title = new StringBuilder()
-                    .Append(Program.GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
+                ShowException(exception);
                 textBoxOdd.Focus();
                 textBoxOdd.SelectAll();
             }
             try {
                 trustDegree = ParseTrustDegree(textBoxTrustDegree.Text);
             } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-                StringBuilder title = new StringBuilder()
-                    .Append(Program.GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
+                ShowException(exception);
                 textBoxTrustDegree.Focus();
                 textBoxTrustDegree.SelectAll();
             }
@@ -421,7 +486,23 @@ namespace BetHelper {
                 tip.Service = textBoxService.Text;
                 tip.Status = (Tip.TipStatus)comboBoxStatus.SelectedValue;
             }
+            tip.PersistWindowState = persistWindowState;
+            tip.Settings = settings;
             DialogResult = DialogResult.OK;
+        }
+
+        private void ShowException(Exception exception) {
+            Debug.WriteLine(exception);
+            ErrorLog.WriteLine(exception);
+            StringBuilder title = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionError);
+            dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
+            dialog.HelpRequested += new HelpEventHandler(OpenHelp);
+            dialog.ShowDialog(this);
         }
 
         private string ShowOdd(float price) {

@@ -727,12 +727,6 @@
   <data name="MenuItemCopyCurrentTitle" xml:space="preserve">
     <value>Copy Titl&amp;e of Current Page</value>
   </data>
-  <data name="MenuItemDeselectItem" xml:space="preserve">
-    <value>De&amp;select Item</value>
-  </data>
-  <data name="MenuItemSelectItem" xml:space="preserve">
-    <value>&amp;Select Item</value>
-  </data>
   <data name="MenuItemInvertSelection" xml:space="preserve">
     <value>&amp;Invert Selection</value>
   </data>
@@ -905,7 +899,7 @@
     <value>Bookmark has been removed</value>
   </data>
   <data name="MenuItemTryToKeepUserLoggedIn" xml:space="preserve">
-    <value>Try to keep the user &amp;logged in</value>
+    <value>Try to Keep the User &amp;Logged in</value>
   </data>
   <data name="ImgServiceActive" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ImgServiceActive.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -962,7 +956,7 @@
     <value>S&amp;kip</value>
   </data>
   <data name="MenuItemUnselect" xml:space="preserve">
-    <value>&amp;Unselect</value>
+    <value>Un&amp;select</value>
   </data>
   <data name="MenuItemVoid" xml:space="preserve">
     <value>&amp;Void</value>
@@ -1006,9 +1000,6 @@
   <data name="MessageTruncateFile" xml:space="preserve">
     <value>Are you sure you want to truncate the current log file?</value>
   </data>
-  <data name="Bell" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Bell.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="MenuItemStopRinging" xml:space="preserve">
     <value>&amp;Stop Ringing</value>
   </data>
@@ -1020,5 +1011,104 @@
   </data>
   <data name="MessageClosing" xml:space="preserve">
     <value>Closing...</value>
+  </data>
+  <data name="Tip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tip.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bell" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bell.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Bookmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Bookmark.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CaptionBookmaker" xml:space="preserve">
+    <value>Bookmaker</value>
+  </data>
+  <data name="CaptionDate" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="CaptionExpiration" xml:space="preserve">
+    <value>Expiration</value>
+  </data>
+  <data name="CaptionLeague" xml:space="preserve">
+    <value>League</value>
+  </data>
+  <data name="CaptionMatch" xml:space="preserve">
+    <value>Match</value>
+  </data>
+  <data name="CaptionName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="CaptionOdd" xml:space="preserve">
+    <value>Odd</value>
+  </data>
+  <data name="CaptionOpportunity" xml:space="preserve">
+    <value>Opportunity</value>
+  </data>
+  <data name="CaptionPeriod" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="CaptionPrice" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="CaptionService" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="CaptionSport" xml:space="preserve">
+    <value>Sport</value>
+  </data>
+  <data name="CaptionStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CaptionSubscribed" xml:space="preserve">
+    <value>Subscribed</value>
+  </data>
+  <data name="CaptionTime" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="CaptionTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="CaptionTrustDegree" xml:space="preserve">
+    <value>Trust Degree</value>
+  </data>
+  <data name="CaptionUrl" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="MessageDeleteBookmark" xml:space="preserve">
+    <value>Are you sure you want to delete the selected bookmark?</value>
+  </data>
+  <data name="MessageDeleteBookmarks" xml:space="preserve">
+    <value>Are you sure you want to delete the selected {0} bookmarks?</value>
+  </data>
+  <data name="MessageDeleteIpAddress" xml:space="preserve">
+    <value>Are you sure you want to delete the selected IP address?</value>
+  </data>
+  <data name="MessageDeleteIpAddresses" xml:space="preserve">
+    <value>Are you sure you want to delete the selected {0} IP addresses?</value>
+  </data>
+  <data name="MessageCannotDeleteService" xml:space="preserve">
+    <value>Cannot delete selected service.</value>
+  </data>
+  <data name="MessageCannotDeleteServices" xml:space="preserve">
+    <value>Cannot delete selected {0} services.</value>
+  </data>
+  <data name="MessageCannotDeleteTip" xml:space="preserve">
+    <value>Cannot delete selected tip.</value>
+  </data>
+  <data name="MessageCannotDeleteTips" xml:space="preserve">
+    <value>Cannot delete selected {0} tips.</value>
+  </data>
+  <data name="MessageCannotDeleteRService" xml:space="preserve">
+    <value>The remaining service cannot be removed.</value>
+  </data>
+  <data name="MessageCannotDeleteRServices" xml:space="preserve">
+    <value>The other {0} services cannot be removed.</value>
+  </data>
+  <data name="MessageCannotDeleteRTip" xml:space="preserve">
+    <value>The remaining tip cannot be removed.</value>
+  </data>
+  <data name="MessageCannotDeleteRTips" xml:space="preserve">
+    <value>The other {0} tips cannot be removed.</value>
   </data>
 </root>

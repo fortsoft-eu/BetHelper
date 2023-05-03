@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.6.0
+ * Version 1.1.7.0
  */
 
 using CefSharp;
@@ -209,6 +209,8 @@ namespace BetHelper {
 
         protected bool RemoveChat { get; private set; } = true;
 
+        public bool Alertable => IsService && !string.IsNullOrEmpty(UrlTips) && UrlTips.Equals(BrowserAddress);
+
         public bool IsBookmaker => Fields == null ? false : Fields.Contains(Constants.FieldBalance);
 
         public bool WillTryToKeepUserLoggedIn => IsBookmaker || IsService;
@@ -285,6 +287,12 @@ namespace BetHelper {
             persistWindowState.Parent = webInfoForm;
             webInfoForm.HelpRequested += new HelpEventHandler((sender, hlpevent) => Help?.Invoke(sender, hlpevent));
             webInfoForm.ShowDialog();
+        }
+
+        public void CloseInfo() {
+            if (webInfoForm != null && webInfoForm.Visible) {
+                webInfoForm.SafeClose();
+            }
         }
 
         public void CancelLogIn() {
@@ -376,7 +384,7 @@ namespace BetHelper {
 
         private void ExecuteLogIn() {
             if (logInThread != null && logInThread.IsAlive) {
-                if (Dialog is ProgressBarForm) {
+                if (Dialog is ProgressBarFormEx) {
                     Dialog.Activate();
                 }
                 return;

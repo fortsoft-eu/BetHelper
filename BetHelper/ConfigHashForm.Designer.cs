@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.7.0
  */
 
 namespace BetHelper {
@@ -99,8 +99,10 @@ namespace BetHelper {
             this.MinimizeBox = false;
             this.Name = "ConfigHashForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.OpenHelp);
             this.Activated += new System.EventHandler(this.OnFormActivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
+            this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.OpenHelp);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();

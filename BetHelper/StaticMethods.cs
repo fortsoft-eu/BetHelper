@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.7.0
  */
 
 using System;
@@ -39,8 +39,8 @@ using System.Windows.Forms;
 using WebPWrapper;
 
 namespace BetHelper {
-    public static class StaticMethods {
-        public static string AbbreviateMatchName(string text, Font font, int width) {
+    internal static class StaticMethods {
+        internal static string AbbreviateMatchName(string text, Font font, int width) {
             char[] separators = new char[] { Constants.EnDash, Constants.EmDash };
             Regex regex = new Regex(Constants.SplitWordsPattern, RegexOptions.Singleline);
             if (text.IndexOfAny(separators) > -1) {
@@ -126,7 +126,7 @@ namespace BetHelper {
             }
         }
 
-        public static bool CheckSelectedUrl(TextBox textBox) {
+        internal static bool CheckSelectedUrl(TextBox textBox) {
             if (textBox.SelectionLength <= 3072) {
                 string trimmed = textBox.SelectedText.TrimStart();
                 if (trimmed.Length <= 2048) {
@@ -141,7 +141,7 @@ namespace BetHelper {
             return false;
         }
 
-        public static void DumpEnumerable(IEnumerable data) {
+        internal static void DumpEnumerable(IEnumerable data) {
             try {
                 string filePath = Path.Combine(
                     Application.LocalUserAppDataPath,
@@ -162,7 +162,7 @@ namespace BetHelper {
             }
         }
 
-        public static void DumpString(string str) {
+        internal static void DumpString(string str) {
             try {
                 string filePath = Path.Combine(
                     Application.LocalUserAppDataPath,
@@ -176,7 +176,7 @@ namespace BetHelper {
             }
         }
 
-        public static bool EqualsSecondLevelDomains(string url1, string url2, bool includeTld = true) {
+        internal static bool EqualsSecondLevelDomains(string url1, string url2, bool includeTld = true) {
             if (string.IsNullOrEmpty(url1) || string.IsNullOrEmpty(url2)) {
                 return false;
             }
@@ -199,19 +199,19 @@ namespace BetHelper {
             return false;
         }
 
-        public static string EscapeArgument(string argument) {
+        internal static string EscapeArgument(string argument) {
             argument = Regex.Replace(argument, @"(\\*)" + Constants.QuotationMark, @"$1$1\" + Constants.QuotationMark);
             return Constants.QuotationMark + Regex.Replace(argument, @"(\\+)$", @"$1$1") + Constants.QuotationMark;
         }
 
-        public static void ExportAsImage(Control control, string filePath) {
+        internal static void ExportAsImage(Control control, string filePath) {
             using (Bitmap bitmap = new Bitmap(control.Width, control.Height, PixelFormat.Format32bppArgb)) {
                 control.DrawToBitmap(bitmap, new Rectangle(Point.Empty, bitmap.Size));
                 SaveBitmap(bitmap, filePath);
             }
         }
 
-        public static Control FindControlAtCursor(Form form) {
+        internal static Control FindControlAtCursor(Form form) {
             Point point = Cursor.Position;
             if (form.Bounds.Contains(point)) {
                 return FindControlAtPoint(form, form.PointToClient(point));
@@ -219,7 +219,7 @@ namespace BetHelper {
             return null;
         }
 
-        public static Control FindControlAtPoint(Control container, Point point) {
+        internal static Control FindControlAtPoint(Control container, Point point) {
             foreach (Control control in container.Controls) {
                 if (control.Visible && control.Bounds.Contains(point)) {
                     return FindControlAtPoint(control, new Point(point.X - control.Left, point.Y - control.Top)) ?? control;
@@ -228,7 +228,7 @@ namespace BetHelper {
             return null;
         }
 
-        public static Size GetNewGraphicsSize(Size graphicSize, Size canvasSize) {
+        internal static Size GetNewGraphicsSize(Size graphicSize, Size canvasSize) {
             bool rotate = IsGraphicsRotationNeeded(graphicSize, canvasSize);
             float ratio = 1f;
             float ratioWidth = graphicSize.Width / (float)(rotate ? canvasSize.Height : canvasSize.Width);
@@ -240,13 +240,13 @@ namespace BetHelper {
             return new Size((int)Math.Floor(graphicSize.Width / ratio), (int)Math.Floor(graphicSize.Height / ratio));
         }
 
-        public static int GetScrollPosition(TabControl tabControl) {
+        internal static int GetScrollPosition(TabControl tabControl) {
             int multiplier = -1;
             while (tabControl.GetTabRect(multiplier++ + 1).Left < 0 && multiplier < tabControl.TabCount) { }
             return multiplier;
         }
 
-        public static bool IsGraphicsRotationNeeded(Size graphicSize, Size canvasSize) {
+        internal static bool IsGraphicsRotationNeeded(Size graphicSize, Size canvasSize) {
             if (graphicSize.Width <= 0 || graphicSize.Height <= 0 || canvasSize.Width <= 0 || canvasSize.Height <= 0) {
                 return false;
             }
@@ -263,7 +263,7 @@ namespace BetHelper {
             return true;
         }
 
-        public static bool IsHoverTabRectangle(TabControl tabControl) {
+        internal static bool IsHoverTabRectangle(TabControl tabControl) {
             if (tabControl.TabCount > 0) {
                 Rectangle rectangle = tabControl.GetTabRect(0);
                 rectangle.X = 0;
@@ -274,7 +274,47 @@ namespace BetHelper {
             return false;
         }
 
-        public static void SaveBitmap(Bitmap bitmap, string finePath) {
+        internal static byte[] ReadToEnd(Stream stream) {
+            long originalPosition = 0;
+            if (stream.CanSeek) {
+                originalPosition = stream.Position;
+                stream.Position = 0;
+            }
+            try {
+                byte[] readBuffer = new byte[4096];
+                int totalBytesRead = 0;
+                int bytesRead;
+                while ((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0) {
+                    totalBytesRead += bytesRead;
+                    if (totalBytesRead.Equals(readBuffer.Length)) {
+                        int nextByte = stream.ReadByte();
+                        if (!nextByte.Equals(-1)) {
+                            byte[] temp = new byte[readBuffer.Length * 2];
+                            Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
+                            Buffer.SetByte(temp, totalBytesRead, (byte)nextByte);
+                            readBuffer = temp;
+                            totalBytesRead++;
+                        }
+                    }
+                }
+                byte[] buffer = readBuffer;
+                if (!totalBytesRead.Equals(readBuffer.Length)) {
+                    buffer = new byte[totalBytesRead];
+                    Buffer.BlockCopy(readBuffer, 0, buffer, 0, totalBytesRead);
+                }
+                return buffer;
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+                return null;
+            } finally {
+                if (stream.CanSeek) {
+                    stream.Position = originalPosition;
+                }
+            }
+        }
+
+        internal static void SaveBitmap(Bitmap bitmap, string finePath) {
             switch (Path.GetExtension(finePath).ToLowerInvariant()) {
                 case Constants.ExtensionBmp:
                     bitmap.Save(finePath, ImageFormat.Bmp);
@@ -299,7 +339,7 @@ namespace BetHelper {
             }
         }
 
-        public static string ShowSize(long length, IFormatProvider provider, bool useDecimalPrefix) {
+        internal static string ShowSize(long length, IFormatProvider provider, bool useDecimalPrefix) {
             double num = length;
             if (num < 1000d) {
                 return new StringBuilder()
@@ -388,7 +428,7 @@ namespace BetHelper {
                 .ToString();
         }
 
-        public static List<SearchLine> SplitToLines(string str) {
+        internal static List<SearchLine> SplitToLines(string str) {
             List<SearchLine> lines = new List<SearchLine>();
             StringBuilder stringBuilder = new StringBuilder();
             int charIndex = 0, index = 0;
@@ -410,7 +450,7 @@ namespace BetHelper {
             return lines;
         }
 
-        public static void TabControlScroll(TabControl tabControl, int direction) {
+        internal static void TabControlScroll(TabControl tabControl, int direction) {
             if (tabControl.TabCount > 0) {
                 if (tabControl.GetTabRect(tabControl.TabCount - 1).Right < tabControl.Width - 30 && direction < 0) {
                     return;
@@ -422,7 +462,7 @@ namespace BetHelper {
             }
         }
 
-        public static string UppercaseFirst(string str, CultureInfo cultureInfo) {
+        internal static string UppercaseFirst(string str, CultureInfo cultureInfo) {
             if (string.IsNullOrEmpty(str)) {
                 return str;
             }

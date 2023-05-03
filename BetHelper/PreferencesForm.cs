@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.7.0
  */
 
 using FortSoft.Tools;
@@ -47,9 +47,12 @@ namespace BetHelper {
         private PersistWindowState persistWindowState;
         private Point location;
         private Settings settings;
+        private TelephoneBell telephoneBell;
         private Timer textBoxClicksTimer;
 
-        public PreferencesForm() {
+        public PreferencesForm(TelephoneBell telephoneBell) {
+            this.telephoneBell = telephoneBell;
+
             textBoxClicksTimer = new Timer();
             textBoxClicksTimer.Interval = SystemInformation.DoubleClickTime;
             textBoxClicksTimer.Tick += new EventHandler((sender, e) => {
@@ -76,7 +79,6 @@ namespace BetHelper {
             persistWindowState.Parent = this;
 
             InitializeComponent();
-
             SuspendLayout();
             BuildContextMenuAsync();
 
@@ -88,6 +90,7 @@ namespace BetHelper {
             pictureBoxWarning.Image = Properties.Resources.Warning.ToBitmap();
 
             comboBoxAcceptLanguage.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
+            comboBoxBellSound.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxBookmakerDColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxBookmakerSColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxBorderStyle.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
@@ -104,8 +107,10 @@ namespace BetHelper {
             comboBoxSportInfo2SColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxStripRenderMode.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxTabAppearance.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
+            comboBoxUnitPrefix.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxUserAgent.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
 
+            comboBoxBellSound.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxBookmakerDColor.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxBookmakerSColor.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxBorderStyle.DrawMode = DrawMode.OwnerDrawFixed;
@@ -124,6 +129,7 @@ namespace BetHelper {
             comboBoxTabAppearance.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxUnitPrefix.DrawMode = DrawMode.OwnerDrawFixed;
 
+            comboBoxBellSound.DrawItem += new DrawItemEventHandler(OnDrawItem);
             comboBoxBookmakerDColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
             comboBoxBookmakerSColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
             comboBoxBorderStyle.DrawItem += new DrawItemEventHandler(OnDrawItem);
@@ -150,6 +156,7 @@ namespace BetHelper {
                 }
             }
             comboBoxStripRenderMode.DataSource = list.ToArray();
+            comboBoxBellSound.DataSource = telephoneBell.Titles;
             comboBoxBorderStyle.DataSource = Enum.GetValues(typeof(Border3DStyle));
 
             comboBoxBookmakerDColor.DataSource = colors.ToList();
@@ -168,6 +175,8 @@ namespace BetHelper {
             MouseWheel += new MouseEventHandler(OnMouseWheel);
             MouseMove += new MouseEventHandler(OnMouseWheel);
         }
+
+        public BookmarkManager BookmarkManager { get; set; }
 
         public bool RestartRequired { get; private set; }
 
@@ -214,10 +223,16 @@ namespace BetHelper {
                 labelKiB.Text = settings.UseDecimalPrefix ? Constants.Kilobyte : Constants.Kibibyte;
                 comboBoxNumberFormat.DataSource = settings.NumberFormatHandler.NumberFormats;
                 comboBoxNumberFormat.SelectedIndex = settings.NumberFormatInt;
+                if (settings.BellIndex < 0 || settings.BellIndex > comboBoxBellSound.Items.Count - 1) {
+                    comboBoxBellSound.SelectedIndex = 0;
+                } else {
+                    comboBoxBellSound.SelectedIndex = settings.BellIndex;
+                }
                 checkBoxAutoAdjustRightPaneWidth.Checked = settings.AutoAdjustRightPaneWidth;
                 checkBoxAutoLogInAfterInitialLoad.Checked = settings.AutoLogInAfterInitialLoad;
                 checkBoxDisplayPromptBeforeClosing.Checked = settings.DisplayPromptBeforeClosing;
                 checkBoxEnableBell.Checked = settings.EnableBell;
+                checkBoxBoldErrorBell.Checked = settings.BoldBellStatus;
                 checkBoxSortBookmarks.Checked = settings.SortBookmarks;
                 checkBoxTruncateBookmarkTitles.Checked = settings.TruncateBookmarkTitles;
                 checkBoxPingWhenIdle.Checked = settings.TryToKeepUserLoggedIn;
@@ -250,6 +265,10 @@ namespace BetHelper {
                     radioButtonHardMargins.Checked = true;
                 }
                 checkBoxStatusBarNotifOnly.Enabled = checkBoxCheckForUpdates.Checked;
+                checkBoxBoldErrorBell.Enabled = checkBoxEnableBell.Checked;
+                labelBellSound.Enabled = checkBoxEnableBell.Checked;
+                comboBoxBellSound.Enabled = checkBoxEnableBell.Checked;
+                buttonChime.Enabled = checkBoxEnableBell.Checked;
                 if (checkBoxEnableCache.Checked) {
                     checkBoxPersistSessionCookies.Enabled = true;
                     checkBoxPersistUserPreferences.Enabled = true;
@@ -499,6 +518,8 @@ namespace BetHelper {
             }
         }
 
+        private void OnChimeClick(object sender, EventArgs e) => telephoneBell.Chime(comboBoxBellSound.SelectedIndex);
+
         private void OnColorDrawItem(object sender, DrawItemEventArgs e) {
             e.DrawBackground();
             ComboBox comboBox = (ComboBox)sender;
@@ -622,6 +643,13 @@ namespace BetHelper {
             comboBox.DropDownWidth = dropDownWidth;
         }
 
+        private void OnEnableBellCheckedChanged(object sender, EventArgs e) {
+            checkBoxBoldErrorBell.Enabled = checkBoxEnableBell.Checked;
+            labelBellSound.Enabled = checkBoxEnableBell.Checked;
+            comboBoxBellSound.Enabled = checkBoxEnableBell.Checked;
+            buttonChime.Enabled = checkBoxEnableBell.Checked;
+        }
+
         private void OnEnableCacheCheckedChanged(object sender, EventArgs e) {
             if (checkBoxEnableCache.Checked) {
                 checkBoxPersistSessionCookies.Enabled = true;
@@ -676,6 +704,12 @@ namespace BetHelper {
                 dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
                 dialog.ShowDialog(this);
             }
+        }
+
+        private void OnManageBookmarksClick(object sender, EventArgs e) {
+            dialog = new BookmarksForm(settings, BookmarkManager);
+            dialog.HelpButtonClicked += new CancelEventHandler((s, t) => OnHelpRequested(new HelpEventArgs(Point.Empty)));
+            dialog.ShowDialog(this);
         }
 
         private void OnMaxPreloadCheckedChanged(object sender, EventArgs e) {
@@ -797,10 +831,12 @@ namespace BetHelper {
             settings.StatusBarNotifOnly = checkBoxStatusBarNotifOnly.Checked;
             settings.NumberFormatInt = comboBoxNumberFormat.SelectedIndex;
             settings.UseDecimalPrefix = comboBoxUnitPrefix.SelectedIndex > 0;
+            settings.BellIndex = comboBoxBellSound.SelectedIndex;
             settings.AutoAdjustRightPaneWidth = checkBoxAutoAdjustRightPaneWidth.Checked;
             settings.AutoLogInAfterInitialLoad = checkBoxAutoLogInAfterInitialLoad.Checked;
             settings.DisplayPromptBeforeClosing = checkBoxDisplayPromptBeforeClosing.Checked;
             settings.EnableBell = checkBoxEnableBell.Checked;
+            settings.BoldBellStatus = checkBoxBoldErrorBell.Checked;
             settings.SortBookmarks = checkBoxSortBookmarks.Checked;
             settings.TruncateBookmarkTitles = checkBoxTruncateBookmarkTitles.Checked;
             settings.TryToKeepUserLoggedIn = checkBoxPingWhenIdle.Checked;

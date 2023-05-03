@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.6.0
+ * Version 1.1.7.0
  */
 
 using CefSharp;
@@ -74,13 +74,16 @@ namespace BetHelper {
         private ShortcutManager shortcutManager;
         private string dataFilePath, undoneNotes;
         private TelephoneBell telephoneBell;
-        private Thread findThread, turnOffThread;
+        private Thread findThread, newTipThread, turnOffThread;
         private System.Windows.Forms.Timer textBoxClicksTimer;
+        private TipForm tipForm;
         private UpdateChecker updateChecker;
         private WebInfoHandler webInfoHandler;
 
         private delegate void MainFormSizeEventHandler(Size size);
+        private delegate void SetNewTipCallback(Tip tip);
         private delegate void SetTabControlCallback();
+        private delegate void ShowBellStatusCallback();
         private delegate void InspectDomElementCallback();
 
         public MainForm(Settings settings) {
@@ -126,7 +129,8 @@ namespace BetHelper {
             InitializeCalculatorHandler();
             InitializeStatusStripHandler();
             InitializeWebInfoHandler(LoadRightPaneData());
-            textBoxNotes.Font = new Font(Constants.MonospaceFontName, 10, FontStyle.Regular, GraphicsUnit.Point, 238);
+            textBoxNotes.Font = new Font(Constants.MonospaceFontName, 10, FontStyle.Regular, GraphicsUnit.Point,
+                Constants.FontGdiCharSet);
             buttonClearNotes.Enabled = textBoxNotes.TextLength > 0;
             ResumeLayout(false);
             PerformLayout();
@@ -258,13 +262,13 @@ namespace BetHelper {
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemEnableBell,
                     new EventHandler(ToggleBell)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemBellTest,
-                    new EventHandler((sender, e) => telephoneBell.Ring())));
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemStopRinging + Constants.ShortcutF6,
-                    new EventHandler((sender, e) => telephoneBell.Stop())));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemBellTest + Constants.ShortcutAltF7,
+                    new EventHandler(TestBell)));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemStopRinging + Constants.ShortcutF7,
+                    new EventHandler(StopRinging)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemResetIpCheckLock + Constants.ShortcutF7,
-                    new EventHandler((sender, e) => Settings.AllowedAddrHandler.Reset())));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemResetIpCheckLock + Constants.ShortcutAltF6,
+                    new EventHandler(ResetIpCheckLock)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemClearBrowserCache,
                     new EventHandler(ClearBrowserCache)));
@@ -500,10 +504,7 @@ namespace BetHelper {
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemNew,
                     new EventHandler(NewTip)));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelect,
-                    new EventHandler(SelectTip)));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUnselect,
-                    new EventHandler(UnselectTip)));
+                contextMenu.MenuItems.Add(new MenuItem(string.Empty, new EventHandler(ToggleSelectTip)));
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
                     new EventHandler(SelectAll)));
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectNone,
@@ -517,9 +518,17 @@ namespace BetHelper {
                     for (int i = 2; i < 7; i++) {
                         contextMenu.MenuItems[i].Enabled = enabled;
                     }
-                    contextMenu.MenuItems[12].Enabled = listViewTips.SelectedItems.Count < listViewTips.Items.Count;
-                    contextMenu.MenuItems[13].Enabled = enabled;
-                    contextMenu.MenuItems[15].Enabled = enabled;
+                    contextMenu.MenuItems[10].Enabled = clickedListViewItemTip != null;
+                    contextMenu.MenuItems[11].Enabled = listViewTips.SelectedItems.Count < listViewTips.Items.Count;
+                    contextMenu.MenuItems[12].Enabled = enabled;
+                    contextMenu.MenuItems[14].Enabled = enabled;
+                    if (clickedListViewItemTip != null) {
+                        contextMenu.MenuItems[10].Text = clickedListViewItemTip.Selected
+                            ? Properties.Resources.MenuItemUnselect
+                            : Properties.Resources.MenuItemSelect;
+                    } else {
+                        contextMenu.MenuItems[10].Text = Properties.Resources.MenuItemSelect;
+                    }
                 });
                 listViewTips.ContextMenu = contextMenu;
             }))
@@ -536,10 +545,7 @@ namespace BetHelper {
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemNew,
                     new EventHandler(NewService)));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelect,
-                    new EventHandler(SelectService)));
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUnselect,
-                    new EventHandler(UnselectService)));
+                contextMenu.MenuItems.Add(new MenuItem(string.Empty, new EventHandler(ToggleSelectService)));
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
                     new EventHandler(SelectAll)));
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectNone,
@@ -553,9 +559,17 @@ namespace BetHelper {
                     for (int i = 2; i < 4; i++) {
                         contextMenu.MenuItems[i].Enabled = enabled;
                     }
-                    contextMenu.MenuItems[9].Enabled = listViewServices.SelectedItems.Count < listViewServices.Items.Count;
-                    contextMenu.MenuItems[10].Enabled = enabled;
-                    contextMenu.MenuItems[12].Enabled = enabled;
+                    contextMenu.MenuItems[7].Enabled = clickedListViewItemService != null;
+                    contextMenu.MenuItems[8].Enabled = listViewServices.SelectedItems.Count < listViewServices.Items.Count;
+                    contextMenu.MenuItems[9].Enabled = enabled;
+                    contextMenu.MenuItems[11].Enabled = enabled;
+                    if (clickedListViewItemService != null) {
+                        contextMenu.MenuItems[7].Text = clickedListViewItemService.Selected
+                            ? Properties.Resources.MenuItemUnselect
+                            : Properties.Resources.MenuItemSelect;
+                    } else {
+                        contextMenu.MenuItems[7].Text = Properties.Resources.MenuItemSelect;
+                    }
                 });
                 listViewServices.ContextMenu = contextMenu;
             }));
@@ -565,47 +579,47 @@ namespace BetHelper {
             await Task.Run(new Action(() => {
                 listViewTips.Columns.AddRange(new ColumnHeader[] {
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderSport,
+                        Text = Properties.Resources.CaptionSport,
                         TextAlign = HorizontalAlignment.Left
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderMatch,
+                        Text = Properties.Resources.CaptionMatch,
                         TextAlign = HorizontalAlignment.Left
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderLeague,
+                        Text = Properties.Resources.CaptionLeague,
                         TextAlign = HorizontalAlignment.Left
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderDate,
+                        Text = Properties.Resources.CaptionDate,
                         TextAlign = HorizontalAlignment.Right
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderTime,
+                        Text = Properties.Resources.CaptionTime,
                         TextAlign = HorizontalAlignment.Right
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderOpportunity,
+                        Text = Properties.Resources.CaptionOpportunity,
                         TextAlign = HorizontalAlignment.Left
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderBookmaker,
+                        Text = Properties.Resources.CaptionBookmaker,
                         TextAlign = HorizontalAlignment.Left
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderOdd,
+                        Text = Properties.Resources.CaptionOdd,
                         TextAlign = HorizontalAlignment.Right
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderTrustDegree,
+                        Text = Properties.Resources.CaptionTrustDegree,
                         TextAlign = HorizontalAlignment.Right
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderService,
+                        Text = Properties.Resources.CaptionService,
                         TextAlign = HorizontalAlignment.Left
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderStatus,
+                        Text = Properties.Resources.CaptionStatus,
                         TextAlign = HorizontalAlignment.Left
                     }
                 });
@@ -636,27 +650,27 @@ namespace BetHelper {
                 });
                 listViewServices.Columns.AddRange(new ColumnHeader[] {
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderName,
+                        Text = Properties.Resources.CaptionName,
                         TextAlign = HorizontalAlignment.Left
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderPrice,
+                        Text = Properties.Resources.CaptionPrice,
                         TextAlign = HorizontalAlignment.Right
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderPeriod,
+                        Text = Properties.Resources.CaptionPeriod,
                         TextAlign = HorizontalAlignment.Left
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderExpiration,
+                        Text = Properties.Resources.CaptionExpiration,
                         TextAlign = HorizontalAlignment.Right
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderSubscribed,
+                        Text = Properties.Resources.CaptionSubscribed,
                         TextAlign = HorizontalAlignment.Right
                     },
                     new ColumnHeader() {
-                        Text = Constants.ColumnHeaderStatus,
+                        Text = Properties.Resources.CaptionStatus,
                         TextAlign = HorizontalAlignment.Left
                     }
                 });
@@ -857,11 +871,12 @@ namespace BetHelper {
             shortcutManager.PrintToPdf += new EventHandler(PrintToPdf);
             shortcutManager.Reload += new EventHandler(Reload);
             shortcutManager.ReloadIgnoreCache += new EventHandler(ReloadIgnoreCache);
-            shortcutManager.ResetIpCheckLock += new EventHandler((sender, e) => Settings.AllowedAddrHandler.Reset());
+            shortcutManager.ResetIpCheckLock += new EventHandler(ResetIpCheckLock);
             shortcutManager.ShowPreferences += new EventHandler(ShowPreferences);
             shortcutManager.ShowWebInfo += new EventHandler(ShowWebInfo);
             shortcutManager.StopLoad += new EventHandler(StopLoad);
-            shortcutManager.StopRinging += new EventHandler((sender, e) => telephoneBell.Stop());
+            shortcutManager.StopRinging += new EventHandler(StopRinging);
+            shortcutManager.TestBell += new EventHandler(TestBell);
             shortcutManager.ToggleRightPane += new EventHandler(ToggleRightPane);
             shortcutManager.ToggleRightPanetWidth += new EventHandler(ToggleRightPanetWidth);
             shortcutManager.TurnOffMonitors += new EventHandler(TurnOffMonitors);
@@ -878,6 +893,7 @@ namespace BetHelper {
             webInfoHandler = new WebInfoHandler(this, balances);
             webInfoHandler.AddressChanged += new EventHandler<AddressChangedEventArgs>((sender, e) =>
                 StatusStripHandler.SetUrl(e.Address));
+            webInfoHandler.AlertableGot += new EventHandler((sender, e) => ShowBellStatus());
             webInfoHandler.BalanceGot += new EventHandler(ShowBalance);
             webInfoHandler.BrowserConsoleMessage += new EventHandler<ConsoleMessageEventArgs>((sender, e) =>
                 SetConsoleMessage(e.Line, e.Source, e.Message));
@@ -1492,6 +1508,7 @@ namespace BetHelper {
                 findForm.F2Pressed += new EventHandler(FocusTrustDegrees);
                 findForm.F4Pressed += new EventHandler(UnloadPage);
                 findForm.F5Pressed += new EventHandler(Reload);
+                findForm.F7Pressed += new EventHandler(StopRinging);
                 findForm.F8Pressed += new EventHandler(LogIn);
                 findForm.F9Pressed += new EventHandler(ToggleRightPane);
                 findForm.F9Pressed += new EventHandler(ToggleRightPane);
@@ -1619,6 +1636,8 @@ namespace BetHelper {
             }
         }
 
+        private void ResetIpCheckLock(object sender, EventArgs e) => Settings.AllowedAddrHandler.Reset();
+
         private void ViewSource(object sender, EventArgs e) {
             if (webInfoHandler.Current != null && webInfoHandler.Current.Browser != null) {
                 webInfoHandler.Current.Browser.ViewSource();
@@ -1704,6 +1723,17 @@ namespace BetHelper {
         private void ToggleBell(object sender, EventArgs e) {
             Settings.EnableBell = !Settings.EnableBell;
             ((MenuItem)sender).Checked = Settings.EnableBell;
+            ShowBellStatus();
+        }
+
+        private void TestBell(object sender, EventArgs e) {
+            telephoneBell.Ring(Settings.BellIndex);
+            ShowBellStatus();
+        }
+
+        private void StopRinging(object sender, EventArgs e) {
+            telephoneBell.Stop();
+            ShowBellStatus();
         }
 
         private void ClearBrowserCache(object sender, EventArgs e) {
@@ -1730,9 +1760,11 @@ namespace BetHelper {
             } else {
                 StringBuilder message = new StringBuilder()
                     .Append(Properties.Resources.MessageClearBrowserCache)
-                    .Append(Environment.NewLine).Append(Environment.NewLine)
+                    .Append(Environment.NewLine)
+                    .Append(Environment.NewLine)
                     .Append(Properties.Resources.MessageClearBrowserCacheInclUserData)
-                    .Append(Environment.NewLine).Append(Environment.NewLine)
+                    .Append(Environment.NewLine)
+                    .Append(Environment.NewLine)
                     .Append(Properties.Resources.MessageApplicationWillBeRestarted);
                 dialog = new MessageForm(this, message.ToString(), null, MessageForm.Buttons.OKCancel, MessageForm.BoxIcon.Information);
                 dialog.HelpRequested += new HelpEventHandler(OpenHelp);
@@ -1750,9 +1782,11 @@ namespace BetHelper {
             } else {
                 StringBuilder message = new StringBuilder()
                     .Append(Properties.Resources.MessageResetWarningLine1)
-                    .Append(Environment.NewLine).Append(Environment.NewLine)
+                    .Append(Environment.NewLine)
+                    .Append(Environment.NewLine)
                     .Append(Properties.Resources.MessageResetWarningLine2)
-                    .Append(Environment.NewLine).Append(Environment.NewLine)
+                    .Append(Environment.NewLine)
+                    .Append(Environment.NewLine)
                     .Append(Properties.Resources.MessageApplicationWillBeRestarted);
                 dialog = new MessageForm(this, message.ToString(), null, MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Warning,
                     MessageForm.DefaultButton.Button2);
@@ -1792,9 +1826,10 @@ namespace BetHelper {
             if (InvokeRequired) {
                 Invoke(new EventHandler(ShowPreferences), sender, e);
             } else {
-                PreferencesForm preferencesForm = new PreferencesForm();
+                PreferencesForm preferencesForm = new PreferencesForm(telephoneBell);
                 preferencesForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
                 preferencesForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                preferencesForm.BookmarkManager = bookmarkManager;
                 preferencesForm.Settings = Settings;
                 dialog = preferencesForm;
 
@@ -1803,6 +1838,7 @@ namespace BetHelper {
                     bookmarkManager.Populate();
                     SetTabControlsAppearance();
                     UpdateTrustDegrees();
+                    ShowBellStatus();
                     StatusStripHandler.SetMessage(
                         StatusStripHandler.StatusMessageType.Temporary,
                         Properties.Resources.MessagePreferencesSaved);
@@ -2207,7 +2243,7 @@ namespace BetHelper {
             } else {
                 if (dialog != null && dialog.Visible) {
                     if (suppressDialogs || !e.CloseReason.Equals(CloseReason.UserClosing)) {
-                        if (!webInfoHandler.IsSuspended && !(dialog is ProgressBarForm)) {
+                        if (!webInfoHandler.IsSuspended && !(dialog is ProgressBarFormEx)) {
                             dialog.Close();
                         }
                     } else {
@@ -2230,9 +2266,25 @@ namespace BetHelper {
                         return;
                     }
                 }
-                if (bitmap != null) {
-                    bitmap.Dispose();
+                if (dialog != null && dialog is ProgressBarFormEx && dialog.Visible) {
+                    ProgressBarFormEx progressBarForm = (ProgressBarFormEx)dialog;
+                    progressBarForm.DisableClose = true;
+                    progressBarForm.ProgressBarMarquee = true;
+                    progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
+                    progressBarForm.Cursor = Cursors.WaitCursor;
+                } else {
+                    ProgressBarFormEx progressBarForm = new ProgressBarFormEx();
+                    progressBarForm.DisableClose = true;
+                    progressBarForm.ProgressBarMarquee = true;
+                    progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
+                    dialog = progressBarForm;
+                    progressBarForm.F7Pressed += new EventHandler(StopRinging);
+                    progressBarForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                    progressBarForm.Cursor = Cursors.WaitCursor;
+                    progressBarForm.Show(this);
                 }
+                StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessagePleaseWait);
+                SetControlsEnabled(false);
                 if (findForm != null) {
                     findForm.AltCtrlShiftEPressed -= new EventHandler(ExportWindowAsync);
                     findForm.AltCtrlShiftPPressed -= new EventHandler(PrintImage);
@@ -2273,6 +2325,7 @@ namespace BetHelper {
                     findForm.F2Pressed -= new EventHandler(FocusTrustDegrees);
                     findForm.F4Pressed -= new EventHandler(UnloadPage);
                     findForm.F5Pressed -= new EventHandler(Reload);
+                    findForm.F7Pressed -= new EventHandler(StopRinging);
                     findForm.F8Pressed -= new EventHandler(LogIn);
                     findForm.F9Pressed -= new EventHandler(ToggleRightPane);
                     findForm.F9Pressed -= new EventHandler(ToggleRightPane);
@@ -2287,24 +2340,13 @@ namespace BetHelper {
                         findForm.SafeClose();
                     }
                 }
-                if (dialog != null && dialog is ProgressBarForm && dialog.Visible) {
-                    ProgressBarForm progressBarForm = (ProgressBarForm)dialog;
-                    progressBarForm.DisableClose = true;
-                    progressBarForm.ProgressBarMarquee = true;
-                    progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
-                    progressBarForm.Cursor = Cursors.WaitCursor;
-                } else {
-                    ProgressBarForm progressBarForm = new ProgressBarForm();
-                    progressBarForm.DisableClose = true;
-                    progressBarForm.ProgressBarMarquee = true;
-                    progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
-                    dialog = progressBarForm;
-                    progressBarForm.HelpRequested += new HelpEventHandler(OpenHelp);
-                    progressBarForm.Cursor = Cursors.WaitCursor;
-                    progressBarForm.Show(this);
+                if (tipForm != null && tipForm.Visible) {
+                    tipForm.SafeClose();
                 }
-                StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessagePleaseWait);
-                SetControlsEnabled(false);
+                foreach (ListViewItem listViewItem in listViewTips.Items) {
+                    ((Tip)listViewItem.Tag).Close();
+                }
+                webInfoHandler.CloseInfos();
                 webInfoHandler.Suspend();
                 if (webInfoHandler.IsSuspended) {
                     StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageClosing);
@@ -2315,6 +2357,9 @@ namespace BetHelper {
                         Settings.ActivePanelLeft = tabControlLeft.SelectedIndex;
                         Settings.ActivePanelRight = tabControlRight.SelectedIndex;
                         Settings.Save();
+                    }
+                    if (bitmap != null) {
+                        bitmap.Dispose();
                     }
                     Settings.Dispose();
                     telephoneBell.Dispose();
@@ -2332,18 +2377,19 @@ namespace BetHelper {
         }
 
         private void OnLogInStarted(object sender, StartedEventArgs e) {
-            if (dialog != null && dialog is ProgressBarForm && dialog.Visible) {
-                ProgressBarForm progressBarForm = (ProgressBarForm)dialog;
+            if (dialog != null && dialog is ProgressBarFormEx && dialog.Visible) {
+                ProgressBarFormEx progressBarForm = (ProgressBarFormEx)dialog;
                 progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
                 progressBarForm.SetMaximum(e.ItemsTotal);
                 progressBarForm.Cursor = Cursors.AppStarting;
             } else {
-                ProgressBarForm progressBarForm = new ProgressBarFormEx();
+                ProgressBarFormEx progressBarForm = new ProgressBarFormEx();
                 progressBarForm.ProgressBarMarquee = true;
                 progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
                 progressBarForm.SetMaximum(e.ItemsTotal);
                 dialog = progressBarForm;
                 webInfoHandler.Current.Dialog = progressBarForm;
+                progressBarForm.F7Pressed += new EventHandler(StopRinging);
                 progressBarForm.FormClosed += new FormClosedEventHandler(OnProgressBarFormClosed);
                 progressBarForm.HelpRequested += new HelpEventHandler(OpenHelp);
                 progressBarForm.Cursor = Cursors.AppStarting;
@@ -2371,8 +2417,8 @@ namespace BetHelper {
         }
 
         private void OnLogInProgress(object sender, ProgressEventArgs e) {
-            if (dialog != null && dialog is ProgressBarForm && dialog.Visible) {
-                ProgressBarForm progressBarForm = (ProgressBarForm)dialog;
+            if (dialog != null && dialog is ProgressBarFormEx && dialog.Visible) {
+                ProgressBarFormEx progressBarForm = (ProgressBarFormEx)dialog;
                 progressBarForm.SetMaximum(e.ItemsTotal);
                 progressBarForm.SetMessage(e.Message);
                 progressBarForm.SetValue(e.CurrentItem);
@@ -2383,8 +2429,8 @@ namespace BetHelper {
         }
 
         private void OnLogInFinished(object sender, FinishedEventArgs e) {
-            if (dialog != null && dialog is ProgressBarForm && dialog.Visible) {
-                ((ProgressBarForm)dialog).SetFinished(e.Message);
+            if (dialog != null && dialog is ProgressBarFormEx && dialog.Visible) {
+                ((ProgressBarFormEx)dialog).SetFinished(e.Message);
             }
             GC.Collect(2, GCCollectionMode.Forced, true);
             StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Message);
@@ -2393,8 +2439,8 @@ namespace BetHelper {
         }
 
         private void OnLogInError(object sender, ErrorEventArgs e) {
-            if (dialog != null && dialog is ProgressBarForm && dialog.Visible) {
-                ((ProgressBarForm)dialog).SetFinished(e.ErrorMessage);
+            if (dialog != null && dialog is ProgressBarFormEx && dialog.Visible) {
+                ((ProgressBarFormEx)dialog).SetFinished(e.ErrorMessage);
             }
             GC.Collect(2, GCCollectionMode.Forced, true);
             StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.ErrorMessage);
@@ -2403,8 +2449,8 @@ namespace BetHelper {
         }
 
         private void OnLogInCanceled(object sender, CanceledEventArgs e) {
-            if (dialog != null && dialog is ProgressBarForm && dialog.Visible) {
-                ((ProgressBarForm)dialog).SetFinished(e.CancelMessage);
+            if (dialog != null && dialog is ProgressBarFormEx && dialog.Visible) {
+                ((ProgressBarFormEx)dialog).SetFinished(e.CancelMessage);
             }
             GC.Collect(2, GCCollectionMode.Forced, true);
             StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.CancelMessage);
@@ -2592,6 +2638,22 @@ namespace BetHelper {
             }
         }
 
+        private void ShowBellStatus() {
+            if (InvokeRequired) {
+                Invoke(new ShowBellStatusCallback(ShowBellStatus));
+            } else if (Settings.EnableBell) {
+                if (webInfoHandler.Alertable) {
+                    StatusStripHandler.SetBell(telephoneBell.IsRinging
+                        ? StatusStripHandler.BellMode.Ringing
+                        : StatusStripHandler.BellMode.On);
+                } else {
+                    StatusStripHandler.SetBell(StatusStripHandler.BellMode.Warning);
+                }
+            } else {
+                StatusStripHandler.SetBell(StatusStripHandler.BellMode.Off);
+            }
+        }
+
         private void ShowBalance(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(ShowBalance), sender, e);
@@ -2613,7 +2675,8 @@ namespace BetHelper {
             if (InvokeRequired) {
                 Invoke(new EventHandler(SetTips), sender, e);
             } else if (AddTips(webInfoHandler.Tips) && Settings.EnableBell) {
-                telephoneBell.Ring();
+                telephoneBell.Ring(Settings.BellIndex);
+                ShowBellStatus();
             }
         }
 
@@ -2752,6 +2815,8 @@ namespace BetHelper {
                     }
                 },
                 (int)tip.Status);
+            tip.Update += new EventHandler(OnTipUpdate);
+            tip.ListViewItem = listViewItem;
             listViewItem.Tag = tip;
             return listViewItem;
         }
@@ -3594,7 +3659,7 @@ namespace BetHelper {
             }
         }
 
-        private void OnTBNTextChanged(object sender, EventArgs e) {
+        private void OnTBNotesTextChanged(object sender, EventArgs e) {
             buttonClearNotes.Enabled = textBoxNotes.TextLength > 0;
             undoneNotes = null;
             undone = false;
@@ -3655,27 +3720,50 @@ namespace BetHelper {
         }
 
         private void NewTip(object sender, EventArgs e) {
-            TipForm tipForm = new TipForm(Settings);
-            tipForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
-            tipForm.HelpRequested += new HelpEventHandler(OpenHelp);
-            dialog = tipForm;
-            if (tipForm.ShowDialog(this).Equals(DialogResult.OK)) {
+            if (newTipThread != null && newTipThread.IsAlive) {
+                try {
+                    tipForm.SafeSelect();
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+            } else {
+                newTipThread = new Thread(new ThreadStart(NewTip));
+                newTipThread.Start();
+            }
+        }
+
+        private void NewTip() {
+            tipForm = new TipForm(Settings);
+            if (tipForm.ShowDialog().Equals(DialogResult.OK)) {
+                SetNewTip(tipForm.Tip);
+            }
+        }
+
+        private void SetNewTip(Tip tip) {
+            if (InvokeRequired) {
+                Invoke(new SetNewTipCallback(SetNewTip), tip);
+            } else {
                 listViewTips.Items.Add(SetTip(tipForm.Tip));
+                listViewTips.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            }
+        }
+
+        private void OnTipUpdate(object sender, EventArgs e) {
+            if (InvokeRequired) {
+                Invoke(new EventHandler(OnTipUpdate), sender, e);
+            } else {
+                SetTip((Tip)sender, ((Tip)sender).ListViewItem);
                 listViewTips.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             }
         }
 
         private void EditTip(object sender, EventArgs e) {
             if (listViewTips.SelectedItems.Count.Equals(1)) {
-                TipForm tipForm = new TipForm(Settings);
-                tipForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
-                tipForm.HelpRequested += new HelpEventHandler(OpenHelp);
-                tipForm.Tip = (Tip)listViewTips.SelectedItems[0].Tag;
-                dialog = tipForm;
-                if (tipForm.ShowDialog(this).Equals(DialogResult.OK)) {
-                    SetTip(tipForm.Tip, listViewTips.SelectedItems[0]);
-                    listViewTips.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-                }
+                Tip tip = (Tip)listViewTips.SelectedItems[0].Tag;
+                tip.ListViewItem = listViewTips.SelectedItems[0];
+                tip.Settings = Settings;
+                tip.Edit();
             }
         }
 
@@ -3724,25 +3812,72 @@ namespace BetHelper {
             ListView listView = sender.GetType().Equals(typeof(ListView))
                 ? (ListView)sender
                 : (ListView)((MenuItem)sender).GetContextMenu().SourceControl;
-            if (listView.SelectedItems.Count > 0) {
-                string message;
-                if (listView.SelectedItems[0].Tag.GetType().Equals(typeof(Tip))) {
-                    message = listView.SelectedItems.Count > 1
-                        ? string.Format(Properties.Resources.MessageDeleteTips, listView.SelectedItems.Count)
-                        : Properties.Resources.MessageDeleteTip;
-                } else {
-                    message = listView.SelectedItems.Count > 1
-                        ? string.Format(Properties.Resources.MessageDeleteServices, listView.SelectedItems.Count)
-                        : Properties.Resources.MessageDeleteService;
+            List<ListViewItem> canRemove = new List<ListViewItem>(listView.SelectedItems.Count);
+            List<ListViewItem> cannotRemove = new List<ListViewItem>(listView.SelectedItems.Count);
+            foreach (ListViewItem listViewItem in listView.SelectedItems) {
+                if (listViewItem.Tag != null) {
+                    if (listViewItem.Tag.GetType().Equals(typeof(Tip))) {
+                        if (((Tip)listViewItem.Tag).IsOpened) {
+                            cannotRemove.Add(listViewItem);
+                        } else {
+                            canRemove.Add(listViewItem);
+                        }
+                    } else {
+                        canRemove.Add(listViewItem);
+                    }
                 }
-                dialog = new MessageForm(this, message, Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo,
+            }
+            if (canRemove.Count > 0) {
+                StringBuilder message = new StringBuilder();
+                if (canRemove[0].Tag.GetType().Equals(typeof(Tip))) {
+                    message.Append(canRemove.Count > 1
+                        ? string.Format(Properties.Resources.MessageDeleteTips, canRemove.Count)
+                        : Properties.Resources.MessageDeleteTip);
+                } else {
+                    message.Append(canRemove.Count > 1
+                        ? string.Format(Properties.Resources.MessageDeleteServices, canRemove.Count)
+                        : Properties.Resources.MessageDeleteService);
+                }
+                if (cannotRemove.Count > 0) {
+                    message.AppendLine();
+                    if (cannotRemove[0].Tag.GetType().Equals(typeof(Tip))) {
+                        message.Append(cannotRemove.Count > 1
+                            ? string.Format(Properties.Resources.MessageCannotDeleteRTips, cannotRemove.Count)
+                            : Properties.Resources.MessageCannotDeleteRTip);
+                    } else {
+                        message.Append(cannotRemove.Count > 1
+                            ? string.Format(Properties.Resources.MessageCannotDeleteRServices, cannotRemove.Count)
+                            : Properties.Resources.MessageCannotDeleteRService);
+                    }
+                }
+                dialog = new MessageForm(this, message.ToString(), Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo,
                     MessageForm.BoxIcon.Question);
                 dialog.HelpRequested += new HelpEventHandler(OpenHelp);
                 if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
-                    foreach (ListViewItem listViewItem in listView.SelectedItems) {
+                    foreach (ListViewItem listViewItem in canRemove) {
+                        if (listViewItem.Tag != null && listViewItem.Tag is Tip) {
+                            if (((Tip)listViewItem.Tag).IsOpened) {
+                                continue;
+                            }
+                        }
                         listView.Items.Remove(listViewItem);
                     }
                 }
+            } else if (cannotRemove.Count > 0) {
+                StringBuilder message = new StringBuilder();
+                if (cannotRemove[0].Tag.GetType().Equals(typeof(Tip))) {
+                    message.Append(cannotRemove.Count > 1
+                        ? string.Format(Properties.Resources.MessageCannotDeleteTips, cannotRemove.Count)
+                        : Properties.Resources.MessageCannotDeleteTip);
+                } else {
+                    message.Append(cannotRemove.Count > 1
+                        ? string.Format(Properties.Resources.MessageCannotDeleteServices, cannotRemove.Count)
+                        : Properties.Resources.MessageCannotDeleteService);
+                }
+                dialog = new MessageForm(this, message.ToString(), Properties.Resources.CaptionInformation, MessageForm.Buttons.OK,
+                    MessageForm.BoxIcon.Information);
+                dialog.HelpRequested += new HelpEventHandler(OpenHelp);
+                dialog.ShowDialog(this);
             }
         }
 
@@ -3761,27 +3896,15 @@ namespace BetHelper {
             buttonExpire.Enabled = enabled;
         }
 
-        private void SelectTip(object sender, EventArgs e) {
+        private void ToggleSelectTip(object sender, EventArgs e) {
             if (clickedListViewItemTip != null) {
-                clickedListViewItemTip.Selected = true;
+                clickedListViewItemTip.Selected = !clickedListViewItemTip.Selected;
             }
         }
 
-        private void UnselectTip(object sender, EventArgs e) {
-            if (clickedListViewItemTip != null) {
-                clickedListViewItemTip.Selected = false;
-            }
-        }
-
-        private void SelectService(object sender, EventArgs e) {
+        private void ToggleSelectService(object sender, EventArgs e) {
             if (clickedListViewItemService != null) {
-                clickedListViewItemService.Selected = true;
-            }
-        }
-
-        private void UnselectService(object sender, EventArgs e) {
-            if (clickedListViewItemService != null) {
-                clickedListViewItemService.Selected = false;
+                clickedListViewItemService.Selected = !clickedListViewItemService.Selected;
             }
         }
 
@@ -3825,7 +3948,7 @@ namespace BetHelper {
             }
         }
 
-        private void OnTBNKeyDown(object sender, KeyEventArgs e) {
+        private void OnTBNotesKeyDown(object sender, KeyEventArgs e) {
             TextBox textBox = (TextBox)sender;
             if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;

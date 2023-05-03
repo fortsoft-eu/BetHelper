@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.1.0
+ * Version 1.1.7.0
  */
 
 using System;
@@ -32,30 +32,77 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BetHelper {
+
+    /// <summary>
+    /// Implements the extractor of the calculator files.
+    /// </summary>
     public class CalculatorExtractor {
 
+        /// <summary>
+        /// Field with file names of the calculator files.
+        /// </summary>
+        private string[] calculatorFileNames;
+
+        /// <summary>
+        /// Field with the calculator directory full path.
+        /// </summary>
+        private string calculatorDirectory;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculatorExtractor"/>
+        /// class.
+        /// </summary>
         public CalculatorExtractor() {
+            calculatorFileNames = new string[] {
+                Constants.CalculatorFileName01,
+                Constants.CalculatorFileName02,
+                Constants.CalculatorFileName03,
+                Constants.CalculatorFileName04,
+                Constants.CalculatorFileName05,
+                Constants.CalculatorFileName06,
+                Constants.CalculatorFileName07,
+                Constants.CalculatorFileName08,
+                Constants.CalculatorFileName09,
+                Constants.CalculatorFileName10,
+                Constants.CalculatorFileName11,
+                Constants.CalculatorFileName12,
+                Constants.CalculatorFileName13,
+                Constants.CalculatorFileName14,
+                Constants.CalculatorFileName15,
+                Constants.CalculatorFileName16,
+                Constants.CalculatorFileName17,
+                Constants.CalculatorFileName18
+            };
+
+            string appDataPath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
+            calculatorDirectory = Path.Combine(appDataPath, Constants.CalculatorDirectoryName);
             ExtractCalculatorAsync();
         }
 
-        private static async void ExtractCalculatorAsync() {
+        /// <summary>
+        /// Checks if exists all files of the calculator.
+        /// </summary>
+        private bool ExistsAll() {
+            foreach (string fileName in calculatorFileNames) {
+                if (!File.Exists(Path.Combine(calculatorDirectory, fileName))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Extracts the calculator files in the ZIP file imported in the
+        /// resources called 'calculator' and saves them to the application data
+        /// folder.
+        /// </summary>
+        private async void ExtractCalculatorAsync() {
             await Task.Run(new Action(() => {
                 try {
-                    string appDataPath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
-                    string calculatorDirectory = Path.Combine(appDataPath, Constants.CalculatorDirectoryName);
                     if (!Directory.Exists(calculatorDirectory)) {
                         Directory.CreateDirectory(calculatorDirectory);
                     }
-                    if (!File.Exists(Constants.CalculatorFileName01) || !File.Exists(Constants.CalculatorFileName02)
-                            || !File.Exists(Constants.CalculatorFileName03) || !File.Exists(Constants.CalculatorFileName04)
-                            || !File.Exists(Constants.CalculatorFileName05) || !File.Exists(Constants.CalculatorFileName06)
-                            || !File.Exists(Constants.CalculatorFileName07) || !File.Exists(Constants.CalculatorFileName08)
-                            || !File.Exists(Constants.CalculatorFileName09) || !File.Exists(Constants.CalculatorFileName10)
-                            || !File.Exists(Constants.CalculatorFileName11) || !File.Exists(Constants.CalculatorFileName12)
-                            || !File.Exists(Constants.CalculatorFileName13) || !File.Exists(Constants.CalculatorFileName14)
-                            || !File.Exists(Constants.CalculatorFileName15) || !File.Exists(Constants.CalculatorFileName16)
-                            || !File.Exists(Constants.CalculatorFileName17) || !File.Exists(Constants.CalculatorFileName18)) {
-
+                    if (!ExistsAll()) {
                         string calculatorZipFilePath = Path.Combine(calculatorDirectory, Constants.CalculatorZipFileName);
                         if (!File.Exists(calculatorZipFilePath)) {
                             File.WriteAllBytes(calculatorZipFilePath, Properties.Resources.calculator);
@@ -66,7 +113,7 @@ namespace BetHelper {
                                 try {
                                     if (!File.Exists(filePath)) {
                                         using (Stream stream = zipArchiveEntry.Open()) {
-                                            File.WriteAllBytes(filePath, ReadToEnd(stream));
+                                            File.WriteAllBytes(filePath, StaticMethods.ReadToEnd(stream));
                                         }
                                     }
                                 } catch (Exception exception) {
@@ -82,46 +129,6 @@ namespace BetHelper {
                     ErrorLog.WriteLine(exception);
                 }
             }));
-        }
-
-        protected static byte[] ReadToEnd(Stream stream) {
-            long originalPosition = 0;
-            if (stream.CanSeek) {
-                originalPosition = stream.Position;
-                stream.Position = 0;
-            }
-            try {
-                byte[] readBuffer = new byte[4096];
-                int totalBytesRead = 0;
-                int bytesRead;
-                while ((bytesRead = stream.Read(readBuffer, totalBytesRead, readBuffer.Length - totalBytesRead)) > 0) {
-                    totalBytesRead += bytesRead;
-                    if (totalBytesRead.Equals(readBuffer.Length)) {
-                        int nextByte = stream.ReadByte();
-                        if (!nextByte.Equals(-1)) {
-                            byte[] temp = new byte[readBuffer.Length * 2];
-                            Buffer.BlockCopy(readBuffer, 0, temp, 0, readBuffer.Length);
-                            Buffer.SetByte(temp, totalBytesRead, (byte)nextByte);
-                            readBuffer = temp;
-                            totalBytesRead++;
-                        }
-                    }
-                }
-                byte[] buffer = readBuffer;
-                if (!totalBytesRead.Equals(readBuffer.Length)) {
-                    buffer = new byte[totalBytesRead];
-                    Buffer.BlockCopy(readBuffer, 0, buffer, 0, totalBytesRead);
-                }
-                return buffer;
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-                return null;
-            } finally {
-                if (stream.CanSeek) {
-                    stream.Position = originalPosition;
-                }
-            }
         }
     }
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.5.0
+ * Version 1.1.7.0
  */
 
 namespace BetHelper {
@@ -30,6 +30,11 @@ namespace BetHelper {
     /// Constants used in many places in the application.
     /// </summary>
     public static class Constants {
+
+        /// <summary>
+        /// This value specifies the GDI character set that Font object uses.
+        /// </summary>
+        public const byte FontGdiCharSet = 238;
 
         /// <summary>
         /// This value is chosen considering the size of the calculator in the
@@ -103,7 +108,7 @@ namespace BetHelper {
         /// Initial time interval in milliseconds to get balances and tips
         /// displayed at right pane.
         /// </summary>
-        public const int InitialRightPaneInterval = 10000;
+        public const int InitialRightPaneInterval = 8000;
 
         /// <summary>
         /// The shortest possible time interval in milliseconds of the next check
@@ -171,7 +176,7 @@ namespace BetHelper {
         /// The time interval in milliseconds to get balances and tips displayed
         /// at right pane.
         /// </summary>
-        public const int RightPaneInterval = 30000;
+        public const int RightPaneInterval = 20000;
 
         /// <summary>
         /// The time delay in milliseconds after which the window area will be
@@ -254,6 +259,11 @@ namespace BetHelper {
         /// StatusStrip.
         /// </summary>
         public const int StripStatusLblUrlVLimit = 600;
+
+        /// <summary>
+        /// Telephone bell ringing period in milliseconds.
+        /// </summary>
+        public const int TelephoneBellRingPeriod = 5000;
 
         /// <summary>
         /// Default column index for sorting tips in the listing.
@@ -385,24 +395,6 @@ namespace BetHelper {
         public const string CefCLiArgMuteAudioVal = "true";
         public const string CefDebugLogFileName = "CefDebug.log";
         public const string CharMapFileName = "charmap.exe";
-        public const string ColumnHeaderBookmaker = "Bookmaker";
-        public const string ColumnHeaderDate = "Date";
-        public const string ColumnHeaderExpiration = "Expiration";
-        public const string ColumnHeaderLeague = "League";
-        public const string ColumnHeaderMatch = "Match";
-        public const string ColumnHeaderName = "Name";
-        public const string ColumnHeaderOdd = "Odd";
-        public const string ColumnHeaderOpportunity = "Opportunity";
-        public const string ColumnHeaderPeriod = "Period";
-        public const string ColumnHeaderPrice = "Price";
-        public const string ColumnHeaderPurchased = "Purchased";
-        public const string ColumnHeaderService = "Service";
-        public const string ColumnHeaderSport = "Sport";
-        public const string ColumnHeaderStatus = "Status";
-        public const string ColumnHeaderSubscribed = "Subscribed";
-        public const string ColumnHeaderTime = "Time";
-        public const string ColumnHeaderTrustDegree = "Trust Degree";
-        public const string ColumnHeaderValidUntil = "Valid Until";
         public const string CommandLineSwitchUC = "-c";
         public const string CommandLineSwitchUD = "-d";
         public const string CommandLineSwitchUE = "-e";
@@ -465,12 +457,16 @@ namespace BetHelper {
         public const string ExtensionTif = ".tif";
         public const string ExtensionTxt = ".txt";
         public const string ExtensionWebP = ".webp";
+        public const string ExternalEditorApplicationName = "Notepad++";
+        public const string ExternalEditorFileName = "notepad++.exe";
         public const string FieldBalance = "Balance";
         public const string FieldDisplayName = "DisplayName";
         public const string FieldUserName = "UserName";
         public const string ForbiddenHostContents = "casino,poker,vegas";
         public const string ForbiddenPathContents = "priloha";
         public const string ForeignUrlsLogFileName = "ForeignUrls.log";
+        public const string GenericProgramFilesDirName = "Program Files";
+        public const string GenericProgramFilesX86DirName = "Program Files (x86)";
         public const string GetSelectorPattern = "^.*'(.*)'.*$";
         public const string IetfLanguageTagEnUs = "en-US";
         public const string IPv4Pattern = "^\\d{1,4}\\.\\d{1,4}\\.\\d{1,4}\\.\\d{1,4}$";
@@ -495,7 +491,6 @@ namespace BetHelper {
         public const string LogFileExtension = "*.log";
         public const string LogSearchFileName = "LogSearch.dat";
         public const string MonospaceFontName = "Consolas";
-        public const string Muted = "Muted";
         public const string NotepadFileName = "notepad.exe";
         public const string NumberFormatSystem = "[system]";
         public const string NumericUpDownEdit = "upDownEdit";
@@ -503,8 +498,6 @@ namespace BetHelper {
         public const string OneDecimalDigitFormat = "f1";
         public const string PopUpFrameHandlerLogFileName = "PopUpFrameHandler.log";
         public const string PopUpFrameHandlerLogFormat = "frameIdentifier{0} = {1}";
-        public const string ExternalEditorApplicationName = "Notepad++";
-        public const string ExternalEditorFileName = "notepad++.exe";
         public const string PrintOutputInput = "Input";
         public const string PrintOutputOutput = "Output";
         public const string RemoteApiScriptName = "api.php";
@@ -536,6 +529,8 @@ namespace BetHelper {
         public const string ShortcutAltF10 = "\tAlt+F10";
         public const string ShortcutAltF11 = "\tAlt+F11";
         public const string ShortcutAltF12 = "\tAlt+F12";
+        public const string ShortcutAltF6 = "\tAlt+F6";
+        public const string ShortcutAltF7 = "\tAlt+F7";
         public const string ShortcutAltF8 = "\tAlt+F8";
         public const string ShortcutAltF9 = "\tAlt+F9";
         public const string ShortcutAltHome = "\tAlt+Home";
@@ -572,7 +567,6 @@ namespace BetHelper {
         public const string ShortcutF3 = "\tF3";
         public const string ShortcutF4 = "\tF4";
         public const string ShortcutF5 = "\tF5";
-        public const string ShortcutF6 = "\tF6";
         public const string ShortcutF7 = "\tF7";
         public const string ShortcutF8 = "\tF8";
         public const string ShortcutF9 = "\tF9";
@@ -586,15 +580,32 @@ namespace BetHelper {
         public const string ShortcutShiftCtrlT = "\tShift+Ctrl+T";
         public const string SplitWordsPattern = "\\s+";
         public const string StatusOk = "Ok";
+        public const string StripBell = "Bell";
+        public const string StripMuted = "Muted";
         public const string StripSearchFormat = "{0}/{1} {2}";
         public const string StripSearchMatches = "matches";
         public const string StripSearchMatchesShort1 = "match";
         public const string StripSearchMatchesShort2 = "m.";
         public const string StripSearchNotFound = "String not found";
+        public const string StripSound = "Sound";
         public const string TabControlLeftNameEnd = "Left";
         public const string TabControlRightNameEnd = "Right";
         public const string TelegramDesktopApplicationName = "Telegram Desktop";
         public const string TelegramDesktopFileName = "Telegram.exe";
+        public const string TelephoneBellDirectoryName = "Bell";
+        public const string TelephoneBellFileName01 = "Bell1.mp3";
+        public const string TelephoneBellFileName02 = "Bell2.mp3";
+        public const string TelephoneBellFileName03 = "Bell3.mp3";
+        public const string TelephoneBellFileName04 = "Bell4.mp3";
+        public const string TelephoneBellFileName05 = "Bell5.mp3";
+        public const string TelephoneBellFileName06 = "Bell6.mp3";
+        public const string TelephoneBellTitle01 = "Electromechanical bell 1";
+        public const string TelephoneBellTitle02 = "Electromechanical bell 2";
+        public const string TelephoneBellTitle03 = "Electronic bell 1";
+        public const string TelephoneBellTitle04 = "Electronic bell 2";
+        public const string TelephoneBellTitle05 = "Electronic bell 3";
+        public const string TelephoneBellTitle06 = "Electronic bell 4";
+        public const string TelephoneBellZipFileName = "bell.zip";
         public const string ThreeDots = "...";
         public const string TimeFormatForFilename = "yyyyMMdd_HHmmss";
         public const string TimeFormatForUid = "yyyyMMddHH";

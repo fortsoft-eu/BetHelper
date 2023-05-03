@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.7.0
  */
 
 using FortSoft.Tools;
@@ -35,6 +35,7 @@ using System.Windows.Forms;
 namespace BetHelper {
     public partial class AllowedAddrForm : Form {
         private AllowedAddrHandler allowedAddrHandler;
+        private Form dialog;
         private int clickedIndex, textBoxClicks;
         private PersistWindowState persistWindowState;
         private Point location;
@@ -108,8 +109,7 @@ namespace BetHelper {
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemRemoveSelected,
                     new EventHandler(DeleteSelected)));
                 contextMenu.MenuItems.Add(Constants.Hyphen.ToString());
-                contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectItem,
-                    new EventHandler(ToggleSelect)));
+                contextMenu.MenuItems.Add(new MenuItem(string.Empty, new EventHandler(ToggleSelect)));
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemInvertSelection,
                     new EventHandler(InvertSelection)));
                 contextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll,
@@ -122,10 +122,10 @@ namespace BetHelper {
                     contextMenu.MenuItems[5].Enabled = listBox.Items.Count > listBox.SelectedItems.Count;
                     if (clickedIndex >= 0) {
                         contextMenu.MenuItems[3].Text = listBox.GetSelected(clickedIndex)
-                            ? Properties.Resources.MenuItemDeselectItem
-                            : Properties.Resources.MenuItemSelectItem;
+                            ? Properties.Resources.MenuItemUnselect
+                            : Properties.Resources.MenuItemSelect;
                     } else {
-                        contextMenu.MenuItems[3].Text = Properties.Resources.MenuItemSelectItem;
+                        contextMenu.MenuItems[3].Text = Properties.Resources.MenuItemSelect;
                     }
                 });
                 listBox.ContextMenu = contextMenu;
@@ -148,19 +148,22 @@ namespace BetHelper {
         }
 
         private void DeleteSelected(object sender, EventArgs e) {
-            while (listBox.SelectedIndex >= 0) {
-                listBox.Items.RemoveAt(listBox.SelectedIndex);
-            }
-            string[] items = new string[listBox.Items.Count];
-            for (int i = 0; i < listBox.Items.Count; i++) {
-                items[i] = (string)listBox.Items[i];
-            }
-            allowedAddrHandler.Items = items;
-        }
-
-        private void ToggleSelect(object sender, EventArgs e) {
-            if (clickedIndex >= 0) {
-                listBox.SetSelected(clickedIndex, !listBox.GetSelected(clickedIndex));
+            if (listBox.SelectedIndex >= 0) {
+                string message = listBox.SelectedItems.Count > 1
+                    ? string.Format(Properties.Resources.MessageDeleteIpAddresses, listBox.SelectedItems.Count)
+                    : Properties.Resources.MessageDeleteIpAddress;
+                dialog = new MessageForm(this, message, Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo,
+                    MessageForm.BoxIcon.Question);
+                if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
+                    while (listBox.SelectedIndex >= 0) {
+                        listBox.Items.RemoveAt(listBox.SelectedIndex);
+                    }
+                    string[] items = new string[listBox.Items.Count];
+                    for (int i = 0; i < listBox.Items.Count; i++) {
+                        items[i] = (string)listBox.Items[i];
+                    }
+                    allowedAddrHandler.Items = items;
+                }
             }
         }
 
@@ -170,9 +173,9 @@ namespace BetHelper {
             }
         }
 
-        private void SelectAll(object sender, EventArgs e) {
-            for (int i = 0; i < listBox.Items.Count; i++) {
-                listBox.SetSelected(i, true);
+        private void OnFormActivated(object sender, EventArgs e) {
+            if (dialog != null) {
+                dialog.Activate();
             }
         }
 
@@ -255,5 +258,17 @@ namespace BetHelper {
         private void OnTextChanged(object sender, EventArgs e) => buttonAdd.Enabled = allowedAddrHandler.CheckIpSimple(textBox.Text);
 
         private void OnSelectedIndexChanged(object sender, EventArgs e) => buttonRemove.Enabled = listBox.SelectedIndex >= 0;
+
+        private void SelectAll(object sender, EventArgs e) {
+            for (int i = 0; i < listBox.Items.Count; i++) {
+                listBox.SetSelected(i, true);
+            }
+        }
+
+        private void ToggleSelect(object sender, EventArgs e) {
+            if (clickedIndex >= 0) {
+                listBox.SetSelected(clickedIndex, !listBox.GetSelected(clickedIndex));
+            }
+        }
     }
 }

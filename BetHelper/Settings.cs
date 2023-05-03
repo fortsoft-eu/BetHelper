@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.5.0
+ * Version 1.1.7.0
  */
 
 using FortSoft.Tools;
@@ -51,7 +51,7 @@ namespace BetHelper {
         private NumberFormatHandler numberFormatHandler;
         private PersistentSettings persistentSettings;
         private string[] acceptLanguages, userAgents;
-        private string acceptLanguage, userAgent;
+        private string acceptLanguage, externalEditor, userAgent;
 
         /// <summary>
         /// Occurs on successful saving all application settings into the Windows
@@ -64,6 +64,11 @@ namespace BetHelper {
         /// </summary>
         public Settings() {
             userAgents = new string[] {
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_3_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
@@ -210,6 +215,8 @@ namespace BetHelper {
                 ErrorLog.WriteLine(exception);
             }
 
+            NumberFormatInt = numberFormatHandler.NumberFormats.Length - 1;
+
             ExternalEditor = GetExternalEditor();
 
             Load();
@@ -246,6 +253,12 @@ namespace BetHelper {
         public bool BlockRequestsToForeignUrls { get; set; } = true;
 
         /// <summary>
+        /// Represents the setting for displaying bold bell status in the
+        /// StatusStrip when applicable. The default value is true.
+        /// </summary>
+        public bool BoldBellStatus { get; set; } = true;
+
+        /// <summary>
         /// Represents the setting if the application should check for updates.
         /// The default value is true.
         /// </summary>
@@ -272,9 +285,9 @@ namespace BetHelper {
 
         /// <summary>
         /// Represents the setting if the bell will be enabled when a new tip is
-        /// received from the service. The default value is false.
+        /// received from the service. The default value is true.
         /// </summary>
-        public bool EnableBell { get; set; }
+        public bool EnableBell { get; set; } = true;
 
         /// <summary>
         /// Represents the setting of whether the embedded Chromium browser will
@@ -309,9 +322,9 @@ namespace BetHelper {
 
         /// <summary>
         /// Represents the setting if F3 pressed at the MainForm gives the focus
-        /// to opened FindForm. The default value is false.
+        /// to opened FindForm. The default value is true.
         /// </summary>
-        public bool F3MainFormFocusesFindForm { get; set; }
+        public bool F3MainFormFocusesFindForm { get; set; } = true;
 
         /// <summary>
         /// Represents the setting if certificate errors from websites running on
@@ -337,9 +350,9 @@ namespace BetHelper {
         /// <summary>
         /// Represents the setting to log all requests to URLs not belonging to
         /// the URL set by their second-level domains or the exception list by
-        /// their hostname. The default value is false.
+        /// their hostname. The default value is true.
         /// </summary>
-        public bool LogForeignUrls { get; set; }
+        public bool LogForeignUrls { get; set; } = true;
 
         /// <summary>
         /// Represents the setting if load errors of the embedded Chromium
@@ -356,9 +369,9 @@ namespace BetHelper {
         /// <summary>
         /// Represents the setting of whether to outline search results in the
         /// displayed web page in the Chromium embedded browser. The default
-        /// value is false.
+        /// value is true.
         /// </summary>
-        public bool OutlineSearchResults { get; set; }
+        public bool OutlineSearchResults { get; set; } = true;
 
         /// <summary>
         /// Represents the setting if the embedded Chromium browser will be
@@ -546,15 +559,21 @@ namespace BetHelper {
 
         /// <summary>
         /// Represents the index of the active tab of the right tab panel. The
-        /// default value is false.
+        /// default value is zero.
         /// </summary>
         public int ActivePanelRight { get; set; }
 
         /// <summary>
         /// Represents the index of the active tab of the preferences tab panel.
-        /// The default value is false.
+        /// The default value is zero.
         /// </summary>
         public int ActivePreferencesPanel { get; set; }
+
+        /// <summary>
+        /// Represents the index of the selected bell sound. The default value is
+        /// two.
+        /// </summary>
+        public int BellIndex { get; set; } = 2;
 
         /// <summary>
         /// Last export extension index used. The default value is four.
@@ -598,7 +617,14 @@ namespace BetHelper {
         /// Full path to the external editor executable for viewing log files
         /// outside the application. The default value is null.
         /// </summary>
-        public string ExternalEditor { get; set; }
+        public string ExternalEditor {
+            get {
+                return string.IsNullOrEmpty(externalEditor) ? GetExternalEditor() : externalEditor;
+            }
+            set {
+                externalEditor = value == null || value.Equals(GetExternalEditor()) ? string.Empty : value;
+            }
+        }
 
         /// <summary>
         /// Last export directory path used. The default value is null.
@@ -704,6 +730,7 @@ namespace BetHelper {
         /// </summary>
         private void Load() {
             acceptLanguage = persistentSettings.Load("AcceptLanguage", acceptLanguage);
+            externalEditor = persistentSettings.Load("ExternalEditor", externalEditor);
             userAgent = persistentSettings.Load("UserAgent", userAgent);
 
             IntToActivePanels(persistentSettings.Load("ActivePanels", ActivePanelsToInt()));
@@ -715,7 +742,6 @@ namespace BetHelper {
 
             ConfigHash = persistentSettings.Load("ConfigHash", ConfigHash);
             LastExportDirectory = persistentSettings.Load("LastExportDir", LastExportDirectory);
-            ExternalEditor = persistentSettings.Load("ExternalEditor", ExternalEditor);
             TelegramAppDirectory = persistentSettings.Load("TelegramAppDir", TelegramAppDirectory);
             BookmakerDefaultColor = persistentSettings.Load("BookmakerDefaultColor", BookmakerDefaultColor);
             BookmakerSelectedColor = persistentSettings.Load("BookmakerSelectedColor", BookmakerSelectedColor);
@@ -736,6 +762,7 @@ namespace BetHelper {
         /// </summary>
         public void Save() {
             persistentSettings.Save("AcceptLanguage", acceptLanguage);
+            persistentSettings.Save("ExternalEditor", externalEditor);
             persistentSettings.Save("UserAgent", userAgent);
 
             persistentSettings.Save("ActivePanels", ActivePanelsToInt());
@@ -747,7 +774,6 @@ namespace BetHelper {
 
             persistentSettings.Save("ConfigHash", ConfigHash);
             persistentSettings.Save("LastExportDir", LastExportDirectory);
-            persistentSettings.Save("ExternalEditor", ExternalEditor);
             persistentSettings.Save("TelegramAppDir", TelegramAppDirectory);
             persistentSettings.Save("BookmakerDefaultColor", BookmakerDefaultColor);
             persistentSettings.Save("BookmakerSelectedColor", BookmakerSelectedColor);
@@ -771,7 +797,7 @@ namespace BetHelper {
             BitArray bitArray = new BitArray(new int[] { i });
             bool[] bitSettings = new bool[bitArray.Count];
             bitArray.CopyTo(bitSettings, 0);
-            i = bitSettings.Length - 1;
+            i = bitSettings.Length;
 
             TryToKeepUserLoggedIn = bitSettings[--i];
             AutoLogInAfterInitialLoad = bitSettings[--i];
@@ -796,6 +822,7 @@ namespace BetHelper {
             EnableProxy = bitSettings[--i];
             F3MainFormFocusesFindForm = bitSettings[--i];
             OutlineSearchResults = bitSettings[--i];
+            BoldBellStatus = bitSettings[--i];
             EnableBell = bitSettings[--i];
             UseDecimalPrefix = bitSettings[--i];
             TabsBoldFont = bitSettings[--i];
@@ -813,7 +840,7 @@ namespace BetHelper {
         /// Compacts some boolean settings into an integer value.
         /// </summary>
         private int BitSettings1ToInt() {
-            StringBuilder stringBuilder = new StringBuilder(string.Empty.PadRight(1, Constants.Zero))
+            StringBuilder stringBuilder = new StringBuilder()
                 .Append(TryToKeepUserLoggedIn ? 1 : 0)
                 .Append(AutoLogInAfterInitialLoad ? 1 : 0)
                 .Append(BlockRequestsToForeignUrls ? 1 : 0)
@@ -834,6 +861,7 @@ namespace BetHelper {
                 .Append(EnableProxy ? 1 : 0)
                 .Append(F3MainFormFocusesFindForm ? 1 : 0)
                 .Append(OutlineSearchResults ? 1 : 0)
+                .Append(BoldBellStatus ? 1 : 0)
                 .Append(EnableBell ? 1 : 0)
                 .Append(UseDecimalPrefix ? 1 : 0)
                 .Append(TabsBoldFont ? 1 : 0)
@@ -885,6 +913,7 @@ namespace BetHelper {
             ActivePanelLeft = bytes[0];
             ActivePanelRight = bytes[1];
             ActivePreferencesPanel = bytes[2];
+            BellIndex = bytes[3];
         }
 
         /// <summary>
@@ -896,7 +925,7 @@ namespace BetHelper {
                 (byte)ActivePanelLeft,
                 (byte)ActivePanelRight,
                 (byte)ActivePreferencesPanel,
-                0
+                (byte)BellIndex
             };
             return ByteArrayToInt(bytes);
         }
@@ -1105,25 +1134,23 @@ namespace BetHelper {
         /// files outside the application.
         /// </summary>
         private static string GetExternalEditor() {
-            try {
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                    Constants.ExternalEditorApplicationName, Constants.ExternalEditorFileName);
-                if (File.Exists(path)) {
-                    return path;
+            string parentFolder = Path.GetDirectoryName(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
+            string[] directoryPaths = new string[] {
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                Path.Combine(parentFolder, Constants.GenericProgramFilesDirName),
+                Path.Combine(parentFolder, Constants.GenericProgramFilesX86DirName)
+            };
+            foreach (string directoryPath in directoryPaths) {
+                try {
+                    string path = Path.Combine(directoryPath, Constants.ExternalEditorApplicationName, Constants.ExternalEditorFileName);
+                    if (File.Exists(path)) {
+                        return path;
+                    }
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
                 }
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-            }
-            try {
-                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-                    Constants.ExternalEditorApplicationName, Constants.ExternalEditorFileName);
-                if (File.Exists(path)) {
-                    return path;
-                }
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
             }
             return null;
         }

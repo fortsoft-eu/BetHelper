@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.7.0
  */
 
 using FortSoft.Tools;
@@ -90,6 +90,7 @@ namespace BetHelper {
         public event EventHandler F2Pressed;
         public event EventHandler F4Pressed;
         public event EventHandler F5Pressed;
+        public event EventHandler F6Pressed;
         public event EventHandler F7Pressed;
         public event EventHandler F8Pressed;
         public event EventHandler F9Pressed;
@@ -301,6 +302,8 @@ namespace BetHelper {
                     F4Pressed?.Invoke(this, EventArgs.Empty);
                 } else if (e.KeyCode.Equals(Keys.F5)) {
                     F5Pressed?.Invoke(this, EventArgs.Empty);
+                } else if (e.KeyCode.Equals(Keys.F6)) {
+                    F6Pressed?.Invoke(this, EventArgs.Empty);
                 } else if (e.KeyCode.Equals(Keys.F7)) {
                     F7Pressed?.Invoke(this, EventArgs.Empty);
                 } else if (e.KeyCode.Equals(Keys.F8)) {

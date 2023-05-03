@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.5.0
+ * Version 1.1.7.0
  */
 
 using CefSharp;
@@ -41,7 +41,7 @@ namespace BetHelper {
 
         private delegate void WebInfoHandlerCallback();
 
-        public event EventHandler BalanceGot, BrowserInitializedChanged, Enter, Suspended, TipsGot, ZoomLevelChanged;
+        public event EventHandler AlertableGot, BalanceGot, BrowserInitializedChanged, Enter, Suspended, TipsGot, ZoomLevelChanged;
         public event EventHandler<AddressChangedEventArgs> AddressChanged;
         public event EventHandler<CanceledEventArgs> Canceled;
         public event EventHandler<ConsoleMessageEventArgs> BrowserConsoleMessage;
@@ -73,6 +73,7 @@ namespace BetHelper {
             getTimer = new System.Timers.Timer();
             getTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
                 getTimer.Interval = Constants.RightPaneInterval;
+                GetAlertable();
                 GetBalance();
                 GetTips();
             });
@@ -103,6 +104,8 @@ namespace BetHelper {
                 }
             });
         }
+
+        public bool Alertable { get; private set; }
 
         public bool IsSuspended { get; private set; }
 
@@ -341,6 +344,22 @@ namespace BetHelper {
             suspendTimer.Dispose();
         }
 
+        private void GetAlertable() {
+            bool alertable = true;
+            bool atLeastOneService = false;
+            foreach (WebInfo webInfo in WebInfos) {
+                if (webInfo.IsService && !string.IsNullOrEmpty(webInfo.UrlTips)) {
+                    atLeastOneService = true;
+                    if (!webInfo.Alertable) {
+                        alertable = false;
+                        break;
+                    }
+                }
+            }
+            Alertable = alertable && atLeastOneService;
+            AlertableGot?.Invoke(this, EventArgs.Empty);
+        }
+
         private void GetBalance() {
             decimal balance = decimal.Zero;
             foreach (WebInfo webInfo in WebInfos) {
@@ -423,6 +442,12 @@ namespace BetHelper {
                 if (webInfo.Browser != null) {
                     webInfo.StopFinding(false);
                 }
+            }
+        }
+
+        public void CloseInfos() {
+            foreach (WebInfo webInfo in WebInfos) {
+                webInfo.CloseInfo();
             }
         }
 

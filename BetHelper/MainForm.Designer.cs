@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.6.0
+ * Version 1.1.7.0
  */
 
 namespace BetHelper {
@@ -225,8 +225,8 @@ namespace BetHelper {
             this.textBoxNotes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBoxNotes.Size = new System.Drawing.Size(336, 200);
             this.textBoxNotes.TabIndex = 0;
-            this.textBoxNotes.TextChanged += new System.EventHandler(this.OnTBNTextChanged);
-            this.textBoxNotes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTBNKeyDown);
+            this.textBoxNotes.TextChanged += new System.EventHandler(this.OnTBNotesTextChanged);
+            this.textBoxNotes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTBNotesKeyDown);
             this.textBoxNotes.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
             // 
             // groupBoxMovements

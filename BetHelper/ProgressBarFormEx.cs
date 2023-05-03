@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.7.0
  */
 
 using System;
@@ -33,6 +33,8 @@ namespace BetHelper {
         private int maximum, temp;
         private Timer timer;
 
+        public event EventHandler F7Pressed;
+
         public ProgressBarFormEx() {
             timer = new Timer();
             timer.Interval = Constants.ProgressBarFormInterval;
@@ -41,6 +43,14 @@ namespace BetHelper {
                 timer.Stop();
                 timer.Dispose();
             });
+            Button.KeyDown += new KeyEventHandler(OnKeyDown);
+            KeyDown += new KeyEventHandler(OnKeyDown);
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void OnTick(object sender, EventArgs e) {

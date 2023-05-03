@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.1
+ * Version 1.1.7.0
  */
 
 using FortSoft.Tools;
@@ -101,7 +101,7 @@ namespace BetHelper {
             BuildContextMenuAsync();
             InitializeStatusStripHandler();
 
-            textBox.Font = new Font(Constants.MonospaceFontName, 10, FontStyle.Regular, GraphicsUnit.Point, 238);
+            textBox.Font = new Font(Constants.MonospaceFontName, 10, FontStyle.Regular, GraphicsUnit.Point, Constants.FontGdiCharSet);
             textBox.Text = settings.Config;
             textBox.TextChanged += new EventHandler((sender, e) => {
                 if (!dirty) {

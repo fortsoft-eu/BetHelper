@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.1
+ * Version 1.1.7.0
  */
 
 using FortSoft.Tools;
@@ -98,8 +98,10 @@ namespace BetHelper {
             InitializeStatusStripHandler();
 
             textBoxInput.Text = str;
-            textBoxInput.Font = new Font(Constants.MonospaceFontName, 10, FontStyle.Regular, GraphicsUnit.Point, 238);
-            textBoxOutput.Font = new Font(Constants.MonospaceFontName, 10, FontStyle.Regular, GraphicsUnit.Point, 238);
+            textBoxInput.Font = new Font(Constants.MonospaceFontName, 10, FontStyle.Regular, GraphicsUnit.Point,
+                Constants.FontGdiCharSet);
+            textBoxOutput.Font = new Font(Constants.MonospaceFontName, 10, FontStyle.Regular, GraphicsUnit.Point,
+                Constants.FontGdiCharSet);
 
             Menu.MenuItems[2].MenuItems[2].Checked = textBoxInput.WordWrap;
             EnableControls();

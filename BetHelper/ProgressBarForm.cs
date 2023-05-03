@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.5.0
+ * Version 1.1.7.0
  */
 
 using System;
@@ -49,21 +49,6 @@ namespace BetHelper {
             });
         }
 
-        public ProgressBar ProgressBar => progressBar;
-
-        public Label LabelProgress => labelProgress;
-
-        public bool ProgressBarMarquee {
-            get {
-                return progressBar.Style.Equals(ProgressBarStyle.Marquee);
-            }
-            set {
-                progressBar.Style = value
-                    ? ProgressBarStyle.Marquee
-                    : ProgressBarStyle.Continuous;
-            }
-        }
-
         public bool DisableClose {
             get {
                 return disableClose;
@@ -82,39 +67,34 @@ namespace BetHelper {
             }
         }
 
-        public virtual void SetMessage(string message) {
-            if (InvokeRequired) {
-                Invoke(new SetMessageCallback(SetMessage), message);
-            } else {
-                labelMessage.Text = message;
+        public Button Button => button;
+
+        public Label LabelProgress => labelProgress;
+
+        public bool ProgressBarMarquee {
+            get {
+                return progressBar.Style.Equals(ProgressBarStyle.Marquee);
+            }
+            set {
+                progressBar.Style = value ? ProgressBarStyle.Marquee : ProgressBarStyle.Continuous;
             }
         }
 
-        public virtual void SetMaximum(int maximum) {
-            if (InvokeRequired) {
-                Invoke(new SetValueCallback(SetMaximum), maximum);
-            } else {
-                progressBar.Maximum = maximum;
-            }
+        public ProgressBar ProgressBar => progressBar;
+
+        private void DisableCloseButton() {
+            NativeMethods.EnableMenuItem(NativeMethods.GetSystemMenu(Handle, false), Constants.SC_CLOSE, 1);
         }
 
-        public virtual void SetValue(int value) {
-            if (InvokeRequired) {
-                Invoke(new SetValueCallback(SetValue), value);
-            } else {
-                progressBar.Style = ProgressBarStyle.Continuous;
-                if (value > progressBar.Maximum) {
-                    value = progressBar.Maximum;
-                }
-                progressBar.Value = value;
-                progressBar.Invalidate();
-                labelProgress.Text = new StringBuilder()
-                    .Append(value * 100 / progressBar.Maximum)
-                    .Append(Constants.Space)
-                    .Append(Constants.Percent)
-                    .ToString();
-                labelProgress.Invalidate();
-            }
+        private void EnableCloseButton() {
+            NativeMethods.EnableMenuItem(NativeMethods.GetSystemMenu(Handle, false), Constants.SC_CLOSE, 0);
+        }
+
+        private void OnCancelButtonClick(object sender, EventArgs e) => Close();
+
+        private void OnFormClosed(object sender, FormClosedEventArgs e) {
+            timer.Stop();
+            timer.Dispose();
         }
 
         public virtual void SetFinished(string message) {
@@ -139,19 +119,39 @@ namespace BetHelper {
             }
         }
 
-        private void OnFormClosed(object sender, FormClosedEventArgs e) {
-            timer.Stop();
-            timer.Dispose();
+        public virtual void SetMaximum(int maximum) {
+            if (InvokeRequired) {
+                Invoke(new SetValueCallback(SetMaximum), maximum);
+            } else {
+                progressBar.Maximum = maximum;
+            }
         }
 
-        private void OnCancelButtonClick(object sender, EventArgs e) => Close();
-
-        private void DisableCloseButton() {
-            NativeMethods.EnableMenuItem(NativeMethods.GetSystemMenu(Handle, false), Constants.SC_CLOSE, 1);
+        public virtual void SetMessage(string message) {
+            if (InvokeRequired) {
+                Invoke(new SetMessageCallback(SetMessage), message);
+            } else {
+                labelMessage.Text = message;
+            }
         }
 
-        private void EnableCloseButton() {
-            NativeMethods.EnableMenuItem(NativeMethods.GetSystemMenu(Handle, false), Constants.SC_CLOSE, 0);
+        public virtual void SetValue(int value) {
+            if (InvokeRequired) {
+                Invoke(new SetValueCallback(SetValue), value);
+            } else {
+                progressBar.Style = ProgressBarStyle.Continuous;
+                if (value > progressBar.Maximum) {
+                    value = progressBar.Maximum;
+                }
+                progressBar.Value = value;
+                progressBar.Invalidate();
+                labelProgress.Text = new StringBuilder()
+                    .Append(value * 100 / progressBar.Maximum)
+                    .Append(Constants.Space)
+                    .Append(Constants.Percent)
+                    .ToString();
+                labelProgress.Invalidate();
+            }
         }
     }
 }
