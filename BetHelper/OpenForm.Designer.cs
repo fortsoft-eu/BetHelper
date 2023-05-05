@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -88,6 +88,7 @@ namespace BetHelper {
             this.buttonOpen.Text = "&Open";
             this.buttonOpen.UseVisualStyleBackColor = true;
             this.buttonOpen.Click += new System.EventHandler(this.OnButtonOpenClick);
+            this.buttonOpen.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonClose
             // 
@@ -99,6 +100,7 @@ namespace BetHelper {
             this.buttonClose.TabIndex = 3;
             this.buttonClose.Text = "Clos&e";
             this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // OpenForm
             // 
@@ -123,6 +125,7 @@ namespace BetHelper {
             this.Text = "Open";
             this.Activated += new System.EventHandler(this.OnFormActivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

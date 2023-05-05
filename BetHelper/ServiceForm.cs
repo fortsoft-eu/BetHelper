@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -46,11 +46,19 @@ namespace BetHelper {
         private string text;
         private Timer textBoxClicksTimer;
 
-        public ServiceForm(Settings settings) {
-            this.settings = settings;
+        private delegate void ServiceFormFormCallback();
 
-            text = Properties.Resources.CaptionNewService;
+        public event EventHandler F7Pressed;
+
+        public ServiceForm(Settings settings) : this(settings, null) { }
+
+        public ServiceForm(Settings settings, PersistWindowState persistWindowState) {
+            this.settings = settings;
+            this.persistWindowState = persistWindowState;
+
+            Icon = Properties.Resources.Service;
             Text = Properties.Resources.CaptionNewService;
+            text = Properties.Resources.CaptionNewService;
 
             textBoxClicksTimer = new Timer();
             textBoxClicksTimer.Interval = SystemInformation.DoubleClickTime;
@@ -59,10 +67,14 @@ namespace BetHelper {
                 textBoxClicks = 0;
             });
 
-            persistWindowState = new PersistWindowState();
-            persistWindowState.DisableSaveSize = true;
-            persistWindowState.DisableSaveWindowState = true;
+            if (this.persistWindowState == null) {
+                persistWindowState = new PersistWindowState();
+                persistWindowState.AllowSaveTopMost = true;
+                persistWindowState.FixHeight = true;
+                persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
+            }
             persistWindowState.Parent = this;
+            persistWindowState.Loaded += new EventHandler<PersistWindowStateEventArgs>((sender, e) => checkBoxTopMost.Checked = TopMost);
 
             InitializeComponent();
             BuildContextMenuAsync();
@@ -105,6 +117,9 @@ namespace BetHelper {
                 dateTimePickerExpiration.Value = service.Expiration;
                 dateTimePickerSubscribed.Value = service.Subscribed;
                 comboBoxStatus.SelectedIndex = (int)service.Status;
+                service.PersistWindowState = persistWindowState;
+                service.Settings = settings;
+                service.StatusChanged += new EventHandler(OnStatusChanged);
             }
         }
 
@@ -229,6 +244,8 @@ namespace BetHelper {
                     NumericUpDown numericUpDown = (NumericUpDown)sender;
                     numericUpDown.Select(0, numericUpDown.Text.Length);
                 }
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -252,6 +269,14 @@ namespace BetHelper {
         }
 
         private void OnPriceChanged(object sender, EventArgs e) => EnableSave();
+
+        private void OnStatusChanged(object sender, EventArgs e) {
+            if (InvokeRequired) {
+                Invoke(new EventHandler(OnStatusChanged), sender, e);
+            } else {
+                comboBoxStatus.SelectedIndex = (int)((Service)sender).Status;
+            }
+        }
 
         private void OnTextBoxMouseDown(object sender, MouseEventArgs e) {
             if (!e.Button.Equals(MouseButtons.Left)) {
@@ -309,6 +334,38 @@ namespace BetHelper {
             textBoxPrice.Text = ShowPrice(price);
         }
 
+        private void OnTopMostCheckedChanged(object sender, EventArgs e) {
+            TopMost = checkBoxTopMost.Checked;
+            if (!TopMost) {
+                SendToBack();
+            }
+        }
+
+        private void OpenHelp(object sender, EventArgs e) {
+            try {
+                StringBuilder url = new StringBuilder()
+                    .Append(Properties.Resources.Website.TrimEnd(Constants.Slash).ToLowerInvariant())
+                    .Append(Constants.Slash)
+                    .Append(Application.ProductName.ToLowerInvariant())
+                    .Append(Constants.Slash);
+                Process.Start(url.ToString());
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                    MessageForm.BoxIcon.Error);
+                messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                dialog = messageForm;
+                messageForm.ShowDialog(this);
+            }
+        }
+
         private static decimal ParsePrice(string str) {
             return decimal.Parse(
                 Regex.Replace(str.Replace(Constants.Comma, Constants.Period), Constants.JSBalancePattern, string.Empty),
@@ -337,19 +394,60 @@ namespace BetHelper {
                 }
                 DialogResult = DialogResult.OK;
             } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-                StringBuilder title = new StringBuilder()
-                    .Append(Program.GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
+                ShowException(exception);
                 textBoxPrice.Focus();
                 textBoxPrice.SelectAll();
             }
+        }
+
+        public void SafeClose() {
+            if (InvokeRequired) {
+                Invoke(new ServiceFormFormCallback(SafeClose));
+            } else {
+                Close();
+            }
+        }
+
+        public void SafeHide() {
+            if (InvokeRequired) {
+                Invoke(new ServiceFormFormCallback(SafeHide));
+            } else if (!WindowState.Equals(FormWindowState.Minimized)) {
+                WindowState = FormWindowState.Minimized;
+            }
+        }
+
+        public void SafeShow() {
+            if (InvokeRequired) {
+                Invoke(new ServiceFormFormCallback(SafeShow));
+            } else {
+                persistWindowState.Restore();
+            }
+        }
+
+        public void SafeSelect() {
+            if (InvokeRequired) {
+                Invoke(new ServiceFormFormCallback(SafeSelect));
+            } else {
+                persistWindowState.Restore();
+                persistWindowState.BringToFront();
+            }
+        }
+
+        private void ShowException(Exception exception) {
+            Debug.WriteLine(exception);
+            ErrorLog.WriteLine(exception);
+            StringBuilder title = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionError);
+            MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                MessageForm.BoxIcon.Error);
+            messageForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+            messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+            dialog = messageForm;
+            messageForm.ShowDialog(this);
         }
 
         private string ShowPrice(decimal price) {

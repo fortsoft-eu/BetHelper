@@ -461,6 +461,7 @@
     <Content Include="libwebp_x86.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Service.ico" />
     <None Include="Resources\Bookmark.ico" />
     <None Include="Resources\Tip.ico" />
     <None Include="Resources\ImgServiceExpired.ico" />

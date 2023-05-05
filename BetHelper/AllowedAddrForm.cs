@@ -41,6 +41,8 @@ namespace BetHelper {
         private Point location;
         private Timer textBoxClicksTimer;
 
+        public event EventHandler F7Pressed;
+
         public AllowedAddrForm(Settings settings) {
             allowedAddrHandler = settings.AllowedAddrHandler;
             allowedAddrHandler.Added += new EventHandler((sender, e) => {
@@ -152,9 +154,11 @@ namespace BetHelper {
                 string message = listBox.SelectedItems.Count > 1
                     ? string.Format(Properties.Resources.MessageDeleteIpAddresses, listBox.SelectedItems.Count)
                     : Properties.Resources.MessageDeleteIpAddress;
-                dialog = new MessageForm(this, message, Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo,
+                MessageForm messageForm = new MessageForm(this, message, Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo,
                     MessageForm.BoxIcon.Question);
-                if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
+                messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                dialog = messageForm;
+                if (messageForm.ShowDialog(this).Equals(DialogResult.Yes)) {
                     while (listBox.SelectedIndex >= 0) {
                         listBox.Items.RemoveAt(listBox.SelectedIndex);
                     }
@@ -199,6 +203,8 @@ namespace BetHelper {
                 if (sender is ListBox || sender is Button && ((Button)sender).Name.Equals(Constants.ButtonRemoveName)) {
                     DeleteSelected(sender, e);
                 }
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -50,6 +50,8 @@ namespace BetHelper {
 
         private delegate void TipFormFormCallback();
 
+        public event EventHandler F7Pressed;
+
         public TipForm(Settings settings) : this(settings, null) { }
 
         public TipForm(Settings settings, PersistWindowState persistWindowState) {
@@ -76,13 +78,13 @@ namespace BetHelper {
             text = Properties.Resources.CaptionNewTip;
 
             if (this.persistWindowState == null) {
-                this.persistWindowState = new PersistWindowState();
-                this.persistWindowState.AllowSaveTopMost = true;
-                this.persistWindowState.FixHeight = true;
-                this.persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
+                persistWindowState = new PersistWindowState();
+                persistWindowState.AllowSaveTopMost = true;
+                persistWindowState.FixHeight = true;
+                persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
             }
-            this.persistWindowState.Parent = this;
-            this.persistWindowState.Loaded += new EventHandler<PersistWindowStateEventArgs>((sender, e) => checkBoxTopMost.Checked = TopMost);
+            persistWindowState.Parent = this;
+            persistWindowState.Loaded += new EventHandler<PersistWindowStateEventArgs>((sender, e) => checkBoxTopMost.Checked = TopMost);
 
             InitializeComponent();
             BuildContextMenuAsync();
@@ -220,7 +222,10 @@ namespace BetHelper {
             }
         }
 
-        private void OnFormClosing(object sender, FormClosingEventArgs e) => textBoxClicksTimer.Dispose();
+        private void OnFormClosing(object sender, FormClosingEventArgs e) {
+            focusTimer.Dispose();
+            textBoxClicksTimer.Dispose();
+        }
 
         private void OnFormLoad(object sender, EventArgs e) {
             if (tabControl.TabPages.Count.Equals(0) && tabControl.TabPages.Count < Constants.GameTabsMaxCounts) {
@@ -259,6 +264,8 @@ namespace BetHelper {
                 if (sender is TextBox) {
                     ((TextBox)sender).SelectAll();
                 }
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -376,8 +383,11 @@ namespace BetHelper {
                     .Append(Constants.EnDash)
                     .Append(Constants.Space)
                     .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
+                MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                    MessageForm.BoxIcon.Error);
+                messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                dialog = messageForm;
+                messageForm.ShowDialog(this);
             }
         }
 
@@ -447,9 +457,11 @@ namespace BetHelper {
             foreach (TabPage tabPage in tabControl.TabPages) {
                 MatchControl matchControl = (MatchControl)tabPage.Controls[0];
                 if (string.IsNullOrWhiteSpace(matchControl.Game.Match)) {
-                    dialog = new MessageForm(this, Properties.Resources.MessageMatchEmptyError, null, MessageForm.Buttons.OK,
-                        MessageForm.BoxIcon.Exclamation);
-                    dialog.ShowDialog(this);
+                    MessageForm messageForm = new MessageForm(this, Properties.Resources.MessageMatchEmptyError, null,
+                        MessageForm.Buttons.OK, MessageForm.BoxIcon.Exclamation);
+                    messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                    dialog = messageForm;
+                    messageForm.ShowDialog(this);
                     matchControl.FocusMatchField();
                     return;
                 }
@@ -500,9 +512,12 @@ namespace BetHelper {
                 .Append(Constants.EnDash)
                 .Append(Constants.Space)
                 .Append(Properties.Resources.CaptionError);
-            dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-            dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-            dialog.ShowDialog(this);
+            MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                MessageForm.BoxIcon.Error);
+            messageForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+            messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+            dialog = messageForm;
+            messageForm.ShowDialog(this);
         }
 
         private string ShowOdd(float price) {

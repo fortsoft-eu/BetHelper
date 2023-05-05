@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -40,6 +40,8 @@ namespace BetHelper {
         private ListViewSorter listViewSorter;
         private PersistWindowState persistWindowState;
         private Settings settings;
+
+        public event EventHandler F7Pressed;
 
         public BookmarksForm(Settings settings, BookmarkManager bookmarkManager) {
             this.settings = settings;
@@ -157,9 +159,11 @@ namespace BetHelper {
                 string message = listView.SelectedItems.Count > 1
                     ? string.Format(Properties.Resources.MessageDeleteBookmarks, listView.SelectedItems.Count)
                     : Properties.Resources.MessageDeleteBookmark;
-                dialog = new MessageForm(this, message, Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo,
+                MessageForm messageForm = new MessageForm(this, message, Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo,
                     MessageForm.BoxIcon.Question);
-                if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
+                messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                dialog = messageForm;
+                if (messageForm.ShowDialog(this).Equals(DialogResult.Yes)) {
                     foreach (ListViewItem listViewItem in listView.SelectedItems) {
                         listView.Items.Remove(listViewItem);
                         items.Add(listViewItem.SubItems[1].Text);
@@ -209,6 +213,8 @@ namespace BetHelper {
                 if (sender is ListView || sender is Button && ((Button)sender).Name.Equals(Constants.ButtonRemoveName)) {
                     DeleteSelected(sender, e);
                 }
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.8.0
  */
 
 using System;
@@ -47,6 +47,7 @@ namespace BetHelper {
         private delegate void HandleErrorCallback(Exception exception);
         private delegate void ResponseCallback(string version);
 
+        public event EventHandler F7Pressed;
         public event EventHandler<UpdateCheckEventArgs> StateChanged;
         public event HelpEventHandler Help;
 
@@ -71,9 +72,10 @@ namespace BetHelper {
                 case CheckType.User:
                     if (dialog == null || !dialog.Visible) {
                         UpdateCheckForm updateCheckForm = new UpdateCheckForm(null);
+                        updateCheckForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
                         updateCheckForm.Load += new EventHandler(OnLoad);
-                        updateCheckForm.StateSet += new EventHandler<UpdateCheckEventArgs>((sender, e) =>
-                            StateChanged?.Invoke(sender, e));
+                        updateCheckForm.StateSet += new EventHandler<UpdateCheckEventArgs>(
+                            (sender, e) => StateChanged?.Invoke(sender, e));
                         updateCheckForm.HelpRequested += new HelpEventHandler((sender, hlpevent) => Help?.Invoke(sender, hlpevent));
                         dialog = updateCheckForm;
                         StateChanged?.Invoke(this,
@@ -172,6 +174,9 @@ namespace BetHelper {
                         if (CompareVersion(version, Application.ProductVersion) > 0) {
                             if (checkType.Equals(CheckType.Auto) && dialog == null || !dialog.Visible) {
                                 UpdateCheckForm updateCheckForm = new UpdateCheckForm(version);
+                                updateCheckForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+                                updateCheckForm.HelpRequested += new HelpEventHandler(
+                                    (sender, hlpevent) => Help?.Invoke(sender, hlpevent));
                                 dialog = updateCheckForm;
                                 updateCheckForm.ShowDialog(parent);
                             }

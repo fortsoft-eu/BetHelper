@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -34,16 +34,18 @@ namespace BetHelper {
         private PersistWindowState persistWindowState;
         private Timer timer;
 
-        private delegate void CountDownFormback();
+        private delegate void CountDownFormCallback();
 
-        public CountDownForm() {
+        public event EventHandler F7Pressed;
+
+        public CountDownForm(Settings settings) {
             persistWindowState = new PersistWindowState();
             persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
             persistWindowState.Parent = this;
 
             InitializeComponent();
 
-            sec = Constants.TurnOffTheMonitorsInterval;
+            sec = settings.TurnOffTheMonitorsInterval < 0 ? 0 : settings.TurnOffTheMonitorsInterval;
             labelSec.Text = sec.ToString();
 
             timer = new Timer();
@@ -71,11 +73,24 @@ namespace BetHelper {
             timer.Dispose();
         }
 
-        private void OnFormLoad(object sender, EventArgs e) => timer.Start();
+        private void OnFormLoad(object sender, EventArgs e) {
+            if (sec.Equals(0)) {
+                SendMessage();
+                Close();
+            } else {
+                timer.Start();
+            }
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         public void SafeClose() {
             if (InvokeRequired) {
-                Invoke(new CountDownFormback(SafeClose));
+                Invoke(new CountDownFormCallback(SafeClose));
             } else {
                 Close();
             }
@@ -83,7 +98,7 @@ namespace BetHelper {
 
         public void SafeSelect() {
             if (InvokeRequired) {
-                Invoke(new CountDownFormback(SafeSelect));
+                Invoke(new CountDownFormCallback(SafeSelect));
             } else {
                 persistWindowState.Restore();
                 persistWindowState.BringToFront();

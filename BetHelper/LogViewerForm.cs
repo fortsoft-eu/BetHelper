@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.6.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -1600,7 +1600,7 @@ namespace BetHelper {
         }
 
         private void TurnOffMonitors() {
-            countDownForm = new CountDownForm();
+            countDownForm = new CountDownForm(settings);
             countDownForm.HelpButtonClicked += new CancelEventHandler((sender, e) => {
                 countDownForm.Close();
                 OpenHelp(sender, e);

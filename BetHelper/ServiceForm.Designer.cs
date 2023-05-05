@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -64,6 +64,7 @@ namespace BetHelper {
             this.comboBoxStatus = new System.Windows.Forms.ComboBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.checkBoxTopMost = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSpan)).BeginInit();
             this.SuspendLayout();
             // 
@@ -146,6 +147,7 @@ namespace BetHelper {
             this.comboBoxSpan.Name = "comboBoxSpan";
             this.comboBoxSpan.Size = new System.Drawing.Size(89, 21);
             this.comboBoxSpan.TabIndex = 6;
+            this.comboBoxSpan.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelExpiration
             // 
@@ -164,6 +166,7 @@ namespace BetHelper {
             this.dateTimePickerExpiration.Name = "dateTimePickerExpiration";
             this.dateTimePickerExpiration.Size = new System.Drawing.Size(155, 20);
             this.dateTimePickerExpiration.TabIndex = 8;
+            this.dateTimePickerExpiration.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelSubscribed
             // 
@@ -182,6 +185,7 @@ namespace BetHelper {
             this.dateTimePickerSubscribed.Name = "dateTimePickerSubscribed";
             this.dateTimePickerSubscribed.Size = new System.Drawing.Size(155, 20);
             this.dateTimePickerSubscribed.TabIndex = 10;
+            this.dateTimePickerSubscribed.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelStatus
             // 
@@ -202,6 +206,7 @@ namespace BetHelper {
             this.comboBoxStatus.Name = "comboBoxStatus";
             this.comboBoxStatus.Size = new System.Drawing.Size(155, 21);
             this.comboBoxStatus.TabIndex = 12;
+            this.comboBoxStatus.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonSave
             // 
@@ -213,6 +218,7 @@ namespace BetHelper {
             this.buttonSave.Text = "&Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.Save);
+            this.buttonSave.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonCancel
             // 
@@ -224,6 +230,19 @@ namespace BetHelper {
             this.buttonCancel.TabIndex = 14;
             this.buttonCancel.Text = "Canc&el";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // checkBoxTopMost
+            // 
+            this.checkBoxTopMost.AutoSize = true;
+            this.checkBoxTopMost.Location = new System.Drawing.Point(15, 180);
+            this.checkBoxTopMost.Name = "checkBoxTopMost";
+            this.checkBoxTopMost.Size = new System.Drawing.Size(70, 17);
+            this.checkBoxTopMost.TabIndex = 15;
+            this.checkBoxTopMost.Text = "&Top most";
+            this.checkBoxTopMost.UseVisualStyleBackColor = true;
+            this.checkBoxTopMost.CheckedChanged += new System.EventHandler(this.OnTopMostCheckedChanged);
+            this.checkBoxTopMost.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // ServiceForm
             // 
@@ -232,6 +251,7 @@ namespace BetHelper {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(279, 211);
+            this.Controls.Add(this.checkBoxTopMost);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.comboBoxStatus);
@@ -248,16 +268,12 @@ namespace BetHelper {
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.labelName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.HelpButton = true;
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "ServiceForm";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Activated += new System.EventHandler(this.OnFormActivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnFormLoad);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSpan)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -281,5 +297,6 @@ namespace BetHelper {
         private System.Windows.Forms.ComboBox comboBoxStatus;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.CheckBox checkBoxTopMost;
     }
 }

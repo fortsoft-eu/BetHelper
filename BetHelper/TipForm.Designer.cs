@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -141,6 +141,7 @@ namespace BetHelper {
             this.tabControl.Size = new System.Drawing.Size(279, 161);
             this.tabControl.TabIndex = 2;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.OnSelectedIndexChanged);
+            this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonAddGame
             // 
@@ -152,6 +153,7 @@ namespace BetHelper {
             this.buttonAddGame.Text = "&Add Match";
             this.buttonAddGame.UseVisualStyleBackColor = true;
             this.buttonAddGame.Click += new System.EventHandler(this.AddGame);
+            this.buttonAddGame.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonRemoveGame
             // 
@@ -163,6 +165,7 @@ namespace BetHelper {
             this.buttonRemoveGame.Text = "&Remove Match";
             this.buttonRemoveGame.UseVisualStyleBackColor = true;
             this.buttonRemoveGame.Click += new System.EventHandler(this.RemoveGame);
+            this.buttonRemoveGame.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonSave
             // 
@@ -174,6 +177,7 @@ namespace BetHelper {
             this.buttonSave.Text = "&Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.Save);
+            this.buttonSave.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonCancel
             // 
@@ -185,6 +189,7 @@ namespace BetHelper {
             this.buttonCancel.TabIndex = 14;
             this.buttonCancel.Text = "Canc&el";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelStatus
             // 
@@ -205,6 +210,7 @@ namespace BetHelper {
             this.comboBoxStatus.Name = "comboBoxStatus";
             this.comboBoxStatus.Size = new System.Drawing.Size(80, 21);
             this.comboBoxStatus.TabIndex = 12;
+            this.comboBoxStatus.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelService
             // 
@@ -238,6 +244,7 @@ namespace BetHelper {
             this.checkBoxTopMost.Text = "&Top most";
             this.checkBoxTopMost.UseVisualStyleBackColor = true;
             this.checkBoxTopMost.CheckedChanged += new System.EventHandler(this.OnTopMostCheckedChanged);
+            this.checkBoxTopMost.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // TipForm
             // 
@@ -268,6 +275,7 @@ namespace BetHelper {
             this.Activated += new System.EventHandler(this.OnFormActivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnFormLoad);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

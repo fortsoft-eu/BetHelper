@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -69,6 +69,17 @@ namespace BetHelper {
                 "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_3_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 16_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/113.0.5672.69 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (iPad; CPU OS 16_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/113.0.5672.69 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (iPod; CPU iPhone OS 16_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/113.0.5672.69 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.76 Mobile Safari/537.36",
+                "Mozilla/5.0 (Linux; Android 10; SM-A205U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.76 Mobile Safari/537.36",
+                "Mozilla/5.0 (Linux; Android 10; SM-A102U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.76 Mobile Safari/537.36",
+                "Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.76 Mobile Safari/537.36",
+                "Mozilla/5.0 (Linux; Android 10; SM-N960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.76 Mobile Safari/537.36",
+                "Mozilla/5.0 (Linux; Android 10; LM-Q720) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.76 Mobile Safari/537.36",
+                "Mozilla/5.0 (Linux; Android 10; LM-X420) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.76 Mobile Safari/537.36",
+                "Mozilla/5.0 (Linux; Android 10; LM-Q710(FGN)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.5672.76 Mobile Safari/537.36",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
@@ -587,6 +598,13 @@ namespace BetHelper {
         public int NumberFormatInt { get; set; }
 
         /// <summary>
+        /// The time interval in seconds after which the monitors will be turned
+        /// off after entering the command to turn off the monitors. The default
+        /// value is five.
+        /// </summary>
+        public int TurnOffTheMonitorsInterval { get; set; } = 5;
+
+        /// <summary>
         /// Gets an instance of an NumberFormatComboBox object.
         /// </summary>
         public NumberFormatComboBox NumberFormat => numberFormatHandler.GetNumberFormat(NumberFormatInt);
@@ -737,6 +755,7 @@ namespace BetHelper {
             IntToBitSettings1(persistentSettings.Load("BitSettings1", BitSettings1ToInt()));
             IntToBitSettings2(persistentSettings.Load("BitSettings2", BitSettings2ToInt()));
             IntToByteSettings1(persistentSettings.Load("ByteSettings1", ByteSettings1ToInt()));
+            IntToByteSettings2(persistentSettings.Load("ByteSettings2", ByteSettings2ToInt()));
             IntToWordSettings1(persistentSettings.Load("WordSettings1", WordSettings1ToInt()));
             IntToWordSettings2(persistentSettings.Load("WordSettings2", WordSettings2ToInt()));
 
@@ -769,6 +788,7 @@ namespace BetHelper {
             persistentSettings.Save("BitSettings1", BitSettings1ToInt());
             persistentSettings.Save("BitSettings2", BitSettings2ToInt());
             persistentSettings.Save("ByteSettings1", ByteSettings1ToInt());
+            persistentSettings.Save("ByteSettings2", ByteSettings2ToInt());
             persistentSettings.Save("WordSettings1", WordSettings1ToInt());
             persistentSettings.Save("WordSettings2", WordSettings2ToInt());
 
@@ -906,26 +926,24 @@ namespace BetHelper {
         }
 
         /// <summary>
-        /// Expands an integer value into active panel idexes and opacity value.
+        /// Expands an integer value into active panel idexes.
         /// </summary>
         private void IntToActivePanels(int i) {
             byte[] bytes = IntToByteArray(i);
             ActivePanelLeft = bytes[0];
             ActivePanelRight = bytes[1];
             ActivePreferencesPanel = bytes[2];
-            BellIndex = bytes[3];
         }
 
         /// <summary>
-        /// Compacts some active panel idexes and opacity value into an integer
-        /// value.
+        /// Compacts some active panel idexes into an integer value.
         /// </summary>
         private int ActivePanelsToInt() {
             byte[] bytes = new byte[] {
                 (byte)ActivePanelLeft,
                 (byte)ActivePanelRight,
                 (byte)ActivePreferencesPanel,
-                (byte)BellIndex
+                0
             };
             return ByteArrayToInt(bytes);
         }
@@ -996,6 +1014,28 @@ namespace BetHelper {
                 (byte)ExtensionFilterIndex,
                 (byte)StripRenderMode,
                 (byte)NumberFormatInt
+            };
+            return ByteArrayToInt(bytes);
+        }
+
+        /// <summary>
+        /// Expands an integer value into byte values.
+        /// </summary>
+        private void IntToByteSettings2(int i) {
+            byte[] bytes = IntToByteArray(i);
+            BellIndex = bytes[0];
+            TurnOffTheMonitorsInterval = bytes[1];
+        }
+
+        /// <summary>
+        /// Compacts some byte values into an integer value.
+        /// </summary>
+        private int ByteSettings2ToInt() {
+            byte[] bytes = new byte[] {
+                (byte)BellIndex,
+                (byte)TurnOffTheMonitorsInterval,
+                0,
+                0
             };
             return ByteArrayToInt(bytes);
         }

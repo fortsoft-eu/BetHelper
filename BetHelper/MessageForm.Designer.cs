@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -101,6 +101,7 @@ namespace BetHelper {
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // button2
             // 
@@ -111,6 +112,7 @@ namespace BetHelper {
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // button3
             // 
@@ -121,6 +123,7 @@ namespace BetHelper {
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 3;
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // button4
             // 
@@ -131,6 +134,7 @@ namespace BetHelper {
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 4;
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // MessageForm
             // 
@@ -150,6 +154,7 @@ namespace BetHelper {
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Load += new System.EventHandler(this.OnFormLoad);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.panel.ResumeLayout(false);
             this.panel.PerformLayout();

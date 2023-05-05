@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.5.0
+ * Version 1.1.8.0
  */
 
 using CefSharp;
@@ -39,12 +39,14 @@ namespace BetHelper {
         private PopUpFrameHandler popUpFrameHandler;
         private SemaphoreSlim heartBeatSemaphore;
         private Settings settings;
+        private ShortcutManager shortcutManager;
         private StatusStripHandler statusStripHandler;
         private string browserConsoleMessage;
         private System.Timers.Timer heartBeatTimer, closeTimer;
         private Thread popUpThread;
         private WebInfo webInfo;
 
+        public event EventHandler F7Pressed;
         public event EventHandler<UrlEventArgs> UrlChanged;
 
         public PopUpBrowserForm(WebInfo webInfo, Settings settings, PopUpEventArgs popUpEventArgs) {
@@ -75,6 +77,7 @@ namespace BetHelper {
             closeTimer.Elapsed += new System.Timers.ElapsedEventHandler(SafeClose);
             mainForm.FormClosed += new FormClosedEventHandler(SafeClose);
 
+            InitializeShortcutManager();
             InitializeComponent();
             SuspendLayout();
 
@@ -232,10 +235,17 @@ namespace BetHelper {
             }
         }
 
+        private void InitializeShortcutManager() {
+            shortcutManager = new ShortcutManager();
+            shortcutManager.StopRinging += new EventHandler(F7Pressed);
+            shortcutManager.AddForm(this);
+        }
+
         private void PopUpBrowser() {
             popUpEventArgs.Location = new Point(webInfo.PopUpLeft, webInfo.PopUpTop);
             popUpEventArgs.Size = new Size(webInfo.PopUpWidth, webInfo.PopUpHeight);
             PopUpBrowserForm popUpBrowserForm = new PopUpBrowserForm(webInfo, settings, popUpEventArgs);
+            popUpBrowserForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
             popUpBrowserForm.UrlChanged += new EventHandler<UrlEventArgs>(OnUrlChanged);
             popUpBrowserForm.ShowDialog();
         }

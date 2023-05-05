@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.6.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -159,6 +159,7 @@ namespace BetHelper {
             this.buttonCopyUrl.Text = "Co&py";
             this.buttonCopyUrl.UseVisualStyleBackColor = true;
             this.buttonCopyUrl.Click += new System.EventHandler(this.OnCopyUrlClick);
+            this.buttonCopyUrl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelUserName
             // 
@@ -191,6 +192,7 @@ namespace BetHelper {
             this.buttonCopyUserName.Text = "C&opy";
             this.buttonCopyUserName.UseVisualStyleBackColor = true;
             this.buttonCopyUserName.Click += new System.EventHandler(this.OnCopyUserNameClick);
+            this.buttonCopyUserName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelPassword
             // 
@@ -224,6 +226,7 @@ namespace BetHelper {
             this.buttonCopyPassword.Text = "&Copy";
             this.buttonCopyPassword.UseVisualStyleBackColor = true;
             this.buttonCopyPassword.Click += new System.EventHandler(this.OnCopyPasswordClick);
+            this.buttonCopyPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelScript
             // 
@@ -319,6 +322,7 @@ namespace BetHelper {
             this.checkBoxHandlePopUps.Text = "Handle popups";
             this.checkBoxHandlePopUps.UseVisualStyleBackColor = true;
             this.checkBoxHandlePopUps.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
+            this.checkBoxHandlePopUps.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelPopUpWidth
             // 
@@ -468,6 +472,7 @@ namespace BetHelper {
             this.buttonOk.TabIndex = 44;
             this.buttonOk.Text = "O&K";
             this.buttonOk.UseVisualStyleBackColor = true;
+            this.buttonOk.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxWillHandlePopUps
             // 
@@ -480,6 +485,7 @@ namespace BetHelper {
             this.checkBoxWillHandlePopUps.Text = "Will actually handle popups";
             this.checkBoxWillHandlePopUps.UseVisualStyleBackColor = true;
             this.checkBoxWillHandlePopUps.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
+            this.checkBoxWillHandlePopUps.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelChatHosts
             // 
@@ -536,6 +542,7 @@ namespace BetHelper {
             this.checkBoxIsService.Text = "Is service";
             this.checkBoxIsService.UseVisualStyleBackColor = true;
             this.checkBoxIsService.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
+            this.checkBoxIsService.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxAudioMutedByDefault
             // 
@@ -547,6 +554,7 @@ namespace BetHelper {
             this.checkBoxAudioMutedByDefault.Text = "Audio muted by default";
             this.checkBoxAudioMutedByDefault.UseVisualStyleBackColor = true;
             this.checkBoxAudioMutedByDefault.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
+            this.checkBoxAudioMutedByDefault.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelUrlNext
             // 
@@ -591,6 +599,7 @@ namespace BetHelper {
             this.checkBoxTabNavigation.Text = "Allow navigation between tabs";
             this.checkBoxTabNavigation.UseVisualStyleBackColor = true;
             this.checkBoxTabNavigation.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
+            this.checkBoxTabNavigation.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxWillTryToKeep
             // 
@@ -603,6 +612,7 @@ namespace BetHelper {
             this.checkBoxWillTryToKeep.Text = "Will try to keep the user logged in";
             this.checkBoxWillTryToKeep.UseVisualStyleBackColor = true;
             this.checkBoxWillTryToKeep.CheckedChanged += new System.EventHandler(this.OnCheckedChanged);
+            this.checkBoxWillTryToKeep.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelTips
             // 
@@ -675,6 +685,7 @@ namespace BetHelper {
             this.checkBoxTopMost.Text = "&Top most";
             this.checkBoxTopMost.UseVisualStyleBackColor = true;
             this.checkBoxTopMost.CheckedChanged += new System.EventHandler(this.OnTopMostCheckedChanged);
+            this.checkBoxTopMost.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // WebInfoForm
             // 
@@ -733,6 +744,7 @@ namespace BetHelper {
             this.Name = "WebInfoForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.SizeChanged += new System.EventHandler(this.GripStyle);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.Move += new System.EventHandler(this.GripStyle);
             this.tableLayoutPanel.ResumeLayout(false);
             this.panelChatHosts.ResumeLayout(false);

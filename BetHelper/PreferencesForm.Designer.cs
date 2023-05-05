@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -113,6 +113,7 @@ namespace BetHelper {
             this.radioButtonSoftMargins = new System.Windows.Forms.RadioButton();
             this.labelPrinting = new System.Windows.Forms.Label();
             this.groupBoxApplication = new System.Windows.Forms.GroupBox();
+            this.buttonChime = new System.Windows.Forms.Button();
             this.comboBoxBellSound = new System.Windows.Forms.ComboBox();
             this.labelBellSound = new System.Windows.Forms.Label();
             this.checkBoxBoldErrorBell = new System.Windows.Forms.CheckBox();
@@ -164,7 +165,6 @@ namespace BetHelper {
             this.checkBoxBoldFont = new System.Windows.Forms.CheckBox();
             this.comboBoxTabAppearance = new System.Windows.Forms.ComboBox();
             this.labelTabAppearance = new System.Windows.Forms.Label();
-            this.buttonChime = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWarning)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabPageBrowser.SuspendLayout();
@@ -223,6 +223,7 @@ namespace BetHelper {
             this.buttonSave.Text = "&Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.Save);
+            this.buttonSave.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonCancel
             // 
@@ -234,6 +235,7 @@ namespace BetHelper {
             this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "Canc&el";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // tabControl
             // 
@@ -249,6 +251,7 @@ namespace BetHelper {
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(388, 514);
             this.tabControl.TabIndex = 0;
+            this.tabControl.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // tabPageBrowser
             // 
@@ -283,6 +286,7 @@ namespace BetHelper {
             this.checkBoxEnableProxy.TabIndex = 0;
             this.checkBoxEnableProxy.Text = "Enable pro&xy server";
             this.checkBoxEnableProxy.UseVisualStyleBackColor = true;
+            this.checkBoxEnableProxy.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxHeaders
             // 
@@ -367,6 +371,7 @@ namespace BetHelper {
             this.checkBoxEnableAudio.Text = "Enable &audio";
             this.checkBoxEnableAudio.UseVisualStyleBackColor = true;
             this.checkBoxEnableAudio.CheckedChanged += new System.EventHandler(this.SetWarning);
+            this.checkBoxEnableAudio.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxEnableDrmContent
             // 
@@ -378,6 +383,7 @@ namespace BetHelper {
             this.checkBoxEnableDrmContent.Text = "Enable &DRM content (experimental)";
             this.checkBoxEnableDrmContent.UseVisualStyleBackColor = true;
             this.checkBoxEnableDrmContent.CheckedChanged += new System.EventHandler(this.SetWarning);
+            this.checkBoxEnableDrmContent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxEnablePrintPreview
             // 
@@ -389,6 +395,7 @@ namespace BetHelper {
             this.checkBoxEnablePrintPreview.Text = "E&nable print preview";
             this.checkBoxEnablePrintPreview.UseVisualStyleBackColor = true;
             this.checkBoxEnablePrintPreview.CheckedChanged += new System.EventHandler(this.SetWarning);
+            this.checkBoxEnablePrintPreview.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxCache
             // 
@@ -414,6 +421,7 @@ namespace BetHelper {
             this.checkBoxPersistUserPreferences.Text = "&Persist user preferences";
             this.checkBoxPersistUserPreferences.UseVisualStyleBackColor = true;
             this.checkBoxPersistUserPreferences.CheckedChanged += new System.EventHandler(this.SetWarning);
+            this.checkBoxPersistUserPreferences.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxPersistSessionCookies
             // 
@@ -425,6 +433,7 @@ namespace BetHelper {
             this.checkBoxPersistSessionCookies.Text = "Persist session &cookies";
             this.checkBoxPersistSessionCookies.UseVisualStyleBackColor = true;
             this.checkBoxPersistSessionCookies.CheckedChanged += new System.EventHandler(this.SetWarning);
+            this.checkBoxPersistSessionCookies.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxEnableCache
             // 
@@ -436,6 +445,7 @@ namespace BetHelper {
             this.checkBoxEnableCache.Text = "Ena&ble cache";
             this.checkBoxEnableCache.UseVisualStyleBackColor = true;
             this.checkBoxEnableCache.CheckedChanged += new System.EventHandler(this.OnEnableCacheCheckedChanged);
+            this.checkBoxEnableCache.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // tabPageDebug
             // 
@@ -491,6 +501,7 @@ namespace BetHelper {
             this.buttonLogViewer.Text = "Open &Log Viewer...";
             this.buttonLogViewer.UseVisualStyleBackColor = true;
             this.buttonLogViewer.Click += new System.EventHandler(this.OnLogViewerClick);
+            this.buttonLogViewer.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonBrowse
             // 
@@ -501,6 +512,7 @@ namespace BetHelper {
             this.buttonBrowse.Text = "Bro&wse...";
             this.buttonBrowse.UseVisualStyleBackColor = true;
             this.buttonBrowse.Click += new System.EventHandler(this.OnButtonBrowseClick);
+            this.buttonBrowse.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // textBoxExternalEditor
             // 
@@ -538,6 +550,7 @@ namespace BetHelper {
             this.checkBoxRestrictSomeFeatures.Text = "&Restrict some features for logs larger than";
             this.checkBoxRestrictSomeFeatures.UseVisualStyleBackColor = true;
             this.checkBoxRestrictSomeFeatures.CheckedChanged += new System.EventHandler(this.OnRestrictFeaturesCheckedChanged);
+            this.checkBoxRestrictSomeFeatures.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelKiB
             // 
@@ -566,6 +579,7 @@ namespace BetHelper {
             this.checkBoxEnableLogPreloadLimit.Text = "E&nable log preload maximum limit";
             this.checkBoxEnableLogPreloadLimit.UseVisualStyleBackColor = true;
             this.checkBoxEnableLogPreloadLimit.CheckedChanged += new System.EventHandler(this.OnMaxPreloadCheckedChanged);
+            this.checkBoxEnableLogPreloadLimit.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxJSErrors
             // 
@@ -589,6 +603,7 @@ namespace BetHelper {
             this.checkBoxLogConsoleMessages.TabIndex = 1;
             this.checkBoxLogConsoleMessages.Text = "Log &console messages";
             this.checkBoxLogConsoleMessages.UseVisualStyleBackColor = true;
+            this.checkBoxLogConsoleMessages.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxShowConsoleMessages
             // 
@@ -599,6 +614,7 @@ namespace BetHelper {
             this.checkBoxShowConsoleMessages.TabIndex = 0;
             this.checkBoxShowConsoleMessages.Text = "Show console &messages";
             this.checkBoxShowConsoleMessages.UseVisualStyleBackColor = true;
+            this.checkBoxShowConsoleMessages.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxNavigation
             // 
@@ -624,6 +640,7 @@ namespace BetHelper {
             this.checkBoxLogPopUpFrameHandler.TabIndex = 3;
             this.checkBoxLogPopUpFrameHandler.Text = "&PopUpFrameHandler logging";
             this.checkBoxLogPopUpFrameHandler.UseVisualStyleBackColor = true;
+            this.checkBoxLogPopUpFrameHandler.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxLogLoadErrors
             // 
@@ -634,6 +651,7 @@ namespace BetHelper {
             this.checkBoxLogLoadErrors.TabIndex = 2;
             this.checkBoxLogLoadErrors.Text = "Log lo&ad errors";
             this.checkBoxLogLoadErrors.UseVisualStyleBackColor = true;
+            this.checkBoxLogLoadErrors.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxShowLoadErrors
             // 
@@ -644,6 +662,7 @@ namespace BetHelper {
             this.checkBoxShowLoadErrors.TabIndex = 1;
             this.checkBoxShowLoadErrors.Text = "Show loa&d errors";
             this.checkBoxShowLoadErrors.UseVisualStyleBackColor = true;
+            this.checkBoxShowLoadErrors.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxLogForeignUrls
             // 
@@ -655,6 +674,7 @@ namespace BetHelper {
             this.checkBoxLogForeignUrls.Text = "L&og all requests to URLs not belonging to the URL set by their\r\nsecond-level dom" +
     "ains or the exception list by their hostname.";
             this.checkBoxLogForeignUrls.UseVisualStyleBackColor = true;
+            this.checkBoxLogForeignUrls.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxDomInspection
             // 
@@ -682,6 +702,7 @@ namespace BetHelper {
             this.comboBoxOverlayCrosshairColor.Name = "comboBoxOverlayCrosshairColor";
             this.comboBoxOverlayCrosshairColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxOverlayCrosshairColor.TabIndex = 6;
+            this.comboBoxOverlayCrosshairColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelOverlayCrosshairColor
             // 
@@ -700,6 +721,7 @@ namespace BetHelper {
             this.comboBoxOverlayBackgroundColor.Name = "comboBoxOverlayBackgroundColor";
             this.comboBoxOverlayBackgroundColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxOverlayBackgroundColor.TabIndex = 4;
+            this.comboBoxOverlayBackgroundColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelOverlayBackgroundColor
             // 
@@ -758,6 +780,7 @@ namespace BetHelper {
             this.checkBoxF3MainFormFind.TabIndex = 1;
             this.checkBoxF3MainFormFind.Text = "&F3 focuses opened find form";
             this.checkBoxF3MainFormFind.UseVisualStyleBackColor = true;
+            this.checkBoxF3MainFormFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxOutlineSearchResults
             // 
@@ -768,6 +791,7 @@ namespace BetHelper {
             this.checkBoxOutlineSearchResults.TabIndex = 0;
             this.checkBoxOutlineSearchResults.Text = "O&utline search result";
             this.checkBoxOutlineSearchResults.UseVisualStyleBackColor = true;
+            this.checkBoxOutlineSearchResults.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // tabPageGeneral
             // 
@@ -792,6 +816,7 @@ namespace BetHelper {
             this.buttonEditRemoteConfig.Text = "Edit &Remote Configuration File...";
             this.buttonEditRemoteConfig.UseVisualStyleBackColor = true;
             this.buttonEditRemoteConfig.Click += new System.EventHandler(this.EditRemoteConfig);
+            this.buttonEditRemoteConfig.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxSecurity
             // 
@@ -818,6 +843,7 @@ namespace BetHelper {
             this.checkBoxIgnoreCertificateErrors.Text = "&Ignore certificate errors";
             this.checkBoxIgnoreCertificateErrors.UseVisualStyleBackColor = true;
             this.checkBoxIgnoreCertificateErrors.CheckedChanged += new System.EventHandler(this.SetWarning);
+            this.checkBoxIgnoreCertificateErrors.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxBlockRequestsToForeignUrls
             // 
@@ -829,6 +855,7 @@ namespace BetHelper {
             this.checkBoxBlockRequestsToForeignUrls.Text = "Block all re&quests to URLs not belonging to the URL set by their\r\nsecond-level d" +
     "omains or the exception list by their hostname.";
             this.checkBoxBlockRequestsToForeignUrls.UseVisualStyleBackColor = true;
+            this.checkBoxBlockRequestsToForeignUrls.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonAllowedClientsIP
             // 
@@ -839,6 +866,7 @@ namespace BetHelper {
             this.buttonAllowedClientsIP.Text = "Allowed Client\'s I&P Addresses...";
             this.buttonAllowedClientsIP.UseVisualStyleBackColor = true;
             this.buttonAllowedClientsIP.Click += new System.EventHandler(this.OnAllowedClientsClick);
+            this.buttonAllowedClientsIP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxKeepAnEyeOnTheClientsIP
             // 
@@ -850,6 +878,7 @@ namespace BetHelper {
             this.checkBoxKeepAnEyeOnTheClientsIP.Text = "Al&ways keep an eye on the client\'s IP address and block all\r\noutgoing requests i" +
     "f the client\'s IP address changes.";
             this.checkBoxKeepAnEyeOnTheClientsIP.UseVisualStyleBackColor = true;
+            this.checkBoxKeepAnEyeOnTheClientsIP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxPrinting
             // 
@@ -875,6 +904,7 @@ namespace BetHelper {
             this.radioButtonHardMargins.TabStop = true;
             this.radioButtonHardMargins.Text = "Use &hard margins";
             this.radioButtonHardMargins.UseVisualStyleBackColor = true;
+            this.radioButtonHardMargins.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // radioButtonSoftMargins
             // 
@@ -886,6 +916,7 @@ namespace BetHelper {
             this.radioButtonSoftMargins.TabStop = true;
             this.radioButtonSoftMargins.Text = "&Use soft margins";
             this.radioButtonSoftMargins.UseVisualStyleBackColor = true;
+            this.radioButtonSoftMargins.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelPrinting
             // 
@@ -925,6 +956,17 @@ namespace BetHelper {
             this.groupBoxApplication.TabStop = false;
             this.groupBoxApplication.Text = "Application";
             // 
+            // buttonChime
+            // 
+            this.buttonChime.Location = new System.Drawing.Point(285, 197);
+            this.buttonChime.Name = "buttonChime";
+            this.buttonChime.Size = new System.Drawing.Size(75, 23);
+            this.buttonChime.TabIndex = 16;
+            this.buttonChime.Text = "&Chime";
+            this.buttonChime.UseVisualStyleBackColor = true;
+            this.buttonChime.Click += new System.EventHandler(this.OnChimeClick);
+            this.buttonChime.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
             // comboBoxBellSound
             // 
             this.comboBoxBellSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -933,6 +975,7 @@ namespace BetHelper {
             this.comboBoxBellSound.Name = "comboBoxBellSound";
             this.comboBoxBellSound.Size = new System.Drawing.Size(177, 21);
             this.comboBoxBellSound.TabIndex = 15;
+            this.comboBoxBellSound.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelBellSound
             // 
@@ -952,6 +995,7 @@ namespace BetHelper {
             this.checkBoxBoldErrorBell.TabIndex = 13;
             this.checkBoxBoldErrorBell.Text = "Bol&d error bell status";
             this.checkBoxBoldErrorBell.UseVisualStyleBackColor = true;
+            this.checkBoxBoldErrorBell.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxEnableBell
             // 
@@ -963,6 +1007,7 @@ namespace BetHelper {
             this.checkBoxEnableBell.Text = "Ena&ble bell";
             this.checkBoxEnableBell.UseVisualStyleBackColor = true;
             this.checkBoxEnableBell.CheckedChanged += new System.EventHandler(this.OnEnableBellCheckedChanged);
+            this.checkBoxEnableBell.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonManageBookmarks
             // 
@@ -973,6 +1018,7 @@ namespace BetHelper {
             this.buttonManageBookmarks.Text = "Mana&ge Bookmarks...";
             this.buttonManageBookmarks.UseVisualStyleBackColor = true;
             this.buttonManageBookmarks.Click += new System.EventHandler(this.OnManageBookmarksClick);
+            this.buttonManageBookmarks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxTruncateBookmarkTitles
             // 
@@ -983,6 +1029,7 @@ namespace BetHelper {
             this.checkBoxTruncateBookmarkTitles.TabIndex = 10;
             this.checkBoxTruncateBookmarkTitles.Text = "&Truncate bookmark titles";
             this.checkBoxTruncateBookmarkTitles.UseVisualStyleBackColor = true;
+            this.checkBoxTruncateBookmarkTitles.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxSortBookmarks
             // 
@@ -993,6 +1040,7 @@ namespace BetHelper {
             this.checkBoxSortBookmarks.TabIndex = 9;
             this.checkBoxSortBookmarks.Text = "Sort book&marks by title";
             this.checkBoxSortBookmarks.UseVisualStyleBackColor = true;
+            this.checkBoxSortBookmarks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxPingWhenIdle
             // 
@@ -1003,6 +1051,7 @@ namespace BetHelper {
             this.checkBoxPingWhenIdle.TabIndex = 8;
             this.checkBoxPingWhenIdle.Text = "Try to &keep user logged in";
             this.checkBoxPingWhenIdle.UseVisualStyleBackColor = true;
+            this.checkBoxPingWhenIdle.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxAutoLogInAfterInitialLoad
             // 
@@ -1013,6 +1062,7 @@ namespace BetHelper {
             this.checkBoxAutoLogInAfterInitialLoad.TabIndex = 7;
             this.checkBoxAutoLogInAfterInitialLoad.Text = "Auto &log in after initial load";
             this.checkBoxAutoLogInAfterInitialLoad.UseVisualStyleBackColor = true;
+            this.checkBoxAutoLogInAfterInitialLoad.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxDisplayPromptBeforeClosing
             // 
@@ -1023,6 +1073,7 @@ namespace BetHelper {
             this.checkBoxDisplayPromptBeforeClosing.TabIndex = 6;
             this.checkBoxDisplayPromptBeforeClosing.Text = "Displa&y prompt before closing main application window";
             this.checkBoxDisplayPromptBeforeClosing.UseVisualStyleBackColor = true;
+            this.checkBoxDisplayPromptBeforeClosing.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // comboBoxUnitPrefix
             // 
@@ -1032,6 +1083,7 @@ namespace BetHelper {
             this.comboBoxUnitPrefix.Name = "comboBoxUnitPrefix";
             this.comboBoxUnitPrefix.Size = new System.Drawing.Size(100, 21);
             this.comboBoxUnitPrefix.TabIndex = 5;
+            this.comboBoxUnitPrefix.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelUnitPrefix
             // 
@@ -1050,6 +1102,7 @@ namespace BetHelper {
             this.comboBoxNumberFormat.Name = "comboBoxNumberFormat";
             this.comboBoxNumberFormat.Size = new System.Drawing.Size(258, 21);
             this.comboBoxNumberFormat.TabIndex = 3;
+            this.comboBoxNumberFormat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelNumberFormat
             // 
@@ -1069,6 +1122,7 @@ namespace BetHelper {
             this.checkBoxStatusBarNotifOnly.TabIndex = 1;
             this.checkBoxStatusBarNotifOnly.Text = "&Notify only in the status bar";
             this.checkBoxStatusBarNotifOnly.UseVisualStyleBackColor = true;
+            this.checkBoxStatusBarNotifOnly.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxCheckForUpdates
             // 
@@ -1080,6 +1134,7 @@ namespace BetHelper {
             this.checkBoxCheckForUpdates.Text = "&Automatically check for updates";
             this.checkBoxCheckForUpdates.UseVisualStyleBackColor = true;
             this.checkBoxCheckForUpdates.CheckedChanged += new System.EventHandler(this.OnAutoUpdatesCheckedChanged);
+            this.checkBoxCheckForUpdates.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // tabPageUserInterface
             // 
@@ -1117,6 +1172,7 @@ namespace BetHelper {
             this.checkBoxDisableThemes.Text = "&Disable themes";
             this.checkBoxDisableThemes.UseVisualStyleBackColor = true;
             this.checkBoxDisableThemes.CheckedChanged += new System.EventHandler(this.SetWarning);
+            this.checkBoxDisableThemes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxRightPane
             // 
@@ -1139,6 +1195,7 @@ namespace BetHelper {
             this.checkBoxAutoAdjustRightPaneWidth.TabIndex = 0;
             this.checkBoxAutoAdjustRightPaneWidth.Text = "Auto adjust right pane &width";
             this.checkBoxAutoAdjustRightPaneWidth.UseVisualStyleBackColor = true;
+            this.checkBoxAutoAdjustRightPaneWidth.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxStatusStrip
             // 
@@ -1163,6 +1220,7 @@ namespace BetHelper {
             this.comboBoxBorderStyle.Name = "comboBoxBorderStyle";
             this.comboBoxBorderStyle.Size = new System.Drawing.Size(164, 21);
             this.comboBoxBorderStyle.TabIndex = 5;
+            this.comboBoxBorderStyle.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelStripRenderMode
             // 
@@ -1190,6 +1248,7 @@ namespace BetHelper {
             this.comboBoxStripRenderMode.Name = "comboBoxStripRenderMode";
             this.comboBoxStripRenderMode.Size = new System.Drawing.Size(164, 21);
             this.comboBoxStripRenderMode.TabIndex = 3;
+            this.comboBoxStripRenderMode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxUserInterface
             // 
@@ -1234,6 +1293,7 @@ namespace BetHelper {
             this.comboBoxCalculatorSColor.Name = "comboBoxCalculatorSColor";
             this.comboBoxCalculatorSColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxCalculatorSColor.TabIndex = 23;
+            this.comboBoxCalculatorSColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelCalculatorSColor
             // 
@@ -1252,6 +1312,7 @@ namespace BetHelper {
             this.comboBoxCalculatorDColor.Name = "comboBoxCalculatorDColor";
             this.comboBoxCalculatorDColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxCalculatorDColor.TabIndex = 21;
+            this.comboBoxCalculatorDColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelCalculatorDColor
             // 
@@ -1270,6 +1331,7 @@ namespace BetHelper {
             this.comboBoxDashboardSColor.Name = "comboBoxDashboardSColor";
             this.comboBoxDashboardSColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxDashboardSColor.TabIndex = 19;
+            this.comboBoxDashboardSColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelDashboardSColor
             // 
@@ -1288,6 +1350,7 @@ namespace BetHelper {
             this.comboBoxDashboardDColor.Name = "comboBoxDashboardDColor";
             this.comboBoxDashboardDColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxDashboardDColor.TabIndex = 17;
+            this.comboBoxDashboardDColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelDashboardDColor
             // 
@@ -1306,6 +1369,7 @@ namespace BetHelper {
             this.comboBoxSportInfo2SColor.Name = "comboBoxSportInfo2SColor";
             this.comboBoxSportInfo2SColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxSportInfo2SColor.TabIndex = 15;
+            this.comboBoxSportInfo2SColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelSportInfo2SColor
             // 
@@ -1324,6 +1388,7 @@ namespace BetHelper {
             this.comboBoxSportInfo2DColor.Name = "comboBoxSportInfo2DColor";
             this.comboBoxSportInfo2DColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxSportInfo2DColor.TabIndex = 13;
+            this.comboBoxSportInfo2DColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelSportInfo2DColor
             // 
@@ -1342,6 +1407,7 @@ namespace BetHelper {
             this.comboBoxSportInfo1SColor.Name = "comboBoxSportInfo1SColor";
             this.comboBoxSportInfo1SColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxSportInfo1SColor.TabIndex = 11;
+            this.comboBoxSportInfo1SColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelSportInfo1SColor
             // 
@@ -1360,6 +1426,7 @@ namespace BetHelper {
             this.comboBoxSportInfo1DColor.Name = "comboBoxSportInfo1DColor";
             this.comboBoxSportInfo1DColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxSportInfo1DColor.TabIndex = 9;
+            this.comboBoxSportInfo1DColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelSportInfo1DColor
             // 
@@ -1378,6 +1445,7 @@ namespace BetHelper {
             this.comboBoxBookmakerSColor.Name = "comboBoxBookmakerSColor";
             this.comboBoxBookmakerSColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxBookmakerSColor.TabIndex = 7;
+            this.comboBoxBookmakerSColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelBookmakerSColor
             // 
@@ -1396,6 +1464,7 @@ namespace BetHelper {
             this.comboBoxBookmakerDColor.Name = "comboBoxBookmakerDColor";
             this.comboBoxBookmakerDColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxBookmakerDColor.TabIndex = 5;
+            this.comboBoxBookmakerDColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelBookmakerDColor
             // 
@@ -1415,6 +1484,7 @@ namespace BetHelper {
             this.checkBoxBackgroundColor.TabIndex = 3;
             this.checkBoxBackgroundColor.Text = "Ba&ckground color in tab headers";
             this.checkBoxBackgroundColor.UseVisualStyleBackColor = true;
+            this.checkBoxBackgroundColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxBoldFont
             // 
@@ -1425,6 +1495,7 @@ namespace BetHelper {
             this.checkBoxBoldFont.TabIndex = 2;
             this.checkBoxBoldFont.Text = "&Bold font in tab headers";
             this.checkBoxBoldFont.UseVisualStyleBackColor = true;
+            this.checkBoxBoldFont.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // comboBoxTabAppearance
             // 
@@ -1434,6 +1505,7 @@ namespace BetHelper {
             this.comboBoxTabAppearance.Name = "comboBoxTabAppearance";
             this.comboBoxTabAppearance.Size = new System.Drawing.Size(164, 21);
             this.comboBoxTabAppearance.TabIndex = 1;
+            this.comboBoxTabAppearance.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelTabAppearance
             // 
@@ -1443,16 +1515,6 @@ namespace BetHelper {
             this.labelTabAppearance.Size = new System.Drawing.Size(130, 13);
             this.labelTabAppearance.TabIndex = 0;
             this.labelTabAppearance.Text = "&Tab headers appearance:";
-            // 
-            // buttonChime
-            // 
-            this.buttonChime.Location = new System.Drawing.Point(285, 197);
-            this.buttonChime.Name = "buttonChime";
-            this.buttonChime.Size = new System.Drawing.Size(75, 23);
-            this.buttonChime.TabIndex = 16;
-            this.buttonChime.Text = "&Chime";
-            this.buttonChime.UseVisualStyleBackColor = true;
-            this.buttonChime.Click += new System.EventHandler(this.OnChimeClick);
             // 
             // PreferencesForm
             // 
@@ -1479,6 +1541,7 @@ namespace BetHelper {
             this.Text = "Preferences";
             this.Activated += new System.EventHandler(this.OnFormActivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWarning)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.tabPageBrowser.ResumeLayout(false);

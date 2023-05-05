@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.8.0
  */
 
 using CefSharp;
@@ -41,6 +41,8 @@ namespace BetHelper {
         private Point location;
         private StringBuilder stringBuilder;
         private Timer textBoxClicksTimer;
+
+        public event EventHandler F7Pressed;
 
         public AboutForm() {
             Text = new StringBuilder()
@@ -180,8 +182,11 @@ namespace BetHelper {
                     .Append(Constants.EnDash)
                     .Append(Constants.Space)
                     .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
+                MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                    MessageForm.BoxIcon.Error);
+                messageForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+                dialog = messageForm;
+                messageForm.ShowDialog(this);
             }
         }
 
@@ -205,6 +210,8 @@ namespace BetHelper {
                 if (sender is TextBox) {
                     ((TextBox)sender).SelectAll();
                 }
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 

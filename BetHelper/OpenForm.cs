@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -42,6 +42,8 @@ namespace BetHelper {
         private Timer textBoxClicksTimer;
         private TypedUrlsHandler typedUrlsHandler;
         private WebInfoHandler webInfoHandler;
+
+        public event EventHandler F7Pressed;
 
         public OpenForm(WebInfoHandler webInfoHandler) {
             this.webInfoHandler = webInfoHandler;
@@ -168,9 +170,11 @@ namespace BetHelper {
                                 .Append(Constants.EnDash)
                                 .Append(Constants.Space)
                                 .Append(Properties.Resources.CaptionWarning);
-                            dialog = new MessageForm(this, message.ToString(), title.ToString(), MessageForm.Buttons.OK,
+                            MessageForm messageForm = new MessageForm(this, message.ToString(), title.ToString(), MessageForm.Buttons.OK,
                                 MessageForm.BoxIcon.Warning);
-                            dialog.ShowDialog(this);
+                            messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                            dialog = messageForm;
+                            messageForm.ShowDialog(this);
                         }
                     } else {
                         StringBuilder title = new StringBuilder()
@@ -179,9 +183,12 @@ namespace BetHelper {
                             .Append(Constants.EnDash)
                             .Append(Constants.Space)
                             .Append(Properties.Resources.CaptionWarning);
-                        dialog = new MessageForm(this, string.Format(Properties.Resources.MessageUnsupportedHostNameType,
-                            comboBoxUrl.Text), title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Warning);
-                        dialog.ShowDialog(this);
+                        MessageForm messageForm = new MessageForm(this,
+                            string.Format(Properties.Resources.MessageUnsupportedHostNameType, comboBoxUrl.Text), title.ToString(),
+                            MessageForm.Buttons.OK, MessageForm.BoxIcon.Warning);
+                        messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                        dialog = messageForm;
+                        messageForm.ShowDialog(this);
                     }
                 } else {
                     StringBuilder title = new StringBuilder()
@@ -190,9 +197,11 @@ namespace BetHelper {
                         .Append(Constants.EnDash)
                         .Append(Constants.Space)
                         .Append(Properties.Resources.CaptionWarning);
-                    dialog = new MessageForm(this, string.Format(Properties.Resources.MessageUnsupportedScheme,
+                    MessageForm messageForm = new MessageForm(this, string.Format(Properties.Resources.MessageUnsupportedScheme,
                         comboBoxUrl.Text, uri.Scheme), title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Warning);
-                    dialog.ShowDialog(this);
+                    messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                    dialog = messageForm;
+                    messageForm.ShowDialog(this);
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -203,8 +212,11 @@ namespace BetHelper {
                     .Append(Constants.EnDash)
                     .Append(Constants.Space)
                     .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
+                MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                    MessageForm.BoxIcon.Error);
+                messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                dialog = messageForm;
+                messageForm.ShowDialog(this);
             }
         }
 
@@ -237,6 +249,8 @@ namespace BetHelper {
                 if (sender is ComboBox) {
                     ((ComboBox)sender).SelectAll();
                 }
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 

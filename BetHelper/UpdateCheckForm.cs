@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.8.0
  */
 
 using System;
@@ -44,6 +44,7 @@ namespace BetHelper {
         private delegate void HandleErrorCallback(Exception exception);
         private delegate void ResponseCallback(string version);
 
+        public event EventHandler F7Pressed;
         public event EventHandler<UpdateCheckEventArgs> StateSet;
 
         public UpdateCheckForm(string version) {
@@ -131,6 +132,127 @@ namespace BetHelper {
             }
         }
 
+        private void HandleError(Exception exception) {
+            try {
+                if (InvokeRequired) {
+                    Invoke(new HandleErrorCallback(HandleError), exception);
+                } else {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                    SetState(UpdateChecker.State.Error, exception.Message);
+                }
+            } catch (Exception e) {
+                Debug.WriteLine(e);
+                ErrorLog.WriteLine(e);
+            }
+        }
+
+        private void OnFormClosing(object sender, FormClosingEventArgs e) {
+            while (thread != null && thread.IsAlive) {
+                try {
+                    thread.Interrupt();
+                    thread = null;
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+            }
+        }
+
+        private void Copy(object sender, EventArgs e) {
+            try {
+                Clipboard.SetText(((Label)((MenuItem)sender).GetContextMenu().SourceControl).Text);
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
+
+        private void CopyLink(object sender, EventArgs e) {
+            try {
+                Clipboard.SetText(((LinkLabel)((MenuItem)sender).GetContextMenu().SourceControl).Text);
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
+
+        private void CopyVersion(object sender, EventArgs e) {
+            try {
+                Clipboard.SetText(((Label)((MenuItem)sender).GetContextMenu().SourceControl).Text);
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
+
+        private void OnLinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
+            if (e.Button.Equals(MouseButtons.Left) || e.Button.Equals(MouseButtons.Middle)) {
+                OpenLink((LinkLabel)sender);
+            }
+        }
+
+        private void OnFormActivated(object sender, EventArgs e) {
+            if (dialog != null) {
+                dialog.Activate();
+            }
+        }
+
+        private void OnFormLoad(object sender, EventArgs e) {
+            linkLabel.Location = new Point(linkLabel.Location.X + label6.Width + 10, linkLabel.Location.Y);
+            button.Select();
+            button.Focus();
+            if (string.IsNullOrEmpty(version)) {
+                SetState(UpdateChecker.State.Connecting);
+                thread = new Thread(new ThreadStart(CheckForUpdates));
+                thread.IsBackground = true;
+                thread.Priority = ThreadPriority.BelowNormal;
+                thread.Start();
+            } else {
+                try {
+                    if (UpdateChecker.CompareVersion(version, Application.ProductVersion) > 0) {
+                        SetState(UpdateChecker.State.UpdateAvailable);
+                    } else {
+                        SetState(UpdateChecker.State.UpToDate);
+                    }
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                    SetState(UpdateChecker.State.Error);
+                }
+                SetVersion(version);
+            }
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private void OpenLink(object sender, EventArgs e) => OpenLink((LinkLabel)((MenuItem)sender).GetContextMenu().SourceControl);
+
+        private void OpenLink(LinkLabel linkLabel) {
+            try {
+                Process.Start(linkLabel.Text);
+                linkLabel.LinkVisited = true;
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+                StringBuilder title = new StringBuilder()
+                    .Append(Program.GetTitle())
+                    .Append(Constants.Space)
+                    .Append(Constants.EnDash)
+                    .Append(Constants.Space)
+                    .Append(Properties.Resources.CaptionError);
+                MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                    MessageForm.BoxIcon.Error);
+                messageForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+                dialog = messageForm;
+                messageForm.ShowDialog(this);
+            }
+        }
+
         private void Response(string version) {
             try {
                 if (InvokeRequired) {
@@ -147,30 +269,6 @@ namespace BetHelper {
                     }
                     SetVersion(version);
                 }
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-            }
-        }
-
-        private void HandleError(Exception exception) {
-            try {
-                if (InvokeRequired) {
-                    Invoke(new HandleErrorCallback(HandleError), exception);
-                } else {
-                    Debug.WriteLine(exception);
-                    ErrorLog.WriteLine(exception);
-                    SetState(UpdateChecker.State.Error, exception.Message);
-                }
-            } catch (Exception e) {
-                Debug.WriteLine(e);
-                ErrorLog.WriteLine(e);
-            }
-        }
-
-        private void SetVersion(string version) {
-            try {
-                label4.Text = version;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -237,102 +335,12 @@ namespace BetHelper {
             StateSet?.Invoke(this, new UpdateCheckEventArgs(this, state, label5.Text));
         }
 
-        private void OnFormClosing(object sender, FormClosingEventArgs e) {
-            while (thread != null && thread.IsAlive) {
-                try {
-                    thread.Interrupt();
-                    thread = null;
-                } catch (Exception exception) {
-                    Debug.WriteLine(exception);
-                    ErrorLog.WriteLine(exception);
-                }
-            }
-        }
-
-        private void Copy(object sender, EventArgs e) {
+        private void SetVersion(string version) {
             try {
-                Clipboard.SetText(((Label)((MenuItem)sender).GetContextMenu().SourceControl).Text);
+                label4.Text = version;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
-            }
-        }
-
-        private void CopyVersion(object sender, EventArgs e) {
-            try {
-                Clipboard.SetText(((Label)((MenuItem)sender).GetContextMenu().SourceControl).Text);
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-            }
-        }
-
-        private void CopyLink(object sender, EventArgs e) {
-            try {
-                Clipboard.SetText(((LinkLabel)((MenuItem)sender).GetContextMenu().SourceControl).Text);
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-            }
-        }
-
-        private void OnLinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
-            if (e.Button.Equals(MouseButtons.Left) || e.Button.Equals(MouseButtons.Middle)) {
-                OpenLink((LinkLabel)sender);
-            }
-        }
-
-        private void OpenLink(object sender, EventArgs e) {
-            OpenLink((LinkLabel)((MenuItem)sender).GetContextMenu().SourceControl);
-        }
-
-        private void OpenLink(LinkLabel linkLabel) {
-            try {
-                Process.Start(linkLabel.Text);
-                linkLabel.LinkVisited = true;
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-                StringBuilder title = new StringBuilder()
-                    .Append(Program.GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
-            }
-        }
-
-        private void OnFormActivated(object sender, EventArgs e) {
-            if (dialog != null) {
-                dialog.Activate();
-            }
-        }
-
-        private void OnFormLoad(object sender, EventArgs e) {
-            linkLabel.Location = new Point(linkLabel.Location.X + label6.Width + 10, linkLabel.Location.Y);
-            button.Select();
-            button.Focus();
-            if (string.IsNullOrEmpty(version)) {
-                SetState(UpdateChecker.State.Connecting);
-                thread = new Thread(new ThreadStart(CheckForUpdates));
-                thread.IsBackground = true;
-                thread.Priority = ThreadPriority.BelowNormal;
-                thread.Start();
-            } else {
-                try {
-                    if (UpdateChecker.CompareVersion(version, Application.ProductVersion) > 0) {
-                        SetState(UpdateChecker.State.UpdateAvailable);
-                    } else {
-                        SetState(UpdateChecker.State.UpToDate);
-                    }
-                } catch (Exception exception) {
-                    Debug.WriteLine(exception);
-                    ErrorLog.WriteLine(exception);
-                    SetState(UpdateChecker.State.Error);
-                }
-                SetVersion(version);
             }
         }
     }

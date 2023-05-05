@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.6.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -42,6 +42,8 @@ namespace BetHelper {
 
         private delegate void WebInfoFormCallback();
         private delegate void CopyCallback(string str);
+
+        public event EventHandler F7Pressed;
 
         public WebInfoForm(WebInfo webInfo, PersistWindowState persistWindowState) {
             this.webInfo = webInfo;
@@ -264,7 +266,11 @@ namespace BetHelper {
         private void OnKeyDown(object sender, KeyEventArgs e) {
             if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
-                ((TextBox)sender).SelectAll();
+                if (sender is TextBox) {
+                    ((TextBox)sender).SelectAll();
+                }
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -319,6 +325,8 @@ namespace BetHelper {
             if (e.Control && e.KeyCode.Equals(Keys.A)) {
                 e.SuppressKeyPress = true;
                 ((MaskedTextBox)sender).SelectAll();
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 

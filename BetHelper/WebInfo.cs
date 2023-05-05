@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 using CefSharp;
@@ -54,7 +54,11 @@ namespace BetHelper {
         protected Thread logInThread, popUpThread, infoThread;
         protected WebInfoForm webInfoForm;
 
-        public event EventHandler BrowserInitializedChanged, Enter, Focus, ZoomLevelChanged;
+        public event EventHandler BrowserInitializedChanged;
+        public event EventHandler Enter;
+        public event EventHandler F7Pressed;
+        public event EventHandler Focus;
+        public event EventHandler ZoomLevelChanged;
         public event EventHandler<AddressChangedEventArgs> AddressChanged;
         public event EventHandler<CanceledEventArgs> Canceled;
         public event EventHandler<ConsoleMessageEventArgs> BrowserConsoleMessage;
@@ -285,6 +289,7 @@ namespace BetHelper {
         private void Info() {
             webInfoForm = new WebInfoForm(this, persistWindowState);
             persistWindowState.Parent = webInfoForm;
+            webInfoForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
             webInfoForm.HelpRequested += new HelpEventHandler((sender, hlpevent) => Help?.Invoke(sender, hlpevent));
             webInfoForm.ShowDialog();
         }
@@ -744,6 +749,7 @@ namespace BetHelper {
             PopUpArgs.Location = new Point(PopUpLeft, PopUpTop);
             PopUpArgs.Size = new Size(PopUpWidth, PopUpHeight);
             PopUpBrowserForm popUpBrowserForm = new PopUpBrowserForm(this, ((MainForm)Parent.Form).Settings, PopUpArgs);
+            popUpBrowserForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
             popUpBrowserForm.UrlChanged += new EventHandler<UrlEventArgs>(OnUrlChanged);
             popUpBrowserForm.ShowDialog();
         }

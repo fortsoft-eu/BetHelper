@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -49,6 +49,8 @@ namespace BetHelper {
         private Settings settings;
         private TelephoneBell telephoneBell;
         private Timer textBoxClicksTimer;
+
+        public event EventHandler F7Pressed;
 
         public PreferencesForm(TelephoneBell telephoneBell) {
             this.telephoneBell = telephoneBell;
@@ -447,16 +449,7 @@ namespace BetHelper {
             try {
                 Process.Start(Application.ExecutablePath, Constants.CommandLineSwitchWE);
             } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-                StringBuilder title = new StringBuilder()
-                    .Append(Program.GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
+                ShowException(exception);
             }
         }
 
@@ -470,9 +463,11 @@ namespace BetHelper {
         }
 
         private void OnAllowedClientsClick(object sender, EventArgs e) {
-            dialog = new AllowedAddrForm(settings);
-            dialog.HelpButtonClicked += new CancelEventHandler((s, t) => OnHelpRequested(new HelpEventArgs(Point.Empty)));
-            dialog.ShowDialog(this);
+            AllowedAddrForm allowedAddrForm = new AllowedAddrForm(settings);
+            allowedAddrForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+            allowedAddrForm.HelpButtonClicked += new CancelEventHandler((s, t) => OnHelpRequested(new HelpEventArgs(Point.Empty)));
+            dialog = allowedAddrForm;
+            allowedAddrForm.ShowDialog(this);
         }
 
         private void OnAutoUpdatesCheckedChanged(object sender, EventArgs e) {
@@ -505,16 +500,7 @@ namespace BetHelper {
                     textBoxExternalEditor.Text = openFileDialog.FileName;
                 }
             } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-                StringBuilder title = new StringBuilder()
-                    .Append(Program.GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog();
+                ShowException(exception);
             }
         }
 
@@ -686,6 +672,8 @@ namespace BetHelper {
                 } else if (sender is ComboBox) {
                     ((ComboBox)sender).SelectAll();
                 }
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -693,23 +681,16 @@ namespace BetHelper {
             try {
                 Process.Start(Application.ExecutablePath, Constants.CommandLineSwitchWL);
             } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
-                StringBuilder title = new StringBuilder()
-                    .Append(Program.GetTitle())
-                    .Append(Constants.Space)
-                    .Append(Constants.EnDash)
-                    .Append(Constants.Space)
-                    .Append(Properties.Resources.CaptionError);
-                dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-                dialog.ShowDialog(this);
+                ShowException(exception);
             }
         }
 
         private void OnManageBookmarksClick(object sender, EventArgs e) {
-            dialog = new BookmarksForm(settings, BookmarkManager);
-            dialog.HelpButtonClicked += new CancelEventHandler((s, t) => OnHelpRequested(new HelpEventArgs(Point.Empty)));
-            dialog.ShowDialog(this);
+            BookmarksForm bookmarksForm = new BookmarksForm(settings, BookmarkManager);
+            bookmarksForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+            bookmarksForm.HelpButtonClicked += new CancelEventHandler((s, t) => OnHelpRequested(new HelpEventArgs(Point.Empty)));
+            dialog = bookmarksForm;
+            bookmarksForm.ShowDialog(this);
         }
 
         private void OnMaxPreloadCheckedChanged(object sender, EventArgs e) {
@@ -788,9 +769,11 @@ namespace BetHelper {
                     if (File.Exists(textBoxExternalEditor.Text)) {
                         externalEditor = textBoxExternalEditor.Text;
                     } else {
-                        dialog = new MessageForm(this, Properties.Resources.MessageExternalEditorWarning, null, MessageForm.Buttons.OK,
-                            MessageForm.BoxIcon.Exclamation);
-                        dialog.ShowDialog(this);
+                        MessageForm messageForm = new MessageForm(this, Properties.Resources.MessageExternalEditorWarning, null,
+                            MessageForm.Buttons.OK, MessageForm.BoxIcon.Exclamation);
+                        messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+                        dialog = messageForm;
+                        messageForm.ShowDialog(this);
                         tabControl.SelectedIndex = 1;
                         textBoxExternalEditor.Focus();
                         textBoxExternalEditor.SelectAll();
@@ -895,5 +878,21 @@ namespace BetHelper {
         }
 
         private void SetWarning(object sender, EventArgs e) => SetWarning();
+
+        private void ShowException(Exception exception) {
+            Debug.WriteLine(exception);
+            ErrorLog.WriteLine(exception);
+            StringBuilder title = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionError);
+            MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                MessageForm.BoxIcon.Error);
+            messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+            dialog = messageForm;
+            messageForm.ShowDialog(this);
+        }
     }
 }

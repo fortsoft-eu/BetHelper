@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.8.0
  */
 
 using System;
@@ -41,12 +41,12 @@ namespace BetHelper {
     public partial class MessageForm : Form {
 
         /// <summary>
-        /// Constant
+        /// Constant.
         /// </summary>
         private const int defaultWidth = 420;
 
         /// <summary>
-        /// Fields
+        /// Fields.
         /// </summary>
         private bool noWrap;
         private BoxIcon icon;
@@ -57,6 +57,11 @@ namespace BetHelper {
         private int maxWidth;
         private string caption;
         private string text;
+
+        /// <summary>
+        /// Event.
+        /// </summary>
+        public event EventHandler F7Pressed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageForm"/> class.
@@ -299,6 +304,12 @@ namespace BetHelper {
 
             label.ContextMenu = new ContextMenu();
             label.ContextMenu.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemCopy, new EventHandler(Copy)));
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void SetCaption() => Text = string.IsNullOrWhiteSpace(caption) ? Program.GetTitle() : caption.Trim();

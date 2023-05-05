@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.3.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -74,6 +74,7 @@ namespace BetHelper {
             this.button.Size = new System.Drawing.Size(75, 23);
             this.button.TabIndex = 1;
             this.button.UseVisualStyleBackColor = true;
+            this.button.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // panel
             // 
@@ -184,6 +185,7 @@ namespace BetHelper {
             this.Activated += new System.EventHandler(this.OnFormActivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnFormLoad);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.panel.ResumeLayout(false);
             this.panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
@@ -198,12 +200,12 @@ namespace BetHelper {
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panel;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.LinkLabel linkLabel;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private FortSoft.Controls.LinkLabel linkLabel;
     }
 }

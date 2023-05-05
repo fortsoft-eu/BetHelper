@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 using CefSharp;
@@ -71,16 +71,18 @@ namespace BetHelper {
         private PrintPreviewDialog printPreviewDialog;
         private SaveFileDialog saveFileDialog;
         private Search search;
+        private ServiceForm serviceForm;
         private ShortcutManager shortcutManager;
         private string dataFilePath, undoneNotes;
         private TelephoneBell telephoneBell;
-        private Thread findThread, newTipThread, turnOffThread;
+        private Thread findThread, newServiceThread, newTipThread, turnOffThread;
         private System.Windows.Forms.Timer textBoxClicksTimer;
         private TipForm tipForm;
         private UpdateChecker updateChecker;
         private WebInfoHandler webInfoHandler;
 
         private delegate void MainFormSizeEventHandler(Size size);
+        private delegate void SetNewServiceCallback(Service service);
         private delegate void SetNewTipCallback(Tip tip);
         private delegate void SetTabControlCallback();
         private delegate void ShowBellStatusCallback();
@@ -730,9 +732,10 @@ namespace BetHelper {
         private async void InitializeUpdateCheckerAsync() {
             await Task.Run(new Action(() => {
                 updateChecker = new UpdateChecker(Settings);
-                updateChecker.Parent = this;
+                updateChecker.F7Pressed += new EventHandler(StopRinging);
                 updateChecker.StateChanged += new EventHandler<UpdateCheckEventArgs>(OnUpdateCheckerStateChanged);
                 updateChecker.Help += new HelpEventHandler(OpenHelp);
+                updateChecker.Parent = this;
             }));
         }
 
@@ -903,6 +906,7 @@ namespace BetHelper {
             webInfoHandler.Enter += new EventHandler((sender, e) =>
                 controlInfo = new ControlInfo((ChromiumWebBrowser)sender, webInfoHandler.Current.BrowserTitle));
             webInfoHandler.Error += new EventHandler<ErrorEventArgs>(OnLogInError);
+            webInfoHandler.F7Pressed += new EventHandler(StopRinging);
             webInfoHandler.Find += new EventHandler<FindEventArgs>(OnFind);
             webInfoHandler.Finished += new EventHandler<FinishedEventArgs>(OnLogInFinished);
             webInfoHandler.FrameLoadEnd += new EventHandler<FrameLoadEndEventArgs>(async (sender, e) => {
@@ -1043,6 +1047,7 @@ namespace BetHelper {
                 Invoke(new EventHandler(Open), sender, e);
             } else {
                 OpenForm openForm = new OpenForm(webInfoHandler);
+                openForm.F7Pressed += new EventHandler(StopRinging);
                 openForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
                 openForm.HelpRequested += new HelpEventHandler(OpenHelp);
                 dialog = openForm;
@@ -1327,9 +1332,12 @@ namespace BetHelper {
                 .Append(Constants.EnDash)
                 .Append(Constants.Space)
                 .Append(Properties.Resources.CaptionError);
-            dialog = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK, MessageForm.BoxIcon.Error);
-            dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-            dialog.ShowDialog(this);
+            MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                MessageForm.BoxIcon.Error);
+            messageForm.F7Pressed += new EventHandler(StopRinging);
+            messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+            dialog = messageForm;
+            messageForm.ShowDialog(this);
             StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB);
             StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.Temporary,
                 string.IsNullOrEmpty(statusMessage) ? exception.Message : statusMessage);
@@ -1518,6 +1526,7 @@ namespace BetHelper {
                 findForm.HomePressed += new EventHandler(OnHomePressed);
                 findForm.PageDownPressed += new EventHandler(OnPageDownPressed);
                 findForm.PageUpPressed += new EventHandler(OnPageUpPressed);
+                findForm.StopRinging += new EventHandler(StopRinging);
                 findForm.UpPressed += new EventHandler(OnUpPressed);
                 findForm.ShowDialog();
             }
@@ -1693,10 +1702,12 @@ namespace BetHelper {
             if (InvokeRequired) {
                 Invoke(new EventHandler(RemoveBookmark), sender, e);
             } else {
-                dialog = new MessageForm(this, Properties.Resources.MessageRemoveBookmark, null, MessageForm.Buttons.YesNo,
-                    MessageForm.BoxIcon.Question);
-                dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-                if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
+                MessageForm messageForm = new MessageForm(this, Properties.Resources.MessageRemoveBookmark, null,
+                    MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question);
+                messageForm.F7Pressed += new EventHandler(StopRinging);
+                messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                dialog = messageForm;
+                if (messageForm.ShowDialog(this).Equals(DialogResult.Yes)) {
                     bookmarkManager.Remove(webInfoHandler.Current.BrowserAddress);
                 }
             }
@@ -1744,10 +1755,12 @@ namespace BetHelper {
                     .Append(Properties.Resources.MessageClearBrowserCache)
                     .Append(Environment.NewLine)
                     .Append(Properties.Resources.MessageApplicationWillBeRestarted);
-                dialog = new MessageForm(this, message.ToString(), null, MessageForm.Buttons.OKCancel, MessageForm.BoxIcon.Information);
-                dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-
-                if (dialog.ShowDialog(this).Equals(DialogResult.OK)) {
+                MessageForm messageForm = new MessageForm(this, message.ToString(), null, MessageForm.Buttons.OKCancel,
+                    MessageForm.BoxIcon.Information);
+                messageForm.F7Pressed += new EventHandler(StopRinging);
+                messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                dialog = messageForm;
+                if (messageForm.ShowDialog(this).Equals(DialogResult.OK)) {
                     BrowserCacheManager.Set(BrowserCacheManager.ClearSet.BrowserCacheOnly);
                     RestartApplication();
                 }
@@ -1766,10 +1779,12 @@ namespace BetHelper {
                     .Append(Environment.NewLine)
                     .Append(Environment.NewLine)
                     .Append(Properties.Resources.MessageApplicationWillBeRestarted);
-                dialog = new MessageForm(this, message.ToString(), null, MessageForm.Buttons.OKCancel, MessageForm.BoxIcon.Information);
-                dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-
-                if (dialog.ShowDialog(this).Equals(DialogResult.OK)) {
+                MessageForm messageForm = new MessageForm(this, message.ToString(), null, MessageForm.Buttons.OKCancel,
+                    MessageForm.BoxIcon.Information);
+                messageForm.F7Pressed += new EventHandler(StopRinging);
+                messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                dialog = messageForm;
+                if (messageForm.ShowDialog(this).Equals(DialogResult.OK)) {
                     BrowserCacheManager.Set(BrowserCacheManager.ClearSet.BrowserCacheIncludingUserData);
                     RestartApplication();
                 }
@@ -1788,11 +1803,12 @@ namespace BetHelper {
                     .Append(Environment.NewLine)
                     .Append(Environment.NewLine)
                     .Append(Properties.Resources.MessageApplicationWillBeRestarted);
-                dialog = new MessageForm(this, message.ToString(), null, MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Warning,
-                    MessageForm.DefaultButton.Button2);
-                dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-
-                if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
+                MessageForm messageForm = new MessageForm(this, message.ToString(), null, MessageForm.Buttons.YesNo,
+                    MessageForm.BoxIcon.Warning, MessageForm.DefaultButton.Button2);
+                messageForm.F7Pressed += new EventHandler(StopRinging);
+                messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                dialog = messageForm;
+                if (messageForm.ShowDialog(this).Equals(DialogResult.Yes)) {
                     if (findForm != null && findForm.Visible) {
                         findForm.SafeClose();
                     }
@@ -1827,6 +1843,7 @@ namespace BetHelper {
                 Invoke(new EventHandler(ShowPreferences), sender, e);
             } else {
                 PreferencesForm preferencesForm = new PreferencesForm(telephoneBell);
+                preferencesForm.F7Pressed += new EventHandler(StopRinging);
                 preferencesForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
                 preferencesForm.HelpRequested += new HelpEventHandler(OpenHelp);
                 preferencesForm.BookmarkManager = bookmarkManager;
@@ -2100,7 +2117,8 @@ namespace BetHelper {
         }
 
         private void TurnOffMonitors() {
-            countDownForm = new CountDownForm();
+            countDownForm = new CountDownForm(Settings);
+            countDownForm.F7Pressed += new EventHandler(StopRinging);
             countDownForm.HelpButtonClicked += new CancelEventHandler((sender, e) => {
                 countDownForm.Close();
                 OpenHelp(sender, e);
@@ -2180,9 +2198,11 @@ namespace BetHelper {
         private void CheckUpdates(object sender, EventArgs e) => updateChecker.Check(UpdateChecker.CheckType.User);
 
         private void ShowAbout(object sender, EventArgs e) {
-            dialog = new AboutForm();
-            dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-            dialog.ShowDialog(this);
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.HelpRequested += new HelpEventHandler(OpenHelp);
+            aboutForm.F7Pressed += new EventHandler(StopRinging);
+            dialog = aboutForm;
+            aboutForm.ShowDialog(this);
         }
 
         private void OnCurrentSet(object sender, FocusEventArgs e) {
@@ -2258,10 +2278,12 @@ namespace BetHelper {
                     }
                 }
                 if (!suppressDialogs && Settings.DisplayPromptBeforeClosing && e.CloseReason.Equals(CloseReason.UserClosing)) {
-                    dialog = new MessageForm(this, Properties.Resources.MessageQuestionBeforeClosing,
+                    MessageForm messageForm = new MessageForm(this, Properties.Resources.MessageQuestionBeforeClosing,
                         Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question);
-                    dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-                    if (!dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
+                    messageForm.F7Pressed += new EventHandler(StopRinging);
+                    messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                    dialog = messageForm;
+                    if (!messageForm.ShowDialog(this).Equals(DialogResult.Yes)) {
                         e.Cancel = true;
                         return;
                     }
@@ -2335,6 +2357,7 @@ namespace BetHelper {
                     findForm.HomePressed -= new EventHandler(OnHomePressed);
                     findForm.PageDownPressed -= new EventHandler(OnPageDownPressed);
                     findForm.PageUpPressed -= new EventHandler(OnPageUpPressed);
+                    findForm.StopRinging -= new EventHandler(StopRinging);
                     findForm.UpPressed -= new EventHandler(OnUpPressed);
                     if (findForm.Visible) {
                         findForm.SafeClose();
@@ -2815,6 +2838,7 @@ namespace BetHelper {
                     }
                 },
                 (int)tip.Status);
+            tip.F7Pressed += new EventHandler(StopRinging);
             tip.Update += new EventHandler(OnTipUpdate);
             tip.ListViewItem = listViewItem;
             listViewItem.Tag = tip;
@@ -2897,6 +2921,7 @@ namespace BetHelper {
                     }
                 },
                 (int)service.Status);
+            service.F7Pressed += new EventHandler(StopRinging);
             listViewItem.Tag = service;
             return listViewItem;
         }
@@ -3735,6 +3760,7 @@ namespace BetHelper {
 
         private void NewTip() {
             tipForm = new TipForm(Settings);
+            tipForm.F7Pressed += new EventHandler(StopRinging);
             if (tipForm.ShowDialog().Equals(DialogResult.OK)) {
                 SetNewTip(tipForm.Tip);
             }
@@ -3784,27 +3810,51 @@ namespace BetHelper {
         }
 
         private void NewService(object sender, EventArgs e) {
-            ServiceForm serviceForm = new ServiceForm(Settings);
-            serviceForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
-            serviceForm.HelpRequested += new HelpEventHandler(OpenHelp);
-            dialog = serviceForm;
-            if (serviceForm.ShowDialog(this).Equals(DialogResult.OK)) {
+            if (newServiceThread != null && newServiceThread.IsAlive) {
+                try {
+                    serviceForm.SafeSelect();
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+            } else {
+                newServiceThread = new Thread(new ThreadStart(NewService));
+                newServiceThread.Start();
+            }
+        }
+
+        private void NewService() {
+            serviceForm = new ServiceForm(Settings);
+            serviceForm.F7Pressed += new EventHandler(StopRinging);
+            if (serviceForm.ShowDialog().Equals(DialogResult.OK)) {
+                SetNewService(serviceForm.Service);
+            }
+        }
+
+        private void SetNewService(Service service) {
+            if (InvokeRequired) {
+                Invoke(new SetNewServiceCallback(SetNewService), service);
+            } else {
                 listViewServices.Items.Add(SetService(serviceForm.Service));
+                listViewServices.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+            }
+        }
+
+        private void OnServiceUpdate(object sender, EventArgs e) {
+            if (InvokeRequired) {
+                Invoke(new EventHandler(OnServiceUpdate), sender, e);
+            } else {
+                SetService((Service)sender, ((Service)sender).ListViewItem);
                 listViewServices.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             }
         }
 
         private void EditService(object sender, EventArgs e) {
             if (listViewServices.SelectedItems.Count.Equals(1)) {
-                ServiceForm serviceForm = new ServiceForm(Settings);
-                serviceForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
-                serviceForm.HelpRequested += new HelpEventHandler(OpenHelp);
-                serviceForm.Service = (Service)listViewServices.SelectedItems[0].Tag;
-                dialog = serviceForm;
-                if (serviceForm.ShowDialog(this).Equals(DialogResult.OK)) {
-                    SetService(serviceForm.Service, listViewServices.SelectedItems[0]);
-                    listViewServices.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-                }
+                Service service = (Service)listViewServices.SelectedItems[0].Tag;
+                service.ListViewItem = listViewServices.SelectedItems[0];
+                service.Settings = Settings;
+                service.Edit();
             }
         }
 
@@ -3823,7 +3873,11 @@ namespace BetHelper {
                             canRemove.Add(listViewItem);
                         }
                     } else {
-                        canRemove.Add(listViewItem);
+                        if (((Service)listViewItem.Tag).IsOpened) {
+                            cannotRemove.Add(listViewItem);
+                        } else {
+                            canRemove.Add(listViewItem);
+                        }
                     }
                 }
             }
@@ -3833,7 +3887,7 @@ namespace BetHelper {
                     message.Append(canRemove.Count > 1
                         ? string.Format(Properties.Resources.MessageDeleteTips, canRemove.Count)
                         : Properties.Resources.MessageDeleteTip);
-                } else {
+                } else if (canRemove[0].Tag.GetType().Equals(typeof(Service))) {
                     message.Append(canRemove.Count > 1
                         ? string.Format(Properties.Resources.MessageDeleteServices, canRemove.Count)
                         : Properties.Resources.MessageDeleteService);
@@ -3844,20 +3898,28 @@ namespace BetHelper {
                         message.Append(cannotRemove.Count > 1
                             ? string.Format(Properties.Resources.MessageCannotDeleteRTips, cannotRemove.Count)
                             : Properties.Resources.MessageCannotDeleteRTip);
-                    } else {
+                    } else if (cannotRemove[0].Tag.GetType().Equals(typeof(Service))) {
                         message.Append(cannotRemove.Count > 1
                             ? string.Format(Properties.Resources.MessageCannotDeleteRServices, cannotRemove.Count)
                             : Properties.Resources.MessageCannotDeleteRService);
                     }
                 }
-                dialog = new MessageForm(this, message.ToString(), Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo,
-                    MessageForm.BoxIcon.Question);
-                dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-                if (dialog.ShowDialog(this).Equals(DialogResult.Yes)) {
+                MessageForm messageForm = new MessageForm(this, message.ToString(), Properties.Resources.CaptionQuestion,
+                    MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question);
+                messageForm.F7Pressed += new EventHandler(StopRinging);
+                messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                dialog = messageForm;
+                if (messageForm.ShowDialog(this).Equals(DialogResult.Yes)) {
                     foreach (ListViewItem listViewItem in canRemove) {
-                        if (listViewItem.Tag != null && listViewItem.Tag is Tip) {
-                            if (((Tip)listViewItem.Tag).IsOpened) {
-                                continue;
+                        if (listViewItem.Tag != null) {
+                            if (listViewItem.Tag.GetType().Equals(typeof(Tip))) {
+                                if (((Tip)listViewItem.Tag).IsOpened) {
+                                    continue;
+                                }
+                            } else if (listViewItem.Tag.GetType().Equals(typeof(Service))) {
+                                if (((Service)listViewItem.Tag).IsOpened) {
+                                    continue;
+                                }
                             }
                         }
                         listView.Items.Remove(listViewItem);
@@ -3869,15 +3931,17 @@ namespace BetHelper {
                     message.Append(cannotRemove.Count > 1
                         ? string.Format(Properties.Resources.MessageCannotDeleteTips, cannotRemove.Count)
                         : Properties.Resources.MessageCannotDeleteTip);
-                } else {
+                } else if (cannotRemove[0].Tag.GetType().Equals(typeof(Service))) {
                     message.Append(cannotRemove.Count > 1
                         ? string.Format(Properties.Resources.MessageCannotDeleteServices, cannotRemove.Count)
                         : Properties.Resources.MessageCannotDeleteService);
                 }
-                dialog = new MessageForm(this, message.ToString(), Properties.Resources.CaptionInformation, MessageForm.Buttons.OK,
-                    MessageForm.BoxIcon.Information);
-                dialog.HelpRequested += new HelpEventHandler(OpenHelp);
-                dialog.ShowDialog(this);
+                MessageForm messageForm = new MessageForm(this, message.ToString(), Properties.Resources.CaptionInformation,
+                    MessageForm.Buttons.OK, MessageForm.BoxIcon.Information);
+                messageForm.F7Pressed += new EventHandler(StopRinging);
+                messageForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                dialog = messageForm;
+                messageForm.ShowDialog(this);
             }
         }
 

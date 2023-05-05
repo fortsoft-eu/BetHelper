@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 using FortSoft.Tools;
@@ -38,10 +38,10 @@ namespace BetHelper {
     [Serializable]
     public sealed class Tip : ISerializable {
         private Thread thread;
-        private TipForm form;
-        private TipStatus status;
+        private TipForm tipForm;
+        private TipStatus tipStatus;
 
-        public event EventHandler StatusChanged, Update;
+        public event EventHandler F7Pressed, StatusChanged, Update;
 
         public Tip(
                 DateTime dateTime,
@@ -50,14 +50,14 @@ namespace BetHelper {
                 float odd,
                 float trustDegree,
                 string service,
-                TipStatus status) {
+                TipStatus tipStatus) {
 
             Bookmaker = bookmaker;
             DateTime = dateTime;
             Games = games;
             Odd = odd;
             Service = service;
-            this.status = status;
+            this.tipStatus = tipStatus;
             TrustDegree = trustDegree;
             SetUid();
         }
@@ -68,7 +68,7 @@ namespace BetHelper {
             Games = (Game[])info.GetValue("Games", typeof(Game[]));
             Odd = (float)info.GetValue("Odd", typeof(float));
             Service = (string)info.GetValue("Service", typeof(string));
-            status = (TipStatus)info.GetValue("Status", typeof(TipStatus));
+            tipStatus = (TipStatus)info.GetValue("Status", typeof(TipStatus));
             TrustDegree = (float)info.GetValue("TrustDegree", typeof(float));
             Uid = (string)info.GetValue("Uid", typeof(string));
         }
@@ -97,10 +97,10 @@ namespace BetHelper {
 
         public TipStatus Status {
             get {
-                return status;
+                return tipStatus;
             }
             set {
-                status = value;
+                tipStatus = value;
                 StatusChanged?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -108,7 +108,7 @@ namespace BetHelper {
         public void Close() {
             if (IsOpened) {
                 try {
-                    form.SafeClose();
+                    tipForm.SafeClose();
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
@@ -119,7 +119,7 @@ namespace BetHelper {
         public void Edit() {
             if (IsOpened) {
                 try {
-                    form.SafeSelect();
+                    tipForm.SafeSelect();
                 } catch (Exception exception) {
                     Debug.WriteLine(exception);
                     ErrorLog.WriteLine(exception);
@@ -131,9 +131,10 @@ namespace BetHelper {
         }
 
         private void EditThread() {
-            form = new TipForm(Settings, PersistWindowState);
-            form.Tip = this;
-            if (form.ShowDialog().Equals(DialogResult.OK)) {
+            tipForm = new TipForm(Settings, PersistWindowState);
+            tipForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+            tipForm.Tip = this;
+            if (tipForm.ShowDialog().Equals(DialogResult.OK)) {
                 Update?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -144,7 +145,7 @@ namespace BetHelper {
             info.AddValue("Games", Games);
             info.AddValue("Odd", Odd);
             info.AddValue("Service", Service);
-            info.AddValue("Status", status);
+            info.AddValue("Status", tipStatus);
             info.AddValue("TrustDegree", TrustDegree);
             info.AddValue("Uid", Uid);
         }
@@ -186,7 +187,7 @@ namespace BetHelper {
                 .Append("Status")
                 .Append(Constants.Colon)
                 .Append(Constants.Space)
-                .AppendLine(status.ToString())
+                .AppendLine(tipStatus.ToString())
                 .Append("Uid")
                 .Append(Constants.Colon)
                 .Append(Constants.Space)

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.2.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -74,6 +74,7 @@ namespace BetHelper {
             this.button.Size = new System.Drawing.Size(75, 23);
             this.button.TabIndex = 3;
             this.button.UseVisualStyleBackColor = true;
+            this.button.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelProductInfo
             // 
@@ -176,6 +177,7 @@ namespace BetHelper {
             this.Activated += new System.EventHandler(this.OnFormActivated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnFormLoad);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.panelProductInfo.ResumeLayout(false);
             this.panelProductInfo.PerformLayout();

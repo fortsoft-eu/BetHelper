@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 using System;
@@ -38,6 +38,7 @@ namespace BetHelper {
         private Point location;
         private Settings settings;
 
+        public event EventHandler F7Pressed;
         public event EventHandler<MatchControlEventArgs> GameNameChanged;
 
         public MatchControl(Settings settings) {
@@ -145,6 +146,8 @@ namespace BetHelper {
                 if (sender is TextBox) {
                     ((TextBox)sender).SelectAll();
                 }
+            } else if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 

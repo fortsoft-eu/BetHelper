@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 using CefSharp;
@@ -41,7 +41,14 @@ namespace BetHelper {
 
         private delegate void WebInfoHandlerCallback();
 
-        public event EventHandler AlertableGot, BalanceGot, BrowserInitializedChanged, Enter, Suspended, TipsGot, ZoomLevelChanged;
+        public event EventHandler AlertableGot;
+        public event EventHandler BalanceGot;
+        public event EventHandler BrowserInitializedChanged;
+        public event EventHandler Enter;
+        public event EventHandler F7Pressed;
+        public event EventHandler Suspended;
+        public event EventHandler TipsGot;
+        public event EventHandler ZoomLevelChanged;
         public event EventHandler<AddressChangedEventArgs> AddressChanged;
         public event EventHandler<CanceledEventArgs> Canceled;
         public event EventHandler<ConsoleMessageEventArgs> BrowserConsoleMessage;
@@ -316,6 +323,7 @@ namespace BetHelper {
                 webInfo.Canceled += new EventHandler<CanceledEventArgs>(OnCancel);
                 webInfo.Enter += new EventHandler(OnEnter);
                 webInfo.Error += new EventHandler<ErrorEventArgs>(OnError);
+                webInfo.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
                 webInfo.Find += new EventHandler<FindEventArgs>(OnFind);
                 webInfo.Finished += new EventHandler<FinishedEventArgs>(OnFinished);
                 webInfo.Focus += new EventHandler(OnFocus);

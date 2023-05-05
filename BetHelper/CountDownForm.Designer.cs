@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -84,6 +84,7 @@ namespace BetHelper {
             this.buttonImmediate.Text = "Tur&n off Now";
             this.buttonImmediate.UseVisualStyleBackColor = true;
             this.buttonImmediate.Click += new System.EventHandler(this.OnClick);
+            this.buttonImmediate.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // buttonCancel
             // 
@@ -94,6 +95,7 @@ namespace BetHelper {
             this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "Canc&el";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // CountDownForm
             // 
@@ -118,6 +120,7 @@ namespace BetHelper {
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnFormLoad);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.ResumeLayout(false);
 
         }

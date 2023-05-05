@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.8.0
  */
 
 namespace BetHelper {
@@ -269,12 +269,6 @@ namespace BetHelper {
         /// Default column index for sorting tips in the listing.
         /// </summary>
         public const int TipsDefaultSortColumn = 3;
-
-        /// <summary>
-        /// The time interval in seconds after which the monitors will be turned
-        /// off after entering the command to turn off the monitors.
-        /// </summary>
-        public const int TurnOffTheMonitorsInterval = 5;
 
         /// <summary>
         /// Tabs in the log files will be replaced with the following number of
