@@ -159,6 +159,8 @@
     <Compile Include="FocusEventArgs.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Hash.cs" />
+    <Compile Include="KeyboardEventArgs.cs" />
+    <Compile Include="KeyboardHandler.cs" />
     <Compile Include="LinkLabel.cs">
       <SubType>Component</SubType>
     </Compile>

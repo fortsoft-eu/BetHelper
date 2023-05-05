@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using FortSoft.Tools;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -39,7 +40,6 @@ namespace BetHelper {
         private PopUpFrameHandler popUpFrameHandler;
         private SemaphoreSlim heartBeatSemaphore;
         private Settings settings;
-        private ShortcutManager shortcutManager;
         private StatusStripHandler statusStripHandler;
         private string browserConsoleMessage;
         private System.Timers.Timer heartBeatTimer, closeTimer;
@@ -77,7 +77,6 @@ namespace BetHelper {
             closeTimer.Elapsed += new System.Timers.ElapsedEventHandler(SafeClose);
             mainForm.FormClosed += new FormClosedEventHandler(SafeClose);
 
-            InitializeShortcutManager();
             InitializeComponent();
             SuspendLayout();
 
@@ -160,6 +159,9 @@ namespace BetHelper {
                 statusStripHandler.SetMaximum(0);
             });
             Browser.IsBrowserInitializedChanged += new EventHandler(OnIsBrowserInitializedChanged);
+            KeyboardHandler keyboardHandler = new KeyboardHandler();
+            keyboardHandler.KeyEvent += new EventHandler<KeyboardEventArgs>(OnBrowserKeyEvent);
+            Browser.KeyboardHandler = keyboardHandler;
             Browser.LoadingStateChanged += new EventHandler<LoadingStateChangedEventArgs>(OnLoadingStateChanged);
             Browser.Resize += new EventHandler((sender, e) => HeartBeatReset());
             Browser.StatusMessage += new EventHandler<StatusMessageEventArgs>(OnBrowserStatusMessage);
@@ -235,76 +237,42 @@ namespace BetHelper {
             }
         }
 
-        private void InitializeShortcutManager() {
-            shortcutManager = new ShortcutManager();
-            shortcutManager.StopRinging += new EventHandler(F7Pressed);
-            shortcutManager.AddForm(this);
+        private void OnAddressChanged(object sender, AddressChangedEventArgs e) {
+            if (!webInfo.EqualsSecondLevelDomain(e.Address)) {
+                SafeClose(sender, e);
+            }
+            statusStripHandler.SetUrl(e.Address);
         }
 
-        private void PopUpBrowser() {
-            popUpEventArgs.Location = new Point(webInfo.PopUpLeft, webInfo.PopUpTop);
-            popUpEventArgs.Size = new Size(webInfo.PopUpWidth, webInfo.PopUpHeight);
-            PopUpBrowserForm popUpBrowserForm = new PopUpBrowserForm(webInfo, settings, popUpEventArgs);
-            popUpBrowserForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
-            popUpBrowserForm.UrlChanged += new EventHandler<UrlEventArgs>(OnUrlChanged);
-            popUpBrowserForm.ShowDialog();
-        }
-
-        private void OnUrlChanged(object sender, UrlEventArgs e) {
-            if (webInfo.Browser.InvokeRequired) {
-                webInfo.Browser.Invoke(new EventHandler<UrlEventArgs>(OnUrlChanged), sender, e);
-            } else {
-                webInfo.Browser.Load(e.Url);
+        private void OnBrowserConsoleMessage(object sender, ConsoleMessageEventArgs e) {
+            if (settings.ShowConsoleMessages) {
+                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB,
+                    string.Format(Constants.BrowserConsoleMessageFormat1, e.Line, e.Source, e.Message));
             }
         }
 
-        private void OnPopUpFrameHandlerClose(object sender, EventArgs e) {
+        private void OnBrowserKeyEvent(object sender, KeyboardEventArgs e) {
+            if (e.Modifiers.Equals(CefEventFlags.None) && e.WindowsKeyCode.Equals((int)VirtualKeyCode.F7)) {
+                F7Pressed?.Invoke(sender, e);
+            }
+        }
+
+        private void OnBrowserStatusMessage(object sender, StatusMessageEventArgs e) {
+            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Value);
+        }
+
+        private void OnBrowserTitleChanged(object sender, TitleChangedEventArgs e) {
             try {
                 if (InvokeRequired) {
-                    Invoke(new EventHandler(OnPopUpFrameHandlerClose), sender, e);
+                    Invoke(new EventHandler<TitleChangedEventArgs>(OnBrowserTitleChanged), sender, e);
                 } else {
-                    UrlChanged?.Invoke(sender, new UrlEventArgs(((PopUpFrameHandler)sender).NewUrl));
-                    Label label = new Label();
-                    label.Dock = DockStyle.Fill;
-                    panel.Controls.Add(label);
-                    label.BringToFront();
-                    SendToBack();
-                    closeTimer.Start();
+                    SetText(e.Title);
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
         }
-
-        private void SafeMinimize(object sender, EventArgs e) {
-            if (InvokeRequired) {
-                Invoke(new EventHandler(SafeMinimize), sender, e);
-            } else {
-                WindowState = FormWindowState.Minimized;
-            }
-        }
-
-        private void SafeClose(object sender, EventArgs e) {
-            if (Browser.IsDisposed) {
-                return;
-            }
-            if (Browser.InvokeRequired) {
-                Browser.Invoke(new EventHandler(SafeClose), sender, e);
-            } else {
-                closeTimer.Stop();
-                closeTimer.Dispose();
-                heartBeatTimer.Stop();
-                heartBeatTimer.Dispose();
-                heartBeatSemaphore.Dispose();
-                statusStripHandler.Dispose();
-                if (!Browser.IsDisposed) {
-                    Browser.GetBrowser().CloseBrowser(true);
-                }
-            }
-        }
-
-        private void SetText(string str) => Text = string.IsNullOrEmpty(str) ? Program.GetTitle() : str;
 
         private void OnIsBrowserInitializedChanged(object sender, EventArgs e) {
             try {
@@ -328,23 +296,18 @@ namespace BetHelper {
             }
         }
 
-        private void OnBrowserConsoleMessage(object sender, ConsoleMessageEventArgs e) {
-            if (settings.ShowConsoleMessages) {
-                statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentB,
-                    string.Format(Constants.BrowserConsoleMessageFormat1, e.Line, e.Source, e.Message));
-            }
-        }
-
-        private void OnBrowserStatusMessage(object sender, StatusMessageEventArgs e) {
-            statusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, e.Value);
-        }
-
-        private void OnBrowserTitleChanged(object sender, TitleChangedEventArgs e) {
+        private void OnPopUpFrameHandlerClose(object sender, EventArgs e) {
             try {
                 if (InvokeRequired) {
-                    Invoke(new EventHandler<TitleChangedEventArgs>(OnBrowserTitleChanged), sender, e);
+                    Invoke(new EventHandler(OnPopUpFrameHandlerClose), sender, e);
                 } else {
-                    SetText(e.Title);
+                    UrlChanged?.Invoke(sender, new UrlEventArgs(((PopUpFrameHandler)sender).NewUrl));
+                    Label label = new Label();
+                    label.Dock = DockStyle.Fill;
+                    panel.Controls.Add(label);
+                    label.BringToFront();
+                    SendToBack();
+                    closeTimer.Start();
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -352,11 +315,50 @@ namespace BetHelper {
             }
         }
 
-        private void OnAddressChanged(object sender, AddressChangedEventArgs e) {
-            if (!webInfo.EqualsSecondLevelDomain(e.Address)) {
-                SafeClose(sender, e);
+        private void OnUrlChanged(object sender, UrlEventArgs e) {
+            if (webInfo.Browser.InvokeRequired) {
+                webInfo.Browser.Invoke(new EventHandler<UrlEventArgs>(OnUrlChanged), sender, e);
+            } else {
+                webInfo.Browser.Load(e.Url);
             }
-            statusStripHandler.SetUrl(e.Address);
         }
+
+        private void PopUpBrowser() {
+            popUpEventArgs.Location = new Point(webInfo.PopUpLeft, webInfo.PopUpTop);
+            popUpEventArgs.Size = new Size(webInfo.PopUpWidth, webInfo.PopUpHeight);
+            PopUpBrowserForm popUpBrowserForm = new PopUpBrowserForm(webInfo, settings, popUpEventArgs);
+            popUpBrowserForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+            popUpBrowserForm.UrlChanged += new EventHandler<UrlEventArgs>(OnUrlChanged);
+            popUpBrowserForm.ShowDialog();
+        }
+
+        private void SafeClose(object sender, EventArgs e) {
+            if (Browser.IsDisposed) {
+                return;
+            }
+            if (Browser.InvokeRequired) {
+                Browser.Invoke(new EventHandler(SafeClose), sender, e);
+            } else {
+                closeTimer.Stop();
+                closeTimer.Dispose();
+                heartBeatTimer.Stop();
+                heartBeatTimer.Dispose();
+                heartBeatSemaphore.Dispose();
+                statusStripHandler.Dispose();
+                if (!Browser.IsDisposed) {
+                    Browser.GetBrowser().CloseBrowser(true);
+                }
+            }
+        }
+
+        private void SafeMinimize(object sender, EventArgs e) {
+            if (InvokeRequired) {
+                Invoke(new EventHandler(SafeMinimize), sender, e);
+            } else {
+                WindowState = FormWindowState.Minimized;
+            }
+        }
+
+        private void SetText(string str) => Text = string.IsNullOrEmpty(str) ? Program.GetTitle() : str;
     }
 }

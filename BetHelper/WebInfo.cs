@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using CefSharp;
@@ -423,9 +423,12 @@ namespace BetHelper {
                 if (fields.Contains(Constants.FieldBalance)) {
                     if (string.IsNullOrEmpty(Pattern)) {
                         if (fields.Length.Equals(1)) {
-                            decimal.TryParse(Regex.Replace(response, Constants.JSBalancePattern, string.Empty),
+                            bool parsed = decimal.TryParse(Regex.Replace(response, Constants.JSBalancePattern, string.Empty),
                                 NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
                                 CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag), out val);
+                            if (!parsed) {
+                                val = decimal.MinValue;
+                            }
                         }
                     } else {
                         string prepared = Regex.Replace(
@@ -434,8 +437,11 @@ namespace BetHelper {
                                     Array.FindIndex(fields,
                                         new Predicate<string>(field => field.Contains(Constants.FieldBalance))) + 1)),
                             Constants.JSBalancePattern, string.Empty);
-                        decimal.TryParse(prepared, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
+                        bool parsed = decimal.TryParse(prepared, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign,
                             CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag), out val);
+                        if (!parsed) {
+                            val = decimal.MinValue;
+                        }
                     }
                 }
             } catch (Exception exception) {
