@@ -94,10 +94,6 @@
       <HintPath>..\packages\WMPLib.1.0.0\lib\Interop.WMPLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="NonInvasiveKeyboardHookLibrary, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NonInvasiveKeyboardHookLibrary.2.1.0\lib\net452\NonInvasiveKeyboardHookLibrary.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
@@ -159,8 +155,11 @@
     <Compile Include="FocusEventArgs.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Hash.cs" />
+    <Compile Include="KeybindStruct.cs" />
     <Compile Include="KeyboardEventArgs.cs" />
     <Compile Include="KeyboardHandler.cs" />
+    <Compile Include="KeyboardHookManager.cs" />
+    <Compile Include="KeyboardParams.cs" />
     <Compile Include="LinkLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -174,6 +173,7 @@
       <DependentUpon>MatchControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MatchControlEventArgs.cs" />
+    <Compile Include="ModifierKeysUtilities.cs" />
     <Compile Include="NameValuePair.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="ServiceForm.cs">

@@ -122,8 +122,9 @@
   </metadata>
   <data name="textBox.Text" xml:space="preserve">
     <value>Copyright (c) 2022-2023 Petr Červinka - FortSoft &lt;cervinka@fortsoft.eu&gt;
+Copyright (c) 2022 Guilherme Ribeiro [NonInvasiveKeyboardHookLibrary 2.1.2]
+Copyright (c) 2018-2021 Kfir Eichenblat [NonInvasiveKeyboardHookLibrary 2.1.1]
 Copyright (c) 2020-2021 Jose M. Piñeiro [WebPWrapper.cs]
-Copyright (c) 2018-2020 Kfir Eichenblat [NonInvasiveKeyboardHookLibrary.dll]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
