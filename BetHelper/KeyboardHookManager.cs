@@ -168,14 +168,17 @@ namespace NonInvasiveKeyboardHookLibrary {
         private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
         [DllImport("kernel32.dll")]
-        private static extern IntPtr LoadLibrary(string lpFileName);
+        private static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)] string lpFileName);
 
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
     }
 
+    [Serializable]
     internal class HotkeyAlreadyRegisteredException : NonInvasiveKeyboardHookException { }
 
+    [Serializable]
     internal class HotkeyNotRegisteredException : NonInvasiveKeyboardHookException { }
 
+    [Serializable]
     internal class NonInvasiveKeyboardHookException : Exception { }
 }
