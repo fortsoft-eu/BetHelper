@@ -357,36 +357,10 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="CalculatorForm.resx">
-      <DependentUpon>CalculatorForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="EncDecForm.resx">
-      <DependentUpon>EncDecForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LogViewerForm.resx">
-      <DependentUpon>LogViewerForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MatchControl.resx">
-      <DependentUpon>MatchControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PopUpBrowserForm.resx">
-      <DependentUpon>PopUpBrowserForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigEditForm.resx">
-      <DependentUpon>ConfigEditForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />

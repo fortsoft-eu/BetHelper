@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 namespace BetHelper {
@@ -213,7 +213,7 @@ namespace BetHelper {
             this.maskedTextBoxPassword.Size = new System.Drawing.Size(253, 20);
             this.maskedTextBoxPassword.TabIndex = 14;
             this.maskedTextBoxPassword.UseSystemPasswordChar = true;
-            this.maskedTextBoxPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnPasswordKeyDown);
+            this.maskedTextBoxPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.maskedTextBoxPassword.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnPasswordMouseDown);
             // 
             // buttonCopyPassword

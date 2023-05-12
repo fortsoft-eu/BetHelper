@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using FortSoft.Tools;
@@ -39,7 +39,9 @@ using System.Windows.Forms;
 
 namespace BetHelper {
     public partial class PreferencesForm : Form {
-        private bool disableThemes, persistSessionCookies, persistUserPreferences;
+        private bool disableThemes;
+        private bool persistSessionCookies;
+        private bool persistUserPreferences;
         private Form dialog;
         private IEnumerable<object> colors;
         private int textBoxClicks;
@@ -92,7 +94,6 @@ namespace BetHelper {
             pictureBoxWarning.Image = Properties.Resources.Warning.ToBitmap();
 
             comboBoxAcceptLanguage.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
-            comboBoxBellSound.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxBookmakerDColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxBookmakerSColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxBorderStyle.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
@@ -101,6 +102,7 @@ namespace BetHelper {
             comboBoxDashboardDColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxDashboardSColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxNumberFormat.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
+            comboBoxFOSound.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxOverlayBackgroundColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxOverlayCrosshairColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxSportInfo1DColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
@@ -109,10 +111,10 @@ namespace BetHelper {
             comboBoxSportInfo2SColor.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxStripRenderMode.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxTabAppearance.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
+            comboBoxNTSound.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxUnitPrefix.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
             comboBoxUserAgent.MaxDropDownItems = Constants.PrefsMaxDropDownItems;
 
-            comboBoxBellSound.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxBookmakerDColor.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxBookmakerSColor.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxBorderStyle.DrawMode = DrawMode.OwnerDrawFixed;
@@ -121,6 +123,7 @@ namespace BetHelper {
             comboBoxDashboardDColor.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxDashboardSColor.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxNumberFormat.DrawMode = DrawMode.OwnerDrawFixed;
+            comboBoxFOSound.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxOverlayBackgroundColor.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxOverlayCrosshairColor.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxSportInfo1DColor.DrawMode = DrawMode.OwnerDrawFixed;
@@ -129,9 +132,9 @@ namespace BetHelper {
             comboBoxSportInfo2SColor.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxStripRenderMode.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxTabAppearance.DrawMode = DrawMode.OwnerDrawFixed;
+            comboBoxNTSound.DrawMode = DrawMode.OwnerDrawFixed;
             comboBoxUnitPrefix.DrawMode = DrawMode.OwnerDrawFixed;
 
-            comboBoxBellSound.DrawItem += new DrawItemEventHandler(OnDrawItem);
             comboBoxBookmakerDColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
             comboBoxBookmakerSColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
             comboBoxBorderStyle.DrawItem += new DrawItemEventHandler(OnDrawItem);
@@ -140,6 +143,7 @@ namespace BetHelper {
             comboBoxDashboardDColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
             comboBoxDashboardSColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
             comboBoxNumberFormat.DrawItem += new DrawItemEventHandler(OnDrawItem);
+            comboBoxFOSound.DrawItem += new DrawItemEventHandler(OnDrawItem);
             comboBoxOverlayBackgroundColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
             comboBoxOverlayCrosshairColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
             comboBoxSportInfo1DColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
@@ -148,9 +152,23 @@ namespace BetHelper {
             comboBoxSportInfo2SColor.DrawItem += new DrawItemEventHandler(OnColorDrawItem);
             comboBoxStripRenderMode.DrawItem += new DrawItemEventHandler(OnDrawItem);
             comboBoxTabAppearance.DrawItem += new DrawItemEventHandler(OnDrawItem);
+            comboBoxNTSound.DrawItem += new DrawItemEventHandler(OnDrawItem);
             comboBoxUnitPrefix.DrawItem += new DrawItemEventHandler(OnDrawItem);
 
-            comboBoxTabAppearance.DataSource = Enum.GetValues(typeof(TabAppearance));
+            comboBoxBookmakerDColor.DataSource = colors.ToList();
+            comboBoxBookmakerSColor.DataSource = colors.ToList();
+            comboBoxBorderStyle.DataSource = Enum.GetValues(typeof(Border3DStyle));
+            comboBoxCalculatorDColor.DataSource = colors.ToList();
+            comboBoxCalculatorSColor.DataSource = colors.ToList();
+            comboBoxDashboardDColor.DataSource = colors.ToList();
+            comboBoxDashboardSColor.DataSource = colors.ToList();
+            comboBoxFOSound.DataSource = telephoneBell.Titles.Clone();
+            comboBoxOverlayBackgroundColor.DataSource = colors.ToList();
+            comboBoxOverlayCrosshairColor.DataSource = colors.ToList();
+            comboBoxSportInfo1DColor.DataSource = colors.ToList();
+            comboBoxSportInfo1SColor.DataSource = colors.ToList();
+            comboBoxSportInfo2DColor.DataSource = colors.ToList();
+            comboBoxSportInfo2SColor.DataSource = colors.ToList();
             List<ToolStripRenderMode> list = new List<ToolStripRenderMode>();
             foreach (ToolStripRenderMode toolStripRenderMode in Enum.GetValues(typeof(ToolStripRenderMode))) {
                 if (toolStripRenderMode > 0) {
@@ -158,21 +176,8 @@ namespace BetHelper {
                 }
             }
             comboBoxStripRenderMode.DataSource = list.ToArray();
-            comboBoxBellSound.DataSource = telephoneBell.Titles;
-            comboBoxBorderStyle.DataSource = Enum.GetValues(typeof(Border3DStyle));
-
-            comboBoxBookmakerDColor.DataSource = colors.ToList();
-            comboBoxBookmakerSColor.DataSource = colors.ToList();
-            comboBoxCalculatorDColor.DataSource = colors.ToList();
-            comboBoxCalculatorSColor.DataSource = colors.ToList();
-            comboBoxDashboardDColor.DataSource = colors.ToList();
-            comboBoxDashboardSColor.DataSource = colors.ToList();
-            comboBoxOverlayBackgroundColor.DataSource = colors.ToList();
-            comboBoxOverlayCrosshairColor.DataSource = colors.ToList();
-            comboBoxSportInfo1DColor.DataSource = colors.ToList();
-            comboBoxSportInfo1SColor.DataSource = colors.ToList();
-            comboBoxSportInfo2DColor.DataSource = colors.ToList();
-            comboBoxSportInfo2SColor.DataSource = colors.ToList();
+            comboBoxTabAppearance.DataSource = Enum.GetValues(typeof(TabAppearance));
+            comboBoxNTSound.DataSource = telephoneBell.Titles.Clone();
 
             MouseWheel += new MouseEventHandler(OnMouseWheel);
             MouseMove += new MouseEventHandler(OnMouseWheel);
@@ -225,15 +230,21 @@ namespace BetHelper {
                 labelKiB.Text = settings.UseDecimalPrefix ? Constants.Kilobyte : Constants.Kibibyte;
                 comboBoxNumberFormat.DataSource = settings.NumberFormatHandler.NumberFormats;
                 comboBoxNumberFormat.SelectedIndex = settings.NumberFormatInt;
-                if (settings.BellIndex < 0 || settings.BellIndex > comboBoxBellSound.Items.Count - 1) {
-                    comboBoxBellSound.SelectedIndex = 0;
+                if (settings.TipArrivalBellIndex < 0 || settings.TipArrivalBellIndex > comboBoxNTSound.Items.Count - 1) {
+                    comboBoxNTSound.SelectedIndex = 0;
                 } else {
-                    comboBoxBellSound.SelectedIndex = settings.BellIndex;
+                    comboBoxNTSound.SelectedIndex = settings.TipArrivalBellIndex;
+                }
+                if (settings.OpportunityBellIndex < 0 || settings.OpportunityBellIndex > comboBoxFOSound.Items.Count - 1) {
+                    comboBoxFOSound.SelectedIndex = 0;
+                } else {
+                    comboBoxFOSound.SelectedIndex = settings.OpportunityBellIndex;
                 }
                 checkBoxAutoAdjustRightPaneWidth.Checked = settings.AutoAdjustRightPaneWidth;
                 checkBoxAutoLogInAfterInitialLoad.Checked = settings.AutoLogInAfterInitialLoad;
                 checkBoxDisplayPromptBeforeClosing.Checked = settings.DisplayPromptBeforeClosing;
-                checkBoxEnableBell.Checked = settings.EnableBell;
+                checkBoxEnableNTBell.Checked = settings.EnableTipArrivalBell;
+                checkBoxEnableFOBell.Checked = settings.EnableOpportunityBell;
                 checkBoxBoldErrorBell.Checked = settings.BoldBellStatus;
                 checkBoxSortBookmarks.Checked = settings.SortBookmarks;
                 checkBoxTruncateBookmarkTitles.Checked = settings.TruncateBookmarkTitles;
@@ -241,6 +252,9 @@ namespace BetHelper {
                 checkBoxBlockRequestsToForeignUrls.Checked = settings.BlockRequestsToForeignUrls;
                 checkBoxKeepAnEyeOnTheClientsIP.Checked = settings.KeepAnEyeOnTheClientsIP;
                 checkBoxIgnoreCertificateErrors.Checked = settings.IgnoreCertificateErrors;
+                numericUpDownSecond.Minimum = settings.TurnOffTheMonitorsIntervalMin;
+                numericUpDownSecond.Maximum = settings.TurnOffTheMonitorsIntervalMax;
+                numericUpDownSecond.Value = settings.TurnOffTheMonitorsInterval;
                 checkBoxBoldFont.Checked = settings.TabsBoldFont;
                 checkBoxBackgroundColor.Checked = settings.TabsBackgroundColor;
                 comboBoxTabAppearance.SelectedItem = settings.TabAppearance;
@@ -256,6 +270,7 @@ namespace BetHelper {
                 comboBoxDashboardSColor.SelectedItem = GetNamedColor(settings.DashboardSelectedColor);
                 comboBoxCalculatorDColor.SelectedItem = GetNamedColor(settings.CalculatorDefaultColor);
                 comboBoxCalculatorSColor.SelectedItem = GetNamedColor(settings.CalculatorSelectedColor);
+                TabSettingControlsSetEnable();
                 comboBoxOverlayBackgroundColor.SelectedItem = GetNamedColor(settings.OverlayBackgroundColor);
                 comboBoxOverlayCrosshairColor.SelectedItem = GetNamedColor(settings.OverlayCrosshairColor);
                 checkBoxDisableThemes.Checked = settings.DisableThemes;
@@ -267,10 +282,12 @@ namespace BetHelper {
                     radioButtonHardMargins.Checked = true;
                 }
                 checkBoxStatusBarNotifOnly.Enabled = checkBoxCheckForUpdates.Checked;
-                checkBoxBoldErrorBell.Enabled = checkBoxEnableBell.Checked;
-                labelBellSound.Enabled = checkBoxEnableBell.Checked;
-                comboBoxBellSound.Enabled = checkBoxEnableBell.Checked;
-                buttonChime.Enabled = checkBoxEnableBell.Checked;
+                labelNTSound.Enabled = checkBoxEnableNTBell.Checked;
+                comboBoxNTSound.Enabled = checkBoxEnableNTBell.Checked;
+                buttonNTChime.Enabled = checkBoxEnableNTBell.Checked;
+                labelFOSound.Enabled = checkBoxEnableFOBell.Checked;
+                comboBoxFOSound.Enabled = checkBoxEnableFOBell.Checked;
+                buttonFOChime.Enabled = checkBoxEnableFOBell.Checked;
                 if (checkBoxEnableCache.Checked) {
                     checkBoxPersistSessionCookies.Enabled = true;
                     checkBoxPersistUserPreferences.Enabled = true;
@@ -405,6 +422,7 @@ namespace BetHelper {
                 numericUpDownOverlayOpacity.ContextMenu = contextMenu;
                 numericUpDownPreloadLimit.ContextMenu = contextMenu;
                 numericUpDownLargeLogsLimit.ContextMenu = contextMenu;
+                numericUpDownSecond.ContextMenu = contextMenu;
             }))
             .ContinueWith(new Action<Task>(task => {
                 ContextMenu contextMenu = new ContextMenu();
@@ -474,6 +492,8 @@ namespace BetHelper {
             checkBoxStatusBarNotifOnly.Enabled = checkBoxCheckForUpdates.Checked;
         }
 
+        private void OnBackgroundColorCheckedChanged(object sender, EventArgs e) => TabSettingControlsSetEnable();
+
         private void OnButtonBrowseClick(object sender, EventArgs e) {
             try {
                 if (!string.IsNullOrWhiteSpace(textBoxExternalEditor.Text)) {
@@ -503,8 +523,6 @@ namespace BetHelper {
                 ShowException(exception);
             }
         }
-
-        private void OnChimeClick(object sender, EventArgs e) => telephoneBell.Chime(comboBoxBellSound.SelectedIndex);
 
         private void OnColorDrawItem(object sender, DrawItemEventArgs e) {
             e.DrawBackground();
@@ -629,13 +647,6 @@ namespace BetHelper {
             comboBox.DropDownWidth = dropDownWidth;
         }
 
-        private void OnEnableBellCheckedChanged(object sender, EventArgs e) {
-            checkBoxBoldErrorBell.Enabled = checkBoxEnableBell.Checked;
-            labelBellSound.Enabled = checkBoxEnableBell.Checked;
-            comboBoxBellSound.Enabled = checkBoxEnableBell.Checked;
-            buttonChime.Enabled = checkBoxEnableBell.Checked;
-        }
-
         private void OnEnableCacheCheckedChanged(object sender, EventArgs e) {
             if (checkBoxEnableCache.Checked) {
                 checkBoxPersistSessionCookies.Enabled = true;
@@ -710,10 +721,26 @@ namespace BetHelper {
             }
         }
 
+        private void OnOpportunityCheckedChanged(object sender, EventArgs e) {
+            labelFOSound.Enabled = checkBoxEnableFOBell.Checked;
+            comboBoxFOSound.Enabled = checkBoxEnableFOBell.Checked;
+            buttonFOChime.Enabled = checkBoxEnableFOBell.Checked;
+        }
+
+        private void OnOpportunityChimeClick(object sender, EventArgs e) => telephoneBell.Chime(comboBoxFOSound.SelectedIndex);
+
         private void OnRestrictFeaturesCheckedChanged(object sender, EventArgs e) {
             numericUpDownLargeLogsLimit.Enabled = checkBoxRestrictSomeFeatures.Checked;
             labelMiB.Enabled = checkBoxRestrictSomeFeatures.Checked;
         }
+
+        private void OnTipArrivalCheckedChanged(object sender, EventArgs e) {
+            labelNTSound.Enabled = checkBoxEnableNTBell.Checked;
+            comboBoxNTSound.Enabled = checkBoxEnableNTBell.Checked;
+            buttonNTChime.Enabled = checkBoxEnableNTBell.Checked;
+        }
+
+        private void OnTipArrivalChimeClick(object sender, EventArgs e) => telephoneBell.Chime(comboBoxNTSound.SelectedIndex);
 
         private void OnTextBoxMouseDown(object sender, MouseEventArgs e) {
             if (!e.Button.Equals(MouseButtons.Left)) {
@@ -814,11 +841,13 @@ namespace BetHelper {
             settings.StatusBarNotifOnly = checkBoxStatusBarNotifOnly.Checked;
             settings.NumberFormatInt = comboBoxNumberFormat.SelectedIndex;
             settings.UseDecimalPrefix = comboBoxUnitPrefix.SelectedIndex > 0;
-            settings.BellIndex = comboBoxBellSound.SelectedIndex;
+            settings.TipArrivalBellIndex = comboBoxNTSound.SelectedIndex;
+            settings.OpportunityBellIndex = comboBoxFOSound.SelectedIndex;
             settings.AutoAdjustRightPaneWidth = checkBoxAutoAdjustRightPaneWidth.Checked;
             settings.AutoLogInAfterInitialLoad = checkBoxAutoLogInAfterInitialLoad.Checked;
             settings.DisplayPromptBeforeClosing = checkBoxDisplayPromptBeforeClosing.Checked;
-            settings.EnableBell = checkBoxEnableBell.Checked;
+            settings.EnableTipArrivalBell = checkBoxEnableNTBell.Checked;
+            settings.EnableOpportunityBell = checkBoxEnableFOBell.Checked;
             settings.BoldBellStatus = checkBoxBoldErrorBell.Checked;
             settings.SortBookmarks = checkBoxSortBookmarks.Checked;
             settings.TruncateBookmarkTitles = checkBoxTruncateBookmarkTitles.Checked;
@@ -826,6 +855,7 @@ namespace BetHelper {
             settings.BlockRequestsToForeignUrls = checkBoxBlockRequestsToForeignUrls.Checked;
             settings.KeepAnEyeOnTheClientsIP = checkBoxKeepAnEyeOnTheClientsIP.Checked;
             settings.IgnoreCertificateErrors = checkBoxIgnoreCertificateErrors.Checked;
+            settings.TurnOffTheMonitorsInterval = (byte)numericUpDownSecond.Value;
             settings.TabsBoldFont = checkBoxBoldFont.Checked;
             settings.TabsBackgroundColor = checkBoxBackgroundColor.Checked;
             settings.TabAppearance = (TabAppearance)comboBoxTabAppearance.SelectedItem;
@@ -893,6 +923,29 @@ namespace BetHelper {
             messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
             dialog = messageForm;
             messageForm.ShowDialog(this);
+        }
+
+        private void TabSettingControlsSetEnable() {
+            labelBookmakerDColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxBookmakerDColor.Enabled = checkBoxBackgroundColor.Checked;
+            labelBookmakerSColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxBookmakerSColor.Enabled = checkBoxBackgroundColor.Checked;
+            labelSportInfo1DColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxSportInfo1DColor.Enabled = checkBoxBackgroundColor.Checked;
+            labelSportInfo1SColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxSportInfo1SColor.Enabled = checkBoxBackgroundColor.Checked;
+            labelSportInfo2DColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxSportInfo2DColor.Enabled = checkBoxBackgroundColor.Checked;
+            labelSportInfo2SColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxSportInfo2SColor.Enabled = checkBoxBackgroundColor.Checked;
+            labelDashboardDColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxDashboardDColor.Enabled = checkBoxBackgroundColor.Checked;
+            labelDashboardSColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxDashboardSColor.Enabled = checkBoxBackgroundColor.Checked;
+            labelCalculatorDColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxCalculatorDColor.Enabled = checkBoxBackgroundColor.Checked;
+            labelCalculatorSColor.Enabled = checkBoxBackgroundColor.Checked;
+            comboBoxCalculatorSColor.Enabled = checkBoxBackgroundColor.Checked;
         }
     }
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using CefSharp;
@@ -261,8 +261,10 @@ namespace BetHelper {
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTryToKeepUserLoggedIn,
                     new EventHandler(TryToKeepUserLoggedIn)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemEnableBell,
-                    new EventHandler(ToggleBell)));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemEnableTipArrivalBell,
+                    new EventHandler(ToggleTipArrivalBell)));
+                menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemEnableOpportunityBell,
+                    new EventHandler(ToggleOpportunityBell)));
                 menuItemOptions.MenuItems.Add(Constants.Hyphen.ToString());
                 menuItemOptions.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemBellTest + Constants.ShortcutAltF7,
                     new EventHandler(TestBell)));
@@ -377,8 +379,9 @@ namespace BetHelper {
                     menuItemOptions.MenuItems[0].Checked = Settings.AutoAdjustRightPaneWidth;
                     menuItemOptions.MenuItems[2].Checked = Settings.AutoLogInAfterInitialLoad;
                     menuItemOptions.MenuItems[3].Checked = Settings.TryToKeepUserLoggedIn;
-                    menuItemOptions.MenuItems[5].Checked = Settings.EnableBell;
-                    menuItemOptions.MenuItems[10].Enabled = Settings.AllowedAddrHandler.Locked;
+                    menuItemOptions.MenuItems[5].Checked = Settings.EnableTipArrivalBell;
+                    menuItemOptions.MenuItems[6].Checked = Settings.EnableOpportunityBell;
+                    menuItemOptions.MenuItems[11].Enabled = Settings.AllowedAddrHandler.Locked;
                 });
                 menuItemTools.Popup += new EventHandler((sender, e) => {
                     bool enabled = !string.IsNullOrEmpty(webInfoHandler.GetCurrentAddress());
@@ -943,6 +946,55 @@ namespace BetHelper {
             webInfoHandler.TitleChanged += new EventHandler<TitleChangedEventArgs>((sender, e) => SetText(e.Title));
             webInfoHandler.ZoomLevelChanged += new EventHandler((sender, e) =>
                 StatusStripHandler.SetZoomLevel(((WebInfo)sender).ZoomLevel));
+
+            webInfoHandler.AltCtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            webInfoHandler.AltCtrlShiftPPressed += new EventHandler(PrintImage);
+            webInfoHandler.AltF10Pressed += new EventHandler(OpenBetCalculator);
+            webInfoHandler.AltF11Pressed += new EventHandler(LaunchCalculator);
+            webInfoHandler.AltF12Pressed += new EventHandler(LaunchNotepad);
+            webInfoHandler.AltF7Pressed += new EventHandler(TestBell);
+            webInfoHandler.AltF8Pressed += new EventHandler(LogInAtInitialPage);
+            webInfoHandler.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            webInfoHandler.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            webInfoHandler.AltHomePressed += new EventHandler(GoHome);
+            webInfoHandler.AltLeftPressed += new EventHandler(GoBack);
+            webInfoHandler.AltLPressed += new EventHandler(OpenLogViewer);
+            webInfoHandler.AltRightPressed += new EventHandler(GoForward);
+            webInfoHandler.CtrlDPressed += new EventHandler(AddBookmark);
+            webInfoHandler.CtrlEPressed += new EventHandler(ExportAsync);
+            webInfoHandler.CtrlFPressed += new EventHandler(Find);
+            webInfoHandler.CtrlF5Pressed += new EventHandler(ReloadIgnoreCache);
+            webInfoHandler.CtrlGPressed += new EventHandler(ShowPreferences);
+            webInfoHandler.CtrlMinusPressed += new EventHandler(ZoomOutFine);
+            webInfoHandler.CtrlMPressed += new EventHandler(ToggleMuteAudio);
+            webInfoHandler.CtrlOPressed += new EventHandler(Open);
+            webInfoHandler.CtrlPlusPressed += new EventHandler(ZoomInFine);
+            webInfoHandler.CtrlPPressed += new EventHandler(Print);
+            webInfoHandler.CtrlShiftDelPressed += new EventHandler(ClearBrowserCacheInclUserData);
+            webInfoHandler.CtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            webInfoHandler.CtrlShiftMinusPressed += new EventHandler(ZoomOutCoarse);
+            webInfoHandler.CtrlShiftNPressed += new EventHandler(OpenEncoderDecoder);
+            webInfoHandler.CtrlShiftPlusPressed += new EventHandler(ZoomInCoarse);
+            webInfoHandler.CtrlShiftPPressed += new EventHandler(PrintToPdf);
+            webInfoHandler.CtrlTPressed += new EventHandler(NewTabBetCalculator);
+            webInfoHandler.CtrlUPressed += new EventHandler(ViewSource);
+            webInfoHandler.CtrlZeroPressed += new EventHandler(ActualSize);
+            webInfoHandler.DownPressed += new EventHandler(OnDownPressed);
+            webInfoHandler.EndPressed += new EventHandler(OnEndPressed);
+            webInfoHandler.F11Pressed += new EventHandler(TurnOffMonitors);
+            webInfoHandler.F12Pressed += new EventHandler(OpenDevTools);
+            webInfoHandler.F2Pressed += new EventHandler(FocusTrustDegrees);
+            webInfoHandler.F3Pressed += new EventHandler(FindNext);
+            webInfoHandler.F4Pressed += new EventHandler(UnloadPage);
+            webInfoHandler.F5Pressed += new EventHandler(Reload);
+            webInfoHandler.F7Pressed += new EventHandler(StopRinging);
+            webInfoHandler.F8Pressed += new EventHandler(LogIn);
+            webInfoHandler.F9Pressed += new EventHandler(ToggleRightPane);
+            webInfoHandler.HomePressed += new EventHandler(OnHomePressed);
+            webInfoHandler.PageDownPressed += new EventHandler(OnPageDownPressed);
+            webInfoHandler.PageUpPressed += new EventHandler(OnPageUpPressed);
+            webInfoHandler.ShiftF3Pressed += new EventHandler(FindPrevious);
+            webInfoHandler.UpPressed += new EventHandler(OnUpPressed);
         }
 
         private void SubscribeEvents() {
@@ -1482,6 +1534,7 @@ namespace BetHelper {
                 findForm.AltF10Pressed += new EventHandler(OpenBetCalculator);
                 findForm.AltF11Pressed += new EventHandler(LaunchCalculator);
                 findForm.AltF12Pressed += new EventHandler(LaunchNotepad);
+                findForm.AltF7Pressed += new EventHandler(TestBell);
                 findForm.AltF8Pressed += new EventHandler(LogInAtInitialPage);
                 findForm.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
                 findForm.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
@@ -1518,7 +1571,6 @@ namespace BetHelper {
                 findForm.F5Pressed += new EventHandler(Reload);
                 findForm.F7Pressed += new EventHandler(StopRinging);
                 findForm.F8Pressed += new EventHandler(LogIn);
-                findForm.F9Pressed += new EventHandler(ToggleRightPane);
                 findForm.F9Pressed += new EventHandler(ToggleRightPane);
                 findForm.Find += new EventHandler<SearchEventArgs>(OnFind);
                 findForm.FormClosed += new FormClosedEventHandler(OnFindFormClosed);
@@ -1586,7 +1638,17 @@ namespace BetHelper {
         }
 
         private void FindPrevious(object sender, EventArgs e) {
-            if (webInfoHandler.Current != null && webInfoHandler.Current.Browser != null && !string.IsNullOrEmpty(search.searchString)) {
+            if (Settings.F3MainFormFocusesFindForm && findThread != null && findThread.IsAlive) {
+                try {
+                    findForm.SafeSelect();
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+            } else if (webInfoHandler.Current != null
+                    && webInfoHandler.Current.Browser != null
+                    && !string.IsNullOrEmpty(search.searchString)) {
+
                 searching = true;
                 webInfoHandler.Current.Browser.Find(search.searchString, search.backward, search.caseSensitive, true);
             }
@@ -1731,14 +1793,20 @@ namespace BetHelper {
             ((MenuItem)sender).Checked = Settings.TryToKeepUserLoggedIn;
         }
 
-        private void ToggleBell(object sender, EventArgs e) {
-            Settings.EnableBell = !Settings.EnableBell;
-            ((MenuItem)sender).Checked = Settings.EnableBell;
+        private void ToggleTipArrivalBell(object sender, EventArgs e) {
+            Settings.EnableTipArrivalBell = !Settings.EnableTipArrivalBell;
+            ((MenuItem)sender).Checked = Settings.EnableTipArrivalBell;
+            ShowBellStatus();
+        }
+
+        private void ToggleOpportunityBell(object sender, EventArgs e) {
+            Settings.EnableOpportunityBell = !Settings.EnableOpportunityBell;
+            ((MenuItem)sender).Checked = Settings.EnableOpportunityBell;
             ShowBellStatus();
         }
 
         private void TestBell(object sender, EventArgs e) {
-            telephoneBell.Ring(Settings.BellIndex);
+            telephoneBell.Ring(Settings.TipArrivalBellIndex);
             ShowBellStatus();
         }
 
@@ -2298,6 +2366,7 @@ namespace BetHelper {
                     ProgressBarFormEx progressBarForm = new ProgressBarFormEx();
                     progressBarForm.DisableClose = true;
                     progressBarForm.ProgressBarMarquee = true;
+                    progressBarForm.ParentRectangle = new Rectangle(Location, Size);
                     progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
                     dialog = progressBarForm;
                     progressBarForm.F7Pressed += new EventHandler(StopRinging);
@@ -2307,67 +2376,20 @@ namespace BetHelper {
                 }
                 StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessagePleaseWait);
                 SetControlsEnabled(false);
-                if (findForm != null) {
-                    findForm.AltCtrlShiftEPressed -= new EventHandler(ExportWindowAsync);
-                    findForm.AltCtrlShiftPPressed -= new EventHandler(PrintImage);
-                    findForm.AltF10Pressed -= new EventHandler(OpenBetCalculator);
-                    findForm.AltF11Pressed -= new EventHandler(LaunchCalculator);
-                    findForm.AltF12Pressed -= new EventHandler(LaunchNotepad);
-                    findForm.AltF8Pressed -= new EventHandler(LogInAtInitialPage);
-                    findForm.AltF9Pressed -= new EventHandler(ToggleRightPanetWidth);
-                    findForm.AltF9Pressed -= new EventHandler(ToggleRightPanetWidth);
-                    findForm.AltHomePressed -= new EventHandler(GoHome);
-                    findForm.AltLeftPressed -= new EventHandler(GoBack);
-                    findForm.AltLPressed -= new EventHandler(OpenLogViewer);
-                    findForm.AltRightPressed -= new EventHandler(GoForward);
-                    findForm.CtrlDPressed -= new EventHandler(AddBookmark);
-                    findForm.CtrlEPressed -= new EventHandler(ExportAsync);
-                    findForm.CtrlF5Pressed -= new EventHandler(ReloadIgnoreCache);
-                    findForm.CtrlF5Pressed -= new EventHandler(ReloadIgnoreCache);
-                    findForm.CtrlGPressed -= new EventHandler(ShowPreferences);
-                    findForm.CtrlIPressed -= new EventHandler(ShowWebInfo);
-                    findForm.CtrlMinusPressed -= new EventHandler(ZoomOutFine);
-                    findForm.CtrlMPressed -= new EventHandler(ToggleMuteAudio);
-                    findForm.CtrlOPressed -= new EventHandler(Open);
-                    findForm.CtrlPlusPressed -= new EventHandler(ZoomInFine);
-                    findForm.CtrlPPressed -= new EventHandler(Print);
-                    findForm.CtrlShiftDelPressed -= new EventHandler(ClearBrowserCacheInclUserData);
-                    findForm.CtrlShiftEPressed -= new EventHandler(ExportWindowAsync);
-                    findForm.CtrlShiftMinusPressed -= new EventHandler(ZoomOutCoarse);
-                    findForm.CtrlShiftNPressed -= new EventHandler(OpenEncoderDecoder);
-                    findForm.CtrlShiftPlusPressed -= new EventHandler(ZoomInCoarse);
-                    findForm.CtrlShiftPPressed -= new EventHandler(PrintToPdf);
-                    findForm.CtrlTPressed -= new EventHandler(NewTabBetCalculator);
-                    findForm.CtrlUPressed -= new EventHandler(ViewSource);
-                    findForm.CtrlZeroPressed -= new EventHandler(ActualSize);
-                    findForm.DownPressed -= new EventHandler(OnDownPressed);
-                    findForm.EndPressed -= new EventHandler(OnEndPressed);
-                    findForm.F11Pressed -= new EventHandler(TurnOffMonitors);
-                    findForm.F12Pressed -= new EventHandler(OpenDevTools);
-                    findForm.F2Pressed -= new EventHandler(FocusTrustDegrees);
-                    findForm.F4Pressed -= new EventHandler(UnloadPage);
-                    findForm.F5Pressed -= new EventHandler(Reload);
-                    findForm.F7Pressed -= new EventHandler(StopRinging);
-                    findForm.F8Pressed -= new EventHandler(LogIn);
-                    findForm.F9Pressed -= new EventHandler(ToggleRightPane);
-                    findForm.F9Pressed -= new EventHandler(ToggleRightPane);
-                    findForm.Find -= new EventHandler<SearchEventArgs>(OnFind);
-                    findForm.FormClosed -= new FormClosedEventHandler(OnFindFormClosed);
-                    findForm.HelpRequested -= new HelpEventHandler(OpenHelp);
-                    findForm.HomePressed -= new EventHandler(OnHomePressed);
-                    findForm.PageDownPressed -= new EventHandler(OnPageDownPressed);
-                    findForm.PageUpPressed -= new EventHandler(OnPageUpPressed);
-                    findForm.StopRinging -= new EventHandler(StopRinging);
-                    findForm.UpPressed -= new EventHandler(OnUpPressed);
-                    if (findForm.Visible) {
-                        findForm.SafeClose();
-                    }
+                if (findForm != null && findForm.Visible) {
+                    findForm.SafeClose();
                 }
                 if (tipForm != null && tipForm.Visible) {
                     tipForm.SafeClose();
                 }
+                if (serviceForm != null && serviceForm.Visible) {
+                    serviceForm.SafeClose();
+                }
                 foreach (ListViewItem listViewItem in listViewTips.Items) {
                     ((Tip)listViewItem.Tag).Close();
+                }
+                foreach (ListViewItem listViewItem in listViewServices.Items) {
+                    ((Service)listViewItem.Tag).Close();
                 }
                 webInfoHandler.CloseInfos();
                 webInfoHandler.Suspend();
@@ -2408,6 +2430,7 @@ namespace BetHelper {
             } else {
                 ProgressBarFormEx progressBarForm = new ProgressBarFormEx();
                 progressBarForm.ProgressBarMarquee = true;
+                progressBarForm.ParentRectangle = new Rectangle(Location, Size);
                 progressBarForm.SetMessage(Properties.Resources.MessagePleaseWait);
                 progressBarForm.SetMaximum(e.ItemsTotal);
                 dialog = progressBarForm;
@@ -2428,6 +2451,8 @@ namespace BetHelper {
             foreach (MenuItem menuItem in Menu.MenuItems) {
                 menuItem.Enabled = enabled;
             }
+            listViewTips.HideSelection = !enabled;
+            listViewServices.HideSelection = !enabled;
             splitContainerMain.Enabled = enabled;
             StatusStripHandler.EnableContextMenu = enabled;
             if (findForm != null && findForm.Visible) {
@@ -2664,16 +2689,23 @@ namespace BetHelper {
         private void ShowBellStatus() {
             if (InvokeRequired) {
                 Invoke(new ShowBellStatusCallback(ShowBellStatus));
-            } else if (Settings.EnableBell) {
-                if (webInfoHandler.Alertable) {
-                    StatusStripHandler.SetBell(telephoneBell.IsRinging
-                        ? StatusStripHandler.BellMode.Ringing
-                        : StatusStripHandler.BellMode.On);
-                } else {
-                    StatusStripHandler.SetBell(StatusStripHandler.BellMode.Warning);
-                }
             } else {
-                StatusStripHandler.SetBell(StatusStripHandler.BellMode.Off);
+                if (Settings.EnableTipArrivalBell) {
+                    if (webInfoHandler.Alertable) {
+                        StatusStripHandler.SetNTBell(telephoneBell.IsRinging
+                            ? StatusStripHandler.BellMode.Ringing
+                            : StatusStripHandler.BellMode.On);
+                    } else {
+                        StatusStripHandler.SetNTBell(StatusStripHandler.BellMode.Warning);
+                    }
+                } else {
+                    StatusStripHandler.SetNTBell(StatusStripHandler.BellMode.Off);
+                }
+                if (Settings.EnableOpportunityBell) {
+                    StatusStripHandler.SetFOBell(StatusStripHandler.BellMode.On);
+                } else {
+                    StatusStripHandler.SetFOBell(StatusStripHandler.BellMode.Off);
+                }
             }
         }
 
@@ -2697,8 +2729,8 @@ namespace BetHelper {
         private void SetTips(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(SetTips), sender, e);
-            } else if (AddTips(webInfoHandler.Tips) && Settings.EnableBell) {
-                telephoneBell.Ring(Settings.BellIndex);
+            } else if (AddTips(webInfoHandler.Tips) && Settings.EnableTipArrivalBell) {
+                telephoneBell.Ring(Settings.TipArrivalBellIndex);
                 ShowBellStatus();
             }
         }
@@ -2838,8 +2870,56 @@ namespace BetHelper {
                     }
                 },
                 (int)tip.Status);
+            tip.AltCtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            tip.AltCtrlShiftPPressed += new EventHandler(PrintImage);
+            tip.AltF10Pressed += new EventHandler(OpenBetCalculator);
+            tip.AltF11Pressed += new EventHandler(LaunchCalculator);
+            tip.AltF12Pressed += new EventHandler(LaunchNotepad);
+            tip.AltF7Pressed += new EventHandler(TestBell);
+            tip.AltF8Pressed += new EventHandler(LogInAtInitialPage);
+            tip.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            tip.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            tip.AltHomePressed += new EventHandler(GoHome);
+            tip.AltLeftPressed += new EventHandler(GoBack);
+            tip.AltLPressed += new EventHandler(OpenLogViewer);
+            tip.AltRightPressed += new EventHandler(GoForward);
+            tip.CtrlDPressed += new EventHandler(AddBookmark);
+            tip.CtrlEPressed += new EventHandler(ExportAsync);
+            tip.CtrlFPressed += new EventHandler(Find);
+            tip.CtrlF5Pressed += new EventHandler(ReloadIgnoreCache);
+            tip.CtrlGPressed += new EventHandler(ShowPreferences);
+            tip.CtrlIPressed += new EventHandler(ShowWebInfo);
+            tip.CtrlMinusPressed += new EventHandler(ZoomOutFine);
+            tip.CtrlMPressed += new EventHandler(ToggleMuteAudio);
+            tip.CtrlOPressed += new EventHandler(Open);
+            tip.CtrlPlusPressed += new EventHandler(ZoomInFine);
+            tip.CtrlPPressed += new EventHandler(Print);
+            tip.CtrlShiftDelPressed += new EventHandler(ClearBrowserCacheInclUserData);
+            tip.CtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            tip.CtrlShiftMinusPressed += new EventHandler(ZoomOutCoarse);
+            tip.CtrlShiftNPressed += new EventHandler(OpenEncoderDecoder);
+            tip.CtrlShiftPlusPressed += new EventHandler(ZoomInCoarse);
+            tip.CtrlShiftPPressed += new EventHandler(PrintToPdf);
+            tip.CtrlTPressed += new EventHandler(NewTabBetCalculator);
+            tip.CtrlUPressed += new EventHandler(ViewSource);
+            tip.CtrlZeroPressed += new EventHandler(ActualSize);
+            tip.DownPressed += new EventHandler(OnDownPressed);
+            tip.EndPressed += new EventHandler(OnEndPressed);
+            tip.F11Pressed += new EventHandler(TurnOffMonitors);
+            tip.F12Pressed += new EventHandler(OpenDevTools);
+            tip.F2Pressed += new EventHandler(FocusTrustDegrees);
+            tip.F3Pressed += new EventHandler(FindNext);
+            tip.F4Pressed += new EventHandler(UnloadPage);
+            tip.F5Pressed += new EventHandler(Reload);
             tip.F7Pressed += new EventHandler(StopRinging);
+            tip.F8Pressed += new EventHandler(LogIn);
+            tip.F9Pressed += new EventHandler(ToggleRightPane);
+            tip.HomePressed += new EventHandler(OnHomePressed);
+            tip.PageDownPressed += new EventHandler(OnPageDownPressed);
+            tip.PageUpPressed += new EventHandler(OnPageUpPressed);
+            tip.ShiftF3Pressed += new EventHandler(FindPrevious);
             tip.Update += new EventHandler(OnTipUpdate);
+            tip.UpPressed += new EventHandler(OnUpPressed);
             tip.ListViewItem = listViewItem;
             listViewItem.Tag = tip;
             return listViewItem;
@@ -2921,7 +3001,57 @@ namespace BetHelper {
                     }
                 },
                 (int)service.Status);
+            service.AltCtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            service.AltCtrlShiftPPressed += new EventHandler(PrintImage);
+            service.AltF10Pressed += new EventHandler(OpenBetCalculator);
+            service.AltF11Pressed += new EventHandler(LaunchCalculator);
+            service.AltF12Pressed += new EventHandler(LaunchNotepad);
+            service.AltF7Pressed += new EventHandler(TestBell);
+            service.AltF8Pressed += new EventHandler(LogInAtInitialPage);
+            service.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            service.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            service.AltHomePressed += new EventHandler(GoHome);
+            service.AltLeftPressed += new EventHandler(GoBack);
+            service.AltLPressed += new EventHandler(OpenLogViewer);
+            service.AltRightPressed += new EventHandler(GoForward);
+            service.CtrlDPressed += new EventHandler(AddBookmark);
+            service.CtrlEPressed += new EventHandler(ExportAsync);
+            service.CtrlFPressed += new EventHandler(Find);
+            service.CtrlF5Pressed += new EventHandler(ReloadIgnoreCache);
+            service.CtrlGPressed += new EventHandler(ShowPreferences);
+            service.CtrlIPressed += new EventHandler(ShowWebInfo);
+            service.CtrlMinusPressed += new EventHandler(ZoomOutFine);
+            service.CtrlMPressed += new EventHandler(ToggleMuteAudio);
+            service.CtrlOPressed += new EventHandler(Open);
+            service.CtrlPlusPressed += new EventHandler(ZoomInFine);
+            service.CtrlPPressed += new EventHandler(Print);
+            service.CtrlShiftDelPressed += new EventHandler(ClearBrowserCacheInclUserData);
+            service.CtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            service.CtrlShiftMinusPressed += new EventHandler(ZoomOutCoarse);
+            service.CtrlShiftNPressed += new EventHandler(OpenEncoderDecoder);
+            service.CtrlShiftPlusPressed += new EventHandler(ZoomInCoarse);
+            service.CtrlShiftPPressed += new EventHandler(PrintToPdf);
+            service.CtrlTPressed += new EventHandler(NewTabBetCalculator);
+            service.CtrlUPressed += new EventHandler(ViewSource);
+            service.CtrlZeroPressed += new EventHandler(ActualSize);
+            service.DownPressed += new EventHandler(OnDownPressed);
+            service.EndPressed += new EventHandler(OnEndPressed);
+            service.F11Pressed += new EventHandler(TurnOffMonitors);
+            service.F12Pressed += new EventHandler(OpenDevTools);
+            service.F2Pressed += new EventHandler(FocusTrustDegrees);
+            service.F3Pressed += new EventHandler(FindNext);
+            service.F4Pressed += new EventHandler(UnloadPage);
+            service.F5Pressed += new EventHandler(Reload);
             service.F7Pressed += new EventHandler(StopRinging);
+            service.F8Pressed += new EventHandler(LogIn);
+            service.F9Pressed += new EventHandler(ToggleRightPane);
+            service.HomePressed += new EventHandler(OnHomePressed);
+            service.PageDownPressed += new EventHandler(OnPageDownPressed);
+            service.PageUpPressed += new EventHandler(OnPageUpPressed);
+            service.ShiftF3Pressed += new EventHandler(FindPrevious);
+            service.Update += new EventHandler(OnTipUpdate);
+            service.UpPressed += new EventHandler(OnUpPressed);
+            service.ListViewItem = listViewItem;
             listViewItem.Tag = service;
             return listViewItem;
         }
@@ -3760,7 +3890,55 @@ namespace BetHelper {
 
         private void NewTip() {
             tipForm = new TipForm(Settings);
+            tipForm.AltCtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            tipForm.AltCtrlShiftPPressed += new EventHandler(PrintImage);
+            tipForm.AltF10Pressed += new EventHandler(OpenBetCalculator);
+            tipForm.AltF11Pressed += new EventHandler(LaunchCalculator);
+            tipForm.AltF12Pressed += new EventHandler(LaunchNotepad);
+            tipForm.AltF7Pressed += new EventHandler(TestBell);
+            tipForm.AltF8Pressed += new EventHandler(LogInAtInitialPage);
+            tipForm.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            tipForm.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            tipForm.AltHomePressed += new EventHandler(GoHome);
+            tipForm.AltLeftPressed += new EventHandler(GoBack);
+            tipForm.AltLPressed += new EventHandler(OpenLogViewer);
+            tipForm.AltRightPressed += new EventHandler(GoForward);
+            tipForm.CtrlDPressed += new EventHandler(AddBookmark);
+            tipForm.CtrlEPressed += new EventHandler(ExportAsync);
+            tipForm.CtrlFPressed += new EventHandler(Find);
+            tipForm.CtrlF5Pressed += new EventHandler(ReloadIgnoreCache);
+            tipForm.CtrlGPressed += new EventHandler(ShowPreferences);
+            tipForm.CtrlIPressed += new EventHandler(ShowWebInfo);
+            tipForm.CtrlMinusPressed += new EventHandler(ZoomOutFine);
+            tipForm.CtrlMPressed += new EventHandler(ToggleMuteAudio);
+            tipForm.CtrlOPressed += new EventHandler(Open);
+            tipForm.CtrlPlusPressed += new EventHandler(ZoomInFine);
+            tipForm.CtrlPPressed += new EventHandler(Print);
+            tipForm.CtrlShiftDelPressed += new EventHandler(ClearBrowserCacheInclUserData);
+            tipForm.CtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            tipForm.CtrlShiftMinusPressed += new EventHandler(ZoomOutCoarse);
+            tipForm.CtrlShiftNPressed += new EventHandler(OpenEncoderDecoder);
+            tipForm.CtrlShiftPlusPressed += new EventHandler(ZoomInCoarse);
+            tipForm.CtrlShiftPPressed += new EventHandler(PrintToPdf);
+            tipForm.CtrlTPressed += new EventHandler(NewTabBetCalculator);
+            tipForm.CtrlUPressed += new EventHandler(ViewSource);
+            tipForm.CtrlZeroPressed += new EventHandler(ActualSize);
+            tipForm.DownPressed += new EventHandler(OnDownPressed);
+            tipForm.EndPressed += new EventHandler(OnEndPressed);
+            tipForm.F11Pressed += new EventHandler(TurnOffMonitors);
+            tipForm.F12Pressed += new EventHandler(OpenDevTools);
+            tipForm.F2Pressed += new EventHandler(FocusTrustDegrees);
+            tipForm.F3Pressed += new EventHandler(FindNext);
+            tipForm.F4Pressed += new EventHandler(UnloadPage);
+            tipForm.F5Pressed += new EventHandler(Reload);
             tipForm.F7Pressed += new EventHandler(StopRinging);
+            tipForm.F8Pressed += new EventHandler(LogIn);
+            tipForm.F9Pressed += new EventHandler(ToggleRightPane);
+            tipForm.HomePressed += new EventHandler(OnHomePressed);
+            tipForm.PageDownPressed += new EventHandler(OnPageDownPressed);
+            tipForm.PageUpPressed += new EventHandler(OnPageUpPressed);
+            tipForm.ShiftF3Pressed += new EventHandler(FindPrevious);
+            tipForm.UpPressed += new EventHandler(OnUpPressed);
             if (tipForm.ShowDialog().Equals(DialogResult.OK)) {
                 SetNewTip(tipForm.Tip);
             }
@@ -3825,7 +4003,55 @@ namespace BetHelper {
 
         private void NewService() {
             serviceForm = new ServiceForm(Settings);
+            serviceForm.AltCtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            serviceForm.AltCtrlShiftPPressed += new EventHandler(PrintImage);
+            serviceForm.AltF10Pressed += new EventHandler(OpenBetCalculator);
+            serviceForm.AltF11Pressed += new EventHandler(LaunchCalculator);
+            serviceForm.AltF12Pressed += new EventHandler(LaunchNotepad);
+            serviceForm.AltF7Pressed += new EventHandler(TestBell);
+            serviceForm.AltF8Pressed += new EventHandler(LogInAtInitialPage);
+            serviceForm.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            serviceForm.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
+            serviceForm.AltHomePressed += new EventHandler(GoHome);
+            serviceForm.AltLeftPressed += new EventHandler(GoBack);
+            serviceForm.AltLPressed += new EventHandler(OpenLogViewer);
+            serviceForm.AltRightPressed += new EventHandler(GoForward);
+            serviceForm.CtrlDPressed += new EventHandler(AddBookmark);
+            serviceForm.CtrlEPressed += new EventHandler(ExportAsync);
+            serviceForm.CtrlFPressed += new EventHandler(Find);
+            serviceForm.CtrlF5Pressed += new EventHandler(ReloadIgnoreCache);
+            serviceForm.CtrlGPressed += new EventHandler(ShowPreferences);
+            serviceForm.CtrlIPressed += new EventHandler(ShowWebInfo);
+            serviceForm.CtrlMinusPressed += new EventHandler(ZoomOutFine);
+            serviceForm.CtrlMPressed += new EventHandler(ToggleMuteAudio);
+            serviceForm.CtrlOPressed += new EventHandler(Open);
+            serviceForm.CtrlPlusPressed += new EventHandler(ZoomInFine);
+            serviceForm.CtrlPPressed += new EventHandler(Print);
+            serviceForm.CtrlShiftDelPressed += new EventHandler(ClearBrowserCacheInclUserData);
+            serviceForm.CtrlShiftEPressed += new EventHandler(ExportWindowAsync);
+            serviceForm.CtrlShiftMinusPressed += new EventHandler(ZoomOutCoarse);
+            serviceForm.CtrlShiftNPressed += new EventHandler(OpenEncoderDecoder);
+            serviceForm.CtrlShiftPlusPressed += new EventHandler(ZoomInCoarse);
+            serviceForm.CtrlShiftPPressed += new EventHandler(PrintToPdf);
+            serviceForm.CtrlTPressed += new EventHandler(NewTabBetCalculator);
+            serviceForm.CtrlUPressed += new EventHandler(ViewSource);
+            serviceForm.CtrlZeroPressed += new EventHandler(ActualSize);
+            serviceForm.DownPressed += new EventHandler(OnDownPressed);
+            serviceForm.EndPressed += new EventHandler(OnEndPressed);
+            serviceForm.F11Pressed += new EventHandler(TurnOffMonitors);
+            serviceForm.F12Pressed += new EventHandler(OpenDevTools);
+            serviceForm.F2Pressed += new EventHandler(FocusTrustDegrees);
+            serviceForm.F3Pressed += new EventHandler(FindNext);
+            serviceForm.F4Pressed += new EventHandler(UnloadPage);
+            serviceForm.F5Pressed += new EventHandler(Reload);
             serviceForm.F7Pressed += new EventHandler(StopRinging);
+            serviceForm.F8Pressed += new EventHandler(LogIn);
+            serviceForm.F9Pressed += new EventHandler(ToggleRightPane);
+            serviceForm.HomePressed += new EventHandler(OnHomePressed);
+            serviceForm.PageDownPressed += new EventHandler(OnPageDownPressed);
+            serviceForm.PageUpPressed += new EventHandler(OnPageUpPressed);
+            serviceForm.ShiftF3Pressed += new EventHandler(FindPrevious);
+            serviceForm.UpPressed += new EventHandler(OnUpPressed);
             if (serviceForm.ShowDialog().Equals(DialogResult.OK)) {
                 SetNewService(serviceForm.Service);
             }

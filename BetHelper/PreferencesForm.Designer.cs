@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 namespace BetHelper {
@@ -72,10 +72,10 @@ namespace BetHelper {
             this.checkBoxEnableCache = new System.Windows.Forms.CheckBox();
             this.tabPageDebug = new System.Windows.Forms.TabPage();
             this.groupBoxLogViewer = new System.Windows.Forms.GroupBox();
-            this.labelExternalEditor = new System.Windows.Forms.Label();
             this.buttonLogViewer = new System.Windows.Forms.Button();
             this.buttonBrowse = new System.Windows.Forms.Button();
             this.textBoxExternalEditor = new System.Windows.Forms.TextBox();
+            this.labelExternalEditor = new System.Windows.Forms.Label();
             this.labelMiB = new System.Windows.Forms.Label();
             this.numericUpDownLargeLogsLimit = new System.Windows.Forms.NumericUpDown();
             this.checkBoxRestrictSomeFeatures = new System.Windows.Forms.CheckBox();
@@ -98,29 +98,14 @@ namespace BetHelper {
             this.labelPerCent = new System.Windows.Forms.Label();
             this.numericUpDownOverlayOpacity = new System.Windows.Forms.NumericUpDown();
             this.labelOverlayOpacity = new System.Windows.Forms.Label();
-            this.groupBoxFind = new System.Windows.Forms.GroupBox();
-            this.checkBoxF3MainFormFind = new System.Windows.Forms.CheckBox();
-            this.checkBoxOutlineSearchResults = new System.Windows.Forms.CheckBox();
-            this.tabPageGeneral = new System.Windows.Forms.TabPage();
+            this.tabPageGeneral1 = new System.Windows.Forms.TabPage();
+            this.groupBoxConfiguration = new System.Windows.Forms.GroupBox();
             this.buttonEditRemoteConfig = new System.Windows.Forms.Button();
-            this.groupBoxSecurity = new System.Windows.Forms.GroupBox();
-            this.checkBoxIgnoreCertificateErrors = new System.Windows.Forms.CheckBox();
-            this.checkBoxBlockRequestsToForeignUrls = new System.Windows.Forms.CheckBox();
-            this.buttonAllowedClientsIP = new System.Windows.Forms.Button();
-            this.checkBoxKeepAnEyeOnTheClientsIP = new System.Windows.Forms.CheckBox();
-            this.groupBoxPrinting = new System.Windows.Forms.GroupBox();
-            this.radioButtonHardMargins = new System.Windows.Forms.RadioButton();
-            this.radioButtonSoftMargins = new System.Windows.Forms.RadioButton();
-            this.labelPrinting = new System.Windows.Forms.Label();
-            this.groupBoxApplication = new System.Windows.Forms.GroupBox();
-            this.buttonChime = new System.Windows.Forms.Button();
-            this.comboBoxBellSound = new System.Windows.Forms.ComboBox();
-            this.labelBellSound = new System.Windows.Forms.Label();
-            this.checkBoxBoldErrorBell = new System.Windows.Forms.CheckBox();
-            this.checkBoxEnableBell = new System.Windows.Forms.CheckBox();
+            this.groupBoxBookmarks = new System.Windows.Forms.GroupBox();
             this.buttonManageBookmarks = new System.Windows.Forms.Button();
-            this.checkBoxTruncateBookmarkTitles = new System.Windows.Forms.CheckBox();
             this.checkBoxSortBookmarks = new System.Windows.Forms.CheckBox();
+            this.checkBoxTruncateBookmarkTitles = new System.Windows.Forms.CheckBox();
+            this.groupBoxApplication = new System.Windows.Forms.GroupBox();
             this.checkBoxPingWhenIdle = new System.Windows.Forms.CheckBox();
             this.checkBoxAutoLogInAfterInitialLoad = new System.Windows.Forms.CheckBox();
             this.checkBoxDisplayPromptBeforeClosing = new System.Windows.Forms.CheckBox();
@@ -130,16 +115,37 @@ namespace BetHelper {
             this.labelNumberFormat = new System.Windows.Forms.Label();
             this.checkBoxStatusBarNotifOnly = new System.Windows.Forms.CheckBox();
             this.checkBoxCheckForUpdates = new System.Windows.Forms.CheckBox();
+            this.groupBoxBell = new System.Windows.Forms.GroupBox();
+            this.buttonFOChime = new System.Windows.Forms.Button();
+            this.comboBoxFOSound = new System.Windows.Forms.ComboBox();
+            this.labelFOSound = new System.Windows.Forms.Label();
+            this.checkBoxEnableFOBell = new System.Windows.Forms.CheckBox();
+            this.buttonNTChime = new System.Windows.Forms.Button();
+            this.comboBoxNTSound = new System.Windows.Forms.ComboBox();
+            this.labelNTSound = new System.Windows.Forms.Label();
+            this.checkBoxEnableNTBell = new System.Windows.Forms.CheckBox();
+            this.checkBoxBoldErrorBell = new System.Windows.Forms.CheckBox();
+            this.tabPageGeneral2 = new System.Windows.Forms.TabPage();
+            this.groupBoxCountDown = new System.Windows.Forms.GroupBox();
+            this.labelSecond = new System.Windows.Forms.Label();
+            this.numericUpDownSecond = new System.Windows.Forms.NumericUpDown();
+            this.labelCountDown = new System.Windows.Forms.Label();
+            this.groupBoxPrinting = new System.Windows.Forms.GroupBox();
+            this.radioButtonHardMargins = new System.Windows.Forms.RadioButton();
+            this.radioButtonSoftMargins = new System.Windows.Forms.RadioButton();
+            this.labelPrinting = new System.Windows.Forms.Label();
+            this.groupBoxFind = new System.Windows.Forms.GroupBox();
+            this.checkBoxF3MainFormFind = new System.Windows.Forms.CheckBox();
+            this.checkBoxOutlineSearchResults = new System.Windows.Forms.CheckBox();
+            this.groupBoxSecurity = new System.Windows.Forms.GroupBox();
+            this.checkBoxIgnoreCertificateErrors = new System.Windows.Forms.CheckBox();
+            this.checkBoxBlockRequestsToForeignUrls = new System.Windows.Forms.CheckBox();
+            this.buttonAllowedClientsIP = new System.Windows.Forms.Button();
+            this.checkBoxKeepAnEyeOnTheClientsIP = new System.Windows.Forms.CheckBox();
             this.tabPageUserInterface = new System.Windows.Forms.TabPage();
             this.groupBoxMisc = new System.Windows.Forms.GroupBox();
-            this.checkBoxDisableThemes = new System.Windows.Forms.CheckBox();
-            this.groupBoxRightPane = new System.Windows.Forms.GroupBox();
             this.checkBoxAutoAdjustRightPaneWidth = new System.Windows.Forms.CheckBox();
-            this.groupBoxStatusStrip = new System.Windows.Forms.GroupBox();
-            this.comboBoxBorderStyle = new System.Windows.Forms.ComboBox();
-            this.labelStripRenderMode = new System.Windows.Forms.Label();
-            this.labelBorderStyle = new System.Windows.Forms.Label();
-            this.comboBoxStripRenderMode = new System.Windows.Forms.ComboBox();
+            this.checkBoxDisableThemes = new System.Windows.Forms.CheckBox();
             this.groupBoxUserInterface = new System.Windows.Forms.GroupBox();
             this.comboBoxCalculatorSColor = new System.Windows.Forms.ComboBox();
             this.labelCalculatorSColor = new System.Windows.Forms.Label();
@@ -165,6 +171,11 @@ namespace BetHelper {
             this.checkBoxBoldFont = new System.Windows.Forms.CheckBox();
             this.comboBoxTabAppearance = new System.Windows.Forms.ComboBox();
             this.labelTabAppearance = new System.Windows.Forms.Label();
+            this.groupBoxStatusStrip = new System.Windows.Forms.GroupBox();
+            this.comboBoxBorderStyle = new System.Windows.Forms.ComboBox();
+            this.labelStripRenderMode = new System.Windows.Forms.Label();
+            this.labelBorderStyle = new System.Windows.Forms.Label();
+            this.comboBoxStripRenderMode = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWarning)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabPageBrowser.SuspendLayout();
@@ -180,16 +191,21 @@ namespace BetHelper {
             this.groupBoxNavigation.SuspendLayout();
             this.groupBoxDomInspection.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOverlayOpacity)).BeginInit();
-            this.groupBoxFind.SuspendLayout();
-            this.tabPageGeneral.SuspendLayout();
-            this.groupBoxSecurity.SuspendLayout();
-            this.groupBoxPrinting.SuspendLayout();
+            this.tabPageGeneral1.SuspendLayout();
+            this.groupBoxConfiguration.SuspendLayout();
+            this.groupBoxBookmarks.SuspendLayout();
             this.groupBoxApplication.SuspendLayout();
+            this.groupBoxBell.SuspendLayout();
+            this.tabPageGeneral2.SuspendLayout();
+            this.groupBoxCountDown.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSecond)).BeginInit();
+            this.groupBoxPrinting.SuspendLayout();
+            this.groupBoxFind.SuspendLayout();
+            this.groupBoxSecurity.SuspendLayout();
             this.tabPageUserInterface.SuspendLayout();
             this.groupBoxMisc.SuspendLayout();
-            this.groupBoxRightPane.SuspendLayout();
-            this.groupBoxStatusStrip.SuspendLayout();
             this.groupBoxUserInterface.SuspendLayout();
+            this.groupBoxStatusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelWarning
@@ -244,7 +260,8 @@ namespace BetHelper {
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPageBrowser);
             this.tabControl.Controls.Add(this.tabPageDebug);
-            this.tabControl.Controls.Add(this.tabPageGeneral);
+            this.tabControl.Controls.Add(this.tabPageGeneral1);
+            this.tabControl.Controls.Add(this.tabPageGeneral2);
             this.tabControl.Controls.Add(this.tabPageUserInterface);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
@@ -269,6 +286,9 @@ namespace BetHelper {
             // 
             // groupBoxProxy
             // 
+            this.groupBoxProxy.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxProxy.Controls.Add(this.checkBoxEnableProxy);
             this.groupBoxProxy.Location = new System.Drawing.Point(6, 284);
             this.groupBoxProxy.Name = "groupBoxProxy";
@@ -306,7 +326,7 @@ namespace BetHelper {
             // comboBoxAcceptLanguage
             // 
             this.comboBoxAcceptLanguage.FormattingEnabled = true;
-            this.comboBoxAcceptLanguage.Location = new System.Drawing.Point(110, 45);
+            this.comboBoxAcceptLanguage.Location = new System.Drawing.Point(110, 46);
             this.comboBoxAcceptLanguage.Name = "comboBoxAcceptLanguage";
             this.comboBoxAcceptLanguage.Size = new System.Drawing.Size(250, 21);
             this.comboBoxAcceptLanguage.TabIndex = 3;
@@ -319,7 +339,7 @@ namespace BetHelper {
             // labelAcceptLanguage
             // 
             this.labelAcceptLanguage.AutoSize = true;
-            this.labelAcceptLanguage.Location = new System.Drawing.Point(9, 48);
+            this.labelAcceptLanguage.Location = new System.Drawing.Point(9, 49);
             this.labelAcceptLanguage.Name = "labelAcceptLanguage";
             this.labelAcceptLanguage.Size = new System.Drawing.Size(95, 13);
             this.labelAcceptLanguage.TabIndex = 2;
@@ -453,7 +473,6 @@ namespace BetHelper {
             this.tabPageDebug.Controls.Add(this.groupBoxJSErrors);
             this.tabPageDebug.Controls.Add(this.groupBoxNavigation);
             this.tabPageDebug.Controls.Add(this.groupBoxDomInspection);
-            this.tabPageDebug.Controls.Add(this.groupBoxFind);
             this.tabPageDebug.Location = new System.Drawing.Point(4, 22);
             this.tabPageDebug.Name = "tabPageDebug";
             this.tabPageDebug.Padding = new System.Windows.Forms.Padding(3);
@@ -464,39 +483,31 @@ namespace BetHelper {
             // 
             // groupBoxLogViewer
             // 
-            this.groupBoxLogViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxLogViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxLogViewer.Controls.Add(this.labelExternalEditor);
             this.groupBoxLogViewer.Controls.Add(this.buttonLogViewer);
             this.groupBoxLogViewer.Controls.Add(this.buttonBrowse);
             this.groupBoxLogViewer.Controls.Add(this.textBoxExternalEditor);
+            this.groupBoxLogViewer.Controls.Add(this.labelExternalEditor);
             this.groupBoxLogViewer.Controls.Add(this.labelMiB);
             this.groupBoxLogViewer.Controls.Add(this.numericUpDownLargeLogsLimit);
             this.groupBoxLogViewer.Controls.Add(this.checkBoxRestrictSomeFeatures);
             this.groupBoxLogViewer.Controls.Add(this.labelKiB);
             this.groupBoxLogViewer.Controls.Add(this.numericUpDownPreloadLimit);
             this.groupBoxLogViewer.Controls.Add(this.checkBoxEnableLogPreloadLimit);
-            this.groupBoxLogViewer.Location = new System.Drawing.Point(6, 351);
+            this.groupBoxLogViewer.Location = new System.Drawing.Point(6, 329);
             this.groupBoxLogViewer.Name = "groupBoxLogViewer";
-            this.groupBoxLogViewer.Size = new System.Drawing.Size(368, 131);
+            this.groupBoxLogViewer.Size = new System.Drawing.Size(368, 153);
             this.groupBoxLogViewer.TabIndex = 4;
             this.groupBoxLogViewer.TabStop = false;
             this.groupBoxLogViewer.Text = "Log Viewer";
             // 
-            // labelExternalEditor
-            // 
-            this.labelExternalEditor.AutoSize = true;
-            this.labelExternalEditor.Location = new System.Drawing.Point(9, 63);
-            this.labelExternalEditor.Name = "labelExternalEditor";
-            this.labelExternalEditor.Size = new System.Drawing.Size(156, 13);
-            this.labelExternalEditor.TabIndex = 6;
-            this.labelExternalEditor.Text = "External editor executable &path:";
-            // 
             // buttonLogViewer
             // 
-            this.buttonLogViewer.Location = new System.Drawing.Point(12, 102);
+            this.buttonLogViewer.Location = new System.Drawing.Point(24, 120);
             this.buttonLogViewer.Name = "buttonLogViewer";
-            this.buttonLogViewer.Size = new System.Drawing.Size(130, 23);
+            this.buttonLogViewer.Size = new System.Drawing.Size(190, 23);
             this.buttonLogViewer.TabIndex = 9;
             this.buttonLogViewer.Text = "Open &Log Viewer...";
             this.buttonLogViewer.UseVisualStyleBackColor = true;
@@ -505,7 +516,7 @@ namespace BetHelper {
             // 
             // buttonBrowse
             // 
-            this.buttonBrowse.Location = new System.Drawing.Point(285, 77);
+            this.buttonBrowse.Location = new System.Drawing.Point(285, 85);
             this.buttonBrowse.Name = "buttonBrowse";
             this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
             this.buttonBrowse.TabIndex = 8;
@@ -516,17 +527,26 @@ namespace BetHelper {
             // 
             // textBoxExternalEditor
             // 
-            this.textBoxExternalEditor.Location = new System.Drawing.Point(12, 79);
+            this.textBoxExternalEditor.Location = new System.Drawing.Point(12, 87);
             this.textBoxExternalEditor.Name = "textBoxExternalEditor";
             this.textBoxExternalEditor.Size = new System.Drawing.Size(267, 20);
             this.textBoxExternalEditor.TabIndex = 7;
             this.textBoxExternalEditor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.textBoxExternalEditor.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
             // 
+            // labelExternalEditor
+            // 
+            this.labelExternalEditor.AutoSize = true;
+            this.labelExternalEditor.Location = new System.Drawing.Point(9, 71);
+            this.labelExternalEditor.Name = "labelExternalEditor";
+            this.labelExternalEditor.Size = new System.Drawing.Size(156, 13);
+            this.labelExternalEditor.TabIndex = 6;
+            this.labelExternalEditor.Text = "E&xternal editor executable path:";
+            // 
             // labelMiB
             // 
             this.labelMiB.AutoSize = true;
-            this.labelMiB.Location = new System.Drawing.Point(313, 42);
+            this.labelMiB.Location = new System.Drawing.Point(313, 46);
             this.labelMiB.Name = "labelMiB";
             this.labelMiB.Size = new System.Drawing.Size(25, 13);
             this.labelMiB.TabIndex = 5;
@@ -534,7 +554,7 @@ namespace BetHelper {
             // 
             // numericUpDownLargeLogsLimit
             // 
-            this.numericUpDownLargeLogsLimit.Location = new System.Drawing.Point(257, 40);
+            this.numericUpDownLargeLogsLimit.Location = new System.Drawing.Point(257, 44);
             this.numericUpDownLargeLogsLimit.Name = "numericUpDownLargeLogsLimit";
             this.numericUpDownLargeLogsLimit.Size = new System.Drawing.Size(50, 20);
             this.numericUpDownLargeLogsLimit.TabIndex = 4;
@@ -543,7 +563,7 @@ namespace BetHelper {
             // checkBoxRestrictSomeFeatures
             // 
             this.checkBoxRestrictSomeFeatures.AutoSize = true;
-            this.checkBoxRestrictSomeFeatures.Location = new System.Drawing.Point(12, 41);
+            this.checkBoxRestrictSomeFeatures.Location = new System.Drawing.Point(12, 45);
             this.checkBoxRestrictSomeFeatures.Name = "checkBoxRestrictSomeFeatures";
             this.checkBoxRestrictSomeFeatures.Size = new System.Drawing.Size(221, 17);
             this.checkBoxRestrictSomeFeatures.TabIndex = 3;
@@ -587,9 +607,9 @@ namespace BetHelper {
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxJSErrors.Controls.Add(this.checkBoxLogConsoleMessages);
             this.groupBoxJSErrors.Controls.Add(this.checkBoxShowConsoleMessages);
-            this.groupBoxJSErrors.Location = new System.Drawing.Point(6, 285);
+            this.groupBoxJSErrors.Location = new System.Drawing.Point(6, 253);
             this.groupBoxJSErrors.Name = "groupBoxJSErrors";
-            this.groupBoxJSErrors.Size = new System.Drawing.Size(368, 60);
+            this.groupBoxJSErrors.Size = new System.Drawing.Size(368, 70);
             this.groupBoxJSErrors.TabIndex = 3;
             this.groupBoxJSErrors.TabStop = false;
             this.groupBoxJSErrors.Text = "JavaScript Errors";
@@ -597,7 +617,7 @@ namespace BetHelper {
             // checkBoxLogConsoleMessages
             // 
             this.checkBoxLogConsoleMessages.AutoSize = true;
-            this.checkBoxLogConsoleMessages.Location = new System.Drawing.Point(12, 38);
+            this.checkBoxLogConsoleMessages.Location = new System.Drawing.Point(12, 42);
             this.checkBoxLogConsoleMessages.Name = "checkBoxLogConsoleMessages";
             this.checkBoxLogConsoleMessages.Size = new System.Drawing.Size(134, 17);
             this.checkBoxLogConsoleMessages.TabIndex = 1;
@@ -624,9 +644,9 @@ namespace BetHelper {
             this.groupBoxNavigation.Controls.Add(this.checkBoxLogLoadErrors);
             this.groupBoxNavigation.Controls.Add(this.checkBoxShowLoadErrors);
             this.groupBoxNavigation.Controls.Add(this.checkBoxLogForeignUrls);
-            this.groupBoxNavigation.Location = new System.Drawing.Point(6, 168);
+            this.groupBoxNavigation.Location = new System.Drawing.Point(6, 117);
             this.groupBoxNavigation.Name = "groupBoxNavigation";
-            this.groupBoxNavigation.Size = new System.Drawing.Size(368, 111);
+            this.groupBoxNavigation.Size = new System.Drawing.Size(368, 130);
             this.groupBoxNavigation.TabIndex = 2;
             this.groupBoxNavigation.TabStop = false;
             this.groupBoxNavigation.Text = "Navigation";
@@ -634,7 +654,7 @@ namespace BetHelper {
             // checkBoxLogPopUpFrameHandler
             // 
             this.checkBoxLogPopUpFrameHandler.AutoSize = true;
-            this.checkBoxLogPopUpFrameHandler.Location = new System.Drawing.Point(12, 89);
+            this.checkBoxLogPopUpFrameHandler.Location = new System.Drawing.Point(12, 101);
             this.checkBoxLogPopUpFrameHandler.Name = "checkBoxLogPopUpFrameHandler";
             this.checkBoxLogPopUpFrameHandler.Size = new System.Drawing.Size(162, 17);
             this.checkBoxLogPopUpFrameHandler.TabIndex = 3;
@@ -645,7 +665,7 @@ namespace BetHelper {
             // checkBoxLogLoadErrors
             // 
             this.checkBoxLogLoadErrors.AutoSize = true;
-            this.checkBoxLogLoadErrors.Location = new System.Drawing.Point(12, 70);
+            this.checkBoxLogLoadErrors.Location = new System.Drawing.Point(12, 78);
             this.checkBoxLogLoadErrors.Name = "checkBoxLogLoadErrors";
             this.checkBoxLogLoadErrors.Size = new System.Drawing.Size(96, 17);
             this.checkBoxLogLoadErrors.TabIndex = 2;
@@ -656,7 +676,7 @@ namespace BetHelper {
             // checkBoxShowLoadErrors
             // 
             this.checkBoxShowLoadErrors.AutoSize = true;
-            this.checkBoxShowLoadErrors.Location = new System.Drawing.Point(12, 51);
+            this.checkBoxShowLoadErrors.Location = new System.Drawing.Point(12, 55);
             this.checkBoxShowLoadErrors.Name = "checkBoxShowLoadErrors";
             this.checkBoxShowLoadErrors.Size = new System.Drawing.Size(105, 17);
             this.checkBoxShowLoadErrors.TabIndex = 1;
@@ -687,9 +707,9 @@ namespace BetHelper {
             this.groupBoxDomInspection.Controls.Add(this.labelPerCent);
             this.groupBoxDomInspection.Controls.Add(this.numericUpDownOverlayOpacity);
             this.groupBoxDomInspection.Controls.Add(this.labelOverlayOpacity);
-            this.groupBoxDomInspection.Location = new System.Drawing.Point(6, 72);
+            this.groupBoxDomInspection.Location = new System.Drawing.Point(6, 6);
             this.groupBoxDomInspection.Name = "groupBoxDomInspection";
-            this.groupBoxDomInspection.Size = new System.Drawing.Size(368, 90);
+            this.groupBoxDomInspection.Size = new System.Drawing.Size(368, 105);
             this.groupBoxDomInspection.TabIndex = 1;
             this.groupBoxDomInspection.TabStop = false;
             this.groupBoxDomInspection.Text = "DOM Element Inspection";
@@ -698,7 +718,7 @@ namespace BetHelper {
             // 
             this.comboBoxOverlayCrosshairColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOverlayCrosshairColor.FormattingEnabled = true;
-            this.comboBoxOverlayCrosshairColor.Location = new System.Drawing.Point(196, 63);
+            this.comboBoxOverlayCrosshairColor.Location = new System.Drawing.Point(196, 71);
             this.comboBoxOverlayCrosshairColor.Name = "comboBoxOverlayCrosshairColor";
             this.comboBoxOverlayCrosshairColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxOverlayCrosshairColor.TabIndex = 6;
@@ -707,7 +727,7 @@ namespace BetHelper {
             // labelOverlayCrosshairColor
             // 
             this.labelOverlayCrosshairColor.AutoSize = true;
-            this.labelOverlayCrosshairColor.Location = new System.Drawing.Point(9, 66);
+            this.labelOverlayCrosshairColor.Location = new System.Drawing.Point(9, 74);
             this.labelOverlayCrosshairColor.Name = "labelOverlayCrosshairColor";
             this.labelOverlayCrosshairColor.Size = new System.Drawing.Size(117, 13);
             this.labelOverlayCrosshairColor.TabIndex = 5;
@@ -717,7 +737,7 @@ namespace BetHelper {
             // 
             this.comboBoxOverlayBackgroundColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxOverlayBackgroundColor.FormattingEnabled = true;
-            this.comboBoxOverlayBackgroundColor.Location = new System.Drawing.Point(196, 40);
+            this.comboBoxOverlayBackgroundColor.Location = new System.Drawing.Point(196, 44);
             this.comboBoxOverlayBackgroundColor.Name = "comboBoxOverlayBackgroundColor";
             this.comboBoxOverlayBackgroundColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxOverlayBackgroundColor.TabIndex = 4;
@@ -726,7 +746,7 @@ namespace BetHelper {
             // labelOverlayBackgroundColor
             // 
             this.labelOverlayBackgroundColor.AutoSize = true;
-            this.labelOverlayBackgroundColor.Location = new System.Drawing.Point(9, 43);
+            this.labelOverlayBackgroundColor.Location = new System.Drawing.Point(9, 47);
             this.labelOverlayBackgroundColor.Name = "labelOverlayBackgroundColor";
             this.labelOverlayBackgroundColor.Size = new System.Drawing.Size(132, 13);
             this.labelOverlayBackgroundColor.TabIndex = 3;
@@ -758,188 +778,95 @@ namespace BetHelper {
             this.labelOverlayOpacity.TabIndex = 0;
             this.labelOverlayOpacity.Text = "O&verlay opacity:";
             // 
-            // groupBoxFind
+            // tabPageGeneral1
             // 
-            this.groupBoxFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tabPageGeneral1.Controls.Add(this.groupBoxConfiguration);
+            this.tabPageGeneral1.Controls.Add(this.groupBoxBookmarks);
+            this.tabPageGeneral1.Controls.Add(this.groupBoxApplication);
+            this.tabPageGeneral1.Controls.Add(this.groupBoxBell);
+            this.tabPageGeneral1.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGeneral1.Name = "tabPageGeneral1";
+            this.tabPageGeneral1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageGeneral1.Size = new System.Drawing.Size(380, 488);
+            this.tabPageGeneral1.TabIndex = 2;
+            this.tabPageGeneral1.Text = "General 1";
+            this.tabPageGeneral1.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxConfiguration
+            // 
+            this.groupBoxConfiguration.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxFind.Controls.Add(this.checkBoxF3MainFormFind);
-            this.groupBoxFind.Controls.Add(this.checkBoxOutlineSearchResults);
-            this.groupBoxFind.Location = new System.Drawing.Point(6, 6);
-            this.groupBoxFind.Name = "groupBoxFind";
-            this.groupBoxFind.Size = new System.Drawing.Size(368, 60);
-            this.groupBoxFind.TabIndex = 0;
-            this.groupBoxFind.TabStop = false;
-            this.groupBoxFind.Text = "Finding String in Page";
-            // 
-            // checkBoxF3MainFormFind
-            // 
-            this.checkBoxF3MainFormFind.AutoSize = true;
-            this.checkBoxF3MainFormFind.Location = new System.Drawing.Point(12, 38);
-            this.checkBoxF3MainFormFind.Name = "checkBoxF3MainFormFind";
-            this.checkBoxF3MainFormFind.Size = new System.Drawing.Size(160, 17);
-            this.checkBoxF3MainFormFind.TabIndex = 1;
-            this.checkBoxF3MainFormFind.Text = "&F3 focuses opened find form";
-            this.checkBoxF3MainFormFind.UseVisualStyleBackColor = true;
-            this.checkBoxF3MainFormFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // checkBoxOutlineSearchResults
-            // 
-            this.checkBoxOutlineSearchResults.AutoSize = true;
-            this.checkBoxOutlineSearchResults.Location = new System.Drawing.Point(12, 19);
-            this.checkBoxOutlineSearchResults.Name = "checkBoxOutlineSearchResults";
-            this.checkBoxOutlineSearchResults.Size = new System.Drawing.Size(122, 17);
-            this.checkBoxOutlineSearchResults.TabIndex = 0;
-            this.checkBoxOutlineSearchResults.Text = "O&utline search result";
-            this.checkBoxOutlineSearchResults.UseVisualStyleBackColor = true;
-            this.checkBoxOutlineSearchResults.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // tabPageGeneral
-            // 
-            this.tabPageGeneral.Controls.Add(this.buttonEditRemoteConfig);
-            this.tabPageGeneral.Controls.Add(this.groupBoxSecurity);
-            this.tabPageGeneral.Controls.Add(this.groupBoxPrinting);
-            this.tabPageGeneral.Controls.Add(this.groupBoxApplication);
-            this.tabPageGeneral.Location = new System.Drawing.Point(4, 22);
-            this.tabPageGeneral.Name = "tabPageGeneral";
-            this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGeneral.Size = new System.Drawing.Size(380, 488);
-            this.tabPageGeneral.TabIndex = 2;
-            this.tabPageGeneral.Text = "General";
-            this.tabPageGeneral.UseVisualStyleBackColor = true;
+            this.groupBoxConfiguration.Controls.Add(this.buttonEditRemoteConfig);
+            this.groupBoxConfiguration.Location = new System.Drawing.Point(6, 428);
+            this.groupBoxConfiguration.Name = "groupBoxConfiguration";
+            this.groupBoxConfiguration.Size = new System.Drawing.Size(368, 54);
+            this.groupBoxConfiguration.TabIndex = 3;
+            this.groupBoxConfiguration.TabStop = false;
+            this.groupBoxConfiguration.Text = "Configuration";
             // 
             // buttonEditRemoteConfig
             // 
-            this.buttonEditRemoteConfig.Location = new System.Drawing.Point(30, 453);
+            this.buttonEditRemoteConfig.Location = new System.Drawing.Point(24, 21);
             this.buttonEditRemoteConfig.Name = "buttonEditRemoteConfig";
-            this.buttonEditRemoteConfig.Size = new System.Drawing.Size(182, 23);
-            this.buttonEditRemoteConfig.TabIndex = 3;
+            this.buttonEditRemoteConfig.Size = new System.Drawing.Size(190, 23);
+            this.buttonEditRemoteConfig.TabIndex = 0;
             this.buttonEditRemoteConfig.Text = "Edit &Remote Configuration File...";
             this.buttonEditRemoteConfig.UseVisualStyleBackColor = true;
             this.buttonEditRemoteConfig.Click += new System.EventHandler(this.EditRemoteConfig);
             this.buttonEditRemoteConfig.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
-            // groupBoxSecurity
+            // groupBoxBookmarks
             // 
-            this.groupBoxSecurity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxBookmarks.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxSecurity.Controls.Add(this.checkBoxIgnoreCertificateErrors);
-            this.groupBoxSecurity.Controls.Add(this.checkBoxBlockRequestsToForeignUrls);
-            this.groupBoxSecurity.Controls.Add(this.buttonAllowedClientsIP);
-            this.groupBoxSecurity.Controls.Add(this.checkBoxKeepAnEyeOnTheClientsIP);
-            this.groupBoxSecurity.Location = new System.Drawing.Point(6, 317);
-            this.groupBoxSecurity.Name = "groupBoxSecurity";
-            this.groupBoxSecurity.Size = new System.Drawing.Size(368, 131);
-            this.groupBoxSecurity.TabIndex = 2;
-            this.groupBoxSecurity.TabStop = false;
-            this.groupBoxSecurity.Text = "Security";
+            this.groupBoxBookmarks.Controls.Add(this.buttonManageBookmarks);
+            this.groupBoxBookmarks.Controls.Add(this.checkBoxSortBookmarks);
+            this.groupBoxBookmarks.Controls.Add(this.checkBoxTruncateBookmarkTitles);
+            this.groupBoxBookmarks.Location = new System.Drawing.Point(6, 340);
+            this.groupBoxBookmarks.Name = "groupBoxBookmarks";
+            this.groupBoxBookmarks.Size = new System.Drawing.Size(368, 82);
+            this.groupBoxBookmarks.TabIndex = 2;
+            this.groupBoxBookmarks.TabStop = false;
+            this.groupBoxBookmarks.Text = "Bookmarks";
             // 
-            // checkBoxIgnoreCertificateErrors
+            // buttonManageBookmarks
             // 
-            this.checkBoxIgnoreCertificateErrors.AutoSize = true;
-            this.checkBoxIgnoreCertificateErrors.Location = new System.Drawing.Point(12, 109);
-            this.checkBoxIgnoreCertificateErrors.Name = "checkBoxIgnoreCertificateErrors";
-            this.checkBoxIgnoreCertificateErrors.Size = new System.Drawing.Size(134, 17);
-            this.checkBoxIgnoreCertificateErrors.TabIndex = 3;
-            this.checkBoxIgnoreCertificateErrors.Text = "&Ignore certificate errors";
-            this.checkBoxIgnoreCertificateErrors.UseVisualStyleBackColor = true;
-            this.checkBoxIgnoreCertificateErrors.CheckedChanged += new System.EventHandler(this.SetWarning);
-            this.checkBoxIgnoreCertificateErrors.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            this.buttonManageBookmarks.Location = new System.Drawing.Point(24, 49);
+            this.buttonManageBookmarks.Name = "buttonManageBookmarks";
+            this.buttonManageBookmarks.Size = new System.Drawing.Size(190, 23);
+            this.buttonManageBookmarks.TabIndex = 2;
+            this.buttonManageBookmarks.Text = "Mana&ge Bookmarks...";
+            this.buttonManageBookmarks.UseVisualStyleBackColor = true;
+            this.buttonManageBookmarks.Click += new System.EventHandler(this.OnManageBookmarksClick);
+            this.buttonManageBookmarks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
-            // checkBoxBlockRequestsToForeignUrls
+            // checkBoxSortBookmarks
             // 
-            this.checkBoxBlockRequestsToForeignUrls.AutoSize = true;
-            this.checkBoxBlockRequestsToForeignUrls.Location = new System.Drawing.Point(12, 78);
-            this.checkBoxBlockRequestsToForeignUrls.Name = "checkBoxBlockRequestsToForeignUrls";
-            this.checkBoxBlockRequestsToForeignUrls.Size = new System.Drawing.Size(327, 30);
-            this.checkBoxBlockRequestsToForeignUrls.TabIndex = 2;
-            this.checkBoxBlockRequestsToForeignUrls.Text = "Block all re&quests to URLs not belonging to the URL set by their\r\nsecond-level d" +
-    "omains or the exception list by their hostname.";
-            this.checkBoxBlockRequestsToForeignUrls.UseVisualStyleBackColor = true;
-            this.checkBoxBlockRequestsToForeignUrls.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            this.checkBoxSortBookmarks.AutoSize = true;
+            this.checkBoxSortBookmarks.Location = new System.Drawing.Point(12, 19);
+            this.checkBoxSortBookmarks.Name = "checkBoxSortBookmarks";
+            this.checkBoxSortBookmarks.Size = new System.Drawing.Size(133, 17);
+            this.checkBoxSortBookmarks.TabIndex = 0;
+            this.checkBoxSortBookmarks.Text = "Sort book&marks by title";
+            this.checkBoxSortBookmarks.UseVisualStyleBackColor = true;
+            this.checkBoxSortBookmarks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
-            // buttonAllowedClientsIP
+            // checkBoxTruncateBookmarkTitles
             // 
-            this.buttonAllowedClientsIP.Location = new System.Drawing.Point(24, 52);
-            this.buttonAllowedClientsIP.Name = "buttonAllowedClientsIP";
-            this.buttonAllowedClientsIP.Size = new System.Drawing.Size(182, 23);
-            this.buttonAllowedClientsIP.TabIndex = 1;
-            this.buttonAllowedClientsIP.Text = "Allowed Client\'s I&P Addresses...";
-            this.buttonAllowedClientsIP.UseVisualStyleBackColor = true;
-            this.buttonAllowedClientsIP.Click += new System.EventHandler(this.OnAllowedClientsClick);
-            this.buttonAllowedClientsIP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // checkBoxKeepAnEyeOnTheClientsIP
-            // 
-            this.checkBoxKeepAnEyeOnTheClientsIP.AutoSize = true;
-            this.checkBoxKeepAnEyeOnTheClientsIP.Location = new System.Drawing.Point(12, 19);
-            this.checkBoxKeepAnEyeOnTheClientsIP.Name = "checkBoxKeepAnEyeOnTheClientsIP";
-            this.checkBoxKeepAnEyeOnTheClientsIP.Size = new System.Drawing.Size(305, 30);
-            this.checkBoxKeepAnEyeOnTheClientsIP.TabIndex = 0;
-            this.checkBoxKeepAnEyeOnTheClientsIP.Text = "Al&ways keep an eye on the client\'s IP address and block all\r\noutgoing requests i" +
-    "f the client\'s IP address changes.";
-            this.checkBoxKeepAnEyeOnTheClientsIP.UseVisualStyleBackColor = true;
-            this.checkBoxKeepAnEyeOnTheClientsIP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // groupBoxPrinting
-            // 
-            this.groupBoxPrinting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxPrinting.Controls.Add(this.radioButtonHardMargins);
-            this.groupBoxPrinting.Controls.Add(this.radioButtonSoftMargins);
-            this.groupBoxPrinting.Controls.Add(this.labelPrinting);
-            this.groupBoxPrinting.Location = new System.Drawing.Point(6, 236);
-            this.groupBoxPrinting.Name = "groupBoxPrinting";
-            this.groupBoxPrinting.Size = new System.Drawing.Size(368, 75);
-            this.groupBoxPrinting.TabIndex = 1;
-            this.groupBoxPrinting.TabStop = false;
-            this.groupBoxPrinting.Text = "Printing";
-            // 
-            // radioButtonHardMargins
-            // 
-            this.radioButtonHardMargins.AutoSize = true;
-            this.radioButtonHardMargins.Location = new System.Drawing.Point(187, 52);
-            this.radioButtonHardMargins.Name = "radioButtonHardMargins";
-            this.radioButtonHardMargins.Size = new System.Drawing.Size(107, 17);
-            this.radioButtonHardMargins.TabIndex = 2;
-            this.radioButtonHardMargins.TabStop = true;
-            this.radioButtonHardMargins.Text = "Use &hard margins";
-            this.radioButtonHardMargins.UseVisualStyleBackColor = true;
-            this.radioButtonHardMargins.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // radioButtonSoftMargins
-            // 
-            this.radioButtonSoftMargins.AutoSize = true;
-            this.radioButtonSoftMargins.Location = new System.Drawing.Point(12, 52);
-            this.radioButtonSoftMargins.Name = "radioButtonSoftMargins";
-            this.radioButtonSoftMargins.Size = new System.Drawing.Size(103, 17);
-            this.radioButtonSoftMargins.TabIndex = 1;
-            this.radioButtonSoftMargins.TabStop = true;
-            this.radioButtonSoftMargins.Text = "&Use soft margins";
-            this.radioButtonSoftMargins.UseVisualStyleBackColor = true;
-            this.radioButtonSoftMargins.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // labelPrinting
-            // 
-            this.labelPrinting.AutoSize = true;
-            this.labelPrinting.Location = new System.Drawing.Point(9, 21);
-            this.labelPrinting.Name = "labelPrinting";
-            this.labelPrinting.Size = new System.Drawing.Size(323, 26);
-            this.labelPrinting.TabIndex = 0;
-            this.labelPrinting.Text = "This setting applies only when printing screenshots or plain text and\r\nnot when p" +
-    "rinting from the embedded Chromium web browser.";
+            this.checkBoxTruncateBookmarkTitles.AutoSize = true;
+            this.checkBoxTruncateBookmarkTitles.Location = new System.Drawing.Point(196, 19);
+            this.checkBoxTruncateBookmarkTitles.Name = "checkBoxTruncateBookmarkTitles";
+            this.checkBoxTruncateBookmarkTitles.Size = new System.Drawing.Size(143, 17);
+            this.checkBoxTruncateBookmarkTitles.TabIndex = 1;
+            this.checkBoxTruncateBookmarkTitles.Text = "&Truncate bookmark titles";
+            this.checkBoxTruncateBookmarkTitles.UseVisualStyleBackColor = true;
+            this.checkBoxTruncateBookmarkTitles.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxApplication
             // 
             this.groupBoxApplication.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxApplication.Controls.Add(this.buttonChime);
-            this.groupBoxApplication.Controls.Add(this.comboBoxBellSound);
-            this.groupBoxApplication.Controls.Add(this.labelBellSound);
-            this.groupBoxApplication.Controls.Add(this.checkBoxBoldErrorBell);
-            this.groupBoxApplication.Controls.Add(this.checkBoxEnableBell);
-            this.groupBoxApplication.Controls.Add(this.buttonManageBookmarks);
-            this.groupBoxApplication.Controls.Add(this.checkBoxTruncateBookmarkTitles);
-            this.groupBoxApplication.Controls.Add(this.checkBoxSortBookmarks);
             this.groupBoxApplication.Controls.Add(this.checkBoxPingWhenIdle);
             this.groupBoxApplication.Controls.Add(this.checkBoxAutoLogInAfterInitialLoad);
             this.groupBoxApplication.Controls.Add(this.checkBoxDisplayPromptBeforeClosing);
@@ -951,101 +878,15 @@ namespace BetHelper {
             this.groupBoxApplication.Controls.Add(this.checkBoxCheckForUpdates);
             this.groupBoxApplication.Location = new System.Drawing.Point(6, 6);
             this.groupBoxApplication.Name = "groupBoxApplication";
-            this.groupBoxApplication.Size = new System.Drawing.Size(368, 224);
+            this.groupBoxApplication.Size = new System.Drawing.Size(368, 172);
             this.groupBoxApplication.TabIndex = 0;
             this.groupBoxApplication.TabStop = false;
             this.groupBoxApplication.Text = "Application";
             // 
-            // buttonChime
-            // 
-            this.buttonChime.Location = new System.Drawing.Point(285, 197);
-            this.buttonChime.Name = "buttonChime";
-            this.buttonChime.Size = new System.Drawing.Size(75, 23);
-            this.buttonChime.TabIndex = 16;
-            this.buttonChime.Text = "&Chime";
-            this.buttonChime.UseVisualStyleBackColor = true;
-            this.buttonChime.Click += new System.EventHandler(this.OnChimeClick);
-            this.buttonChime.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // comboBoxBellSound
-            // 
-            this.comboBoxBellSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxBellSound.FormattingEnabled = true;
-            this.comboBoxBellSound.Location = new System.Drawing.Point(102, 198);
-            this.comboBoxBellSound.Name = "comboBoxBellSound";
-            this.comboBoxBellSound.Size = new System.Drawing.Size(177, 21);
-            this.comboBoxBellSound.TabIndex = 15;
-            this.comboBoxBellSound.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // labelBellSound
-            // 
-            this.labelBellSound.AutoSize = true;
-            this.labelBellSound.Location = new System.Drawing.Point(28, 201);
-            this.labelBellSound.Name = "labelBellSound";
-            this.labelBellSound.Size = new System.Drawing.Size(59, 13);
-            this.labelBellSound.TabIndex = 14;
-            this.labelBellSound.Text = "Bell s&ound:";
-            // 
-            // checkBoxBoldErrorBell
-            // 
-            this.checkBoxBoldErrorBell.AutoSize = true;
-            this.checkBoxBoldErrorBell.Location = new System.Drawing.Point(31, 178);
-            this.checkBoxBoldErrorBell.Name = "checkBoxBoldErrorBell";
-            this.checkBoxBoldErrorBell.Size = new System.Drawing.Size(121, 17);
-            this.checkBoxBoldErrorBell.TabIndex = 13;
-            this.checkBoxBoldErrorBell.Text = "Bol&d error bell status";
-            this.checkBoxBoldErrorBell.UseVisualStyleBackColor = true;
-            this.checkBoxBoldErrorBell.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // checkBoxEnableBell
-            // 
-            this.checkBoxEnableBell.AutoSize = true;
-            this.checkBoxEnableBell.Location = new System.Drawing.Point(12, 160);
-            this.checkBoxEnableBell.Name = "checkBoxEnableBell";
-            this.checkBoxEnableBell.Size = new System.Drawing.Size(78, 17);
-            this.checkBoxEnableBell.TabIndex = 12;
-            this.checkBoxEnableBell.Text = "Ena&ble bell";
-            this.checkBoxEnableBell.UseVisualStyleBackColor = true;
-            this.checkBoxEnableBell.CheckedChanged += new System.EventHandler(this.OnEnableBellCheckedChanged);
-            this.checkBoxEnableBell.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // buttonManageBookmarks
-            // 
-            this.buttonManageBookmarks.Location = new System.Drawing.Point(187, 165);
-            this.buttonManageBookmarks.Name = "buttonManageBookmarks";
-            this.buttonManageBookmarks.Size = new System.Drawing.Size(173, 23);
-            this.buttonManageBookmarks.TabIndex = 11;
-            this.buttonManageBookmarks.Text = "Mana&ge Bookmarks...";
-            this.buttonManageBookmarks.UseVisualStyleBackColor = true;
-            this.buttonManageBookmarks.Click += new System.EventHandler(this.OnManageBookmarksClick);
-            this.buttonManageBookmarks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // checkBoxTruncateBookmarkTitles
-            // 
-            this.checkBoxTruncateBookmarkTitles.AutoSize = true;
-            this.checkBoxTruncateBookmarkTitles.Location = new System.Drawing.Point(187, 142);
-            this.checkBoxTruncateBookmarkTitles.Name = "checkBoxTruncateBookmarkTitles";
-            this.checkBoxTruncateBookmarkTitles.Size = new System.Drawing.Size(143, 17);
-            this.checkBoxTruncateBookmarkTitles.TabIndex = 10;
-            this.checkBoxTruncateBookmarkTitles.Text = "&Truncate bookmark titles";
-            this.checkBoxTruncateBookmarkTitles.UseVisualStyleBackColor = true;
-            this.checkBoxTruncateBookmarkTitles.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // checkBoxSortBookmarks
-            // 
-            this.checkBoxSortBookmarks.AutoSize = true;
-            this.checkBoxSortBookmarks.Location = new System.Drawing.Point(187, 124);
-            this.checkBoxSortBookmarks.Name = "checkBoxSortBookmarks";
-            this.checkBoxSortBookmarks.Size = new System.Drawing.Size(133, 17);
-            this.checkBoxSortBookmarks.TabIndex = 9;
-            this.checkBoxSortBookmarks.Text = "Sort book&marks by title";
-            this.checkBoxSortBookmarks.UseVisualStyleBackColor = true;
-            this.checkBoxSortBookmarks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
             // checkBoxPingWhenIdle
             // 
             this.checkBoxPingWhenIdle.AutoSize = true;
-            this.checkBoxPingWhenIdle.Location = new System.Drawing.Point(12, 142);
+            this.checkBoxPingWhenIdle.Location = new System.Drawing.Point(196, 142);
             this.checkBoxPingWhenIdle.Name = "checkBoxPingWhenIdle";
             this.checkBoxPingWhenIdle.Size = new System.Drawing.Size(149, 17);
             this.checkBoxPingWhenIdle.TabIndex = 8;
@@ -1056,22 +897,22 @@ namespace BetHelper {
             // checkBoxAutoLogInAfterInitialLoad
             // 
             this.checkBoxAutoLogInAfterInitialLoad.AutoSize = true;
-            this.checkBoxAutoLogInAfterInitialLoad.Location = new System.Drawing.Point(12, 124);
+            this.checkBoxAutoLogInAfterInitialLoad.Location = new System.Drawing.Point(12, 142);
             this.checkBoxAutoLogInAfterInitialLoad.Name = "checkBoxAutoLogInAfterInitialLoad";
             this.checkBoxAutoLogInAfterInitialLoad.Size = new System.Drawing.Size(149, 17);
             this.checkBoxAutoLogInAfterInitialLoad.TabIndex = 7;
-            this.checkBoxAutoLogInAfterInitialLoad.Text = "Auto &log in after initial load";
+            this.checkBoxAutoLogInAfterInitialLoad.Text = "Aut&o log in after initial load";
             this.checkBoxAutoLogInAfterInitialLoad.UseVisualStyleBackColor = true;
             this.checkBoxAutoLogInAfterInitialLoad.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxDisplayPromptBeforeClosing
             // 
             this.checkBoxDisplayPromptBeforeClosing.AutoSize = true;
-            this.checkBoxDisplayPromptBeforeClosing.Location = new System.Drawing.Point(12, 106);
+            this.checkBoxDisplayPromptBeforeClosing.Location = new System.Drawing.Point(12, 119);
             this.checkBoxDisplayPromptBeforeClosing.Name = "checkBoxDisplayPromptBeforeClosing";
             this.checkBoxDisplayPromptBeforeClosing.Size = new System.Drawing.Size(282, 17);
             this.checkBoxDisplayPromptBeforeClosing.TabIndex = 6;
-            this.checkBoxDisplayPromptBeforeClosing.Text = "Displa&y prompt before closing main application window";
+            this.checkBoxDisplayPromptBeforeClosing.Text = "Dis&play prompt before closing main application window";
             this.checkBoxDisplayPromptBeforeClosing.UseVisualStyleBackColor = true;
             this.checkBoxDisplayPromptBeforeClosing.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
@@ -1079,7 +920,7 @@ namespace BetHelper {
             // 
             this.comboBoxUnitPrefix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxUnitPrefix.FormattingEnabled = true;
-            this.comboBoxUnitPrefix.Location = new System.Drawing.Point(102, 80);
+            this.comboBoxUnitPrefix.Location = new System.Drawing.Point(110, 92);
             this.comboBoxUnitPrefix.Name = "comboBoxUnitPrefix";
             this.comboBoxUnitPrefix.Size = new System.Drawing.Size(100, 21);
             this.comboBoxUnitPrefix.TabIndex = 5;
@@ -1088,7 +929,7 @@ namespace BetHelper {
             // labelUnitPrefix
             // 
             this.labelUnitPrefix.AutoSize = true;
-            this.labelUnitPrefix.Location = new System.Drawing.Point(9, 84);
+            this.labelUnitPrefix.Location = new System.Drawing.Point(9, 96);
             this.labelUnitPrefix.Name = "labelUnitPrefix";
             this.labelUnitPrefix.Size = new System.Drawing.Size(57, 13);
             this.labelUnitPrefix.TabIndex = 4;
@@ -1098,16 +939,16 @@ namespace BetHelper {
             // 
             this.comboBoxNumberFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxNumberFormat.FormattingEnabled = true;
-            this.comboBoxNumberFormat.Location = new System.Drawing.Point(102, 57);
+            this.comboBoxNumberFormat.Location = new System.Drawing.Point(110, 65);
             this.comboBoxNumberFormat.Name = "comboBoxNumberFormat";
-            this.comboBoxNumberFormat.Size = new System.Drawing.Size(258, 21);
+            this.comboBoxNumberFormat.Size = new System.Drawing.Size(250, 21);
             this.comboBoxNumberFormat.TabIndex = 3;
             this.comboBoxNumberFormat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelNumberFormat
             // 
             this.labelNumberFormat.AutoSize = true;
-            this.labelNumberFormat.Location = new System.Drawing.Point(9, 60);
+            this.labelNumberFormat.Location = new System.Drawing.Point(9, 68);
             this.labelNumberFormat.Name = "labelNumberFormat";
             this.labelNumberFormat.Size = new System.Drawing.Size(79, 13);
             this.labelNumberFormat.TabIndex = 2;
@@ -1116,7 +957,7 @@ namespace BetHelper {
             // checkBoxStatusBarNotifOnly
             // 
             this.checkBoxStatusBarNotifOnly.AutoSize = true;
-            this.checkBoxStatusBarNotifOnly.Location = new System.Drawing.Point(31, 37);
+            this.checkBoxStatusBarNotifOnly.Location = new System.Drawing.Point(31, 42);
             this.checkBoxStatusBarNotifOnly.Name = "checkBoxStatusBarNotifOnly";
             this.checkBoxStatusBarNotifOnly.Size = new System.Drawing.Size(153, 17);
             this.checkBoxStatusBarNotifOnly.TabIndex = 1;
@@ -1136,60 +977,350 @@ namespace BetHelper {
             this.checkBoxCheckForUpdates.CheckedChanged += new System.EventHandler(this.OnAutoUpdatesCheckedChanged);
             this.checkBoxCheckForUpdates.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
+            // groupBoxBell
+            // 
+            this.groupBoxBell.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxBell.Controls.Add(this.buttonFOChime);
+            this.groupBoxBell.Controls.Add(this.comboBoxFOSound);
+            this.groupBoxBell.Controls.Add(this.labelFOSound);
+            this.groupBoxBell.Controls.Add(this.checkBoxEnableFOBell);
+            this.groupBoxBell.Controls.Add(this.buttonNTChime);
+            this.groupBoxBell.Controls.Add(this.comboBoxNTSound);
+            this.groupBoxBell.Controls.Add(this.labelNTSound);
+            this.groupBoxBell.Controls.Add(this.checkBoxEnableNTBell);
+            this.groupBoxBell.Controls.Add(this.checkBoxBoldErrorBell);
+            this.groupBoxBell.Location = new System.Drawing.Point(6, 184);
+            this.groupBoxBell.Name = "groupBoxBell";
+            this.groupBoxBell.Size = new System.Drawing.Size(368, 150);
+            this.groupBoxBell.TabIndex = 1;
+            this.groupBoxBell.TabStop = false;
+            this.groupBoxBell.Text = "Bell";
+            // 
+            // buttonFOChime
+            // 
+            this.buttonFOChime.Location = new System.Drawing.Point(285, 114);
+            this.buttonFOChime.Name = "buttonFOChime";
+            this.buttonFOChime.Size = new System.Drawing.Size(75, 23);
+            this.buttonFOChime.TabIndex = 8;
+            this.buttonFOChime.Text = "C&hime";
+            this.buttonFOChime.UseVisualStyleBackColor = true;
+            this.buttonFOChime.Click += new System.EventHandler(this.OnOpportunityChimeClick);
+            this.buttonFOChime.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // comboBoxFOSound
+            // 
+            this.comboBoxFOSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFOSound.FormattingEnabled = true;
+            this.comboBoxFOSound.Location = new System.Drawing.Point(110, 115);
+            this.comboBoxFOSound.Name = "comboBoxFOSound";
+            this.comboBoxFOSound.Size = new System.Drawing.Size(169, 21);
+            this.comboBoxFOSound.TabIndex = 7;
+            this.comboBoxFOSound.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // labelFOSound
+            // 
+            this.labelFOSound.AutoSize = true;
+            this.labelFOSound.Location = new System.Drawing.Point(9, 118);
+            this.labelFOSound.Name = "labelFOSound";
+            this.labelFOSound.Size = new System.Drawing.Size(86, 13);
+            this.labelFOSound.TabIndex = 6;
+            this.labelFOSound.Text = "Fast opp. so&und:";
+            // 
+            // checkBoxEnableFOBell
+            // 
+            this.checkBoxEnableFOBell.AutoSize = true;
+            this.checkBoxEnableFOBell.Location = new System.Drawing.Point(12, 92);
+            this.checkBoxEnableFOBell.Name = "checkBoxEnableFOBell";
+            this.checkBoxEnableFOBell.Size = new System.Drawing.Size(153, 17);
+            this.checkBoxEnableFOBell.TabIndex = 5;
+            this.checkBoxEnableFOBell.Text = "Enab&le fast opportunity bell";
+            this.checkBoxEnableFOBell.UseVisualStyleBackColor = true;
+            this.checkBoxEnableFOBell.CheckedChanged += new System.EventHandler(this.OnOpportunityCheckedChanged);
+            // 
+            // buttonNTChime
+            // 
+            this.buttonNTChime.Location = new System.Drawing.Point(285, 64);
+            this.buttonNTChime.Name = "buttonNTChime";
+            this.buttonNTChime.Size = new System.Drawing.Size(75, 23);
+            this.buttonNTChime.TabIndex = 4;
+            this.buttonNTChime.Text = "&Chime";
+            this.buttonNTChime.UseVisualStyleBackColor = true;
+            this.buttonNTChime.Click += new System.EventHandler(this.OnTipArrivalChimeClick);
+            this.buttonNTChime.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // comboBoxNTSound
+            // 
+            this.comboBoxNTSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxNTSound.FormattingEnabled = true;
+            this.comboBoxNTSound.Location = new System.Drawing.Point(110, 65);
+            this.comboBoxNTSound.Name = "comboBoxNTSound";
+            this.comboBoxNTSound.Size = new System.Drawing.Size(169, 21);
+            this.comboBoxNTSound.TabIndex = 3;
+            this.comboBoxNTSound.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // labelNTSound
+            // 
+            this.labelNTSound.AutoSize = true;
+            this.labelNTSound.Location = new System.Drawing.Point(9, 68);
+            this.labelNTSound.Name = "labelNTSound";
+            this.labelNTSound.Size = new System.Drawing.Size(83, 13);
+            this.labelNTSound.TabIndex = 2;
+            this.labelNTSound.Text = "New tips soun&d:";
+            // 
+            // checkBoxEnableNTBell
+            // 
+            this.checkBoxEnableNTBell.AutoSize = true;
+            this.checkBoxEnableNTBell.Location = new System.Drawing.Point(12, 42);
+            this.checkBoxEnableNTBell.Name = "checkBoxEnableNTBell";
+            this.checkBoxEnableNTBell.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxEnableNTBell.TabIndex = 1;
+            this.checkBoxEnableNTBell.Text = "Enable ne&w tips bell";
+            this.checkBoxEnableNTBell.UseVisualStyleBackColor = true;
+            this.checkBoxEnableNTBell.CheckedChanged += new System.EventHandler(this.OnTipArrivalCheckedChanged);
+            this.checkBoxEnableNTBell.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // checkBoxBoldErrorBell
+            // 
+            this.checkBoxBoldErrorBell.AutoSize = true;
+            this.checkBoxBoldErrorBell.Location = new System.Drawing.Point(12, 19);
+            this.checkBoxBoldErrorBell.Name = "checkBoxBoldErrorBell";
+            this.checkBoxBoldErrorBell.Size = new System.Drawing.Size(121, 17);
+            this.checkBoxBoldErrorBell.TabIndex = 0;
+            this.checkBoxBoldErrorBell.Text = "&Bold error bell status";
+            this.checkBoxBoldErrorBell.UseVisualStyleBackColor = true;
+            this.checkBoxBoldErrorBell.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // tabPageGeneral2
+            // 
+            this.tabPageGeneral2.Controls.Add(this.groupBoxCountDown);
+            this.tabPageGeneral2.Controls.Add(this.groupBoxPrinting);
+            this.tabPageGeneral2.Controls.Add(this.groupBoxFind);
+            this.tabPageGeneral2.Controls.Add(this.groupBoxSecurity);
+            this.tabPageGeneral2.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGeneral2.Name = "tabPageGeneral2";
+            this.tabPageGeneral2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageGeneral2.Size = new System.Drawing.Size(380, 488);
+            this.tabPageGeneral2.TabIndex = 3;
+            this.tabPageGeneral2.Text = "General 2";
+            this.tabPageGeneral2.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxCountDown
+            // 
+            this.groupBoxCountDown.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxCountDown.Controls.Add(this.labelSecond);
+            this.groupBoxCountDown.Controls.Add(this.numericUpDownSecond);
+            this.groupBoxCountDown.Controls.Add(this.labelCountDown);
+            this.groupBoxCountDown.Location = new System.Drawing.Point(6, 404);
+            this.groupBoxCountDown.Name = "groupBoxCountDown";
+            this.groupBoxCountDown.Size = new System.Drawing.Size(368, 78);
+            this.groupBoxCountDown.TabIndex = 3;
+            this.groupBoxCountDown.TabStop = false;
+            this.groupBoxCountDown.Text = "Turn off the Monitors";
+            // 
+            // labelSecond
+            // 
+            this.labelSecond.AutoSize = true;
+            this.labelSecond.Location = new System.Drawing.Point(313, 20);
+            this.labelSecond.Name = "labelSecond";
+            this.labelSecond.Size = new System.Drawing.Size(12, 13);
+            this.labelSecond.TabIndex = 2;
+            this.labelSecond.Text = "s";
+            // 
+            // numericUpDownSecond
+            // 
+            this.numericUpDownSecond.Location = new System.Drawing.Point(257, 18);
+            this.numericUpDownSecond.Name = "numericUpDownSecond";
+            this.numericUpDownSecond.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDownSecond.TabIndex = 1;
+            // 
+            // labelCountDown
+            // 
+            this.labelCountDown.AutoSize = true;
+            this.labelCountDown.Location = new System.Drawing.Point(9, 20);
+            this.labelCountDown.Name = "labelCountDown";
+            this.labelCountDown.Size = new System.Drawing.Size(222, 13);
+            this.labelCountDown.TabIndex = 0;
+            this.labelCountDown.Text = "&Interval after which monitors will be turned off:";
+            // 
+            // groupBoxPrinting
+            // 
+            this.groupBoxPrinting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxPrinting.Controls.Add(this.radioButtonHardMargins);
+            this.groupBoxPrinting.Controls.Add(this.radioButtonSoftMargins);
+            this.groupBoxPrinting.Controls.Add(this.labelPrinting);
+            this.groupBoxPrinting.Location = new System.Drawing.Point(6, 102);
+            this.groupBoxPrinting.Name = "groupBoxPrinting";
+            this.groupBoxPrinting.Size = new System.Drawing.Size(368, 120);
+            this.groupBoxPrinting.TabIndex = 1;
+            this.groupBoxPrinting.TabStop = false;
+            this.groupBoxPrinting.Text = "Printing";
+            // 
+            // radioButtonHardMargins
+            // 
+            this.radioButtonHardMargins.AutoSize = true;
+            this.radioButtonHardMargins.Location = new System.Drawing.Point(12, 77);
+            this.radioButtonHardMargins.Name = "radioButtonHardMargins";
+            this.radioButtonHardMargins.Size = new System.Drawing.Size(107, 17);
+            this.radioButtonHardMargins.TabIndex = 2;
+            this.radioButtonHardMargins.TabStop = true;
+            this.radioButtonHardMargins.Text = "Use &hard margins";
+            this.radioButtonHardMargins.UseVisualStyleBackColor = true;
+            this.radioButtonHardMargins.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // radioButtonSoftMargins
+            // 
+            this.radioButtonSoftMargins.AutoSize = true;
+            this.radioButtonSoftMargins.Location = new System.Drawing.Point(12, 54);
+            this.radioButtonSoftMargins.Name = "radioButtonSoftMargins";
+            this.radioButtonSoftMargins.Size = new System.Drawing.Size(103, 17);
+            this.radioButtonSoftMargins.TabIndex = 1;
+            this.radioButtonSoftMargins.TabStop = true;
+            this.radioButtonSoftMargins.Text = "&Use soft margins";
+            this.radioButtonSoftMargins.UseVisualStyleBackColor = true;
+            this.radioButtonSoftMargins.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // labelPrinting
+            // 
+            this.labelPrinting.AutoSize = true;
+            this.labelPrinting.Location = new System.Drawing.Point(9, 21);
+            this.labelPrinting.Name = "labelPrinting";
+            this.labelPrinting.Size = new System.Drawing.Size(323, 26);
+            this.labelPrinting.TabIndex = 0;
+            this.labelPrinting.Text = "This setting applies only when printing screenshots or plain text and\r\nnot when p" +
+    "rinting from the embedded Chromium web browser.";
+            // 
+            // groupBoxFind
+            // 
+            this.groupBoxFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxFind.Controls.Add(this.checkBoxF3MainFormFind);
+            this.groupBoxFind.Controls.Add(this.checkBoxOutlineSearchResults);
+            this.groupBoxFind.Location = new System.Drawing.Point(6, 6);
+            this.groupBoxFind.Name = "groupBoxFind";
+            this.groupBoxFind.Size = new System.Drawing.Size(368, 90);
+            this.groupBoxFind.TabIndex = 0;
+            this.groupBoxFind.TabStop = false;
+            this.groupBoxFind.Text = "Finding String in Page";
+            // 
+            // checkBoxF3MainFormFind
+            // 
+            this.checkBoxF3MainFormFind.AutoSize = true;
+            this.checkBoxF3MainFormFind.Location = new System.Drawing.Point(12, 42);
+            this.checkBoxF3MainFormFind.Name = "checkBoxF3MainFormFind";
+            this.checkBoxF3MainFormFind.Size = new System.Drawing.Size(160, 17);
+            this.checkBoxF3MainFormFind.TabIndex = 1;
+            this.checkBoxF3MainFormFind.Text = "&F3 focuses opened find form";
+            this.checkBoxF3MainFormFind.UseVisualStyleBackColor = true;
+            this.checkBoxF3MainFormFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // checkBoxOutlineSearchResults
+            // 
+            this.checkBoxOutlineSearchResults.AutoSize = true;
+            this.checkBoxOutlineSearchResults.Location = new System.Drawing.Point(12, 19);
+            this.checkBoxOutlineSearchResults.Name = "checkBoxOutlineSearchResults";
+            this.checkBoxOutlineSearchResults.Size = new System.Drawing.Size(122, 17);
+            this.checkBoxOutlineSearchResults.TabIndex = 0;
+            this.checkBoxOutlineSearchResults.Text = "&Outline search result";
+            this.checkBoxOutlineSearchResults.UseVisualStyleBackColor = true;
+            this.checkBoxOutlineSearchResults.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // groupBoxSecurity
+            // 
+            this.groupBoxSecurity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxSecurity.Controls.Add(this.checkBoxIgnoreCertificateErrors);
+            this.groupBoxSecurity.Controls.Add(this.checkBoxBlockRequestsToForeignUrls);
+            this.groupBoxSecurity.Controls.Add(this.buttonAllowedClientsIP);
+            this.groupBoxSecurity.Controls.Add(this.checkBoxKeepAnEyeOnTheClientsIP);
+            this.groupBoxSecurity.Location = new System.Drawing.Point(6, 228);
+            this.groupBoxSecurity.Name = "groupBoxSecurity";
+            this.groupBoxSecurity.Size = new System.Drawing.Size(368, 170);
+            this.groupBoxSecurity.TabIndex = 2;
+            this.groupBoxSecurity.TabStop = false;
+            this.groupBoxSecurity.Text = "Security";
+            // 
+            // checkBoxIgnoreCertificateErrors
+            // 
+            this.checkBoxIgnoreCertificateErrors.AutoSize = true;
+            this.checkBoxIgnoreCertificateErrors.Location = new System.Drawing.Point(12, 120);
+            this.checkBoxIgnoreCertificateErrors.Name = "checkBoxIgnoreCertificateErrors";
+            this.checkBoxIgnoreCertificateErrors.Size = new System.Drawing.Size(134, 17);
+            this.checkBoxIgnoreCertificateErrors.TabIndex = 3;
+            this.checkBoxIgnoreCertificateErrors.Text = "Ignore &certificate errors";
+            this.checkBoxIgnoreCertificateErrors.UseVisualStyleBackColor = true;
+            this.checkBoxIgnoreCertificateErrors.CheckedChanged += new System.EventHandler(this.SetWarning);
+            this.checkBoxIgnoreCertificateErrors.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // checkBoxBlockRequestsToForeignUrls
+            // 
+            this.checkBoxBlockRequestsToForeignUrls.AutoSize = true;
+            this.checkBoxBlockRequestsToForeignUrls.Location = new System.Drawing.Point(12, 84);
+            this.checkBoxBlockRequestsToForeignUrls.Name = "checkBoxBlockRequestsToForeignUrls";
+            this.checkBoxBlockRequestsToForeignUrls.Size = new System.Drawing.Size(327, 30);
+            this.checkBoxBlockRequestsToForeignUrls.TabIndex = 2;
+            this.checkBoxBlockRequestsToForeignUrls.Text = "&Block all requests to URLs not belonging to the URL set by their\r\nsecond-level d" +
+    "omains or the exception list by their hostname.";
+            this.checkBoxBlockRequestsToForeignUrls.UseVisualStyleBackColor = true;
+            this.checkBoxBlockRequestsToForeignUrls.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // buttonAllowedClientsIP
+            // 
+            this.buttonAllowedClientsIP.Location = new System.Drawing.Point(24, 55);
+            this.buttonAllowedClientsIP.Name = "buttonAllowedClientsIP";
+            this.buttonAllowedClientsIP.Size = new System.Drawing.Size(190, 23);
+            this.buttonAllowedClientsIP.TabIndex = 1;
+            this.buttonAllowedClientsIP.Text = "Allowed Client\'s I&P Addresses...";
+            this.buttonAllowedClientsIP.UseVisualStyleBackColor = true;
+            this.buttonAllowedClientsIP.Click += new System.EventHandler(this.OnAllowedClientsClick);
+            this.buttonAllowedClientsIP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // checkBoxKeepAnEyeOnTheClientsIP
+            // 
+            this.checkBoxKeepAnEyeOnTheClientsIP.AutoSize = true;
+            this.checkBoxKeepAnEyeOnTheClientsIP.Location = new System.Drawing.Point(12, 19);
+            this.checkBoxKeepAnEyeOnTheClientsIP.Name = "checkBoxKeepAnEyeOnTheClientsIP";
+            this.checkBoxKeepAnEyeOnTheClientsIP.Size = new System.Drawing.Size(305, 30);
+            this.checkBoxKeepAnEyeOnTheClientsIP.TabIndex = 0;
+            this.checkBoxKeepAnEyeOnTheClientsIP.Text = "&Always keep an eye on the client\'s IP address and block all\r\noutgoing requests i" +
+    "f the client\'s IP address changes.";
+            this.checkBoxKeepAnEyeOnTheClientsIP.UseVisualStyleBackColor = true;
+            this.checkBoxKeepAnEyeOnTheClientsIP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
             // tabPageUserInterface
             // 
             this.tabPageUserInterface.Controls.Add(this.groupBoxMisc);
-            this.tabPageUserInterface.Controls.Add(this.groupBoxRightPane);
-            this.tabPageUserInterface.Controls.Add(this.groupBoxStatusStrip);
             this.tabPageUserInterface.Controls.Add(this.groupBoxUserInterface);
+            this.tabPageUserInterface.Controls.Add(this.groupBoxStatusStrip);
             this.tabPageUserInterface.Location = new System.Drawing.Point(4, 22);
             this.tabPageUserInterface.Name = "tabPageUserInterface";
             this.tabPageUserInterface.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageUserInterface.Size = new System.Drawing.Size(380, 488);
-            this.tabPageUserInterface.TabIndex = 3;
+            this.tabPageUserInterface.TabIndex = 4;
             this.tabPageUserInterface.Text = "User Interface";
             this.tabPageUserInterface.UseVisualStyleBackColor = true;
             // 
             // groupBoxMisc
             // 
-            this.groupBoxMisc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxMisc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxMisc.Controls.Add(this.checkBoxAutoAdjustRightPaneWidth);
             this.groupBoxMisc.Controls.Add(this.checkBoxDisableThemes);
-            this.groupBoxMisc.Location = new System.Drawing.Point(6, 443);
+            this.groupBoxMisc.Location = new System.Drawing.Point(6, 438);
             this.groupBoxMisc.Name = "groupBoxMisc";
-            this.groupBoxMisc.Size = new System.Drawing.Size(368, 39);
+            this.groupBoxMisc.Size = new System.Drawing.Size(368, 44);
             this.groupBoxMisc.TabIndex = 3;
             this.groupBoxMisc.TabStop = false;
             this.groupBoxMisc.Text = "Miscellaneous";
             // 
-            // checkBoxDisableThemes
-            // 
-            this.checkBoxDisableThemes.AutoSize = true;
-            this.checkBoxDisableThemes.Location = new System.Drawing.Point(12, 17);
-            this.checkBoxDisableThemes.Name = "checkBoxDisableThemes";
-            this.checkBoxDisableThemes.Size = new System.Drawing.Size(98, 17);
-            this.checkBoxDisableThemes.TabIndex = 0;
-            this.checkBoxDisableThemes.Text = "&Disable themes";
-            this.checkBoxDisableThemes.UseVisualStyleBackColor = true;
-            this.checkBoxDisableThemes.CheckedChanged += new System.EventHandler(this.SetWarning);
-            this.checkBoxDisableThemes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // groupBoxRightPane
-            // 
-            this.groupBoxRightPane.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxRightPane.Controls.Add(this.checkBoxAutoAdjustRightPaneWidth);
-            this.groupBoxRightPane.Location = new System.Drawing.Point(6, 398);
-            this.groupBoxRightPane.Name = "groupBoxRightPane";
-            this.groupBoxRightPane.Size = new System.Drawing.Size(368, 39);
-            this.groupBoxRightPane.TabIndex = 2;
-            this.groupBoxRightPane.TabStop = false;
-            this.groupBoxRightPane.Text = "Right Pane";
-            // 
             // checkBoxAutoAdjustRightPaneWidth
             // 
             this.checkBoxAutoAdjustRightPaneWidth.AutoSize = true;
-            this.checkBoxAutoAdjustRightPaneWidth.Location = new System.Drawing.Point(12, 17);
+            this.checkBoxAutoAdjustRightPaneWidth.Location = new System.Drawing.Point(12, 19);
             this.checkBoxAutoAdjustRightPaneWidth.Name = "checkBoxAutoAdjustRightPaneWidth";
             this.checkBoxAutoAdjustRightPaneWidth.Size = new System.Drawing.Size(157, 17);
             this.checkBoxAutoAdjustRightPaneWidth.TabIndex = 0;
@@ -1197,58 +1328,17 @@ namespace BetHelper {
             this.checkBoxAutoAdjustRightPaneWidth.UseVisualStyleBackColor = true;
             this.checkBoxAutoAdjustRightPaneWidth.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
-            // groupBoxStatusStrip
+            // checkBoxDisableThemes
             // 
-            this.groupBoxStatusStrip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxStatusStrip.Controls.Add(this.comboBoxBorderStyle);
-            this.groupBoxStatusStrip.Controls.Add(this.labelStripRenderMode);
-            this.groupBoxStatusStrip.Controls.Add(this.labelBorderStyle);
-            this.groupBoxStatusStrip.Controls.Add(this.comboBoxStripRenderMode);
-            this.groupBoxStatusStrip.Location = new System.Drawing.Point(6, 326);
-            this.groupBoxStatusStrip.Name = "groupBoxStatusStrip";
-            this.groupBoxStatusStrip.Size = new System.Drawing.Size(368, 66);
-            this.groupBoxStatusStrip.TabIndex = 1;
-            this.groupBoxStatusStrip.TabStop = false;
-            this.groupBoxStatusStrip.Text = "Status Strip";
-            // 
-            // comboBoxBorderStyle
-            // 
-            this.comboBoxBorderStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxBorderStyle.FormattingEnabled = true;
-            this.comboBoxBorderStyle.Location = new System.Drawing.Point(196, 40);
-            this.comboBoxBorderStyle.Name = "comboBoxBorderStyle";
-            this.comboBoxBorderStyle.Size = new System.Drawing.Size(164, 21);
-            this.comboBoxBorderStyle.TabIndex = 5;
-            this.comboBoxBorderStyle.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            // 
-            // labelStripRenderMode
-            // 
-            this.labelStripRenderMode.AutoSize = true;
-            this.labelStripRenderMode.Location = new System.Drawing.Point(9, 20);
-            this.labelStripRenderMode.Name = "labelStripRenderMode";
-            this.labelStripRenderMode.Size = new System.Drawing.Size(124, 13);
-            this.labelStripRenderMode.TabIndex = 2;
-            this.labelStripRenderMode.Text = "Stat&us strip render mode:";
-            // 
-            // labelBorderStyle
-            // 
-            this.labelBorderStyle.AutoSize = true;
-            this.labelBorderStyle.Location = new System.Drawing.Point(9, 43);
-            this.labelBorderStyle.Name = "labelBorderStyle";
-            this.labelBorderStyle.Size = new System.Drawing.Size(139, 13);
-            this.labelBorderStyle.TabIndex = 4;
-            this.labelBorderStyle.Text = "Status &label border 3D style:";
-            // 
-            // comboBoxStripRenderMode
-            // 
-            this.comboBoxStripRenderMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxStripRenderMode.FormattingEnabled = true;
-            this.comboBoxStripRenderMode.Location = new System.Drawing.Point(196, 17);
-            this.comboBoxStripRenderMode.Name = "comboBoxStripRenderMode";
-            this.comboBoxStripRenderMode.Size = new System.Drawing.Size(164, 21);
-            this.comboBoxStripRenderMode.TabIndex = 3;
-            this.comboBoxStripRenderMode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            this.checkBoxDisableThemes.AutoSize = true;
+            this.checkBoxDisableThemes.Location = new System.Drawing.Point(196, 19);
+            this.checkBoxDisableThemes.Name = "checkBoxDisableThemes";
+            this.checkBoxDisableThemes.Size = new System.Drawing.Size(98, 17);
+            this.checkBoxDisableThemes.TabIndex = 0;
+            this.checkBoxDisableThemes.Text = "&Disable themes";
+            this.checkBoxDisableThemes.UseVisualStyleBackColor = true;
+            this.checkBoxDisableThemes.CheckedChanged += new System.EventHandler(this.SetWarning);
+            this.checkBoxDisableThemes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // groupBoxUserInterface
             // 
@@ -1280,7 +1370,7 @@ namespace BetHelper {
             this.groupBoxUserInterface.Controls.Add(this.labelTabAppearance);
             this.groupBoxUserInterface.Location = new System.Drawing.Point(6, 6);
             this.groupBoxUserInterface.Name = "groupBoxUserInterface";
-            this.groupBoxUserInterface.Size = new System.Drawing.Size(368, 314);
+            this.groupBoxUserInterface.Size = new System.Drawing.Size(368, 343);
             this.groupBoxUserInterface.TabIndex = 0;
             this.groupBoxUserInterface.TabStop = false;
             this.groupBoxUserInterface.Text = "Tab Headers in the Main Window";
@@ -1289,7 +1379,7 @@ namespace BetHelper {
             // 
             this.comboBoxCalculatorSColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxCalculatorSColor.FormattingEnabled = true;
-            this.comboBoxCalculatorSColor.Location = new System.Drawing.Point(196, 288);
+            this.comboBoxCalculatorSColor.Location = new System.Drawing.Point(196, 312);
             this.comboBoxCalculatorSColor.Name = "comboBoxCalculatorSColor";
             this.comboBoxCalculatorSColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxCalculatorSColor.TabIndex = 23;
@@ -1298,7 +1388,7 @@ namespace BetHelper {
             // labelCalculatorSColor
             // 
             this.labelCalculatorSColor.AutoSize = true;
-            this.labelCalculatorSColor.Location = new System.Drawing.Point(9, 291);
+            this.labelCalculatorSColor.Location = new System.Drawing.Point(9, 315);
             this.labelCalculatorSColor.Name = "labelCalculatorSColor";
             this.labelCalculatorSColor.Size = new System.Drawing.Size(144, 13);
             this.labelCalculatorSColor.TabIndex = 22;
@@ -1308,7 +1398,7 @@ namespace BetHelper {
             // 
             this.comboBoxCalculatorDColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxCalculatorDColor.FormattingEnabled = true;
-            this.comboBoxCalculatorDColor.Location = new System.Drawing.Point(196, 265);
+            this.comboBoxCalculatorDColor.Location = new System.Drawing.Point(196, 285);
             this.comboBoxCalculatorDColor.Name = "comboBoxCalculatorDColor";
             this.comboBoxCalculatorDColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxCalculatorDColor.TabIndex = 21;
@@ -1317,7 +1407,7 @@ namespace BetHelper {
             // labelCalculatorDColor
             // 
             this.labelCalculatorDColor.AutoSize = true;
-            this.labelCalculatorDColor.Location = new System.Drawing.Point(9, 268);
+            this.labelCalculatorDColor.Location = new System.Drawing.Point(9, 288);
             this.labelCalculatorDColor.Name = "labelCalculatorDColor";
             this.labelCalculatorDColor.Size = new System.Drawing.Size(136, 13);
             this.labelCalculatorDColor.TabIndex = 20;
@@ -1327,7 +1417,7 @@ namespace BetHelper {
             // 
             this.comboBoxDashboardSColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDashboardSColor.FormattingEnabled = true;
-            this.comboBoxDashboardSColor.Location = new System.Drawing.Point(196, 242);
+            this.comboBoxDashboardSColor.Location = new System.Drawing.Point(196, 258);
             this.comboBoxDashboardSColor.Name = "comboBoxDashboardSColor";
             this.comboBoxDashboardSColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxDashboardSColor.TabIndex = 19;
@@ -1336,7 +1426,7 @@ namespace BetHelper {
             // labelDashboardSColor
             // 
             this.labelDashboardSColor.AutoSize = true;
-            this.labelDashboardSColor.Location = new System.Drawing.Point(9, 245);
+            this.labelDashboardSColor.Location = new System.Drawing.Point(9, 261);
             this.labelDashboardSColor.Name = "labelDashboardSColor";
             this.labelDashboardSColor.Size = new System.Drawing.Size(171, 13);
             this.labelDashboardSColor.TabIndex = 18;
@@ -1346,7 +1436,7 @@ namespace BetHelper {
             // 
             this.comboBoxDashboardDColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxDashboardDColor.FormattingEnabled = true;
-            this.comboBoxDashboardDColor.Location = new System.Drawing.Point(196, 219);
+            this.comboBoxDashboardDColor.Location = new System.Drawing.Point(196, 231);
             this.comboBoxDashboardDColor.Name = "comboBoxDashboardDColor";
             this.comboBoxDashboardDColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxDashboardDColor.TabIndex = 17;
@@ -1355,7 +1445,7 @@ namespace BetHelper {
             // labelDashboardDColor
             // 
             this.labelDashboardDColor.AutoSize = true;
-            this.labelDashboardDColor.Location = new System.Drawing.Point(9, 222);
+            this.labelDashboardDColor.Location = new System.Drawing.Point(9, 234);
             this.labelDashboardDColor.Name = "labelDashboardDColor";
             this.labelDashboardDColor.Size = new System.Drawing.Size(163, 13);
             this.labelDashboardDColor.TabIndex = 16;
@@ -1365,7 +1455,7 @@ namespace BetHelper {
             // 
             this.comboBoxSportInfo2SColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSportInfo2SColor.FormattingEnabled = true;
-            this.comboBoxSportInfo2SColor.Location = new System.Drawing.Point(196, 196);
+            this.comboBoxSportInfo2SColor.Location = new System.Drawing.Point(196, 204);
             this.comboBoxSportInfo2SColor.Name = "comboBoxSportInfo2SColor";
             this.comboBoxSportInfo2SColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxSportInfo2SColor.TabIndex = 15;
@@ -1374,7 +1464,7 @@ namespace BetHelper {
             // labelSportInfo2SColor
             // 
             this.labelSportInfo2SColor.AutoSize = true;
-            this.labelSportInfo2SColor.Location = new System.Drawing.Point(9, 199);
+            this.labelSportInfo2SColor.Location = new System.Drawing.Point(9, 207);
             this.labelSportInfo2SColor.Name = "labelSportInfo2SColor";
             this.labelSportInfo2SColor.Size = new System.Drawing.Size(133, 13);
             this.labelSportInfo2SColor.TabIndex = 14;
@@ -1384,7 +1474,7 @@ namespace BetHelper {
             // 
             this.comboBoxSportInfo2DColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSportInfo2DColor.FormattingEnabled = true;
-            this.comboBoxSportInfo2DColor.Location = new System.Drawing.Point(196, 173);
+            this.comboBoxSportInfo2DColor.Location = new System.Drawing.Point(196, 177);
             this.comboBoxSportInfo2DColor.Name = "comboBoxSportInfo2DColor";
             this.comboBoxSportInfo2DColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxSportInfo2DColor.TabIndex = 13;
@@ -1393,7 +1483,7 @@ namespace BetHelper {
             // labelSportInfo2DColor
             // 
             this.labelSportInfo2DColor.AutoSize = true;
-            this.labelSportInfo2DColor.Location = new System.Drawing.Point(9, 176);
+            this.labelSportInfo2DColor.Location = new System.Drawing.Point(9, 180);
             this.labelSportInfo2DColor.Name = "labelSportInfo2DColor";
             this.labelSportInfo2DColor.Size = new System.Drawing.Size(125, 13);
             this.labelSportInfo2DColor.TabIndex = 12;
@@ -1422,7 +1512,7 @@ namespace BetHelper {
             // 
             this.comboBoxSportInfo1DColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSportInfo1DColor.FormattingEnabled = true;
-            this.comboBoxSportInfo1DColor.Location = new System.Drawing.Point(196, 127);
+            this.comboBoxSportInfo1DColor.Location = new System.Drawing.Point(196, 123);
             this.comboBoxSportInfo1DColor.Name = "comboBoxSportInfo1DColor";
             this.comboBoxSportInfo1DColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxSportInfo1DColor.TabIndex = 9;
@@ -1431,7 +1521,7 @@ namespace BetHelper {
             // labelSportInfo1DColor
             // 
             this.labelSportInfo1DColor.AutoSize = true;
-            this.labelSportInfo1DColor.Location = new System.Drawing.Point(9, 130);
+            this.labelSportInfo1DColor.Location = new System.Drawing.Point(9, 126);
             this.labelSportInfo1DColor.Name = "labelSportInfo1DColor";
             this.labelSportInfo1DColor.Size = new System.Drawing.Size(125, 13);
             this.labelSportInfo1DColor.TabIndex = 8;
@@ -1441,7 +1531,7 @@ namespace BetHelper {
             // 
             this.comboBoxBookmakerSColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxBookmakerSColor.FormattingEnabled = true;
-            this.comboBoxBookmakerSColor.Location = new System.Drawing.Point(196, 104);
+            this.comboBoxBookmakerSColor.Location = new System.Drawing.Point(196, 96);
             this.comboBoxBookmakerSColor.Name = "comboBoxBookmakerSColor";
             this.comboBoxBookmakerSColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxBookmakerSColor.TabIndex = 7;
@@ -1450,7 +1540,7 @@ namespace BetHelper {
             // labelBookmakerSColor
             // 
             this.labelBookmakerSColor.AutoSize = true;
-            this.labelBookmakerSColor.Location = new System.Drawing.Point(9, 107);
+            this.labelBookmakerSColor.Location = new System.Drawing.Point(9, 99);
             this.labelBookmakerSColor.Name = "labelBookmakerSColor";
             this.labelBookmakerSColor.Size = new System.Drawing.Size(133, 13);
             this.labelBookmakerSColor.TabIndex = 6;
@@ -1460,7 +1550,7 @@ namespace BetHelper {
             // 
             this.comboBoxBookmakerDColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxBookmakerDColor.FormattingEnabled = true;
-            this.comboBoxBookmakerDColor.Location = new System.Drawing.Point(196, 81);
+            this.comboBoxBookmakerDColor.Location = new System.Drawing.Point(196, 69);
             this.comboBoxBookmakerDColor.Name = "comboBoxBookmakerDColor";
             this.comboBoxBookmakerDColor.Size = new System.Drawing.Size(164, 21);
             this.comboBoxBookmakerDColor.TabIndex = 5;
@@ -1469,7 +1559,7 @@ namespace BetHelper {
             // labelBookmakerDColor
             // 
             this.labelBookmakerDColor.AutoSize = true;
-            this.labelBookmakerDColor.Location = new System.Drawing.Point(9, 84);
+            this.labelBookmakerDColor.Location = new System.Drawing.Point(9, 72);
             this.labelBookmakerDColor.Name = "labelBookmakerDColor";
             this.labelBookmakerDColor.Size = new System.Drawing.Size(125, 13);
             this.labelBookmakerDColor.TabIndex = 4;
@@ -1478,22 +1568,23 @@ namespace BetHelper {
             // checkBoxBackgroundColor
             // 
             this.checkBoxBackgroundColor.AutoSize = true;
-            this.checkBoxBackgroundColor.Location = new System.Drawing.Point(12, 60);
+            this.checkBoxBackgroundColor.Location = new System.Drawing.Point(196, 46);
             this.checkBoxBackgroundColor.Name = "checkBoxBackgroundColor";
-            this.checkBoxBackgroundColor.Size = new System.Drawing.Size(180, 17);
+            this.checkBoxBackgroundColor.Size = new System.Drawing.Size(110, 17);
             this.checkBoxBackgroundColor.TabIndex = 3;
-            this.checkBoxBackgroundColor.Text = "Ba&ckground color in tab headers";
+            this.checkBoxBackgroundColor.Text = "Ba&ckground color";
             this.checkBoxBackgroundColor.UseVisualStyleBackColor = true;
+            this.checkBoxBackgroundColor.CheckedChanged += new System.EventHandler(this.OnBackgroundColorCheckedChanged);
             this.checkBoxBackgroundColor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // checkBoxBoldFont
             // 
             this.checkBoxBoldFont.AutoSize = true;
-            this.checkBoxBoldFont.Location = new System.Drawing.Point(12, 42);
+            this.checkBoxBoldFont.Location = new System.Drawing.Point(12, 46);
             this.checkBoxBoldFont.Name = "checkBoxBoldFont";
-            this.checkBoxBoldFont.Size = new System.Drawing.Size(138, 17);
+            this.checkBoxBoldFont.Size = new System.Drawing.Size(68, 17);
             this.checkBoxBoldFont.TabIndex = 2;
-            this.checkBoxBoldFont.Text = "&Bold font in tab headers";
+            this.checkBoxBoldFont.Text = "&Bold font";
             this.checkBoxBoldFont.UseVisualStyleBackColor = true;
             this.checkBoxBoldFont.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
@@ -1501,7 +1592,7 @@ namespace BetHelper {
             // 
             this.comboBoxTabAppearance.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTabAppearance.FormattingEnabled = true;
-            this.comboBoxTabAppearance.Location = new System.Drawing.Point(196, 17);
+            this.comboBoxTabAppearance.Location = new System.Drawing.Point(196, 19);
             this.comboBoxTabAppearance.Name = "comboBoxTabAppearance";
             this.comboBoxTabAppearance.Size = new System.Drawing.Size(164, 21);
             this.comboBoxTabAppearance.TabIndex = 1;
@@ -1510,11 +1601,64 @@ namespace BetHelper {
             // labelTabAppearance
             // 
             this.labelTabAppearance.AutoSize = true;
-            this.labelTabAppearance.Location = new System.Drawing.Point(9, 20);
+            this.labelTabAppearance.Location = new System.Drawing.Point(9, 22);
             this.labelTabAppearance.Name = "labelTabAppearance";
             this.labelTabAppearance.Size = new System.Drawing.Size(130, 13);
             this.labelTabAppearance.TabIndex = 0;
             this.labelTabAppearance.Text = "&Tab headers appearance:";
+            // 
+            // groupBoxStatusStrip
+            // 
+            this.groupBoxStatusStrip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxStatusStrip.Controls.Add(this.comboBoxBorderStyle);
+            this.groupBoxStatusStrip.Controls.Add(this.labelStripRenderMode);
+            this.groupBoxStatusStrip.Controls.Add(this.labelBorderStyle);
+            this.groupBoxStatusStrip.Controls.Add(this.comboBoxStripRenderMode);
+            this.groupBoxStatusStrip.Location = new System.Drawing.Point(6, 355);
+            this.groupBoxStatusStrip.Name = "groupBoxStatusStrip";
+            this.groupBoxStatusStrip.Size = new System.Drawing.Size(368, 77);
+            this.groupBoxStatusStrip.TabIndex = 1;
+            this.groupBoxStatusStrip.TabStop = false;
+            this.groupBoxStatusStrip.Text = "Status Strip";
+            // 
+            // comboBoxBorderStyle
+            // 
+            this.comboBoxBorderStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxBorderStyle.FormattingEnabled = true;
+            this.comboBoxBorderStyle.Location = new System.Drawing.Point(196, 46);
+            this.comboBoxBorderStyle.Name = "comboBoxBorderStyle";
+            this.comboBoxBorderStyle.Size = new System.Drawing.Size(164, 21);
+            this.comboBoxBorderStyle.TabIndex = 5;
+            this.comboBoxBorderStyle.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            // 
+            // labelStripRenderMode
+            // 
+            this.labelStripRenderMode.AutoSize = true;
+            this.labelStripRenderMode.Location = new System.Drawing.Point(9, 22);
+            this.labelStripRenderMode.Name = "labelStripRenderMode";
+            this.labelStripRenderMode.Size = new System.Drawing.Size(124, 13);
+            this.labelStripRenderMode.TabIndex = 2;
+            this.labelStripRenderMode.Text = "Stat&us strip render mode:";
+            // 
+            // labelBorderStyle
+            // 
+            this.labelBorderStyle.AutoSize = true;
+            this.labelBorderStyle.Location = new System.Drawing.Point(9, 49);
+            this.labelBorderStyle.Name = "labelBorderStyle";
+            this.labelBorderStyle.Size = new System.Drawing.Size(139, 13);
+            this.labelBorderStyle.TabIndex = 4;
+            this.labelBorderStyle.Text = "Status &label border 3D style:";
+            // 
+            // comboBoxStripRenderMode
+            // 
+            this.comboBoxStripRenderMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxStripRenderMode.FormattingEnabled = true;
+            this.comboBoxStripRenderMode.Location = new System.Drawing.Point(196, 19);
+            this.comboBoxStripRenderMode.Name = "comboBoxStripRenderMode";
+            this.comboBoxStripRenderMode.Size = new System.Drawing.Size(164, 21);
+            this.comboBoxStripRenderMode.TabIndex = 3;
+            this.comboBoxStripRenderMode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // PreferencesForm
             // 
@@ -1565,24 +1709,31 @@ namespace BetHelper {
             this.groupBoxDomInspection.ResumeLayout(false);
             this.groupBoxDomInspection.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownOverlayOpacity)).EndInit();
-            this.groupBoxFind.ResumeLayout(false);
-            this.groupBoxFind.PerformLayout();
-            this.tabPageGeneral.ResumeLayout(false);
-            this.groupBoxSecurity.ResumeLayout(false);
-            this.groupBoxSecurity.PerformLayout();
-            this.groupBoxPrinting.ResumeLayout(false);
-            this.groupBoxPrinting.PerformLayout();
+            this.tabPageGeneral1.ResumeLayout(false);
+            this.groupBoxConfiguration.ResumeLayout(false);
+            this.groupBoxBookmarks.ResumeLayout(false);
+            this.groupBoxBookmarks.PerformLayout();
             this.groupBoxApplication.ResumeLayout(false);
             this.groupBoxApplication.PerformLayout();
+            this.groupBoxBell.ResumeLayout(false);
+            this.groupBoxBell.PerformLayout();
+            this.tabPageGeneral2.ResumeLayout(false);
+            this.groupBoxCountDown.ResumeLayout(false);
+            this.groupBoxCountDown.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSecond)).EndInit();
+            this.groupBoxPrinting.ResumeLayout(false);
+            this.groupBoxPrinting.PerformLayout();
+            this.groupBoxFind.ResumeLayout(false);
+            this.groupBoxFind.PerformLayout();
+            this.groupBoxSecurity.ResumeLayout(false);
+            this.groupBoxSecurity.PerformLayout();
             this.tabPageUserInterface.ResumeLayout(false);
             this.groupBoxMisc.ResumeLayout(false);
             this.groupBoxMisc.PerformLayout();
-            this.groupBoxRightPane.ResumeLayout(false);
-            this.groupBoxRightPane.PerformLayout();
-            this.groupBoxStatusStrip.ResumeLayout(false);
-            this.groupBoxStatusStrip.PerformLayout();
             this.groupBoxUserInterface.ResumeLayout(false);
             this.groupBoxUserInterface.PerformLayout();
+            this.groupBoxStatusStrip.ResumeLayout(false);
+            this.groupBoxStatusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1611,7 +1762,7 @@ namespace BetHelper {
         private System.Windows.Forms.ComboBox comboBoxUserAgent;
         private System.Windows.Forms.Label labelUserAgent;
         private System.Windows.Forms.GroupBox groupBoxNavigation;
-        private System.Windows.Forms.TabPage tabPageGeneral;
+        private System.Windows.Forms.TabPage tabPageGeneral1;
         private System.Windows.Forms.GroupBox groupBoxFind;
         private System.Windows.Forms.CheckBox checkBoxLogPopUpFrameHandler;
         private System.Windows.Forms.CheckBox checkBoxLogForeignUrls;
@@ -1624,7 +1775,7 @@ namespace BetHelper {
         private System.Windows.Forms.Label labelNumberFormat;
         private System.Windows.Forms.CheckBox checkBoxStatusBarNotifOnly;
         private System.Windows.Forms.CheckBox checkBoxCheckForUpdates;
-        private System.Windows.Forms.TabPage tabPageUserInterface;
+        private System.Windows.Forms.TabPage tabPageGeneral2;
         private System.Windows.Forms.GroupBox groupBoxStatusStrip;
         private System.Windows.Forms.ComboBox comboBoxTabAppearance;
         private System.Windows.Forms.Label labelTabAppearance;
@@ -1652,7 +1803,6 @@ namespace BetHelper {
         private System.Windows.Forms.Label labelBookmakerSColor;
         private System.Windows.Forms.ComboBox comboBoxBookmakerDColor;
         private System.Windows.Forms.Label labelBookmakerDColor;
-        private System.Windows.Forms.GroupBox groupBoxRightPane;
         private System.Windows.Forms.CheckBox checkBoxAutoAdjustRightPaneWidth;
         private System.Windows.Forms.GroupBox groupBoxMisc;
         private System.Windows.Forms.CheckBox checkBoxDisableThemes;
@@ -1697,14 +1847,26 @@ namespace BetHelper {
         private System.Windows.Forms.TextBox textBoxExternalEditor;
         private System.Windows.Forms.Label labelExternalEditor;
         private System.Windows.Forms.CheckBox checkBoxPingWhenIdle;
-        private System.Windows.Forms.CheckBox checkBoxEnableBell;
+        private System.Windows.Forms.CheckBox checkBoxEnableNTBell;
         private System.Windows.Forms.GroupBox groupBoxProxy;
         private System.Windows.Forms.CheckBox checkBoxEnableProxy;
         private System.Windows.Forms.CheckBox checkBoxF3MainFormFind;
         private System.Windows.Forms.Button buttonManageBookmarks;
         private System.Windows.Forms.CheckBox checkBoxBoldErrorBell;
-        private System.Windows.Forms.ComboBox comboBoxBellSound;
-        private System.Windows.Forms.Label labelBellSound;
-        private System.Windows.Forms.Button buttonChime;
+        private System.Windows.Forms.ComboBox comboBoxNTSound;
+        private System.Windows.Forms.Label labelNTSound;
+        private System.Windows.Forms.Button buttonNTChime;
+        private System.Windows.Forms.TabPage tabPageUserInterface;
+        private System.Windows.Forms.GroupBox groupBoxBell;
+        private System.Windows.Forms.Label labelFOSound;
+        private System.Windows.Forms.Button buttonFOChime;
+        private System.Windows.Forms.ComboBox comboBoxFOSound;
+        private System.Windows.Forms.GroupBox groupBoxBookmarks;
+        private System.Windows.Forms.GroupBox groupBoxConfiguration;
+        private System.Windows.Forms.GroupBox groupBoxCountDown;
+        private System.Windows.Forms.Label labelSecond;
+        private System.Windows.Forms.NumericUpDown numericUpDownSecond;
+        private System.Windows.Forms.Label labelCountDown;
+        private System.Windows.Forms.CheckBox checkBoxEnableFOBell;
     }
 }

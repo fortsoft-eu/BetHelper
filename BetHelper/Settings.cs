@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using FortSoft.Tools;
@@ -295,10 +295,16 @@ namespace BetHelper {
         public bool EnableAudio { get; set; } = true;
 
         /// <summary>
+        /// Represents the setting if the bell will be enabled when an
+        /// opportunity comes. The default value is false.
+        /// </summary>
+        public bool EnableOpportunityBell { get; set; } = true;
+
+        /// <summary>
         /// Represents the setting if the bell will be enabled when a new tip is
         /// received from the service. The default value is true.
         /// </summary>
-        public bool EnableBell { get; set; } = true;
+        public bool EnableTipArrivalBell { get; set; } = true;
 
         /// <summary>
         /// Represents the setting of whether the embedded Chromium browser will
@@ -492,6 +498,27 @@ namespace BetHelper {
         public Border3DStyle Border3DStyle { get; set; } = Border3DStyle.Adjust;
 
         /// <summary>
+        /// The time interval in seconds after which the monitors will be turned
+        /// off after entering the command to turn off the monitors. The default
+        /// value is five seconds.
+        /// </summary>
+        public byte TurnOffTheMonitorsInterval { get; set; } = 5;
+
+        /// <summary>
+        /// The time interval in seconds after which the monitors will be turned
+        /// off after entering the command to turn off the monitors maximum
+        /// value. The default value is 255 seconds.
+        /// </summary>
+        public byte TurnOffTheMonitorsIntervalMax { get; private set; } = byte.MaxValue;
+
+        /// <summary>
+        /// The time interval in seconds after which the monitors will be turned
+        /// off after entering the command to turn off the monitors minimum
+        /// value. The default value is zero.
+        /// </summary>
+        public byte TurnOffTheMonitorsIntervalMin { get; private set; } = byte.MinValue;
+
+        /// <summary>
         /// Default tab color with bookmaker website. The default value is
         /// Color.Pink.
         /// </summary>
@@ -563,7 +590,7 @@ namespace BetHelper {
         public Color SportInfo2SelectedColor { get; set; } = Color.PapayaWhip;
 
         /// <summary>
-        /// Represents the index of the active tab of the left tab panel.The
+        /// Represents the index of the active tab of the left tab panel. The
         /// default value is zero.
         /// </summary>
         public int ActivePanelLeft { get; set; }
@@ -581,12 +608,6 @@ namespace BetHelper {
         public int ActivePreferencesPanel { get; set; }
 
         /// <summary>
-        /// Represents the index of the selected bell sound. The default value is
-        /// two.
-        /// </summary>
-        public int BellIndex { get; set; } = 2;
-
-        /// <summary>
         /// Last export extension index used. The default value is four.
         /// </summary>
         public int ExtensionFilterIndex { get; set; } = 4;
@@ -598,11 +619,16 @@ namespace BetHelper {
         public int NumberFormatInt { get; set; }
 
         /// <summary>
-        /// The time interval in seconds after which the monitors will be turned
-        /// off after entering the command to turn off the monitors. The default
-        /// value is five.
+        /// Represents the index of the selected bell sound for opportunity. The
+        /// default value is five.
         /// </summary>
-        public int TurnOffTheMonitorsInterval { get; set; } = 5;
+        public int OpportunityBellIndex { get; set; } = 5;
+
+        /// <summary>
+        /// Represents the index of the selected bell sound for tip arrival. The
+        /// default value is two.
+        /// </summary>
+        public int TipArrivalBellIndex { get; set; } = 2;
 
         /// <summary>
         /// Gets an instance of an NumberFormatComboBox object.
@@ -842,8 +868,8 @@ namespace BetHelper {
             EnableProxy = bitSettings[--i];
             F3MainFormFocusesFindForm = bitSettings[--i];
             OutlineSearchResults = bitSettings[--i];
-            BoldBellStatus = bitSettings[--i];
-            EnableBell = bitSettings[--i];
+            TruncateBookmarkTitles = bitSettings[--i];
+            SortBookmarks = bitSettings[--i];
             UseDecimalPrefix = bitSettings[--i];
             TabsBoldFont = bitSettings[--i];
             TabsBackgroundColor = bitSettings[--i];
@@ -881,8 +907,8 @@ namespace BetHelper {
                 .Append(EnableProxy ? 1 : 0)
                 .Append(F3MainFormFocusesFindForm ? 1 : 0)
                 .Append(OutlineSearchResults ? 1 : 0)
-                .Append(BoldBellStatus ? 1 : 0)
-                .Append(EnableBell ? 1 : 0)
+                .Append(TruncateBookmarkTitles ? 1 : 0)
+                .Append(SortBookmarks ? 1 : 0)
                 .Append(UseDecimalPrefix ? 1 : 0)
                 .Append(TabsBoldFont ? 1 : 0)
                 .Append(TabsBackgroundColor ? 1 : 0)
@@ -903,10 +929,11 @@ namespace BetHelper {
             BitArray bitArray = new BitArray(new int[] { i });
             bool[] bitSettings = new bool[bitArray.Count];
             bitArray.CopyTo(bitSettings, 0);
-            i = bitSettings.Length - 27;
+            i = bitSettings.Length - 26;
 
-            TruncateBookmarkTitles = bitSettings[--i];
-            SortBookmarks = bitSettings[--i];
+            BoldBellStatus = bitSettings[--i];
+            EnableOpportunityBell = bitSettings[--i];
+            EnableTipArrivalBell = bitSettings[--i];
             AutoAdjustRightPaneWidth = bitSettings[--i];
             RightPaneWidth = bitSettings[--i];
             RightPaneCollapsed = bitSettings[--i];
@@ -916,9 +943,10 @@ namespace BetHelper {
         /// Compacts some boolean settings into an integer value.
         /// </summary>
         private int BitSettings2ToInt() {
-            StringBuilder stringBuilder = new StringBuilder(string.Empty.PadRight(27, Constants.Zero))
-                .Append(TruncateBookmarkTitles ? 1 : 0)
-                .Append(SortBookmarks ? 1 : 0)
+            StringBuilder stringBuilder = new StringBuilder(string.Empty.PadRight(26, Constants.Zero))
+                .Append(BoldBellStatus ? 1 : 0)
+                .Append(EnableOpportunityBell ? 1 : 0)
+                .Append(EnableTipArrivalBell ? 1 : 0)
                 .Append(AutoAdjustRightPaneWidth ? 1 : 0)
                 .Append(RightPaneWidth ? 1 : 0)
                 .Append(RightPaneCollapsed ? 1 : 0);
@@ -1023,8 +1051,9 @@ namespace BetHelper {
         /// </summary>
         private void IntToByteSettings2(int i) {
             byte[] bytes = IntToByteArray(i);
-            BellIndex = bytes[0];
-            TurnOffTheMonitorsInterval = bytes[1];
+            TipArrivalBellIndex = bytes[0];
+            OpportunityBellIndex = bytes[1];
+            TurnOffTheMonitorsInterval = bytes[2];
         }
 
         /// <summary>
@@ -1032,9 +1061,9 @@ namespace BetHelper {
         /// </summary>
         private int ByteSettings2ToInt() {
             byte[] bytes = new byte[] {
-                (byte)BellIndex,
-                (byte)TurnOffTheMonitorsInterval,
-                0,
+                (byte)TipArrivalBellIndex,
+                (byte)OpportunityBellIndex,
+                TurnOffTheMonitorsInterval,
                 0
             };
             return ByteArrayToInt(bytes);

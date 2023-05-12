@@ -56,7 +56,6 @@ namespace BetHelper {
 
         public event EventHandler BrowserInitializedChanged;
         public event EventHandler Enter;
-        public event EventHandler F7Pressed;
         public event EventHandler Focus;
         public event EventHandler ZoomLevelChanged;
         public event EventHandler<AddressChangedEventArgs> AddressChanged;
@@ -76,6 +75,54 @@ namespace BetHelper {
         public event EventHandler<TitleChangedEventArgs> TitleChanged;
         public event EventHandler<UrlEventArgs> Relay;
         public event HelpEventHandler Help;
+
+        public event EventHandler AltCtrlShiftEPressed;
+        public event EventHandler AltCtrlShiftPPressed;
+        public event EventHandler AltF10Pressed;
+        public event EventHandler AltF11Pressed;
+        public event EventHandler AltF12Pressed;
+        public event EventHandler AltF7Pressed;
+        public event EventHandler AltF8Pressed;
+        public event EventHandler AltF9Pressed;
+        public event EventHandler AltHomePressed;
+        public event EventHandler AltLeftPressed;
+        public event EventHandler AltLPressed;
+        public event EventHandler AltRightPressed;
+        public event EventHandler CtrlDPressed;
+        public event EventHandler CtrlEPressed;
+        public event EventHandler CtrlFPressed;
+        public event EventHandler CtrlF5Pressed;
+        public event EventHandler CtrlGPressed;
+        public event EventHandler CtrlMinusPressed;
+        public event EventHandler CtrlMPressed;
+        public event EventHandler CtrlOPressed;
+        public event EventHandler CtrlPlusPressed;
+        public event EventHandler CtrlPPressed;
+        public event EventHandler CtrlShiftDelPressed;
+        public event EventHandler CtrlShiftEPressed;
+        public event EventHandler CtrlShiftMinusPressed;
+        public event EventHandler CtrlShiftNPressed;
+        public event EventHandler CtrlShiftPlusPressed;
+        public event EventHandler CtrlShiftPPressed;
+        public event EventHandler CtrlTPressed;
+        public event EventHandler CtrlUPressed;
+        public event EventHandler CtrlZeroPressed;
+        public event EventHandler DownPressed;
+        public event EventHandler EndPressed;
+        public event EventHandler F11Pressed;
+        public event EventHandler F12Pressed;
+        public event EventHandler F2Pressed;
+        public event EventHandler F3Pressed;
+        public event EventHandler F4Pressed;
+        public event EventHandler F5Pressed;
+        public event EventHandler F7Pressed;
+        public event EventHandler F8Pressed;
+        public event EventHandler F9Pressed;
+        public event EventHandler HomePressed;
+        public event EventHandler PageDownPressed;
+        public event EventHandler PageUpPressed;
+        public event EventHandler ShiftF3Pressed;
+        public event EventHandler UpPressed;
 
         public WebInfo() {
             balance = decimal.MinValue;
@@ -289,8 +336,55 @@ namespace BetHelper {
         private void Info() {
             webInfoForm = new WebInfoForm(this, persistWindowState);
             persistWindowState.Parent = webInfoForm;
+            webInfoForm.AltCtrlShiftEPressed += new EventHandler((sender, e) => AltCtrlShiftEPressed?.Invoke(sender, e));
+            webInfoForm.AltCtrlShiftPPressed += new EventHandler((sender, e) => AltCtrlShiftPPressed?.Invoke(sender, e));
+            webInfoForm.AltF10Pressed += new EventHandler((sender, e) => AltF10Pressed?.Invoke(sender, e));
+            webInfoForm.AltF11Pressed += new EventHandler((sender, e) => AltF11Pressed?.Invoke(sender, e));
+            webInfoForm.AltF12Pressed += new EventHandler((sender, e) => AltF12Pressed?.Invoke(sender, e));
+            webInfoForm.AltF7Pressed += new EventHandler((sender, e) => AltF7Pressed?.Invoke(sender, e));
+            webInfoForm.AltF8Pressed += new EventHandler((sender, e) => AltF8Pressed?.Invoke(sender, e));
+            webInfoForm.AltF9Pressed += new EventHandler((sender, e) => AltF9Pressed?.Invoke(sender, e));
+            webInfoForm.AltF9Pressed += new EventHandler((sender, e) => AltF9Pressed?.Invoke(sender, e));
+            webInfoForm.AltHomePressed += new EventHandler((sender, e) => AltHomePressed?.Invoke(sender, e));
+            webInfoForm.AltLeftPressed += new EventHandler((sender, e) => AltLeftPressed?.Invoke(sender, e));
+            webInfoForm.AltLPressed += new EventHandler((sender, e) => AltLPressed?.Invoke(sender, e));
+            webInfoForm.AltRightPressed += new EventHandler((sender, e) => AltRightPressed?.Invoke(sender, e));
+            webInfoForm.CtrlDPressed += new EventHandler((sender, e) => CtrlDPressed?.Invoke(sender, e));
+            webInfoForm.CtrlEPressed += new EventHandler((sender, e) => CtrlEPressed?.Invoke(sender, e));
+            webInfoForm.CtrlF5Pressed += new EventHandler((sender, e) => CtrlF5Pressed?.Invoke(sender, e));
+            webInfoForm.CtrlFPressed += new EventHandler((sender, e) => CtrlFPressed?.Invoke(sender, e));
+            webInfoForm.CtrlGPressed += new EventHandler((sender, e) => CtrlGPressed?.Invoke(sender, e));
+            webInfoForm.CtrlMinusPressed += new EventHandler((sender, e) => CtrlMinusPressed?.Invoke(sender, e));
+            webInfoForm.CtrlMPressed += new EventHandler((sender, e) => CtrlMPressed?.Invoke(sender, e));
+            webInfoForm.CtrlOPressed += new EventHandler((sender, e) => CtrlOPressed?.Invoke(sender, e));
+            webInfoForm.CtrlPlusPressed += new EventHandler((sender, e) => CtrlPlusPressed?.Invoke(sender, e));
+            webInfoForm.CtrlPPressed += new EventHandler((sender, e) => CtrlPPressed?.Invoke(sender, e));
+            webInfoForm.CtrlShiftDelPressed += new EventHandler((sender, e) => CtrlShiftDelPressed?.Invoke(sender, e));
+            webInfoForm.CtrlShiftEPressed += new EventHandler((sender, e) => CtrlShiftEPressed?.Invoke(sender, e));
+            webInfoForm.CtrlShiftMinusPressed += new EventHandler((sender, e) => CtrlShiftMinusPressed?.Invoke(sender, e));
+            webInfoForm.CtrlShiftNPressed += new EventHandler((sender, e) => CtrlShiftNPressed?.Invoke(sender, e));
+            webInfoForm.CtrlShiftPlusPressed += new EventHandler((sender, e) => CtrlShiftPlusPressed?.Invoke(sender, e));
+            webInfoForm.CtrlShiftPPressed += new EventHandler((sender, e) => CtrlShiftPPressed?.Invoke(sender, e));
+            webInfoForm.CtrlTPressed += new EventHandler((sender, e) => CtrlTPressed?.Invoke(sender, e));
+            webInfoForm.CtrlUPressed += new EventHandler((sender, e) => CtrlUPressed?.Invoke(sender, e));
+            webInfoForm.CtrlZeroPressed += new EventHandler((sender, e) => CtrlZeroPressed?.Invoke(sender, e));
+            webInfoForm.DownPressed += new EventHandler((sender, e) => DownPressed?.Invoke(sender, e));
+            webInfoForm.EndPressed += new EventHandler((sender, e) => EndPressed?.Invoke(sender, e));
+            webInfoForm.F11Pressed += new EventHandler((sender, e) => F11Pressed?.Invoke(sender, e));
+            webInfoForm.F12Pressed += new EventHandler((sender, e) => F12Pressed?.Invoke(sender, e));
+            webInfoForm.F2Pressed += new EventHandler((sender, e) => F2Pressed?.Invoke(sender, e));
+            webInfoForm.F3Pressed += new EventHandler((sender, e) => F3Pressed?.Invoke(sender, e));
+            webInfoForm.F4Pressed += new EventHandler((sender, e) => F4Pressed?.Invoke(sender, e));
+            webInfoForm.F5Pressed += new EventHandler((sender, e) => F5Pressed?.Invoke(sender, e));
             webInfoForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+            webInfoForm.F8Pressed += new EventHandler((sender, e) => F8Pressed?.Invoke(sender, e));
+            webInfoForm.F9Pressed += new EventHandler((sender, e) => F9Pressed?.Invoke(sender, e));
             webInfoForm.HelpRequested += new HelpEventHandler((sender, hlpevent) => Help?.Invoke(sender, hlpevent));
+            webInfoForm.HomePressed += new EventHandler((sender, e) => HomePressed?.Invoke(sender, e));
+            webInfoForm.PageDownPressed += new EventHandler((sender, e) => PageDownPressed?.Invoke(sender, e));
+            webInfoForm.PageUpPressed += new EventHandler((sender, e) => PageUpPressed?.Invoke(sender, e));
+            webInfoForm.ShiftF3Pressed += new EventHandler((sender, e) => ShiftF3Pressed?.Invoke(sender, e));
+            webInfoForm.UpPressed += new EventHandler((sender, e) => UpPressed?.Invoke(sender, e));
             webInfoForm.ShowDialog();
         }
 
@@ -968,10 +1062,7 @@ namespace BetHelper {
             return Point.Empty;
         }
 
-        protected string GetValueById(
-                string elementId,
-                string rootElement = Constants.DOMRootElementName) {
-
+        protected string GetValueById(string elementId, string rootElement = Constants.DOMRootElementName) {
             return GetValue(string.Format(Constants.JSGetElementByIdFormat, rootElement, elementId));
         }
 

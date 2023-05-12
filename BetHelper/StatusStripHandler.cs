@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.9.0
  */
 
 using System;
@@ -33,27 +33,36 @@ using System.Windows.Forms;
 
 namespace BetHelper {
     public sealed class StatusStripHandler : IDisposable {
-        private BellMode bellMode;
+        private BellMode fastOpportunityBellMode;
+        private BellMode newTipsBellMode;
         private bool muted;
         private ContextMenu contextMenu;
         private DisplayMode displayMode;
         private double zoomLevel;
         private ExtBrowsHandler extBrowsHandler;
-        private Font defaultFont, boldFont;
-        private int maximum, temp;
+        private Font boldFont;
+        private Font defaultFont;
+        private int maximum;
+        private int temp;
         private long dataSize;
         private Settings settings;
         private StatusStrip statusStrip;
-        private string msg4CtxMenu, msgA, msgB, tempMsg;
+        private string msg4CtxMenu;
+        private string msgA;
+        private string msgB;
+        private string tempMsg;
         private System.Timers.Timer finishedTimer;
-        private System.Windows.Forms.Timer heartBeatTimer, labelTimer, timer;
+        private System.Windows.Forms.Timer heartBeatTimer;
+        private System.Windows.Forms.Timer labelTimer;
+        private System.Windows.Forms.Timer timer;
         private ToolStripProgressBar progressBar;
-        private ToolStripStatusLabel labelBell;
         private ToolStripStatusLabel labelCache;
         private ToolStripStatusLabel labelCaps;
+        private ToolStripStatusLabel labelFOBell;
         private ToolStripStatusLabel labelIns;
         private ToolStripStatusLabel labelMessage;
-        private ToolStripStatusLabel labelMuted;
+        private ToolStripStatusLabel labelSound;
+        private ToolStripStatusLabel labelNTBell;
         private ToolStripStatusLabel labelNum;
         private ToolStripStatusLabel labelScrl;
         private ToolStripStatusLabel labelSearchResult;
@@ -125,7 +134,7 @@ namespace BetHelper {
             labelSearchResult.MouseUp += new MouseEventHandler(SetStatusLabelText);
             labelSearchResult.MouseMove += new MouseEventHandler(SetStatusLabelText);
 
-            labelMuted = new ToolStripStatusLabel() {
+            labelSound = new ToolStripStatusLabel() {
                 Alignment = ToolStripItemAlignment.Right,
                 TextAlign = ContentAlignment.MiddleCenter,
                 BorderSides = ToolStripStatusLabelBorderSides.All,
@@ -133,9 +142,9 @@ namespace BetHelper {
                 Margin = Padding.Empty,
                 AutoSize = false
             };
-            labelMuted.MouseDown += new MouseEventHandler(SetStatusLabelText);
-            labelMuted.MouseUp += new MouseEventHandler(SetStatusLabelText);
-            labelMuted.MouseMove += new MouseEventHandler(SetStatusLabelText);
+            labelSound.MouseDown += new MouseEventHandler(SetStatusLabelText);
+            labelSound.MouseUp += new MouseEventHandler(SetStatusLabelText);
+            labelSound.MouseMove += new MouseEventHandler(SetStatusLabelText);
 
             labelZoomLvl = new ToolStripStatusLabel() {
                 Alignment = ToolStripItemAlignment.Right,
@@ -161,7 +170,7 @@ namespace BetHelper {
             labelCache.MouseUp += new MouseEventHandler(SetStatusLabelText);
             labelCache.MouseMove += new MouseEventHandler(SetStatusLabelText);
 
-            labelBell = new ToolStripStatusLabel() {
+            labelNTBell = new ToolStripStatusLabel() {
                 Alignment = ToolStripItemAlignment.Right,
                 TextAlign = ContentAlignment.MiddleCenter,
                 BorderSides = ToolStripStatusLabelBorderSides.All,
@@ -169,9 +178,21 @@ namespace BetHelper {
                 Margin = Padding.Empty,
                 AutoSize = false
             };
-            labelBell.MouseDown += new MouseEventHandler(SetStatusLabelText);
-            labelBell.MouseUp += new MouseEventHandler(SetStatusLabelText);
-            labelBell.MouseMove += new MouseEventHandler(SetStatusLabelText);
+            labelNTBell.MouseDown += new MouseEventHandler(SetStatusLabelText);
+            labelNTBell.MouseUp += new MouseEventHandler(SetStatusLabelText);
+            labelNTBell.MouseMove += new MouseEventHandler(SetStatusLabelText);
+
+            labelFOBell = new ToolStripStatusLabel() {
+                Alignment = ToolStripItemAlignment.Right,
+                TextAlign = ContentAlignment.MiddleCenter,
+                BorderSides = ToolStripStatusLabelBorderSides.All,
+                Padding = Padding.Empty,
+                Margin = Padding.Empty,
+                AutoSize = false
+            };
+            labelFOBell.MouseDown += new MouseEventHandler(SetStatusLabelText);
+            labelFOBell.MouseUp += new MouseEventHandler(SetStatusLabelText);
+            labelFOBell.MouseMove += new MouseEventHandler(SetStatusLabelText);
 
             labelCaps = new ToolStripStatusLabel() {
                 Alignment = ToolStripItemAlignment.Right,
@@ -236,11 +257,12 @@ namespace BetHelper {
             if (displayMode.Equals(DisplayMode.Basic)) {
                 statusStrip.Items.Add(labelSearchResult);
             }
-            statusStrip.Items.Add(labelMuted);
+            statusStrip.Items.Add(labelSound);
             statusStrip.Items.Add(labelZoomLvl);
             statusStrip.Items.Add(labelCache);
             if (displayMode.Equals(DisplayMode.Standard)) {
-                statusStrip.Items.Add(labelBell);
+                statusStrip.Items.Add(labelNTBell);
+                statusStrip.Items.Add(labelFOBell);
             }
             statusStrip.Items.Add(labelCaps);
             statusStrip.Items.Add(labelNum);
@@ -266,7 +288,8 @@ namespace BetHelper {
             if (displayMode.Equals(DisplayMode.None)) {
                 statusStrip.Visible = false;
             }
-            bellMode = settings.EnableBell ? BellMode.Warning : BellMode.Off;
+            newTipsBellMode = settings.EnableTipArrivalBell ? BellMode.Warning : BellMode.Off;
+            fastOpportunityBellMode = settings.EnableOpportunityBell ? BellMode.Warning : BellMode.Off;
             this.displayMode = displayMode;
             this.extBrowsHandler = extBrowsHandler;
             this.settings = settings;
@@ -281,7 +304,8 @@ namespace BetHelper {
                 SetMuted();
                 SetZoomLevel();
                 SetDataSize();
-                SetBell();
+                SetNTBell();
+                SetFOBell();
             });
             settings.AllowedAddrHandler.IpCheckFailed += new EventHandler((sender, e) => {
                 SetMessage(StatusMessageType.PersistentB, Properties.Resources.MessageCheckYourIpAddress);
@@ -455,7 +479,7 @@ namespace BetHelper {
                     if (temp > Constants.StripProgressBarInterval * 2) {
                         timer.Interval = temp / 2;
                     }
-                    if ((float)progressBar.Value / progressBar.Maximum < 0.9f) {
+                    if ((float)progressBar.Value / progressBar.Maximum < Constants.ProgressBarSmoothMaximum / 100f) {
                         return;
                     }
                     timer.Stop();
@@ -484,10 +508,11 @@ namespace BetHelper {
             bool visible = statusStrip.Width > (displayMode.Equals(DisplayMode.Standard)
                 ? Constants.StripStatusLblCacheVLimit
                 : Constants.StripStatusLblCacheVLimitReduced);
-            labelMuted.Visible = visible;
+            labelSound.Visible = visible;
             labelZoomLvl.Visible = visible;
             labelCache.Visible = visible;
-            labelBell.Visible = visible;
+            labelNTBell.Visible = visible;
+            labelFOBell.Visible = visible;
         }
 
         public void ResetProgressBar() {
@@ -505,31 +530,31 @@ namespace BetHelper {
             }
         }
 
-        private void SetBell() {
+        private void SetFOBell() {
             try {
                 if (statusStrip.InvokeRequired) {
-                    statusStrip.Invoke(new StatusStripHandlerCallback(SetBell));
+                    statusStrip.Invoke(new StatusStripHandlerCallback(SetFOBell));
                 } else {
-                    switch (bellMode) {
+                    switch (fastOpportunityBellMode) {
                         case BellMode.On:
-                            labelBell.Font = defaultFont;
-                            labelBell.ForeColor = SystemColors.ControlText;
-                            labelBell.Text = Constants.StripBell;
+                            labelFOBell.Font = defaultFont;
+                            labelFOBell.ForeColor = SystemColors.ControlText;
+                            labelFOBell.Text = Constants.StripFOBell;
                             break;
                         case BellMode.Ringing:
-                            labelBell.Font = settings.BoldBellStatus ? boldFont : defaultFont;
-                            labelBell.ForeColor = SystemColors.ControlText;
-                            labelBell.Text = Constants.StripBell;
+                            labelFOBell.Font = settings.BoldBellStatus ? boldFont : defaultFont;
+                            labelFOBell.ForeColor = SystemColors.ControlText;
+                            labelFOBell.Text = Constants.StripFOBell;
                             break;
                         case BellMode.Warning:
-                            labelBell.Font = settings.BoldBellStatus ? boldFont : defaultFont;
-                            labelBell.ForeColor = Color.Crimson;
-                            labelBell.Text = Constants.StripBell;
+                            labelFOBell.Font = settings.BoldBellStatus ? boldFont : defaultFont;
+                            labelFOBell.ForeColor = Color.Crimson;
+                            labelFOBell.Text = Constants.StripFOBell;
                             break;
                         default:
-                            labelBell.Font = defaultFont;
-                            labelBell.ForeColor = SystemColors.ControlText;
-                            labelBell.Text = string.Empty;
+                            labelFOBell.Font = defaultFont;
+                            labelFOBell.ForeColor = SystemColors.ControlText;
+                            labelFOBell.Text = string.Empty;
                             break;
                     }
                     SetStatusStripControlsSize();
@@ -540,9 +565,49 @@ namespace BetHelper {
             }
         }
 
-        public void SetBell(BellMode bellMode) {
-            this.bellMode = bellMode;
-            SetBell();
+        public void SetFOBell(BellMode bellMode) {
+            fastOpportunityBellMode = bellMode;
+            SetFOBell();
+        }
+
+        private void SetNTBell() {
+            try {
+                if (statusStrip.InvokeRequired) {
+                    statusStrip.Invoke(new StatusStripHandlerCallback(SetNTBell));
+                } else {
+                    switch (newTipsBellMode) {
+                        case BellMode.On:
+                            labelNTBell.Font = defaultFont;
+                            labelNTBell.ForeColor = SystemColors.ControlText;
+                            labelNTBell.Text = Constants.StripNTBell;
+                            break;
+                        case BellMode.Ringing:
+                            labelNTBell.Font = settings.BoldBellStatus ? boldFont : defaultFont;
+                            labelNTBell.ForeColor = SystemColors.ControlText;
+                            labelNTBell.Text = Constants.StripNTBell;
+                            break;
+                        case BellMode.Warning:
+                            labelNTBell.Font = settings.BoldBellStatus ? boldFont : defaultFont;
+                            labelNTBell.ForeColor = Color.Crimson;
+                            labelNTBell.Text = Constants.StripNTBell;
+                            break;
+                        default:
+                            labelNTBell.Font = defaultFont;
+                            labelNTBell.ForeColor = SystemColors.ControlText;
+                            labelNTBell.Text = string.Empty;
+                            break;
+                    }
+                    SetStatusStripControlsSize();
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
+
+        public void SetNTBell(BellMode bellMode) {
+            newTipsBellMode = bellMode;
+            SetNTBell();
         }
 
         private void SetBorderStyle() {
@@ -713,7 +778,7 @@ namespace BetHelper {
                 if (statusStrip.InvokeRequired) {
                     statusStrip.Invoke(new StatusStripHandlerCallback(SetMuted));
                 } else {
-                    labelMuted.Text = muted ? Constants.StripMuted : Constants.StripSound;
+                    labelSound.Text = muted ? Constants.StripMuted : Constants.StripSound;
                     SetStatusStripControlsSize();
                 }
             } catch (Exception exception) {
@@ -835,12 +900,13 @@ namespace BetHelper {
         }
 
         private void SetStatusStripControlsSize() {
-            labelSearchResult.Size = new Size(97, 10);
-            labelMuted.Size = new Size(48, 10);
-            labelZoomLvl.Size = new Size(48, 10);
-            labelCache.Size = new Size(59, 10);
-            Size size = new Size(39, 10);
-            labelBell.Size = size;
+            labelSearchResult.Size = new Size(Constants.StripStatusLblSearchResWidth, Constants.StripStatusLblHeight);
+            labelSound.Size = new Size(Constants.StripStatusLblSoundWidth, Constants.StripStatusLblHeight);
+            labelZoomLvl.Size = new Size(Constants.StripStatusLblZoomLvlWidth, Constants.StripStatusLblHeight);
+            labelCache.Size = new Size(Constants.StripStatusLblCacheWidth, Constants.StripStatusLblHeight);
+            labelNTBell.Size = new Size(Constants.StripStatusLblBellWidth, Constants.StripStatusLblHeight);
+            labelFOBell.Size = new Size(Constants.StripStatusLblBellWidth, Constants.StripStatusLblHeight);
+            Size size = new Size(Constants.StripStatusKeyLockWidth, Constants.StripStatusLblHeight);
             labelCaps.Size = size;
             labelNum.Size = size;
             labelIns.Size = size;

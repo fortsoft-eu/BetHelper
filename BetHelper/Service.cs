@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using FortSoft.Tools;
@@ -41,7 +41,57 @@ namespace BetHelper {
         private ServiceForm serviceForm;
         private ServiceStatus serviceStatus;
 
-        public event EventHandler F7Pressed, StatusChanged, Update;
+        public event EventHandler StatusChanged;
+        public event EventHandler Update;
+
+        public event EventHandler AltCtrlShiftEPressed;
+        public event EventHandler AltCtrlShiftPPressed;
+        public event EventHandler AltF10Pressed;
+        public event EventHandler AltF11Pressed;
+        public event EventHandler AltF12Pressed;
+        public event EventHandler AltF7Pressed;
+        public event EventHandler AltF8Pressed;
+        public event EventHandler AltF9Pressed;
+        public event EventHandler AltHomePressed;
+        public event EventHandler AltLeftPressed;
+        public event EventHandler AltLPressed;
+        public event EventHandler AltRightPressed;
+        public event EventHandler CtrlDPressed;
+        public event EventHandler CtrlEPressed;
+        public event EventHandler CtrlFPressed;
+        public event EventHandler CtrlF5Pressed;
+        public event EventHandler CtrlGPressed;
+        public event EventHandler CtrlIPressed;
+        public event EventHandler CtrlMinusPressed;
+        public event EventHandler CtrlMPressed;
+        public event EventHandler CtrlOPressed;
+        public event EventHandler CtrlPlusPressed;
+        public event EventHandler CtrlPPressed;
+        public event EventHandler CtrlShiftDelPressed;
+        public event EventHandler CtrlShiftEPressed;
+        public event EventHandler CtrlShiftMinusPressed;
+        public event EventHandler CtrlShiftNPressed;
+        public event EventHandler CtrlShiftPlusPressed;
+        public event EventHandler CtrlShiftPPressed;
+        public event EventHandler CtrlTPressed;
+        public event EventHandler CtrlUPressed;
+        public event EventHandler CtrlZeroPressed;
+        public event EventHandler DownPressed;
+        public event EventHandler EndPressed;
+        public event EventHandler F11Pressed;
+        public event EventHandler F12Pressed;
+        public event EventHandler F2Pressed;
+        public event EventHandler F3Pressed;
+        public event EventHandler F4Pressed;
+        public event EventHandler F5Pressed;
+        public event EventHandler F7Pressed;
+        public event EventHandler F8Pressed;
+        public event EventHandler F9Pressed;
+        public event EventHandler HomePressed;
+        public event EventHandler PageDownPressed;
+        public event EventHandler PageUpPressed;
+        public event EventHandler ShiftF3Pressed;
+        public event EventHandler UpPressed;
 
         public Service(
                 string name,
@@ -132,7 +182,55 @@ namespace BetHelper {
 
         private void EditThread() {
             serviceForm = new ServiceForm(Settings, PersistWindowState);
+            serviceForm.AltCtrlShiftEPressed += new EventHandler((sender, e) => AltCtrlShiftEPressed?.Invoke(sender, e));
+            serviceForm.AltCtrlShiftPPressed += new EventHandler((sender, e) => AltCtrlShiftPPressed?.Invoke(sender, e));
+            serviceForm.AltF10Pressed += new EventHandler((sender, e) => AltF10Pressed?.Invoke(sender, e));
+            serviceForm.AltF11Pressed += new EventHandler((sender, e) => AltF11Pressed?.Invoke(sender, e));
+            serviceForm.AltF12Pressed += new EventHandler((sender, e) => AltF12Pressed?.Invoke(sender, e));
+            serviceForm.AltF7Pressed += new EventHandler((sender, e) => AltF7Pressed?.Invoke(sender, e));
+            serviceForm.AltF8Pressed += new EventHandler((sender, e) => AltF8Pressed?.Invoke(sender, e));
+            serviceForm.AltF9Pressed += new EventHandler((sender, e) => AltF9Pressed?.Invoke(sender, e));
+            serviceForm.AltF9Pressed += new EventHandler((sender, e) => AltF9Pressed?.Invoke(sender, e));
+            serviceForm.AltHomePressed += new EventHandler((sender, e) => AltHomePressed?.Invoke(sender, e));
+            serviceForm.AltLeftPressed += new EventHandler((sender, e) => AltLeftPressed?.Invoke(sender, e));
+            serviceForm.AltLPressed += new EventHandler((sender, e) => AltLPressed?.Invoke(sender, e));
+            serviceForm.AltRightPressed += new EventHandler((sender, e) => AltRightPressed?.Invoke(sender, e));
+            serviceForm.CtrlDPressed += new EventHandler((sender, e) => CtrlDPressed?.Invoke(sender, e));
+            serviceForm.CtrlEPressed += new EventHandler((sender, e) => CtrlEPressed?.Invoke(sender, e));
+            serviceForm.CtrlFPressed += new EventHandler((sender, e) => CtrlFPressed?.Invoke(sender, e));
+            serviceForm.CtrlF5Pressed += new EventHandler((sender, e) => CtrlF5Pressed?.Invoke(sender, e));
+            serviceForm.CtrlGPressed += new EventHandler((sender, e) => CtrlGPressed?.Invoke(sender, e));
+            serviceForm.CtrlIPressed += new EventHandler((sender, e) => CtrlIPressed?.Invoke(sender, e));
+            serviceForm.CtrlMinusPressed += new EventHandler((sender, e) => CtrlMinusPressed?.Invoke(sender, e));
+            serviceForm.CtrlMPressed += new EventHandler((sender, e) => CtrlMPressed?.Invoke(sender, e));
+            serviceForm.CtrlOPressed += new EventHandler((sender, e) => CtrlOPressed?.Invoke(sender, e));
+            serviceForm.CtrlPlusPressed += new EventHandler((sender, e) => CtrlPlusPressed?.Invoke(sender, e));
+            serviceForm.CtrlPPressed += new EventHandler((sender, e) => CtrlPPressed?.Invoke(sender, e));
+            serviceForm.CtrlShiftDelPressed += new EventHandler((sender, e) => CtrlShiftDelPressed?.Invoke(sender, e));
+            serviceForm.CtrlShiftEPressed += new EventHandler((sender, e) => CtrlShiftEPressed?.Invoke(sender, e));
+            serviceForm.CtrlShiftMinusPressed += new EventHandler((sender, e) => CtrlShiftMinusPressed?.Invoke(sender, e));
+            serviceForm.CtrlShiftNPressed += new EventHandler((sender, e) => CtrlShiftNPressed?.Invoke(sender, e));
+            serviceForm.CtrlShiftPlusPressed += new EventHandler((sender, e) => CtrlShiftPlusPressed?.Invoke(sender, e));
+            serviceForm.CtrlShiftPPressed += new EventHandler((sender, e) => CtrlShiftPPressed?.Invoke(sender, e));
+            serviceForm.CtrlTPressed += new EventHandler((sender, e) => CtrlTPressed?.Invoke(sender, e));
+            serviceForm.CtrlUPressed += new EventHandler((sender, e) => CtrlUPressed?.Invoke(sender, e));
+            serviceForm.CtrlZeroPressed += new EventHandler((sender, e) => CtrlZeroPressed?.Invoke(sender, e));
+            serviceForm.DownPressed += new EventHandler((sender, e) => DownPressed?.Invoke(sender, e));
+            serviceForm.EndPressed += new EventHandler((sender, e) => EndPressed?.Invoke(sender, e));
+            serviceForm.F11Pressed += new EventHandler((sender, e) => F11Pressed?.Invoke(sender, e));
+            serviceForm.F12Pressed += new EventHandler((sender, e) => F12Pressed?.Invoke(sender, e));
+            serviceForm.F2Pressed += new EventHandler((sender, e) => F2Pressed?.Invoke(sender, e));
+            serviceForm.F3Pressed += new EventHandler((sender, e) => F3Pressed?.Invoke(sender, e));
+            serviceForm.F4Pressed += new EventHandler((sender, e) => F4Pressed?.Invoke(sender, e));
+            serviceForm.F5Pressed += new EventHandler((sender, e) => F5Pressed?.Invoke(sender, e));
             serviceForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+            serviceForm.F8Pressed += new EventHandler((sender, e) => F8Pressed?.Invoke(sender, e));
+            serviceForm.F9Pressed += new EventHandler((sender, e) => F9Pressed?.Invoke(sender, e));
+            serviceForm.HomePressed += new EventHandler((sender, e) => HomePressed?.Invoke(sender, e));
+            serviceForm.PageDownPressed += new EventHandler((sender, e) => PageDownPressed?.Invoke(sender, e));
+            serviceForm.PageUpPressed += new EventHandler((sender, e) => PageUpPressed?.Invoke(sender, e));
+            serviceForm.ShiftF3Pressed += new EventHandler((sender, e) => ShiftF3Pressed?.Invoke(sender, e));
+            serviceForm.UpPressed += new EventHandler((sender, e) => UpPressed?.Invoke(sender, e));
             serviceForm.Service = this;
             if (serviceForm.ShowDialog().Equals(DialogResult.OK)) {
                 Update?.Invoke(this, EventArgs.Empty);

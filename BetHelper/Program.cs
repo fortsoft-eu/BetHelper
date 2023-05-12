@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.9.0
  */
 
+using CefSharp;
 using FortSoft.Tools;
 using System;
 using System.Diagnostics;
@@ -34,12 +35,12 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
-    public static class Program {
+    internal static class Program {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        public static void Main(string[] args) {
+        internal static void Main(string[] args) {
             if (!Environment.OSVersion.Platform.Equals(PlatformID.Win32NT)) {
                 MessageBox.Show(Properties.Resources.MessageApplicationCannotRun, GetTitle(Properties.Resources.CaptionError),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -98,6 +99,13 @@ namespace BetHelper {
                         Debug.WriteLine(exception);
                         ErrorLog.WriteLine(exception);
                     }
+                    try {
+                        Cef.PreShutdown();
+                        Cef.Shutdown();
+                    } catch (Exception exception) {
+                        Debug.WriteLine(exception);
+                        ErrorLog.WriteLine(exception);
+                    }
                     if (mainForm.Restart) {
                         Application.Restart();
                     }
@@ -114,7 +122,7 @@ namespace BetHelper {
             }
         }
 
-        public static string GetTitle() {
+        internal static string GetTitle() {
             object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
             string title = null;
             if (attributes.Length > 0) {
@@ -124,7 +132,7 @@ namespace BetHelper {
             return string.IsNullOrEmpty(title) ? Application.ProductName : title;
         }
 
-        public static string GetTitle(string title) {
+        internal static string GetTitle(string title) {
             return new StringBuilder()
                 .Append(GetTitle())
                 .Append(Constants.Space)
@@ -134,7 +142,7 @@ namespace BetHelper {
                 .ToString();
         }
 
-        public static bool IsDebugging {
+        internal static bool IsDebugging {
             get {
                 bool isDebugging = false;
                 Debugging(ref isDebugging);

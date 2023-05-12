@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 namespace BetHelper {
@@ -59,12 +59,6 @@ namespace BetHelper {
         /// Dimensionless value.
         /// </summary>
         public const double MinimumZoomLevel = -7.5;
-
-        /// <summary>
-        /// The time interval in milliseconds after which the application will be
-        /// forcibly terminated after the main application window is closed.
-        /// </summary>
-        public const int AfterCloseTimeOut = 1800;
 
         /// <summary>
         /// Minimum empirically determined browser width in pixels required for
@@ -168,6 +162,11 @@ namespace BetHelper {
         public const int ProgressBarFormInterval = 30;
 
         /// <summary>
+        /// ProgressBarForm smooth maximum per cent.
+        /// </summary>
+        public const int ProgressBarSmoothMaximum = 95;
+
+        /// <summary>
         /// Default right panel width in pixels.
         /// </summary>
         public const int RightPaneDefaultWidth = 568;
@@ -232,9 +231,10 @@ namespace BetHelper {
         public const int StripProgressBarWRatio = 18;
 
         /// <summary>
-        /// The time interval in seconds to refresh the StatusStrip labels.
+        /// The width in pixels of the StatusStrip label for displaying the bell
+        /// status.
         /// </summary>
-        public const int StripStatusLblInterval = 30;
+        public const int StripStatusLblBellWidth = 29;
 
         /// <summary>
         /// Width limit in pixels for displaying the browser cache size label in
@@ -249,16 +249,56 @@ namespace BetHelper {
         public const int StripStatusLblCacheVLimitReduced = 600;
 
         /// <summary>
+        /// The width in pixels of the StatusStrip label for displaying the
+        /// browser cache size.
+        /// </summary>
+        public const int StripStatusLblCacheWidth = 59;
+
+        /// <summary>
+        /// The height in pixels of the StatusStrip status labels.
+        /// </summary>
+        public const int StripStatusLblHeight = 10;
+
+        /// <summary>
+        /// The time interval in seconds to refresh the StatusStrip labels.
+        /// </summary>
+        public const int StripStatusLblInterval = 30;
+
+        /// <summary>
+        /// The width in pixels of the StatusStrip label for displaying the key
+        /// locks status.
+        /// </summary>
+        public const int StripStatusKeyLockWidth = 39;
+
+        /// <summary>
         /// Width limit in pixels for displaying the search results label in the
         /// StatusStrip.
         /// </summary>
         public const int StripStatusLblSearchResVLimit = 800;
 
         /// <summary>
+        /// The width in pixels of the StatusStrip label for displaying the
+        /// search results.
+        /// </summary>
+        public const int StripStatusLblSearchResWidth = 97;
+
+        /// <summary>
+        /// The width in pixels of the StatusStrip label for displaying the sound
+        /// status.
+        /// </summary>
+        public const int StripStatusLblSoundWidth = 39;
+
+        /// <summary>
         /// Width limit in pixels for displaying the URL label ProgressBar in the
         /// StatusStrip.
         /// </summary>
         public const int StripStatusLblUrlVLimit = 600;
+
+        /// <summary>
+        /// The width in pixels of the StatusStrip label for displaying the zoom
+        /// level.
+        /// </summary>
+        public const int StripStatusLblZoomLvlWidth = 48;
 
         /// <summary>
         /// Telephone bell ringing period in milliseconds.
@@ -295,14 +335,9 @@ namespace BetHelper {
         /// <summary>
         /// Windows API constants.
         /// </summary>
-        public const int MOUSEEVENTF_LEFTDOWN = 0x02;
         public const int MOUSEEVENTF_LEFTUP = 0x04;
-        public const int MOUSEEVENTF_RIGHTDOWN = 0x08;
-        public const int MOUSEEVENTF_RIGHTUP = 0x10;
         public const int SC_CLOSE = 0xF060;
         public const int SC_MONITORPOWER = 0xF170;
-        public const int SC_SCREENSAVE = 0xF140;
-        public const int SC_TASKLIST = 0xF130;
         public const int WM_CLEAR = 0x0303;
         public const int WM_COPY = 0x0301;
         public const int WM_CUT = 0x0300;
@@ -319,7 +354,6 @@ namespace BetHelper {
         public const char ClosingBracket = ']';
         public const char Colon = ':';
         public const char Comma = ',';
-        public const char Ellipsis = '…';
         public const char EmDash = '—';
         public const char EnDash = '–';
         public const char EqualSign = '=';
@@ -336,8 +370,6 @@ namespace BetHelper {
         public const char Slash = '/';
         public const char Space = ' ';
         public const char Underscore = '_';
-        public const char UpperCaseT = 'T';
-        public const char UpperCaseZ = 'Z';
         public const char VerticalBar = '|';
         public const char VerticalTab = '\t';
         public const char Zero = '0';
@@ -574,14 +606,15 @@ namespace BetHelper {
         public const string ShortcutShiftCtrlT = "\tShift+Ctrl+T";
         public const string SplitWordsPattern = "\\s+";
         public const string StatusOk = "Ok";
-        public const string StripBell = "Bell";
-        public const string StripMuted = "Muted";
+        public const string StripNTBell = "NT";
+        public const string StripFOBell = "FO";
+        public const string StripMuted = "MUT";
         public const string StripSearchFormat = "{0}/{1} {2}";
         public const string StripSearchMatches = "matches";
         public const string StripSearchMatchesShort1 = "match";
         public const string StripSearchMatchesShort2 = "m.";
         public const string StripSearchNotFound = "String not found";
-        public const string StripSound = "Sound";
+        public const string StripSound = "SND";
         public const string TabControlLeftNameEnd = "Left";
         public const string TabControlRightNameEnd = "Right";
         public const string TelegramDesktopApplicationName = "Telegram Desktop";

@@ -899,7 +899,7 @@
     <value>Bookmark has been removed</value>
   </data>
   <data name="MenuItemTryToKeepUserLoggedIn" xml:space="preserve">
-    <value>Try to Keep the User &amp;Logged in</value>
+    <value>Try to &amp;Keep the User Logged in</value>
   </data>
   <data name="ImgServiceActive" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ImgServiceActive.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -1003,8 +1003,8 @@
   <data name="MenuItemStopRinging" xml:space="preserve">
     <value>&amp;Stop Ringing</value>
   </data>
-  <data name="MenuItemEnableBell" xml:space="preserve">
-    <value>Enable &amp;Bell</value>
+  <data name="MenuItemEnableTipArrivalBell" xml:space="preserve">
+    <value>Enable Tip Arri&amp;val Bell</value>
   </data>
   <data name="MenuItemBellTest" xml:space="preserve">
     <value>Bell &amp;Test</value>
@@ -1113,5 +1113,8 @@
   </data>
   <data name="Service" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Service.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MenuItemEnableOpportunityBell" xml:space="preserve">
+    <value>Enab&amp;le Opportunity Bell</value>
   </data>
 </root>

@@ -21,18 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.9.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
     public class WebInfo01 : WebInfo {
 
         protected override void LogIn(ChromiumWebBrowser browser) {
-            OnStarted(8);
+            OnStarted(9);
 
             if (ElementExistsAndVisible(browser,
                     "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1]", false)) {
@@ -49,16 +50,24 @@ namespace BetHelper {
                 return;
             }
 
+            OnProgress(Properties.Resources.MessageDisplayingLoginBlock);
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("document.getElementById('js-app').children[1].children[1].children[0].children[1].children[2].children[0]")
+                .Append(".children[1].children[0].click();")
+                .ToString());
+            Wait(browser);
+            Sleep(150);
+
             do {
                 Sleep(100);
                 OnProgress(Properties.Resources.MessageClearingUserNameBox);
-                browser.ExecuteScriptAsync("document.getElementById('userNameId').value = '';");
+                browser.ExecuteScriptAsync("document.getElementsByName('username')[0].value = '';");
                 Wait(browser);
                 Sleep(100);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (ElementExists(browser, "document.getElementById('userNameId')", true)) {
-                    browser.ExecuteScriptAsync("document.getElementById('userNameId').focus();");
+                if (ElementExists(browser, "document.getElementsByName('username')[0]", true)) {
+                    browser.ExecuteScriptAsync("document.getElementsByName('username')[0].focus();");
                     Sleep(250);
                 } else {
                     OnError();
@@ -67,20 +76,20 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingUserName);
                 SendString(browser, UserName);
-            } while (!GetValueById("userNameId").Equals(UserName));
+            } while (!GetValueBy(ElementAttribute.Name, "username").Equals(UserName));
 
             SendKey(browser, Keys.Tab);
 
             do {
                 Sleep(100);
                 OnProgress(Properties.Resources.MessageClearingPasswordBox);
-                browser.ExecuteScriptAsync("document.getElementById('passwordId').value = '';");
+                browser.ExecuteScriptAsync("document.getElementsByName('password')[0].value = '';");
                 Wait(browser);
                 Sleep(100);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (ElementExists(browser, "document.getElementById('passwordId')", true)) {
-                    browser.ExecuteScriptAsync("document.getElementById('passwordId').focus();");
+                if (ElementExists(browser, "document.getElementsByName('password')[0]", true)) {
+                    browser.ExecuteScriptAsync("document.getElementsByName('password')[0].focus();");
                     Sleep(250);
                 } else {
                     OnError();
@@ -89,11 +98,15 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingPassword);
                 SendString(browser, Password);
-            } while (!GetValueById("passwordId").Equals(Password));
+            } while (!GetValueBy(ElementAttribute.Name, "password").Equals(Password));
 
-            SendKey(browser, Keys.Tab);
             OnProgress(Properties.Resources.MessageLoggingIn);
-            SendKey(browser, Keys.Space);
+            if (!ClickElement(browser,
+                    "document.getElementsByClassName('row middle-xs')[1].parentElement.getElementsByTagName('button')[0]")) {
+
+                OnError();
+                return;
+            }
             Wait(browser);
 
             if (ElementExists(browser, "document.getElementById('modalDialogCloseId')", false)) {
@@ -116,17 +129,36 @@ namespace BetHelper {
         }
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('m-mainMenu')[0].children[1]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('m-mainMenu')[0].children[1].style.display = 'none';");
+            if (ElementExistsAndVisible(browser, new StringBuilder()
+                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
+                    .Append(".children[1]")
+                    .ToString(), false)) {
+
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
+                    .Append(".children[1].style.display = 'none';")
+                    .ToString());
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('m-mainMenu')[0].children[2]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('m-mainMenu')[0].children[2].style.display = 'none';");
+            if (ElementExistsAndVisible(browser, new StringBuilder()
+                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
+                    .Append(".children[2]")
+                    .ToString(), false)) {
+
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
+                    .Append(".children[2].style.display = 'none';")
+                    .ToString());
             }
             if (ElementExistsAndVisible(browser, "document.getElementById('promoWrapId')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('promoWrapId').style.display = 'none';");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('o-subMenu')[0].children[10]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('o-subMenu')[0].children[10].style.display = 'none';");
+            if (ElementExistsAndVisible(browser,
+                        "document.getElementById('js-headNavMenu').children[0].children[0].children[0].children[10]", false)) {
+
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("document.getElementById('js-headNavMenu').children[0].children[0].children[0].children[10].style.display =")
+                    .Append(" 'none';")
+                    .ToString());
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('m-marketingNotification')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('m-marketingNotification')[0].style.display = 'none';");

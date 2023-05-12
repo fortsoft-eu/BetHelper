@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using FortSoft.Tools;
@@ -43,7 +43,53 @@ namespace BetHelper {
         private delegate void WebInfoFormCallback();
         private delegate void CopyCallback(string str);
 
+        public event EventHandler AltCtrlShiftEPressed;
+        public event EventHandler AltCtrlShiftPPressed;
+        public event EventHandler AltF10Pressed;
+        public event EventHandler AltF11Pressed;
+        public event EventHandler AltF12Pressed;
+        public event EventHandler AltF7Pressed;
+        public event EventHandler AltF8Pressed;
+        public event EventHandler AltF9Pressed;
+        public event EventHandler AltHomePressed;
+        public event EventHandler AltLeftPressed;
+        public event EventHandler AltLPressed;
+        public event EventHandler AltRightPressed;
+        public event EventHandler CtrlDPressed;
+        public event EventHandler CtrlEPressed;
+        public event EventHandler CtrlFPressed;
+        public event EventHandler CtrlF5Pressed;
+        public event EventHandler CtrlGPressed;
+        public event EventHandler CtrlMinusPressed;
+        public event EventHandler CtrlMPressed;
+        public event EventHandler CtrlOPressed;
+        public event EventHandler CtrlPlusPressed;
+        public event EventHandler CtrlPPressed;
+        public event EventHandler CtrlShiftDelPressed;
+        public event EventHandler CtrlShiftEPressed;
+        public event EventHandler CtrlShiftMinusPressed;
+        public event EventHandler CtrlShiftNPressed;
+        public event EventHandler CtrlShiftPlusPressed;
+        public event EventHandler CtrlShiftPPressed;
+        public event EventHandler CtrlTPressed;
+        public event EventHandler CtrlUPressed;
+        public event EventHandler CtrlZeroPressed;
+        public event EventHandler DownPressed;
+        public event EventHandler EndPressed;
+        public event EventHandler F11Pressed;
+        public event EventHandler F12Pressed;
+        public event EventHandler F2Pressed;
+        public event EventHandler F3Pressed;
+        public event EventHandler F4Pressed;
+        public event EventHandler F5Pressed;
         public event EventHandler F7Pressed;
+        public event EventHandler F8Pressed;
+        public event EventHandler F9Pressed;
+        public event EventHandler HomePressed;
+        public event EventHandler PageDownPressed;
+        public event EventHandler PageUpPressed;
+        public event EventHandler ShiftF3Pressed;
+        public event EventHandler UpPressed;
 
         public WebInfoForm(WebInfo webInfo, PersistWindowState persistWindowState) {
             this.webInfo = webInfo;
@@ -268,9 +314,109 @@ namespace BetHelper {
                 e.SuppressKeyPress = true;
                 if (sender is TextBox) {
                     ((TextBox)sender).SelectAll();
+                } else if (sender is MaskedTextBox) {
+                    ((TextBox)sender).SelectAll();
                 }
+            } else if (e.Alt && e.Control && e.Shift && e.KeyCode.Equals(Keys.E)) {
+                AltCtrlShiftEPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.Control && e.Shift && e.KeyCode.Equals(Keys.P)) {
+                AltCtrlShiftPPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.F7)) {
+                AltF7Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.F8)) {
+                AltF8Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.F9)) {
+                AltF9Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.F10)) {
+                AltF10Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.F11)) {
+                AltF11Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.F12)) {
+                AltF12Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.Home)) {
+                AltHomePressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.Left)) {
+                AltLeftPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.Right)) {
+                AltRightPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.L)) {
+                AltLPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.Home)) {
+                e.SuppressKeyPress = true;
+                HomePressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.End)) {
+                e.SuppressKeyPress = true;
+                EndPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.PageUp)) {
+                e.SuppressKeyPress = true;
+                PageUpPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.PageDown)) {
+                e.SuppressKeyPress = true;
+                PageDownPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.Up)) {
+                e.SuppressKeyPress = true;
+                UpPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.Down)) {
+                e.SuppressKeyPress = true;
+                DownPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.Shift && (e.KeyCode.Equals(Keys.Add) || e.KeyCode.Equals(Keys.Oemplus))) {
+                CtrlShiftPlusPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.Shift && (e.KeyCode.Equals(Keys.Subtract) || e.KeyCode.Equals(Keys.OemMinus))) {
+                CtrlShiftMinusPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.Shift && e.KeyCode.Equals(Keys.Delete)) {
+                CtrlShiftDelPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.Shift && e.KeyCode.Equals(Keys.E)) {
+                CtrlShiftEPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.Shift && e.KeyCode.Equals(Keys.N)) {
+                CtrlShiftNPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.Shift && e.KeyCode.Equals(Keys.P)) {
+                CtrlShiftPPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && (e.KeyCode.Equals(Keys.Add) || e.KeyCode.Equals(Keys.Oemplus))) {
+                CtrlPlusPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && (e.KeyCode.Equals(Keys.Subtract) || e.KeyCode.Equals(Keys.OemMinus))) {
+                CtrlMinusPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.NumPad0)) {
+                CtrlZeroPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.D)) {
+                CtrlDPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.E)) {
+                CtrlEPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.F)) {
+                CtrlFPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.G)) {
+                CtrlGPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.M)) {
+                CtrlMPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.O)) {
+                CtrlOPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.P)) {
+                CtrlPPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.T)) {
+                CtrlTPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.U)) {
+                CtrlUPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Control && e.KeyCode.Equals(Keys.F5)) {
+                CtrlF5Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Shift && e.KeyCode.Equals(Keys.F3)) {
+                ShiftF3Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.KeyCode.Equals(Keys.F2)) {
+                F2Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.KeyCode.Equals(Keys.F3)) {
+                F3Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.KeyCode.Equals(Keys.F4)) {
+                F4Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.KeyCode.Equals(Keys.F5)) {
+                F5Pressed?.Invoke(this, EventArgs.Empty);
             } else if (e.KeyCode.Equals(Keys.F7)) {
                 F7Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.KeyCode.Equals(Keys.F8)) {
+                F8Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.KeyCode.Equals(Keys.F9)) {
+                F9Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.KeyCode.Equals(Keys.F11)) {
+                F11Pressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.KeyCode.Equals(Keys.F12)) {
+                F12Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -318,15 +464,6 @@ namespace BetHelper {
                 textBox.Focus();
             } else {
                 textBoxClicksTimer.Start();
-            }
-        }
-
-        private void OnPasswordKeyDown(object sender, KeyEventArgs e) {
-            if (e.Control && e.KeyCode.Equals(Keys.A)) {
-                e.SuppressKeyPress = true;
-                ((MaskedTextBox)sender).SelectAll();
-            } else if (e.KeyCode.Equals(Keys.F7)) {
-                F7Pressed?.Invoke(this, EventArgs.Empty);
             }
         }
 

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using CefSharp;
@@ -259,6 +259,12 @@ namespace BetHelper {
                 textBox.Focus();
             } else {
                 textBoxClicksTimer.Start();
+            }
+        }
+
+        private void OnPreviewKeyDown(object sender, PreviewKeyDownEventArgs e) {
+            if (e.KeyCode.Equals(Keys.F7)) {
+                F7Pressed?.Invoke(sender, e);
             }
         }
 

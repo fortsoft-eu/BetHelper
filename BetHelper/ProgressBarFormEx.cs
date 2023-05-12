@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.9.0
  */
 
 using System;
@@ -68,7 +68,7 @@ namespace BetHelper {
             if (temp > Constants.ProgressBarFormInterval * 2) {
                 timer.Interval = temp / 2;
             }
-            if ((float)ProgressBar.Value / ProgressBar.Maximum < 0.95f) {
+            if ((float)ProgressBar.Value / ProgressBar.Maximum < Constants.ProgressBarSmoothMaximum / 100f) {
                 return;
             }
             timer.Stop();

@@ -1259,11 +1259,20 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable &amp;Bell.
+        ///   Looks up a localized string similar to Enab&amp;le Opportunity Bell.
         /// </summary>
-        internal static string MenuItemEnableBell {
+        internal static string MenuItemEnableOpportunityBell {
             get {
-                return ResourceManager.GetString("MenuItemEnableBell", resourceCulture);
+                return ResourceManager.GetString("MenuItemEnableOpportunityBell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Tip Arri&amp;val Bell.
+        /// </summary>
+        internal static string MenuItemEnableTipArrivalBell {
+            get {
+                return ResourceManager.GetString("MenuItemEnableTipArrivalBell", resourceCulture);
             }
         }
         
@@ -2024,7 +2033,7 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Try to Keep the User &amp;Logged in.
+        ///   Looks up a localized string similar to Try to &amp;Keep the User Logged in.
         /// </summary>
         internal static string MenuItemTryToKeepUserLoggedIn {
             get {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 namespace BetHelper {
@@ -91,7 +91,6 @@ namespace BetHelper {
             this.dateTimePicker.Name = "dateTimePicker";
             this.dateTimePicker.Size = new System.Drawing.Size(180, 20);
             this.dateTimePicker.TabIndex = 7;
-            this.dateTimePicker.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
             // labelDateTime
             // 
@@ -183,7 +182,6 @@ namespace BetHelper {
             this.Controls.Add(this.labelSport);
             this.Name = "MatchControl";
             this.Size = new System.Drawing.Size(275, 130);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

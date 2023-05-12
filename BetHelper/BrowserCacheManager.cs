@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.9.0
  */
 
 using System;
@@ -48,7 +48,7 @@ namespace BetHelper {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
-            monitorTimer = new System.Timers.Timer(10000);
+            monitorTimer = new System.Timers.Timer(8000);
             monitorTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
                 monitorTimer.Interval = Constants.CacheSizeRefreshInterval * 60000;
                 RunMonitor();
@@ -80,10 +80,9 @@ namespace BetHelper {
             await Task.Run(new Action(() => {
                 try {
                     string appDataPath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
-                    if (File.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrSetClearFileName))) {
-                        ClearSet clearSet = (ClearSet)Enum
-                            .Parse(typeof(ClearSet),
-                                File.ReadAllText(Path.Combine(appDataPath, Constants.BrowserCacheMngrSetClearFileName)).Trim(), true);
+                    string filePath = Path.Combine(appDataPath, Constants.BrowserCacheMngrSetClearFileName);
+                    if (File.Exists(filePath)) {
+                        ClearSet clearSet = (ClearSet)Enum.Parse(typeof(ClearSet), File.ReadAllText(filePath).Trim(), true);
                         switch (clearSet) {
                             case ClearSet.BrowserCacheOnly:
                                 ClearCacheOnly(appDataPath);
@@ -103,17 +102,32 @@ namespace BetHelper {
         }
 
         private void ClearCacheOnly(string appDataPath) {
-            if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrCacheSubDirName))) {
-                Directory.Delete(Path.Combine(appDataPath, Constants.BrowserCacheMngrCacheSubDirName), true);
+            try {
+                if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrCacheSubDirName))) {
+                    Directory.Delete(Path.Combine(appDataPath, Constants.BrowserCacheMngrCacheSubDirName), true);
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
             }
         }
 
         private void ClearUserData(string appDataPath) {
-            if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName))) {
-                Directory.Delete(Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName), true);
+            try {
+                if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName))) {
+                    Directory.Delete(Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName), true);
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
             }
-            if (File.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrLocalPrefsFileName))) {
-                File.Delete(Path.Combine(appDataPath, Constants.BrowserCacheMngrLocalPrefsFileName));
+            try {
+                if (File.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrLocalPrefsFileName))) {
+                    File.Delete(Path.Combine(appDataPath, Constants.BrowserCacheMngrLocalPrefsFileName));
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
             }
         }
 

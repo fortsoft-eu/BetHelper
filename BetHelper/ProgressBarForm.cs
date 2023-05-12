@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.9.0
  */
 
 using System;
+using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
@@ -71,6 +72,10 @@ namespace BetHelper {
 
         public Label LabelProgress => labelProgress;
 
+        public Rectangle ParentRectangle { get; set; }
+
+        public ProgressBar ProgressBar => progressBar;
+
         public bool ProgressBarMarquee {
             get {
                 return progressBar.Style.Equals(ProgressBarStyle.Marquee);
@@ -79,8 +84,6 @@ namespace BetHelper {
                 progressBar.Style = value ? ProgressBarStyle.Marquee : ProgressBarStyle.Continuous;
             }
         }
-
-        public ProgressBar ProgressBar => progressBar;
 
         private void DisableCloseButton() {
             NativeMethods.EnableMenuItem(NativeMethods.GetSystemMenu(Handle, false), Constants.SC_CLOSE, 1);
@@ -95,6 +98,14 @@ namespace BetHelper {
         private void OnFormClosed(object sender, FormClosedEventArgs e) {
             timer.Stop();
             timer.Dispose();
+        }
+
+        private void OnFormLoad(object sender, EventArgs e) {
+            if (!ParentRectangle.IsEmpty) {
+                Location = new Point(
+                    ParentRectangle.X + (ParentRectangle.Width - Width) / 2,
+                    ParentRectangle.Y + (ParentRectangle.Height - Height) / 2);
+            }
         }
 
         public virtual void SetFinished(string message) {

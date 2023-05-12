@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using FortSoft.Tools;
@@ -41,7 +41,57 @@ namespace BetHelper {
         private TipForm tipForm;
         private TipStatus tipStatus;
 
-        public event EventHandler F7Pressed, StatusChanged, Update;
+        public event EventHandler StatusChanged;
+        public event EventHandler Update;
+
+        public event EventHandler AltCtrlShiftEPressed;
+        public event EventHandler AltCtrlShiftPPressed;
+        public event EventHandler AltF10Pressed;
+        public event EventHandler AltF11Pressed;
+        public event EventHandler AltF12Pressed;
+        public event EventHandler AltF7Pressed;
+        public event EventHandler AltF8Pressed;
+        public event EventHandler AltF9Pressed;
+        public event EventHandler AltHomePressed;
+        public event EventHandler AltLeftPressed;
+        public event EventHandler AltLPressed;
+        public event EventHandler AltRightPressed;
+        public event EventHandler CtrlDPressed;
+        public event EventHandler CtrlEPressed;
+        public event EventHandler CtrlFPressed;
+        public event EventHandler CtrlF5Pressed;
+        public event EventHandler CtrlGPressed;
+        public event EventHandler CtrlIPressed;
+        public event EventHandler CtrlMinusPressed;
+        public event EventHandler CtrlMPressed;
+        public event EventHandler CtrlOPressed;
+        public event EventHandler CtrlPlusPressed;
+        public event EventHandler CtrlPPressed;
+        public event EventHandler CtrlShiftDelPressed;
+        public event EventHandler CtrlShiftEPressed;
+        public event EventHandler CtrlShiftMinusPressed;
+        public event EventHandler CtrlShiftNPressed;
+        public event EventHandler CtrlShiftPlusPressed;
+        public event EventHandler CtrlShiftPPressed;
+        public event EventHandler CtrlTPressed;
+        public event EventHandler CtrlUPressed;
+        public event EventHandler CtrlZeroPressed;
+        public event EventHandler DownPressed;
+        public event EventHandler EndPressed;
+        public event EventHandler F11Pressed;
+        public event EventHandler F12Pressed;
+        public event EventHandler F2Pressed;
+        public event EventHandler F3Pressed;
+        public event EventHandler F4Pressed;
+        public event EventHandler F5Pressed;
+        public event EventHandler F7Pressed;
+        public event EventHandler F8Pressed;
+        public event EventHandler F9Pressed;
+        public event EventHandler HomePressed;
+        public event EventHandler PageDownPressed;
+        public event EventHandler PageUpPressed;
+        public event EventHandler ShiftF3Pressed;
+        public event EventHandler UpPressed;
 
         public Tip(
                 DateTime dateTime,
@@ -132,7 +182,55 @@ namespace BetHelper {
 
         private void EditThread() {
             tipForm = new TipForm(Settings, PersistWindowState);
+            tipForm.AltCtrlShiftEPressed += new EventHandler((sender, e) => AltCtrlShiftEPressed?.Invoke(sender, e));
+            tipForm.AltCtrlShiftPPressed += new EventHandler((sender, e) => AltCtrlShiftPPressed?.Invoke(sender, e));
+            tipForm.AltF10Pressed += new EventHandler((sender, e) => AltF10Pressed?.Invoke(sender, e));
+            tipForm.AltF11Pressed += new EventHandler((sender, e) => AltF11Pressed?.Invoke(sender, e));
+            tipForm.AltF12Pressed += new EventHandler((sender, e) => AltF12Pressed?.Invoke(sender, e));
+            tipForm.AltF7Pressed += new EventHandler((sender, e) => AltF7Pressed?.Invoke(sender, e));
+            tipForm.AltF8Pressed += new EventHandler((sender, e) => AltF8Pressed?.Invoke(sender, e));
+            tipForm.AltF9Pressed += new EventHandler((sender, e) => AltF9Pressed?.Invoke(sender, e));
+            tipForm.AltF9Pressed += new EventHandler((sender, e) => AltF9Pressed?.Invoke(sender, e));
+            tipForm.AltHomePressed += new EventHandler((sender, e) => AltHomePressed?.Invoke(sender, e));
+            tipForm.AltLeftPressed += new EventHandler((sender, e) => AltLeftPressed?.Invoke(sender, e));
+            tipForm.AltLPressed += new EventHandler((sender, e) => AltLPressed?.Invoke(sender, e));
+            tipForm.AltRightPressed += new EventHandler((sender, e) => AltRightPressed?.Invoke(sender, e));
+            tipForm.CtrlDPressed += new EventHandler((sender, e) => CtrlDPressed?.Invoke(sender, e));
+            tipForm.CtrlEPressed += new EventHandler((sender, e) => CtrlEPressed?.Invoke(sender, e));
+            tipForm.CtrlFPressed += new EventHandler((sender, e) => CtrlFPressed?.Invoke(sender, e));
+            tipForm.CtrlF5Pressed += new EventHandler((sender, e) => CtrlF5Pressed?.Invoke(sender, e));
+            tipForm.CtrlGPressed += new EventHandler((sender, e) => CtrlGPressed?.Invoke(sender, e));
+            tipForm.CtrlIPressed += new EventHandler((sender, e) => CtrlIPressed?.Invoke(sender, e));
+            tipForm.CtrlMinusPressed += new EventHandler((sender, e) => CtrlMinusPressed?.Invoke(sender, e));
+            tipForm.CtrlMPressed += new EventHandler((sender, e) => CtrlMPressed?.Invoke(sender, e));
+            tipForm.CtrlOPressed += new EventHandler((sender, e) => CtrlOPressed?.Invoke(sender, e));
+            tipForm.CtrlPlusPressed += new EventHandler((sender, e) => CtrlPlusPressed?.Invoke(sender, e));
+            tipForm.CtrlPPressed += new EventHandler((sender, e) => CtrlPPressed?.Invoke(sender, e));
+            tipForm.CtrlShiftDelPressed += new EventHandler((sender, e) => CtrlShiftDelPressed?.Invoke(sender, e));
+            tipForm.CtrlShiftEPressed += new EventHandler((sender, e) => CtrlShiftEPressed?.Invoke(sender, e));
+            tipForm.CtrlShiftMinusPressed += new EventHandler((sender, e) => CtrlShiftMinusPressed?.Invoke(sender, e));
+            tipForm.CtrlShiftNPressed += new EventHandler((sender, e) => CtrlShiftNPressed?.Invoke(sender, e));
+            tipForm.CtrlShiftPlusPressed += new EventHandler((sender, e) => CtrlShiftPlusPressed?.Invoke(sender, e));
+            tipForm.CtrlShiftPPressed += new EventHandler((sender, e) => CtrlShiftPPressed?.Invoke(sender, e));
+            tipForm.CtrlTPressed += new EventHandler((sender, e) => CtrlTPressed?.Invoke(sender, e));
+            tipForm.CtrlUPressed += new EventHandler((sender, e) => CtrlUPressed?.Invoke(sender, e));
+            tipForm.CtrlZeroPressed += new EventHandler((sender, e) => CtrlZeroPressed?.Invoke(sender, e));
+            tipForm.DownPressed += new EventHandler((sender, e) => DownPressed?.Invoke(sender, e));
+            tipForm.EndPressed += new EventHandler((sender, e) => EndPressed?.Invoke(sender, e));
+            tipForm.F11Pressed += new EventHandler((sender, e) => F11Pressed?.Invoke(sender, e));
+            tipForm.F12Pressed += new EventHandler((sender, e) => F12Pressed?.Invoke(sender, e));
+            tipForm.F2Pressed += new EventHandler((sender, e) => F2Pressed?.Invoke(sender, e));
+            tipForm.F3Pressed += new EventHandler((sender, e) => F3Pressed?.Invoke(sender, e));
+            tipForm.F4Pressed += new EventHandler((sender, e) => F4Pressed?.Invoke(sender, e));
+            tipForm.F5Pressed += new EventHandler((sender, e) => F5Pressed?.Invoke(sender, e));
             tipForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
+            tipForm.F8Pressed += new EventHandler((sender, e) => F8Pressed?.Invoke(sender, e));
+            tipForm.F9Pressed += new EventHandler((sender, e) => F9Pressed?.Invoke(sender, e));
+            tipForm.HomePressed += new EventHandler((sender, e) => HomePressed?.Invoke(sender, e));
+            tipForm.PageDownPressed += new EventHandler((sender, e) => PageDownPressed?.Invoke(sender, e));
+            tipForm.PageUpPressed += new EventHandler((sender, e) => PageUpPressed?.Invoke(sender, e));
+            tipForm.ShiftF3Pressed += new EventHandler((sender, e) => ShiftF3Pressed?.Invoke(sender, e));
+            tipForm.UpPressed += new EventHandler((sender, e) => UpPressed?.Invoke(sender, e));
             tipForm.Tip = this;
             if (tipForm.ShowDialog().Equals(DialogResult.OK)) {
                 Update?.Invoke(this, EventArgs.Empty);

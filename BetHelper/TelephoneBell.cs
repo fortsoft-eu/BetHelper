@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.9.0
  */
 
 using System;
@@ -221,6 +221,14 @@ namespace BetHelper {
         /// <summary>
         /// Stops ringing.
         /// </summary>
-        public void Stop() => timer.Stop();
+        public void Stop() {
+            timer.Stop();
+            try {
+                windowsMediaPlayer.controls.stop();
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+        }
     }
 }

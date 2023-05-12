@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.9.0
  */
 
 using FortSoft.Tools;
@@ -113,6 +113,7 @@ namespace BetHelper {
 
             persistWindowState = new PersistWindowState();
             persistWindowState.AllowSaveTopMost = true;
+            persistWindowState.DetectionOptions = PersistWindowState.WindowDetectionOptions.NoDetection;
             persistWindowState.FixHeight = true;
             persistWindowState.Parent = this;
             persistWindowState.Loaded += new EventHandler<PersistWindowStateEventArgs>((sender, e) => checkBoxTopMost.Checked = TopMost);
