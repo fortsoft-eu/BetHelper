@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.11.0
  */
 
 using CefSharp;
@@ -48,7 +48,13 @@ namespace BetHelper {
     public partial class MainForm : Form {
         private Bitmap bitmap;
         private BookmarkManager bookmarkManager;
-        private bool suppressDialogs, searching, servicesAlreadySorted, tipsAlreadySorted, undone;
+        private bool disableAutoResizeColumnsServices;
+        private bool disableAutoResizeColumnsTips;
+        private bool searching;
+        private bool servicesAlreadySorted;
+        private bool suppressDialogs;
+        private bool tipsAlreadySorted;
+        private bool undone;
         private CalculatorExtractor calculatorExtractor;
         private CalculatorHandler calculatorHandler;
         private ControlInfo controlInfo;
@@ -60,8 +66,10 @@ namespace BetHelper {
         private Graphics graphics;
         private Image image;
         private int textBoxClicks;
-        private ListViewItem clickedListViewItemTip, clickedListViewItemService;
-        private ListViewSorter listViewTipsSorter, listViewServicesSorter;
+        private ListViewItem clickedListViewItemService;
+        private ListViewItem clickedListViewItemTip;
+        private ListViewSorter listViewServicesSorter;
+        private ListViewSorter listViewTipsSorter;
         private Pen crosshairPen;
         private PersistWindowState persistWindowState;
         private Point location;
@@ -73,10 +81,14 @@ namespace BetHelper {
         private Search search;
         private ServiceForm serviceForm;
         private ShortcutManager shortcutManager;
-        private string dataFilePath, undoneNotes;
-        private TelephoneBell telephoneBell;
-        private Thread findThread, newServiceThread, newTipThread, turnOffThread;
+        private string dataFilePath;
+        private string undoneNotes;
         private System.Windows.Forms.Timer textBoxClicksTimer;
+        private TelephoneBell telephoneBell;
+        private Thread findThread;
+        private Thread newServiceThread;
+        private Thread newTipThread;
+        private Thread turnOffThread;
         private TipForm tipForm;
         private UpdateChecker updateChecker;
         private WebInfoHandler webInfoHandler;
@@ -653,6 +665,7 @@ namespace BetHelper {
                     }
                     listViewTips.Sort();
                 });
+                listViewTips.ColumnWidthChanged += new ColumnWidthChangedEventHandler(OnTipsColumnWidthChanged);
                 listViewServices.Columns.AddRange(new ColumnHeader[] {
                     new ColumnHeader() {
                         Text = Properties.Resources.CaptionName,
@@ -704,6 +717,7 @@ namespace BetHelper {
                     }
                     listViewServices.Sort();
                 });
+                listViewServices.ColumnWidthChanged += new ColumnWidthChangedEventHandler(OnServicesColumnWidthChanged);
             }));
         }
 
@@ -2772,7 +2786,11 @@ namespace BetHelper {
             } finally {
                 if (added) {
                     listViewTips.Items.AddRange(listViewItems.ToArray());
-                    listViewTips.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    if (!disableAutoResizeColumnsTips) {
+                        listViewTips.ColumnWidthChanged -= new ColumnWidthChangedEventHandler(OnTipsColumnWidthChanged);
+                        listViewTips.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                        listViewTips.ColumnWidthChanged += new ColumnWidthChangedEventHandler(OnTipsColumnWidthChanged);
+                    }
                     listViewTips.Sort();
                 }
             }
@@ -2796,7 +2814,11 @@ namespace BetHelper {
             } finally {
                 if (listViewItems.Count > 0) {
                     listViewServices.Items.AddRange(listViewItems.ToArray());
-                    listViewServices.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    if (!disableAutoResizeColumnsServices) {
+                        listViewServices.ColumnWidthChanged -= new ColumnWidthChangedEventHandler(OnServicesColumnWidthChanged);
+                        listViewServices.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                        listViewServices.ColumnWidthChanged += new ColumnWidthChangedEventHandler(OnServicesColumnWidthChanged);
+                    }
                     listViewServices.Sort();
                 }
             }
@@ -3074,6 +3096,14 @@ namespace BetHelper {
             listViewItem.ImageIndex = (int)service.Status;
             listViewItem.Tag = service;
             return listViewItem;
+        }
+
+        private void OnServicesColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e) {
+            disableAutoResizeColumnsServices = true;
+        }
+
+        private void OnTipsColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e) {
+            disableAutoResizeColumnsTips = true;
         }
 
         private static int GetSpanUnitMultiplier(Service.SpanUnit spanUnit) {
@@ -3949,7 +3979,11 @@ namespace BetHelper {
                 Invoke(new SetNewTipCallback(SetNewTip), tip);
             } else {
                 listViewTips.Items.Add(SetTip(tipForm.Tip));
-                listViewTips.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                if (!disableAutoResizeColumnsTips) {
+                    listViewTips.ColumnWidthChanged -= new ColumnWidthChangedEventHandler(OnTipsColumnWidthChanged);
+                    listViewTips.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    listViewTips.ColumnWidthChanged += new ColumnWidthChangedEventHandler(OnTipsColumnWidthChanged);
+                }
             }
         }
 
@@ -3958,7 +3992,11 @@ namespace BetHelper {
                 Invoke(new EventHandler(OnTipUpdate), sender, e);
             } else {
                 SetTip((Tip)sender, ((Tip)sender).ListViewItem);
-                listViewTips.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                if (!disableAutoResizeColumnsTips) {
+                    listViewTips.ColumnWidthChanged -= new ColumnWidthChangedEventHandler(OnTipsColumnWidthChanged);
+                    listViewTips.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    listViewTips.ColumnWidthChanged += new ColumnWidthChangedEventHandler(OnTipsColumnWidthChanged);
+                }
             }
         }
 
@@ -4062,7 +4100,11 @@ namespace BetHelper {
                 Invoke(new SetNewServiceCallback(SetNewService), service);
             } else {
                 listViewServices.Items.Add(SetService(serviceForm.Service));
-                listViewServices.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                if (!disableAutoResizeColumnsServices) {
+                    listViewServices.ColumnWidthChanged -= new ColumnWidthChangedEventHandler(OnServicesColumnWidthChanged);
+                    listViewServices.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    listViewServices.ColumnWidthChanged += new ColumnWidthChangedEventHandler(OnServicesColumnWidthChanged);
+                }
             }
         }
 
@@ -4071,7 +4113,11 @@ namespace BetHelper {
                 Invoke(new EventHandler(OnServiceUpdate), sender, e);
             } else {
                 SetService((Service)sender, ((Service)sender).ListViewItem);
-                listViewServices.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                if (!disableAutoResizeColumnsServices) {
+                    listViewServices.ColumnWidthChanged -= new ColumnWidthChangedEventHandler(OnServicesColumnWidthChanged);
+                    listViewServices.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    listViewServices.ColumnWidthChanged += new ColumnWidthChangedEventHandler(OnServicesColumnWidthChanged);
+                }
             }
         }
 
