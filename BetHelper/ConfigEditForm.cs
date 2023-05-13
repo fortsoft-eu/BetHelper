@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.11.2
  */
 
 using FortSoft.Tools;
@@ -431,10 +431,16 @@ namespace BetHelper {
                     return;
                 }
             }
-            settings.Dispose();
+            if (countDownForm != null) {
+                countDownForm.HelpRequested -= new HelpEventHandler(OpenHelp);
+                if (countDownForm.Visible) {
+                    countDownForm.SafeClose();
+                }
+            }
             if (findForm != null) {
                 CloseFindForm();
             }
+            settings.Dispose();
             statusStripHandler.Dispose();
             updateChecker.Dispose();
             textBoxClicksTimer.Dispose();

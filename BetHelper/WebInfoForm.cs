@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.11.2
  */
 
 using FortSoft.Tools;
@@ -138,6 +138,7 @@ namespace BetHelper {
                 ? Properties.Resources.CaptionNotSet
                 : webInfo.DisplayName;
             checkBoxIsService.Checked = webInfo.IsService;
+            checkBoxIsActuallyService.Checked = webInfo.IsActuallyService;
             checkBoxAudioMutedByDefault.Checked = webInfo.AudioMutedByDefault;
             checkBoxHandlePopUps.Checked = webInfo.HandlePopUps;
             checkBoxTabNavigation.Checked = webInfo.TabNavigation;
@@ -282,6 +283,7 @@ namespace BetHelper {
 
         private void OnCheckedChanged(object sender, EventArgs e) {
             checkBoxIsService.Checked = webInfo.IsService;
+            checkBoxIsActuallyService.Checked = webInfo.IsActuallyService;
             checkBoxAudioMutedByDefault.Checked = webInfo.AudioMutedByDefault;
             checkBoxHandlePopUps.Checked = webInfo.HandlePopUps;
             checkBoxTabNavigation.Checked = webInfo.TabNavigation;

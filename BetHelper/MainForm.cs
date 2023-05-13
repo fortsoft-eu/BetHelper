@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.11.0
+ * Version 1.1.11.2
  */
 
 using CefSharp;
@@ -2556,7 +2556,7 @@ namespace BetHelper {
                         color = e.State.Equals(DrawItemState.Selected)
                             ? Settings.BookmakerSelectedColor
                             : Settings.BookmakerDefaultColor;
-                    } else if (webInfoHandler.WebInfos[e.Index].IsService) {
+                    } else if (webInfoHandler.WebInfos[e.Index].IsActuallyService) {
                         color = e.State.Equals(DrawItemState.Selected)
                             ? Settings.SportInfo2SelectedColor
                             : Settings.SportInfo2DefaultColor;

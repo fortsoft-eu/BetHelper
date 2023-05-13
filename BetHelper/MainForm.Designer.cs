@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.11.0
+ * Version 1.1.11.2
  */
 
 namespace BetHelper {
@@ -50,7 +50,6 @@ namespace BetHelper {
         /// </summary>
         private void InitializeComponent() {
             this.splitContainerMain = new System.Windows.Forms.SplitContainer();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tabControlLeft = new FortSoft.Controls.TabControl();
             this.tabControlRight = new BetHelper.TabControlEx();
             this.tabPageDashboard = new System.Windows.Forms.TabPage();
@@ -105,10 +104,11 @@ namespace BetHelper {
             this.buttonSkip = new System.Windows.Forms.Button();
             this.buttonPlace = new System.Windows.Forms.Button();
             this.groupBoxServices = new System.Windows.Forms.GroupBox();
-            this.buttonExpire = new System.Windows.Forms.Button();
-            this.buttonActive = new System.Windows.Forms.Button();
             this.listViewServices = new System.Windows.Forms.ListView();
             this.buttonNewService = new System.Windows.Forms.Button();
+            this.buttonExpire = new System.Windows.Forms.Button();
+            this.buttonActive = new System.Windows.Forms.Button();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
             this.splitContainerMain.Panel1.SuspendLayout();
             this.splitContainerMain.Panel2.SuspendLayout();
@@ -147,13 +147,6 @@ namespace BetHelper {
             this.splitContainerMain.SplitterDistance = 81;
             this.splitContainerMain.SplitterWidth = 7;
             this.splitContainerMain.TabIndex = 0;
-            // 
-            // statusStrip
-            // 
-            this.statusStrip.Location = new System.Drawing.Point(0, 959);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(444, 22);
-            this.statusStrip.TabIndex = 1;
             // 
             // tabControlLeft
             // 
@@ -205,9 +198,9 @@ namespace BetHelper {
             // buttonClearNotes
             // 
             this.buttonClearNotes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClearNotes.Location = new System.Drawing.Point(295, 225);
+            this.buttonClearNotes.Location = new System.Drawing.Point(294, 225);
             this.buttonClearNotes.Name = "buttonClearNotes";
-            this.buttonClearNotes.Size = new System.Drawing.Size(47, 23);
+            this.buttonClearNotes.Size = new System.Drawing.Size(48, 23);
             this.buttonClearNotes.TabIndex = 1;
             this.buttonClearNotes.Text = "Clear";
             this.buttonClearNotes.UseVisualStyleBackColor = true;
@@ -245,11 +238,11 @@ namespace BetHelper {
             // buttonAddMovement
             // 
             this.buttonAddMovement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddMovement.Location = new System.Drawing.Point(295, 225);
+            this.buttonAddMovement.Location = new System.Drawing.Point(294, 225);
             this.buttonAddMovement.Name = "buttonAddMovement";
-            this.buttonAddMovement.Size = new System.Drawing.Size(47, 23);
+            this.buttonAddMovement.Size = new System.Drawing.Size(48, 23);
             this.buttonAddMovement.TabIndex = 0;
-            this.buttonAddMovement.Text = "Add";
+            this.buttonAddMovement.Text = "Add…";
             this.buttonAddMovement.UseVisualStyleBackColor = true;
             this.buttonAddMovement.Click += new System.EventHandler(this.OnAddMovementButtonClick);
             // 
@@ -722,11 +715,11 @@ namespace BetHelper {
             // buttonNewTip
             // 
             this.buttonNewTip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNewTip.Location = new System.Drawing.Point(296, 19);
+            this.buttonNewTip.Location = new System.Drawing.Point(295, 19);
             this.buttonNewTip.Name = "buttonNewTip";
-            this.buttonNewTip.Size = new System.Drawing.Size(47, 23);
+            this.buttonNewTip.Size = new System.Drawing.Size(48, 23);
             this.buttonNewTip.TabIndex = 5;
-            this.buttonNewTip.Text = "New";
+            this.buttonNewTip.Text = "New…";
             this.buttonNewTip.UseVisualStyleBackColor = true;
             this.buttonNewTip.Click += new System.EventHandler(this.NewTip);
             // 
@@ -794,6 +787,32 @@ namespace BetHelper {
             this.groupBoxServices.TabStop = false;
             this.groupBoxServices.Text = "Services";
             // 
+            // listViewServices
+            // 
+            this.listViewServices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewServices.Location = new System.Drawing.Point(6, 48);
+            this.listViewServices.Name = "listViewServices";
+            this.listViewServices.Size = new System.Drawing.Size(337, 125);
+            this.listViewServices.TabIndex = 3;
+            this.listViewServices.UseCompatibleStateImageBehavior = false;
+            this.listViewServices.ItemActivate += new System.EventHandler(this.EditService);
+            this.listViewServices.SelectedIndexChanged += new System.EventHandler(this.ServicesEnableControls);
+            this.listViewServices.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnListViewKeyDown);
+            this.listViewServices.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnListViewServicesClick);
+            // 
+            // buttonNewService
+            // 
+            this.buttonNewService.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonNewService.Location = new System.Drawing.Point(295, 19);
+            this.buttonNewService.Name = "buttonNewService";
+            this.buttonNewService.Size = new System.Drawing.Size(48, 23);
+            this.buttonNewService.TabIndex = 2;
+            this.buttonNewService.Text = "New…";
+            this.buttonNewService.UseVisualStyleBackColor = true;
+            this.buttonNewService.Click += new System.EventHandler(this.NewService);
+            // 
             // buttonExpire
             // 
             this.buttonExpire.Location = new System.Drawing.Point(56, 19);
@@ -814,31 +833,12 @@ namespace BetHelper {
             this.buttonActive.UseVisualStyleBackColor = true;
             this.buttonActive.Click += new System.EventHandler(this.ActiveService);
             // 
-            // listViewServices
+            // statusStrip
             // 
-            this.listViewServices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewServices.Location = new System.Drawing.Point(6, 48);
-            this.listViewServices.Name = "listViewServices";
-            this.listViewServices.Size = new System.Drawing.Size(337, 125);
-            this.listViewServices.TabIndex = 3;
-            this.listViewServices.UseCompatibleStateImageBehavior = false;
-            this.listViewServices.ItemActivate += new System.EventHandler(this.EditService);
-            this.listViewServices.SelectedIndexChanged += new System.EventHandler(this.ServicesEnableControls);
-            this.listViewServices.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnListViewKeyDown);
-            this.listViewServices.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnListViewServicesClick);
-            // 
-            // buttonNewService
-            // 
-            this.buttonNewService.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNewService.Location = new System.Drawing.Point(296, 19);
-            this.buttonNewService.Name = "buttonNewService";
-            this.buttonNewService.Size = new System.Drawing.Size(47, 23);
-            this.buttonNewService.TabIndex = 2;
-            this.buttonNewService.Text = "New";
-            this.buttonNewService.UseVisualStyleBackColor = true;
-            this.buttonNewService.Click += new System.EventHandler(this.NewService);
+            this.statusStrip.Location = new System.Drawing.Point(0, 959);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(444, 22);
+            this.statusStrip.TabIndex = 1;
             // 
             // MainForm
             // 

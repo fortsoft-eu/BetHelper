@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.11.2
  */
 
 using CefSharp;
@@ -260,11 +260,13 @@ namespace BetHelper {
 
         protected bool RemoveChat { get; private set; } = true;
 
-        public bool Alertable => IsService && !string.IsNullOrEmpty(UrlTips) && UrlTips.Equals(BrowserAddress);
+        public bool Alertable => IsActuallyService && !string.IsNullOrEmpty(UrlTips) && UrlTips.Equals(BrowserAddress);
+
+        public bool IsActuallyService => IsService || !string.IsNullOrEmpty(UrlTips);
 
         public bool IsBookmaker => Fields == null ? false : Fields.Contains(Constants.FieldBalance);
 
-        public bool WillTryToKeepUserLoggedIn => IsBookmaker || IsService;
+        public bool WillTryToKeepUserLoggedIn => IsBookmaker || IsActuallyService;
 
         public bool CanPing => WillTryToKeepUserLoggedIn && CanReload && !IsLoading && pingTimerElapsed && IsLoggedIn();
 

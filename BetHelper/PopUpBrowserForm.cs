@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.11.2
  */
 
 using CefSharp;
@@ -108,12 +108,7 @@ namespace BetHelper {
 
             Browser.RequestHandler = requestHandler;
 
-            if (webInfo.HandlePopUps
-                    || !webInfo.PopUpLeft.Equals(0)
-                    || !webInfo.PopUpTop.Equals(0)
-                    || !webInfo.PopUpWidth.Equals(0)
-                    || !webInfo.PopUpHeight.Equals(0)) {
-
+            if (webInfo.WillActuallyHandlePopUps) {
                 LifeSpanHandlerPopUp lifeSpanHandler = new LifeSpanHandlerPopUp();
                 lifeSpanHandler.BrowserPopUp += new EventHandler<PopUpEventArgs>((sender, popUpArgs) => {
                     if (!webInfo.CanNavigate(popUpArgs.TargetUrl)) {

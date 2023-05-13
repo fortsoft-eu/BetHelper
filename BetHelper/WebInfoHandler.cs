@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.11.2
  */
 
 using CefSharp;
@@ -451,7 +451,7 @@ namespace BetHelper {
             bool alertable = true;
             bool atLeastOneService = false;
             foreach (WebInfo webInfo in WebInfos) {
-                if (webInfo.IsService && !string.IsNullOrEmpty(webInfo.UrlTips)) {
+                if (webInfo.IsActuallyService && !string.IsNullOrEmpty(webInfo.UrlTips)) {
                     atLeastOneService = true;
                     if (!webInfo.Alertable) {
                         alertable = false;
@@ -500,7 +500,7 @@ namespace BetHelper {
         private void GetTips() {
             List<Tip> list = new List<Tip>();
             foreach (WebInfo webInfo in WebInfos) {
-                if (webInfo.IsService) {
+                if (webInfo.IsActuallyService) {
                     Tip[] tips = webInfo.GetTips();
                     if (tips != null) {
                         list.AddRange(tips);
@@ -643,7 +643,7 @@ namespace BetHelper {
                 if (++pingIndex == WebInfos.Count) {
                     pingIndex = 0;
                 }
-            } while (++i < WebInfos.Count && !WebInfos[pingIndex].IsBookmaker && !WebInfos[pingIndex].IsService);
+            } while (++i < WebInfos.Count && !WebInfos[pingIndex].IsBookmaker && !WebInfos[pingIndex].IsActuallyService);
             return WebInfos[pingIndex].CanPing ? pingIndex : -1;
         }
 

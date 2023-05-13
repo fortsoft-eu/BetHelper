@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.11.2
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
@@ -90,6 +91,12 @@ namespace BetHelper {
         }
 
         protected override void NoLogIn(ChromiumWebBrowser browser) {
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mediad')[0]", false)) {
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("Array.from(document.getElementsByClassName('mediad')).forEach(function(element, index, array)")
+                    .Append("{ element.style.display = 'none'; });")
+                    .ToString());
+            }
             if (ElementExistsAndVisible(browser, "document.getElementById('footerNewsletterWrap')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('footerNewsletterWrap').style.display = 'none';");
             }
@@ -105,6 +112,12 @@ namespace BetHelper {
         }
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mediad')[0]", false)) {
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("Array.from(document.getElementsByClassName('mediad')).forEach(function(element, index, array)")
+                    .Append("{ element.style.display = 'none'; });")
+                    .ToString());
+            }
             if (ElementExistsAndVisible(browser, "document.getElementById('footerNewsletterWrap')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('footerNewsletterWrap').style.display = 'none';");
             }

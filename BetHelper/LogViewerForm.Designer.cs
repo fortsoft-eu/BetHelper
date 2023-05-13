@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.11.2
  */
 
 namespace BetHelper {
@@ -103,6 +103,7 @@ namespace BetHelper {
         }
 
         #endregion
+
         private System.IO.FileSystemWatcher fileSystemWatcher;
         private System.Windows.Forms.StatusStrip statusStrip;
         private FortSoft.Controls.TabControl tabControl;
