@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.11.1
  */
 
 using FortSoft.Tools;
@@ -35,7 +35,10 @@ namespace BetHelper {
     public partial class BookmarksForm : Form {
         private BookmarkManager bookmarkManager;
         private bool alreadySorted;
+        private bool storeColumnsWidth;
         private Form dialog;
+        private float leftColumnWidth;
+        private float rightColumnWidth;
         private ListViewItem clickedListViewItem;
         private ListViewSorter listViewSorter;
         private PersistWindowState persistWindowState;
@@ -46,6 +49,9 @@ namespace BetHelper {
         public BookmarksForm(Settings settings, BookmarkManager bookmarkManager) {
             this.settings = settings;
             this.bookmarkManager = bookmarkManager;
+
+            leftColumnWidth = 0.5f;
+            rightColumnWidth = 0.5f;
 
             persistWindowState = new PersistWindowState();
             persistWindowState.DisableSaveWindowState = true;
@@ -60,7 +66,6 @@ namespace BetHelper {
                 list.Add(SetBookmark(keyValuePair));
             }
             listView.Items.AddRange(list.ToArray());
-
         }
 
         private async void BuildContextMenuAsync() {
@@ -173,16 +178,8 @@ namespace BetHelper {
             }
         }
 
-        private void OnFormActivated(object sender, EventArgs e) {
-            if (dialog != null) {
-                dialog.Activate();
-            }
-        }
-
-        private void ToggleSelect(object sender, EventArgs e) {
-            if (clickedListViewItem != null) {
-                clickedListViewItem.Selected = !clickedListViewItem.Selected;
-            }
+        private int GetUsableWidth() {
+            return listView.Width - SystemInformation.VerticalScrollBarWidth - SystemInformation.Border3DSize.Width * 2;
         }
 
         private void InvertSelection(object sender, EventArgs e) {
@@ -191,10 +188,21 @@ namespace BetHelper {
             }
         }
 
-        private void SelectAll(object sender, EventArgs e) {
-            foreach (ListViewItem listViewItem in listView.Items) {
-                listViewItem.Selected = true;
+        private void OnColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e) {
+            if (storeColumnsWidth) {
+                StoreColumnsWidth();
             }
+        }
+
+        private void OnFormActivated(object sender, EventArgs e) {
+            if (dialog != null) {
+                dialog.Activate();
+            }
+        }
+
+        private void OnFormLoad(object sender, EventArgs e) {
+            listView.ColumnWidthChanged += new ColumnWidthChangedEventHandler(OnColumnWidthChanged);
+            buttonRemove.Enabled = listView.SelectedItems.Count > 0;
         }
 
         private void OnKeyDown(object sender, KeyEventArgs e) {
@@ -224,7 +232,27 @@ namespace BetHelper {
             }
         }
 
+        private void OnMouseMove(object sender, MouseEventArgs e) => storeColumnsWidth = true;
+
+        private void OnResize(object sender, EventArgs e) {
+            if (storeColumnsWidth) {
+                StoreColumnsWidth();
+            }
+            storeColumnsWidth = false;
+            if (listView.Columns.Count > 0) {
+                int usableWidth = GetUsableWidth();
+                listView.Columns[0].Width = (int)Math.Round(usableWidth * leftColumnWidth);
+                listView.Columns[1].Width = (int)Math.Round(usableWidth * rightColumnWidth);
+            }
+        }
+
         private void OnSelectedIndexChanged(object sender, EventArgs e) => buttonRemove.Enabled = listView.SelectedItems.Count > 0;
+
+        private void SelectAll(object sender, EventArgs e) {
+            foreach (ListViewItem listViewItem in listView.Items) {
+                listViewItem.Selected = true;
+            }
+        }
 
         private ListViewItem SetBookmark(KeyValuePair<string, string> keyValuePair) {
             ListViewItem listViewItem = new ListViewItem(
@@ -242,11 +270,15 @@ namespace BetHelper {
             return listViewItem;
         }
 
-        private void SetColumnsSize(object sender, EventArgs e) {
-            if (listView.Columns.Count > 0) {
-                int columnWidth = (listView.Width - SystemInformation.VerticalScrollBarWidth - SystemInformation.Border3DSize.Width * 2) / 2;
-                listView.Columns[0].Width = columnWidth;
-                listView.Columns[1].Width = columnWidth;
+        private void StoreColumnsWidth() {
+            int usableWidth = GetUsableWidth();
+            leftColumnWidth = listView.Columns[0].Width / (float)usableWidth;
+            rightColumnWidth = listView.Columns[1].Width / (float)usableWidth;
+        }
+
+        private void ToggleSelect(object sender, EventArgs e) {
+            if (clickedListViewItem != null) {
+                clickedListViewItem.Selected = !clickedListViewItem.Selected;
             }
         }
 

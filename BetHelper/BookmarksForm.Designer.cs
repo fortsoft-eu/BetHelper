@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.11.1
  */
 
 namespace BetHelper {
@@ -67,7 +67,8 @@ namespace BetHelper {
             this.listView.SelectedIndexChanged += new System.EventHandler(this.OnSelectedIndexChanged);
             this.listView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.listView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnListViewMouseClick);
-            this.listView.Resize += new System.EventHandler(this.SetColumnsSize);
+            this.listView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnMouseMove);
+            this.listView.Resize += new System.EventHandler(this.OnResize);
             // 
             // buttonRemove
             // 
@@ -105,6 +106,7 @@ namespace BetHelper {
             this.HelpButton = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(200, 110);
             this.Name = "BookmarksForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -112,6 +114,7 @@ namespace BetHelper {
             this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
             this.Text = "Manage Bookmarks";
             this.Activated += new System.EventHandler(this.OnFormActivated);
+            this.Load += new System.EventHandler(this.OnFormLoad);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             this.ResumeLayout(false);
 
