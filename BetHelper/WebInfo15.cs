@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.11.2
  */
 
 using CefSharp;
@@ -223,17 +223,12 @@ namespace BetHelper {
                 DateTime dateTimeNow = DateTime.Now;
                 Regex endHtmlTagRegex = new Regex("\\s*</.*>.*$", RegexOptions.Singleline);
                 Regex lineRegex = new Regex("\\s*(</[^>]+>)*\\s*<\\w+[^>]+>\\s*");
-                Regex matchRegex = new Regex("^.*</span>\\s*(.*)</div>\\s*$",
-                    RegexOptions.IgnoreCase | RegexOptions.Singleline);
-                Regex splitTipsRegex = new Regex("<div\\s+class=\"o-tbody[^>]+>",
-                    RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                Regex matchRegex = new Regex("^.*</span>\\s*(.*)</div>\\s*$", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                Regex splitTipsRegex = new Regex("<div\\s+class=\"o-tbody[^>]+>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 Regex sportRegex = new Regex("^.*<use\\s+xlink:.*\\.svg#sprite-(\\w+(-\\w+)*)\"\\s*>.*$",
                     RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 int i = 0;
-                foreach (string serviceBlock in response.Split(
-                        new string[] { "<div class=\"o-thead\">" },
-                        StringSplitOptions.None)) {
-
+                foreach (string serviceBlock in response.Split(new string[] { "<div class=\"o-thead\">" }, StringSplitOptions.None)) {
                     if (i++ == 0) {
                         continue;
                     }

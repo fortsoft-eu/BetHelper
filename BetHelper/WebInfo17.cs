@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.5.0
+ * Version 1.1.11.2
  */
 
 using CefSharp;
@@ -151,8 +151,7 @@ namespace BetHelper {
                 Regex endHtmlTagRegex = new Regex("(\\s+\\?)?</.*>$");
                 Regex lineRegex = new Regex("\\s*(</[^>]+>)*\\s*<\\w+[^>]+>\\s*");
                 int i = 0;
-                foreach (string rawTipLine in Regex.Split(response, "<li\\s+class=\"reason\"[^>]+>",
-                    RegexOptions.IgnoreCase)) {
+                foreach (string rawTipLine in Regex.Split(response, "<li\\s+class=\"reason\"[^>]+>", RegexOptions.IgnoreCase)) {
                     if (i++ == 0) {
                         continue;
                     }
