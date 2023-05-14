@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.12.0
  */
 
 namespace BetHelper {
@@ -506,6 +506,7 @@ namespace BetHelper {
         public const string JSGetElementsByNameFormat = "{0}.getElementsByName('{1}')[{2}].value";
         public const string JSGetElementsByTagNameFormat = "{0}.getElementsByTagName('{1}')[{2}].value";
         public const string JSIndexAndInnerTextPattern = "\\[\\d+\\]\\.innerText";
+        public const string JSInnerHtml = ".innerHTML";
         public const string JSIsNotEqualToNullFormat = "({0}) !== null;";
         public const string JSPropertyBottom = "bottom";
         public const string JSPropertyLeft = "left";

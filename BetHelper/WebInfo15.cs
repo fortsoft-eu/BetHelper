@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.11.2
+ * Version 1.1.12.0
  */
 
 using CefSharp;
@@ -203,23 +203,31 @@ namespace BetHelper {
             if (BrowserAddress != UrlTips) {
                 return null;
             }
-            string response = null;
-            try {
-                if (browser.CanExecuteJavascriptInMainFrame) {
-                    JavascriptResponse javascriptResponse = browser
-                        .EvaluateScriptAsync("document.getElementsByClassName('my-tips')[0].innerHTML")
-                        .GetAwaiter()
-                        .GetResult();
-                    if (javascriptResponse.Success) {
-                        response = (string)javascriptResponse.Result;
+            string element = "document.getElementsByClassName('my-tips')[{0}]";
+            List<string> responses = new List<string>();
+            for (int i = 0; ElementExistsAndVisible(browser, string.Format(element, i), false); i++) {
+                try {
+                    if (browser.CanExecuteJavascriptInMainFrame) {
+                        JavascriptResponse javascriptResponse = browser.EvaluateScriptAsync(new StringBuilder()
+                            .AppendFormat(element, i)
+                            .Append(Constants.JSInnerHtml)
+                            .ToString()).GetAwaiter().GetResult();
+                        if (!javascriptResponse.Success) {
+                            break;
+                        }
+                        string response = (string)javascriptResponse.Result;
+                        if (string.IsNullOrWhiteSpace(response)) {
+                            break;
+                        }
+                        responses.Add(response);
                     }
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
                 }
-            } catch (Exception exception) {
-                Debug.WriteLine(exception);
-                ErrorLog.WriteLine(exception);
             }
             List<Tip> list = new List<Tip>();
-            if (!string.IsNullOrWhiteSpace(response)) {
+            if (responses.Count > 0) {
                 DateTime dateTimeNow = DateTime.Now;
                 Regex endHtmlTagRegex = new Regex("\\s*</.*>.*$", RegexOptions.Singleline);
                 Regex lineRegex = new Regex("\\s*(</[^>]+>)*\\s*<\\w+[^>]+>\\s*");
@@ -227,133 +235,140 @@ namespace BetHelper {
                 Regex splitTipsRegex = new Regex("<div\\s+class=\"o-tbody[^>]+>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 Regex sportRegex = new Regex("^.*<use\\s+xlink:.*\\.svg#sprite-(\\w+(-\\w+)*)\"\\s*>.*$",
                     RegexOptions.IgnoreCase | RegexOptions.Singleline);
-                int i = 0;
-                foreach (string serviceBlock in response.Split(new string[] { "<div class=\"o-thead\">" }, StringSplitOptions.None)) {
-                    if (i++ == 0) {
-                        continue;
-                    }
-                    string service = null;
-                    string[] splitTips = splitTipsRegex.Split(serviceBlock);
-                    for (int j = 0; j < splitTips.Length; j++) {
-                        if (j == 0) {
-                            int k = 0;
-                            foreach (string rawHeaderItem in lineRegex.Split(splitTips[j])) {
-                                if (string.IsNullOrEmpty(rawHeaderItem)) {
-                                    continue;
-                                }
-                                if (k++ == 1) {
-                                    service = endHtmlTagRegex.Replace(rawHeaderItem, string.Empty);
-                                    break;
-                                }
-                            }
-                        } else {
-                            List<string> sportList = new List<string>();
-                            int k = 0;
-                            foreach (string rawSportItem in splitTips[j].Split(
-                                    new string[] { "<div class=\"m-tr sortable-item\">" },
-                                    StringSplitOptions.None)) {
+                foreach (string response in responses) {
+                    int i = 0;
+                    foreach (string serviceBlock in response.Split(new string[] { "<div class=\"o-thead\">" },
+                            StringSplitOptions.None)) {
 
-                                if (k++ == 0) {
-                                    continue;
-                                }
-                                string sport = sportRegex.Replace(rawSportItem, Constants.ReplaceFirst);
-                                switch (sport) {
-                                    case "athletics":
-                                        sport = "Atletika";
-                                        break;
-                                    case "basketball":
-                                        sport = "Basketbal";
-                                        break;
-                                    case "darts":
-                                        sport = "Šipky";
-                                        break;
-                                    case "e-sports":
-                                        sport = "E-sporty";
-                                        break;
-                                    case "floorball":
-                                        sport = "Florbal";
-                                        break;
-                                    case "football":
-                                        sport = "Fotbal";
-                                        break;
-                                    case "handball":
-                                        sport = "Házená";
-                                        break;
-                                    case "hockey":
-                                        sport = "Hokej";
-                                        break;
-                                    case "motorsport":
-                                        sport = "Motorsport";
-                                        break;
-                                    case "tennis":
-                                        sport = "Tenis";
-                                        break;
-                                    case "volleyball":
-                                        sport = "Volejbal";
-                                        break;
-                                    case "winter-sport":
-                                        sport = "Zimní sport";
-                                        break;
-                                }
-                                sportList.Add(sport.Length < 30
-                                    ? StaticMethods.UppercaseFirst(sport, CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag))
-                                    : null);
-                            }
-                            List<string> tipList = new List<string>();
-                            foreach (string rawHeaderItem in lineRegex.Split(splitTips[j])) {
-                                if (string.IsNullOrEmpty(rawHeaderItem) || rawHeaderItem.Equals("</div>")) {
-                                    continue;
-                                }
-                                tipList.Add(rawHeaderItem);
-                            }
-                            if (tipList.Count < 12) {
-                                continue;
-                            }
-                            float trustDegree = float.Parse(
-                                Regex.Replace(tipList[8],
-                                Constants.TrustDegreePattern,
-                                Constants.ReplaceFirst));
-                            float odd = float.Parse(
-                                Regex.Replace(tipList[9].Replace(Constants.Comma, Constants.Period), Constants.OddPattern, string.Empty),
-                                CultureInfo.InvariantCulture);
-                            string bookmaker = tipList[10];
-                            tipList.RemoveRange(8, 4);
-                            bool toBePlayed = true;
-                            List<Game> games = new List<Game>();
-                            for (k = 0; k < tipList.Count / 8; k++) {
-                                DateTime dateTime;
-                                if (tipList[k * 8].Contains("se hraje")) {
-                                    toBePlayed = false;
-                                    break;
-                                } else {
-                                    string[] span = tipList[1 + k * 8].Split(Constants.Colon);
-                                    if (span.Length < 3) {
+                        if (i++ == 0) {
+                            continue;
+                        }
+                        string service = null;
+                        string[] splitTips = splitTipsRegex.Split(serviceBlock);
+                        for (int j = 0; j < splitTips.Length; j++) {
+                            if (j == 0) {
+                                int k = 0;
+                                foreach (string rawHeaderItem in lineRegex.Split(splitTips[j])) {
+                                    if (string.IsNullOrEmpty(rawHeaderItem)) {
                                         continue;
                                     }
-                                    dateTime = dateTimeNow.Add(new TimeSpan(int.Parse(span[0]), int.Parse(span[1]), int.Parse(span[2])));
+                                    if (k++ == 1) {
+                                        service = endHtmlTagRegex.Replace(rawHeaderItem, string.Empty);
+                                        break;
+                                    }
                                 }
-                                StringBuilder match = new StringBuilder()
-                                    .Append(tipList[4 + k * 8])
-                                    .Append(Constants.Space)
-                                    .Append(Constants.EnDash)
-                                    .Append(Constants.Space)
-                                    .Append(matchRegex.Replace(tipList[5 + k * 8], Constants.ReplaceFirst).TrimEnd());
-                                games.Add(new Game(
-                                    dateTime.AddMinutes(((int)Math.Round(dateTime.Minute / 5.0)) * 5 - dateTime.Minute),
-                                    sportList[k],
-                                    endHtmlTagRegex.Replace(tipList[6 + k * 8], string.Empty),
-                                    match.ToString(),
-                                    endHtmlTagRegex.Replace(tipList[7 + k * 8], string.Empty)));
-                            }
-                            if (toBePlayed) {
-                                list.Add(new Tip(
-                                    dateTimeNow,
-                                    games.ToArray(),
-                                    bookmaker,
-                                    odd,
-                                    trustDegree,
-                                    service,
-                                    Tip.TipStatus.Received));
+                            } else {
+                                List<string> sportList = new List<string>();
+                                int k = 0;
+                                foreach (string rawSportItem in splitTips[j].Split(
+                                        new string[] { "<div class=\"m-tr sortable-item\">" },
+                                        StringSplitOptions.None)) {
+
+                                    if (k++ == 0) {
+                                        continue;
+                                    }
+                                    string sport = sportRegex.Replace(rawSportItem, Constants.ReplaceFirst);
+                                    switch (sport) {
+                                        case "athletics":
+                                            sport = "Atletika";
+                                            break;
+                                        case "basketball":
+                                            sport = "Basketbal";
+                                            break;
+                                        case "darts":
+                                            sport = "Šipky";
+                                            break;
+                                        case "e-sports":
+                                            sport = "E-sporty";
+                                            break;
+                                        case "floorball":
+                                            sport = "Florbal";
+                                            break;
+                                        case "football":
+                                            sport = "Fotbal";
+                                            break;
+                                        case "handball":
+                                            sport = "Házená";
+                                            break;
+                                        case "hockey":
+                                            sport = "Hokej";
+                                            break;
+                                        case "motorsport":
+                                            sport = "Motorsport";
+                                            break;
+                                        case "tennis":
+                                            sport = "Tenis";
+                                            break;
+                                        case "volleyball":
+                                            sport = "Volejbal";
+                                            break;
+                                        case "winter-sport":
+                                            sport = "Zimní sport";
+                                            break;
+                                    }
+                                    sportList.Add(sport.Length < 30
+                                        ? StaticMethods.UppercaseFirst(sport,
+                                            CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag))
+                                        : null);
+                                }
+                                List<string> tipList = new List<string>();
+                                foreach (string rawHeaderItem in lineRegex.Split(splitTips[j])) {
+                                    if (string.IsNullOrEmpty(rawHeaderItem) || rawHeaderItem.Equals("</div>")) {
+                                        continue;
+                                    }
+                                    tipList.Add(rawHeaderItem);
+                                }
+                                if (tipList.Count < 12) {
+                                    continue;
+                                }
+                                float trustDegree = float.Parse(
+                                    Regex.Replace(tipList[8],
+                                    Constants.TrustDegreePattern,
+                                    Constants.ReplaceFirst));
+                                float odd = float.Parse(
+                                    Regex.Replace(tipList[9].Replace(Constants.Comma, Constants.Period), Constants.OddPattern,
+                                        string.Empty),
+                                    CultureInfo.InvariantCulture);
+                                string bookmaker = tipList[10];
+                                tipList.RemoveRange(8, 4);
+                                bool toBePlayed = true;
+                                List<Game> games = new List<Game>();
+                                for (k = 0; k < tipList.Count / 8; k++) {
+                                    DateTime dateTime;
+                                    if (tipList[k * 8].Contains("se hraje")) {
+                                        toBePlayed = false;
+                                        break;
+                                    } else {
+                                        string[] span = tipList[1 + k * 8].Split(Constants.Colon);
+                                        if (span.Length < 3) {
+                                            continue;
+                                        }
+                                        dateTime = dateTimeNow.Add(
+                                            new TimeSpan(int.Parse(span[0]), int.Parse(span[1]), int.Parse(span[2])));
+                                    }
+                                    StringBuilder match = new StringBuilder()
+                                        .Append(tipList[4 + k * 8])
+                                        .Append(Constants.Space)
+                                        .Append(Constants.EnDash)
+                                        .Append(Constants.Space)
+                                        .Append(matchRegex.Replace(tipList[5 + k * 8], Constants.ReplaceFirst).TrimEnd());
+                                    games.Add(new Game(
+                                        dateTime.AddMinutes(((int)Math.Round(dateTime.Minute / 5.0)) * 5 - dateTime.Minute),
+                                        sportList[k],
+                                        endHtmlTagRegex.Replace(tipList[6 + k * 8], string.Empty),
+                                        match.ToString(),
+                                        endHtmlTagRegex.Replace(tipList[7 + k * 8], string.Empty)));
+                                }
+                                if (toBePlayed) {
+                                    list.Add(new Tip(
+                                        dateTimeNow,
+                                        games.ToArray(),
+                                        bookmaker,
+                                        odd,
+                                        trustDegree,
+                                        service,
+                                        Tip.TipStatus.Received));
+                                }
                             }
                         }
                     }
