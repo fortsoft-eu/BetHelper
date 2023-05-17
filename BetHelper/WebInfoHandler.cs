@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.11.2
+ * Version 1.1.13.0
  */
 
 using CefSharp;
@@ -35,9 +35,14 @@ using System.Reflection;
 namespace BetHelper {
     public sealed class WebInfoHandler : IDisposable {
         private bool stopped;
-        private int index, n, ordinal, pingIndex;
+        private int index;
+        private int n;
+        private int ordinal;
+        private int pingIndex;
         private string assemblyName;
-        private System.Timers.Timer getTimer, pingTimer, suspendTimer;
+        private System.Timers.Timer getTimer;
+        private System.Timers.Timer pingTimer;
+        private System.Timers.Timer suspendTimer;
 
         private delegate void WebInfoHandlerCallback();
 
@@ -54,7 +59,8 @@ namespace BetHelper {
         public event EventHandler<ErrorEventArgs> Error;
         public event EventHandler<FindEventArgs> Find;
         public event EventHandler<FinishedEventArgs> Finished;
-        public event EventHandler<FocusEventArgs> CurrentSet, Initialized;
+        public event EventHandler<FocusEventArgs> CurrentSet;
+        public event EventHandler<FocusEventArgs> Initialized;
         public event EventHandler<FrameLoadEndEventArgs> FrameLoadEnd;
         public event EventHandler<FrameLoadStartEventArgs> FrameLoadStart;
         public event EventHandler<LoadErrorEventArgs> LoadError;
@@ -495,6 +501,19 @@ namespace BetHelper {
                 }
             }
             return null;
+        }
+
+        public IntPtr[] GetOpenedWebInfoForms() {
+            List<IntPtr> list = new List<IntPtr>(WebInfos.Count);
+            foreach (WebInfo webInfo in WebInfos) {
+                if (webInfo != null) {
+                    IntPtr handle = webInfo.GetWebInfoFormHandle();
+                    if (!handle.Equals(IntPtr.Zero)) {
+                        list.Add(handle);
+                    }
+                }
+            }
+            return list.ToArray();
         }
 
         private void GetTips() {

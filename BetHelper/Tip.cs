@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.13.0
  */
 
 using FortSoft.Tools;
@@ -40,6 +40,8 @@ namespace BetHelper {
         private Thread thread;
         private TipForm tipForm;
         private TipStatus tipStatus;
+
+        private delegate IntPtr HandleCallback();
 
         public event EventHandler StatusChanged;
         public event EventHandler Update;
@@ -236,6 +238,8 @@ namespace BetHelper {
                 Update?.Invoke(this, EventArgs.Empty);
             }
         }
+
+        public IntPtr GetFormHandle() => IsOpened ? (IntPtr)tipForm.Invoke(new HandleCallback(() => tipForm.Handle)) : IntPtr.Zero;
 
         public void GetObjectData(SerializationInfo info, StreamingContext ctxt) {
             info.AddValue("Bookmaker", Bookmaker);

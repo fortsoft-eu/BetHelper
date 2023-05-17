@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.11.2
+ * Version 1.1.13.0
  */
 
 using CefSharp;
@@ -42,17 +42,33 @@ using System.Windows.Forms;
 
 namespace BetHelper {
     public class WebInfo : IDisposable {
-        protected bool frameInitialLoadEnded, audioMutedByDefault, pingTimerElapsed;
+        protected bool audioMutedByDefault;
+        protected bool frameInitialLoadEnded;
+        protected bool pingTimerElapsed;
         protected decimal balance;
         protected FindEventArgs findEventArgs;
-        protected int currentItem, finished, heartBeatTimerRun, heartBeatTimerStart, itemsTotal, loaded, loadingBeforeLogIn;
+        protected int currentItem;
+        protected int finished;
+        protected int heartBeatTimerRun;
+        protected int heartBeatTimerStart;
+        protected int itemsTotal;
+        protected int loaded;
+        protected int loadingBeforeLogIn;
         protected PersistWindowState persistWindowState;
-        protected Regex secondLevelDomain, urlScheme;
-        protected SemaphoreSlim heartBeatSemaphore, loadingBeforeLogInSemaphore;
+        protected Regex secondLevelDomain;
+        protected Regex urlScheme;
+        protected SemaphoreSlim heartBeatSemaphore;
+        protected SemaphoreSlim loadingBeforeLogInSemaphore;
         protected string urlNext;
-        protected System.Timers.Timer loadingBeforeLogInTimer, heartBeatTimer, pingTimer;
-        protected Thread logInThread, popUpThread, infoThread;
+        protected System.Timers.Timer heartBeatTimer;
+        protected System.Timers.Timer loadingBeforeLogInTimer;
+        protected System.Timers.Timer pingTimer;
+        protected Thread infoThread;
+        protected Thread logInThread;
+        protected Thread popUpThread;
         protected WebInfoForm webInfoForm;
+
+        private delegate IntPtr HandleCallback();
 
         public event EventHandler BrowserInitializedChanged;
         public event EventHandler Enter;
@@ -407,6 +423,12 @@ namespace BetHelper {
             } else {
                 loaded = 1;
             }
+        }
+
+        public IntPtr GetWebInfoFormHandle() {
+            return webInfoForm != null && webInfoForm.Visible
+                ? (IntPtr)webInfoForm.Invoke(new HandleCallback(() => webInfoForm.Handle))
+                : IntPtr.Zero;
         }
 
         public void SetBalance(decimal balance) {

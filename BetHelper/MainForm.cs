@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.11.2
+ * Version 1.1.13.0
  */
 
 using CefSharp;
@@ -62,7 +62,8 @@ namespace BetHelper {
         private decimal[] trustDegrees;
         private FileExtensionFilter fileExtensionFilter;
         private FindForm findForm;
-        private Form dialog, form;
+        private Form dialog;
+        private Form form;
         private Graphics graphics;
         private Image image;
         private int textBoxClicks;
@@ -93,6 +94,7 @@ namespace BetHelper {
         private UpdateChecker updateChecker;
         private WebInfoHandler webInfoHandler;
 
+        private delegate IntPtr HandleCallback();
         private delegate void MainFormSizeEventHandler(Size size);
         private delegate void SetNewServiceCallback(Service service);
         private delegate void SetNewTipCallback(Tip tip);
@@ -1629,7 +1631,7 @@ namespace BetHelper {
                         search = e.Search;
                         webInfoHandler.Current.Browser.Find(search.searchString, !search.backward, search.caseSensitive, true);
                     }
-                    persistWindowState.SetVisible(e.Handle);
+                    persistWindowState.SetVisible(e.Handle, GetOpenForms());
                 }
             }
         }
@@ -4424,6 +4426,24 @@ namespace BetHelper {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
+        }
+
+        private IntPtr[] GetOpenForms() {
+            List<IntPtr> list = new List<IntPtr>();
+            if (tipForm != null && tipForm.Visible) {
+                list.Add((IntPtr)tipForm.Invoke(new HandleCallback(() => tipForm.Handle)));
+            }
+            if (serviceForm != null && serviceForm.Visible) {
+                list.Add((IntPtr)serviceForm.Invoke(new HandleCallback(() => serviceForm.Handle)));
+            }
+            foreach (ListViewItem listViewItem in listViewTips.Items) {
+                list.Add(((Tip)listViewItem.Tag).GetFormHandle());
+            }
+            foreach (ListViewItem listViewItem in listViewServices.Items) {
+                list.Add(((Service)listViewItem.Tag).GetFormHandle());
+            }
+            list.AddRange(webInfoHandler.GetOpenedWebInfoForms());
+            return list.ToArray();
         }
 
         private static ImageList GetTipImageList() {
