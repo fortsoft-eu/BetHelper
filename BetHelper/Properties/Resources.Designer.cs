@@ -515,6 +515,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Received.
+        /// </summary>
+        internal static string CaptionReceived {
+            get {
+                return ResourceManager.GetString("CaptionReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SCRL.
         /// </summary>
         internal static string CaptionScrollLock {
@@ -849,6 +858,15 @@ namespace BetHelper.Properties {
         internal static string LabelTargetFramework {
             get {
                 return ResourceManager.GetString("LabelTargetFramework", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trim &amp;search string.
+        /// </summary>
+        internal static string LabelTrimSearchString {
+            get {
+                return ResourceManager.GetString("LabelTrimSearchString", resourceCulture);
             }
         }
         

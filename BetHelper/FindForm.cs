@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.14.0
  */
 
 using FortSoft.Tools;
@@ -34,6 +34,7 @@ namespace BetHelper {
     public abstract partial class FindForm : Form {
         private bool invertDirection;
         private bool searchKeyPressed;
+        private bool trimSearchString;
         private int textBoxClicks;
         private PersistWindowState persistWindowState;
         private Point location;
@@ -406,6 +407,12 @@ namespace BetHelper {
             checkBoxRegEx.Visible = false;
         }
 
+        protected void ShowTrimCheckBox() {
+            checkBoxStartsWith.Text = Properties.Resources.LabelTrimSearchString;
+            checkBoxStartsWith.Visible = true;
+            trimSearchString = true;
+        }
+
         public void SafeBringToFront() {
             if (InvokeRequired) {
                 Invoke(new FindFormCallback(SafeBringToFront));
@@ -495,6 +502,9 @@ namespace BetHelper {
         private void Search(bool invertDirection) {
             if (searchKeyPressed || cannotSearch) {
                 return;
+            }
+            if (trimSearchString) {
+                comboBoxFind.Text = comboBoxFind.Text.Trim();
             }
             if (!string.IsNullOrWhiteSpace(comboBoxFind.Text)) {
                 searchHandler.Add(new Search(

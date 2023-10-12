@@ -1117,4 +1117,10 @@
   <data name="MenuItemEnableOpportunityBell" xml:space="preserve">
     <value>Enab&amp;le Opportunity Bell</value>
   </data>
+  <data name="CaptionReceived" xml:space="preserve">
+    <value>Received</value>
+  </data>
+  <data name="LabelTrimSearchString" xml:space="preserve">
+    <value>Trim &amp;search string</value>
+  </data>
 </root>

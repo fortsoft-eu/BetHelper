@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.13.0
+ * Version 1.1.14.0
  */
 
 using CefSharp;
@@ -46,10 +46,12 @@ namespace BetHelper {
 
         private delegate void WebInfoHandlerCallback();
 
-        public event EventHandler AlertableGot;
+        public event EventHandler AlertableFOGot;
+        public event EventHandler AlertableNTGot;
         public event EventHandler BalanceGot;
         public event EventHandler BrowserInitializedChanged;
         public event EventHandler Enter;
+        public event EventHandler FastOpportunityGot;
         public event EventHandler Suspended;
         public event EventHandler TipsGot;
         public event EventHandler ZoomLevelChanged;
@@ -133,9 +135,11 @@ namespace BetHelper {
             getTimer = new System.Timers.Timer();
             getTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
                 getTimer.Interval = Constants.RightPaneInterval;
-                GetAlertable();
+                GetAlertableNT();
+                GetAlertableFO();
                 GetBalance();
                 GetTips();
+                GetFastOpportunity();
             });
             pingTimer = new System.Timers.Timer();
             pingTimer.Interval = Constants.PingNextTabInterval;
@@ -165,7 +169,11 @@ namespace BetHelper {
             });
         }
 
-        public bool Alertable { get; private set; }
+        public bool AlertableNT { get; private set; }
+
+        public bool AlertableFO { get; private set; }
+
+        public bool HasFastOpportunity { get; private set; }
 
         public bool IsSuspended { get; private set; }
 
@@ -453,20 +461,36 @@ namespace BetHelper {
             suspendTimer.Dispose();
         }
 
-        private void GetAlertable() {
+        private void GetAlertableNT() {
             bool alertable = true;
             bool atLeastOneService = false;
             foreach (WebInfo webInfo in WebInfos) {
                 if (webInfo.IsActuallyService && !string.IsNullOrEmpty(webInfo.UrlTips)) {
                     atLeastOneService = true;
-                    if (!webInfo.Alertable) {
+                    if (!webInfo.AlertableNT) {
                         alertable = false;
                         break;
                     }
                 }
             }
-            Alertable = alertable && atLeastOneService;
-            AlertableGot?.Invoke(this, EventArgs.Empty);
+            AlertableNT = alertable && atLeastOneService;
+            AlertableNTGot?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void GetAlertableFO() {
+            bool alertable = true;
+            bool atLeastOneService = false;
+            foreach (WebInfo webInfo in WebInfos) {
+                if (webInfo.IsBookmaker && !string.IsNullOrEmpty(webInfo.UrlLive)) {
+                    atLeastOneService = true;
+                    if (!webInfo.AlertableFO) {
+                        alertable = false;
+                        break;
+                    }
+                }
+            }
+            AlertableFO = alertable && atLeastOneService;
+            AlertableFOGot?.Invoke(this, EventArgs.Empty);
         }
 
         private void GetBalance() {
@@ -528,6 +552,19 @@ namespace BetHelper {
             }
             Tips = list.ToArray();
             TipsGot?.Invoke(this, EventArgs.Empty);
+        }
+
+
+        private void GetFastOpportunity() {
+            bool hasFastOpportunity = false;
+            foreach (WebInfo webInfo in WebInfos) {
+                if (webInfo.HasFastOpportunity()) {
+                    hasFastOpportunity = true;
+                    break;
+                }
+            }
+            HasFastOpportunity = hasFastOpportunity;
+            FastOpportunityGot?.Invoke(this, EventArgs.Empty);
         }
 
         public int LoadUrl(string url) {
@@ -657,13 +694,21 @@ namespace BetHelper {
         }
 
         private int NextPing() {
-            int i = 0;
+            if (WebInfos.Count.Equals(0)) {
+                return -1;
+            }
+            int i = pingIndex < 0 ? 0 : pingIndex;
+            int j = i;
             do {
-                if (++pingIndex == WebInfos.Count) {
-                    pingIndex = 0;
+                if (WebInfos.Count.Equals(++i)) {
+                    i = 0;
                 }
-            } while (++i < WebInfos.Count && !WebInfos[pingIndex].IsBookmaker && !WebInfos[pingIndex].IsActuallyService);
-            return WebInfos[pingIndex].CanPing ? pingIndex : -1;
+                if (i.Equals(j)) {
+                    return -1;
+                }
+            } while (!((WebInfos[i].IsBookmaker || WebInfos[i].IsActuallyService) && WebInfos[i].CanPing));
+            pingIndex = i;
+            return i;
         }
 
         private void OnCancel(object sender, CanceledEventArgs e) {
@@ -968,6 +1013,12 @@ namespace BetHelper {
         public void ActualSize() {
             if (Current != null) {
                 Current.ActualSizeAsync();
+            }
+        }
+
+        public void PingReset() {
+            if (!IsSuspended && Current != null) {
+                Current.PingReset();
             }
         }
     }

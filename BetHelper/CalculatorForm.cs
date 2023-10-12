@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.8.0
+ * Version 1.1.14.0
  */
 
 using CefSharp;
@@ -301,11 +301,9 @@ namespace BetHelper {
             cefSettings.LogFile = Path.Combine(Application.LocalUserAppDataPath, Constants.CefDebugLogFileName);
             cefSettings.UserAgent = settings.UserAgent;
             if (settings.EnableCache) {
-                cefSettings.UserDataPath = Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath),
-                    Constants.UserDataRelativePath);
                 cefSettings.RootCachePath = Path.GetDirectoryName(Application.LocalUserAppDataPath);
                 cefSettings.CachePath = Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath),
-                    Constants.CacheRelativePath);
+                    Constants.BrowserCacheMngrCacheSubDirName);
                 cefSettings.PersistSessionCookies = settings.PersistSessionCookies;
                 cefSettings.PersistUserPreferences = settings.PersistUserPreferences;
             }

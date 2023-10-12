@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.12.0
+ * Version 1.1.14.0
  */
 
 using CefSharp;
@@ -360,13 +360,7 @@ namespace BetHelper {
                                         endHtmlTagRegex.Replace(tipList[7 + k * 8], string.Empty)));
                                 }
                                 if (toBePlayed) {
-                                    list.Add(new Tip(
-                                        dateTimeNow,
-                                        games.ToArray(),
-                                        bookmaker,
-                                        odd,
-                                        trustDegree,
-                                        service,
+                                    list.Add(new Tip(dateTimeNow, games.ToArray(), bookmaker, odd, trustDegree, service,
                                         Tip.TipStatus.Received));
                                 }
                             }

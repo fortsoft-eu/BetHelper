@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.14.0
  */
 
 using CefSharp;
@@ -147,6 +147,16 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync(new StringBuilder()
                     .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
                     .Append(".children[2].style.display = 'none';")
+                    .ToString());
+            }
+            if (ElementExistsAndVisible(browser, new StringBuilder()
+                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
+                    .Append(".children[3]")
+                    .ToString(), false)) {
+
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
+                    .Append(".children[3].style.display = 'none';")
                     .ToString());
             }
             if (ElementExistsAndVisible(browser, "document.getElementById('promoWrapId')", false)) {

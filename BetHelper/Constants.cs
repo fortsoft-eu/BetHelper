@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.12.0
+ * Version 1.1.14.0
  */
 
 namespace BetHelper {
@@ -136,13 +136,13 @@ namespace BetHelper {
         /// The time interval in milliseconds after which an attempt to keep the
         /// user logged in on the next tab will be performed.
         /// </summary>
-        public const int PingNextTabInterval = 60000;
+        public const int PingNextTabInterval = 40000;
 
         /// <summary>
         /// The time interval in milliseconds after which an attempt to keep the
         /// user logged in on the same tab will be performed.
         /// </summary>
-        public const int PingTabExpInterval = 300000;
+        public const int PingTabExpInterval = 200000;
 
         /// <summary>
         /// Maximum number of items in comboboxes in PreferencesForm.
@@ -308,7 +308,7 @@ namespace BetHelper {
         /// <summary>
         /// Default column index for sorting tips in the listing.
         /// </summary>
-        public const int TipsDefaultSortColumn = 3;
+        public const int TipsDefaultSortColumn = 9;
 
         /// <summary>
         /// Tabs in the log files will be replaced with the following number of
@@ -382,9 +382,10 @@ namespace BetHelper {
         public const string BlankPageUri = "about:blank";
         public const string BookmarksFileName = "Bookmarks.dat";
         public const string BrowserCacheMngrCacheSubDirName = "Cache";
+        public const string BrowserCacheMngrDictionariesSubDirName = "Dictionaries";
         public const string BrowserCacheMngrLocalPrefsFileName = "LocalPrefs.json";
         public const string BrowserCacheMngrSetClearFileName = "ClearBrowserCache.tmp";
-        public const string BrowserCacheMngrUserDataSubDirName = "UserData";
+        public const string BrowserCacheMngrWidevineCdmSubDirName = "WidevineCdm";
         public const string BrowserConsoleMessageFormat1 = "Line: {0}, Source: {1}, Message: {2}";
         public const string BrowserConsoleMessageFormat2 = "Line: {0}, Source: {1}";
         public const string BrowserConsoleMessageFormat3 = "Line: {0}\tSource: {1}\tMessage: {2}";
@@ -393,7 +394,6 @@ namespace BetHelper {
         public const string BrowserLoadErrorMessageFormat2 = "{0}\t{1}";
         public const string BrowserSearchFileName = "BrowserSearch.dat";
         public const string ButtonRemoveName = "buttonRemove";
-        public const string CacheRelativePath = "Cache";
         public const string CalcFileName = "calc.exe";
         public const string CalculatorDirectoryName = "Calculator";
         public const string CalculatorFileName01 = "app-base.css";
@@ -488,9 +488,13 @@ namespace BetHelper {
         public const string FieldBalance = "Balance";
         public const string FieldDisplayName = "DisplayName";
         public const string FieldUserName = "UserName";
+        public const string FOLeague = "ESPORT";
         public const string ForbiddenHostContents = "casino,poker,vegas";
         public const string ForbiddenPathContents = "priloha";
         public const string ForeignUrlsLogFileName = "ForeignUrls.log";
+        public const string FOScore = "0:0";
+        public const string FOSport = "FOOTBALL";
+        public const string FOTime = "2. pol.";
         public const string GenericProgramFilesDirName = "Program Files";
         public const string GenericProgramFilesX86DirName = "Program Files (x86)";
         public const string GetSelectorPattern = "^.*'(.*)'.*$";
@@ -541,6 +545,7 @@ namespace BetHelper {
         public const string SchemeHttp = "http";
         public const string SchemeHttps = "https";
         public const string SchemePresenceTestPattern = "^[a-z][a-z0-9-\\.]*[a-z0-9]://.+$";
+        public const string ScorePattern = "^\\s*(\\d+)\\s*:\\s*(\\d+)\\s*$";
         public const string SecondLevelDomainPattern = "^([\\w-]+\\.)*(\\w+)\\.(\\w+)$";
         public const string SendKeysAlt = "{%}";
         public const string SendKeysCtrlZ = "^{z}";
@@ -607,9 +612,9 @@ namespace BetHelper {
         public const string ShortcutShiftCtrlT = "\tShift+Ctrl+T";
         public const string SplitWordsPattern = "\\s+";
         public const string StatusOk = "Ok";
-        public const string StripNTBell = "NT";
         public const string StripFOBell = "FO";
         public const string StripMuted = "MUT";
+        public const string StripNTBell = "NT";
         public const string StripSearchFormat = "{0}/{1} {2}";
         public const string StripSearchMatches = "matches";
         public const string StripSearchMatchesShort1 = "match";
@@ -654,12 +659,18 @@ namespace BetHelper {
         public const string UriUserInfo = "User Info";
         public const string UriUserName = "User Name";
         public const string UriVariables = "Variables";
-        public const string UserDataRelativePath = "UserData";
         public const string VersionRegexPattern = "^\\d+\\.\\d+\\.\\d+\\.\\d$";
         public const string WordPadFileName = "write.exe";
+        public const string XmlAttributeHref = "href";
+        public const string XmlAttributeLId = "leagueid";
+        public const string XmlClosingTag = "</xml>";
+        public const string XmlElementA = "a";
+        public const string XmlElementDiv = "div";
         public const string XmlElementRemoteAddress = "RemoteAddress";
         public const string XmlElementStatus = "Status";
         public const string XmlElementVersion = "Version";
+        public const string XmlOpenTag = "<xml>";
+        public const string XmlRemovePattern = "<(area|base|br|col|command|embed|hr|img|input|keygen|link|meta|param|source|track|wbr)[^>]*>";
         public const string ZeroDecimalDigitsFormat = "f0";
 
         /// <summary>

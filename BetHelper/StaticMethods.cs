@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.7.0
+ * Version 1.1.14.0
  */
 
 using System;
@@ -174,6 +174,24 @@ namespace BetHelper {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
             }
+        }
+
+        internal static bool EqualsHostsAndSchemes(string url1, string url2) {
+            if (string.IsNullOrEmpty(url1) || string.IsNullOrEmpty(url2)) {
+                return false;
+            }
+            try {
+                Uri uri1 = new Uri(url1);
+                Uri uri2 = new Uri(url2);
+                return uri2.GetComponents(UriComponents.StrongAuthority, UriFormat.UriEscaped)
+                        .Equals(uri1.GetComponents(UriComponents.StrongAuthority, UriFormat.UriEscaped), StringComparison.Ordinal)
+                    && uri2.GetComponents(UriComponents.Scheme, UriFormat.UriEscaped)
+                        .Equals(uri1.GetComponents(UriComponents.Scheme, UriFormat.UriEscaped), StringComparison.Ordinal);
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+            return false;
         }
 
         internal static bool EqualsSecondLevelDomains(string url1, string url2, bool includeTld = true) {

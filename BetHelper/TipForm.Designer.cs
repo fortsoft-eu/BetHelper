@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.14.0
  */
 
 namespace BetHelper {
@@ -65,6 +65,7 @@ namespace BetHelper {
             this.labelService = new System.Windows.Forms.Label();
             this.textBoxService = new System.Windows.Forms.TextBox();
             this.checkBoxTopMost = new System.Windows.Forms.CheckBox();
+            this.labelRec = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelBookmaker
@@ -146,7 +147,7 @@ namespace BetHelper {
             // buttonAddGame
             // 
             this.buttonAddGame.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonAddGame.Location = new System.Drawing.Point(297, 35);
+            this.buttonAddGame.Location = new System.Drawing.Point(297, 61);
             this.buttonAddGame.Name = "buttonAddGame";
             this.buttonAddGame.Size = new System.Drawing.Size(95, 23);
             this.buttonAddGame.TabIndex = 0;
@@ -237,7 +238,7 @@ namespace BetHelper {
             // 
             this.checkBoxTopMost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxTopMost.AutoSize = true;
-            this.checkBoxTopMost.Location = new System.Drawing.Point(298, 12);
+            this.checkBoxTopMost.Location = new System.Drawing.Point(298, 39);
             this.checkBoxTopMost.Name = "checkBoxTopMost";
             this.checkBoxTopMost.Size = new System.Drawing.Size(70, 17);
             this.checkBoxTopMost.TabIndex = 15;
@@ -246,6 +247,15 @@ namespace BetHelper {
             this.checkBoxTopMost.CheckedChanged += new System.EventHandler(this.OnTopMostCheckedChanged);
             this.checkBoxTopMost.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
             // 
+            // labelRec
+            // 
+            this.labelRec.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelRec.AutoSize = true;
+            this.labelRec.Location = new System.Drawing.Point(294, 15);
+            this.labelRec.Name = "labelRec";
+            this.labelRec.Size = new System.Drawing.Size(0, 13);
+            this.labelRec.TabIndex = 16;
+            // 
             // TipForm
             // 
             this.AcceptButton = this.buttonSave;
@@ -253,6 +263,7 @@ namespace BetHelper {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(404, 268);
+            this.Controls.Add(this.labelRec);
             this.Controls.Add(this.checkBoxTopMost);
             this.Controls.Add(this.textBoxService);
             this.Controls.Add(this.labelService);
@@ -298,5 +309,6 @@ namespace BetHelper {
         private System.Windows.Forms.Label labelService;
         private System.Windows.Forms.TextBox textBoxService;
         private System.Windows.Forms.CheckBox checkBoxTopMost;
+        private System.Windows.Forms.Label labelRec;
     }
 }

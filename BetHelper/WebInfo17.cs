@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.11.2
+ * Version 1.1.14.0
  */
 
 using CefSharp;
@@ -145,6 +145,7 @@ namespace BetHelper {
             }
             List<Tip> list = new List<Tip>();
             if (!string.IsNullOrWhiteSpace(response)) {
+                DateTime dateTimeNow = DateTime.Now;
                 Regex bookmakerRegex = new Regex("^.*<img\\s+style.*\"([^\"]*)\"\\s*></a></div>.*$",
                     RegexOptions.IgnoreCase | RegexOptions.Singleline);
                 Regex dateTimeSplitRegex = new Regex("^(.*)\\((.*)\\)$");
@@ -189,27 +190,25 @@ namespace BetHelper {
                             int.Parse(tipLineItems[7].Substring(0, 2)),
                             int.Parse(tipLineItems[7].Substring(3, 2)),
                             0);
-                        Game game = new Game(
-                            dateTime,
-                            StaticMethods.UppercaseFirst(tipLineItems[0], CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
-                            StaticMethods.UppercaseFirst(tipLineItems[5], CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
-                            StaticMethods.UppercaseFirst(dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceFirst),
-                                CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
-                            new StringBuilder()
-                                .Append(StaticMethods.UppercaseFirst(
-                                    dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceSecond),
-                                    CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)))
-                                .Append(Constants.Space)
-                                .Append(tipLineItems[3])
-                                .ToString());
-                        list.Add(new Tip(
-                            DateTime.Now,
-                            new Game[] { game },
-                            bookmaker.Length < 30 ? bookmaker : null,
-                            float.Parse(tipLineItems[2], NumberStyles.Float, CultureInfo.InvariantCulture),
-                            10f,
-                            StaticMethods.UppercaseFirst(Title, CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag)),
-                            Tip.TipStatus.Received));
+                        if (dateTime > dateTimeNow) {
+                            CultureInfo cultureInfo = CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag);
+                            Game game = new Game(
+                                dateTime,
+                                StaticMethods.UppercaseFirst(tipLineItems[0], cultureInfo),
+                                StaticMethods.UppercaseFirst(tipLineItems[5], cultureInfo),
+                                StaticMethods.UppercaseFirst(dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceFirst),
+                                    cultureInfo).TrimEnd(),
+                                new StringBuilder()
+                                    .Append(StaticMethods.UppercaseFirst(
+                                        dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceSecond),
+                                        cultureInfo))
+                                    .Append(Constants.Space)
+                                    .Append(tipLineItems[3])
+                                    .ToString());
+                            list.Add(new Tip(DateTime.Now, new Game[] { game }, bookmaker.Length < 30 ? bookmaker : null,
+                                float.Parse(tipLineItems[2], NumberStyles.Float, CultureInfo.InvariantCulture), 10f,
+                                StaticMethods.UppercaseFirst(Title, cultureInfo), Tip.TipStatus.Received));
+                        }
                     } catch (Exception exception) {
                         Debug.WriteLine(exception);
                         ErrorLog.WriteLine(exception);

@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.13.0
+ * Version 1.1.14.0
  */
 
 using FortSoft.Tools;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.Serialization;
@@ -253,10 +254,12 @@ namespace BetHelper {
         }
 
         private void SetUid() {
-            StringBuilder stringBuilder = new StringBuilder();
+            List<string> gameUids = new List<string>(Games.Length);
             foreach (Game game in Games) {
-                stringBuilder.Append(game.Uid);
+                gameUids.Add(game.Uid);
             }
+            gameUids.Sort();
+            StringBuilder stringBuilder = new StringBuilder(string.Join(string.Empty, gameUids));
             stringBuilder.Append(Bookmaker);
             stringBuilder.Append(Odd.ToString(Constants.TwoDecimalDigitsFormat, CultureInfo.InvariantCulture));
             stringBuilder.Append(TrustDegree.ToString(Constants.TwoDecimalDigitsFormat, CultureInfo.InvariantCulture));

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.14.0
  */
 
 using FortSoft.Tools;
@@ -154,6 +154,11 @@ namespace BetHelper {
                 tip = value;
                 text = Properties.Resources.CaptionEditTip;
                 Text = Properties.Resources.CaptionEditTip;
+                labelRec.Text = new StringBuilder()
+                    .Append(tip.DateTime.ToString(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern))
+                    .Append(Constants.Space)
+                    .Append(tip.DateTime.ToString(settings.NumberFormat.cultureInfo.DateTimeFormat.ShortTimePattern))
+                    .ToString();
                 odd = tip.Odd;
                 textBoxOdd.Text = ShowOdd(tip.Odd);
                 textBoxBookmaker.Text = tip.Bookmaker;

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.13.0
+ * Version 1.1.14.0
  */
 
 using CefSharp;
@@ -276,7 +276,13 @@ namespace BetHelper {
 
         protected bool RemoveChat { get; private set; } = true;
 
-        public bool Alertable => IsActuallyService && !string.IsNullOrEmpty(UrlTips) && UrlTips.Equals(BrowserAddress);
+        public bool AlertableNT => IsActuallyService && !string.IsNullOrEmpty(UrlTips) && UrlTips.Equals(BrowserAddress);
+
+        public bool AlertableFO {
+            get {
+                return IsBookmaker && !string.IsNullOrEmpty(UrlLive) && StaticMethods.EqualsHostsAndSchemes(UrlLive, BrowserAddress);
+            }
+        }
 
         public bool IsActuallyService => IsService || !string.IsNullOrEmpty(UrlTips);
 
@@ -326,6 +332,7 @@ namespace BetHelper {
         public void HideChat() {
             if (HasChat) {
                 RemoveChat = true;
+                Reload(Browser);
                 HeartBeatReset();
             }
         }
@@ -578,7 +585,7 @@ namespace BetHelper {
             }
         }
 
-        private void PingReset() {
+        public void PingReset() {
             pingTimerElapsed = false;
             pingTimer.Stop();
             pingTimer.Start();
@@ -786,6 +793,9 @@ namespace BetHelper {
                 Browser.GetBrowser().GetHost().SetAudioMuted(IsAudioMuted);
                 BrowserInitializedChanged?.Invoke(this, e);
             });
+            KeyboardHandler keyboardHandler = new KeyboardHandler();
+            keyboardHandler.KeyEvent += new EventHandler<KeyboardEventArgs>((sender, e) => PingReset());
+            Browser.KeyboardHandler = keyboardHandler;
             Browser.LoadError += new EventHandler<LoadErrorEventArgs>((sender, e) => {
                 ErrorCode = e.ErrorCode;
                 ErrorText = e.ErrorText;
@@ -818,6 +828,10 @@ namespace BetHelper {
                 TitleChanged?.Invoke(this, e);
             });
             Initialized?.Invoke(this, new FocusEventArgs(this, Ordinal - 1));
+        }
+
+        private void Browser_MouseMove(object sender, MouseEventArgs e) {
+            throw new NotImplementedException();
         }
 
         public async void LogInAsync(bool initialPage) {
@@ -981,6 +995,10 @@ namespace BetHelper {
         }
 
         protected virtual void NoLogIn(ChromiumWebBrowser browser) { }
+
+        public bool HasFastOpportunity() => Browser != null && IsLoggedIn() ? HasFastOpportunity(Browser) : false;
+
+        protected virtual bool HasFastOpportunity(ChromiumWebBrowser browser) => false;
 
         protected bool ClickElement(ChromiumWebBrowser browser, string script) {
             for (int i = 0; i < Constants.JScriptWaitCycles; i++) {

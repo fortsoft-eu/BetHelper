@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.14.0
  */
 
 using System;
@@ -48,6 +48,7 @@ namespace BetHelper {
                 cannotSearch = false;
             });
             HideExtCheckBoxes();
+            ShowTrimCheckBox();
 
             searchHandler = new SearchHandler(Constants.BrowserSearchFileName);
             searchHandler.Saved += new EventHandler(UpdateFindComboBoxList);

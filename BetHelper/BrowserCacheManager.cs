@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.14.0
  */
 
 using System;
@@ -114,8 +114,16 @@ namespace BetHelper {
 
         private void ClearUserData(string appDataPath) {
             try {
-                if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName))) {
-                    Directory.Delete(Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName), true);
+                if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrDictionariesSubDirName))) {
+                    Directory.Delete(Path.Combine(appDataPath, Constants.BrowserCacheMngrDictionariesSubDirName), true);
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+            try {
+                if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrWidevineCdmSubDirName))) {
+                    Directory.Delete(Path.Combine(appDataPath, Constants.BrowserCacheMngrWidevineCdmSubDirName), true);
                 }
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -141,9 +149,14 @@ namespace BetHelper {
                         Path.Combine(appDataPath, Constants.BrowserCacheMngrCacheSubDirName));
                     size += DirectorySize(directoryInfo);
                 }
-                if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName))) {
+                if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrDictionariesSubDirName))) {
                     DirectoryInfo directoryInfo = new DirectoryInfo(
-                        Path.Combine(appDataPath, Constants.BrowserCacheMngrUserDataSubDirName));
+                        Path.Combine(appDataPath, Constants.BrowserCacheMngrDictionariesSubDirName));
+                    size += DirectorySize(directoryInfo);
+                }
+                if (Directory.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrWidevineCdmSubDirName))) {
+                    DirectoryInfo directoryInfo = new DirectoryInfo(
+                        Path.Combine(appDataPath, Constants.BrowserCacheMngrWidevineCdmSubDirName));
                     size += DirectorySize(directoryInfo);
                 }
                 if (File.Exists(Path.Combine(appDataPath, Constants.BrowserCacheMngrLocalPrefsFileName))) {

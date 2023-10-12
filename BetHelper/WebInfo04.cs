@@ -21,17 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.14.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
     public class WebInfo04 : WebInfo {
+        protected List<string> matchingGameIds;
 
         protected override void LogIn(ChromiumWebBrowser browser) {
             if (BrowserAddress.StartsWith(UrlLive, StringComparison.OrdinalIgnoreCase)) {
@@ -253,6 +256,39 @@ namespace BetHelper {
                 .Append("for (let i = 3; i < 8; i++) if (i != 6) ")
                 .Append("document.getElementsByClassName('top_panel')[0].children[0].children[0].children[i].style.display = 'none';")
                 .ToString());
+        }
+
+        protected override bool HasFastOpportunity(ChromiumWebBrowser browser) {
+            if (!StaticMethods.EqualsHostsAndSchemes(UrlLive, BrowserAddress)) {
+                return false;
+            }
+            string response = null;
+            try {
+                if (browser.CanExecuteJavascriptInMainFrame) {
+                    JavascriptResponse javascriptResponse = browser
+                        .EvaluateScriptAsync("document.getElementsByClassName('sport--FOOTBALL')[0].innerHTML")
+                        .GetAwaiter()
+                        .GetResult();
+                    if (javascriptResponse.Success) {
+                        response = (string)javascriptResponse.Result;
+                    }
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+            }
+            if (string.IsNullOrWhiteSpace(response)) {
+                return false;
+            }
+            FastOpportunity fastOpportunity = new FastOpportunity(response);
+            bool unique = false;
+            foreach (string id in fastOpportunity.GetFOMatchingGameIds()) {
+                if (!matchingGameIds.Contains(id)) {
+                    matchingGameIds.Add(id);
+                    unique = true;
+                }
+            }
+            return unique;
         }
     }
 }
