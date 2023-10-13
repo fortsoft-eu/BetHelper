@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.15.0
  */
 
 using CefSharp;
@@ -210,6 +210,10 @@ namespace BetHelper {
             WebInfos = new List<WebInfo>();
             StringReader stringReader = new StringReader(config);
             for (string line; (line = stringReader.ReadLine()) != null;) {
+                char[] chars = line.ToCharArray();
+                if (chars.Length > 0 && (chars[0].Equals(Constants.Semicolon) || chars[0].Equals(Constants.NumberSign))) {
+                    continue;
+                }
                 string[] configLine = line.Split(new char[] { Constants.EqualSign }, 2);
                 if (configLine.Length.Equals(2)) {
                     if (webInfo == null) {

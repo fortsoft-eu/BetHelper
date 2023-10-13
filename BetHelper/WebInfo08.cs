@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.15.0
  */
 
 using CefSharp;
@@ -50,6 +50,17 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync("document.getElementById('onetrust-accept-btn-handler').click();");
                 Wait(browser);
                 Sleep(30);
+            }
+
+            if (IsLoggedIn()) {
+                OnFinished();
+                return;
+            }
+
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('lsidDialog__button')[0]", false)) {
+                browser.ExecuteScriptAsync("document.getElementsByClassName('lsidDialog__button')[0].click();");
+                Wait(browser);
+                Sleep(1000);
             }
 
             if (IsLoggedIn()) {
@@ -120,10 +131,13 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('modal__window')[0]", false)
                     || ElementExistsAndVisible(browser, "document.getElementsByClassName('ui-processResult')[0]", false)) {
 
-                if (!ClickElement(browser, "document.getElementsByClassName('close')[0]")) {
-                    OnFinished();
-                    return;
-                }
+                ClickElement(browser, "document.getElementsByClassName('close')[0]");
+            }
+
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('lsidDialog__button')[0]", false)) {
+                Wait(browser);
+                Sleep(500);
+                browser.ExecuteScriptAsync("document.getElementsByClassName('lsidDialog__button')[0].click();");
             }
 
             OnFinished();
@@ -135,6 +149,9 @@ namespace BetHelper {
             }
             if (ElementExistsAndVisible(browser, "document.getElementById('onetrust-accept-btn-handler')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('onetrust-accept-btn-handler').click();");
+            }
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('lsidDialog__button')[0]", false)) {
+                browser.ExecuteScriptAsync("document.getElementsByClassName('lsidDialog__button')[0].click();");
             }
         }
 

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.15.0
  */
 
 using CefSharp;
@@ -39,21 +39,21 @@ namespace BetHelper {
                 return;
             }
 
-            if (ElementExists(browser, "document.getElementsByClassName('login')[0].children[0]", false)) {
+            if (ElementExists(browser, "document.getElementById('app-header').getElementsByClassName('green')[0]", false)) {
                 OnProgress(Properties.Resources.MessageDisplayingLoginBlock);
-                browser.ExecuteScriptAsync("document.getElementsByClassName('login')[0].children[0].click();");
+                browser.ExecuteScriptAsync("document.getElementById('app-header').getElementsByClassName('green')[0].click();");
                 Wait(browser);
             }
 
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingUserNameBox);
-                browser.ExecuteScriptAsync("document.getElementById('formLogin').value = '';");
+                browser.ExecuteScriptAsync("document.getElementsByName('login')[0].value = '';");
                 Wait(browser);
                 Sleep(50);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (!ClickElement(browser, "document.getElementById('formLogin')")) {
+                if (!ClickElement(browser, "document.getElementsByName('login')[0]")) {
                     OnError(Properties.Resources.MessageLogInCannotSetFocusError);
                     return;
                 }
@@ -61,17 +61,17 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingUserName);
                 SendString(browser, UserName);
-            } while (!GetValueById("formLogin").Equals(UserName));
+            } while (!GetValueBy(ElementAttribute.Name, "login").Equals(UserName));
 
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingPasswordBox);
-                browser.ExecuteScriptAsync("document.getElementById('formLoginPas').value = '';");
+                browser.ExecuteScriptAsync("document.getElementsByName('password')[0].value = '';");
                 Wait(browser);
                 Sleep(50);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (!ClickElement(browser, "document.getElementById('formLoginPas')")) {
+                if (!ClickElement(browser, "document.getElementsByName('password')[0]")) {
                     OnError(Properties.Resources.MessageLogInCannotSetFocusError);
                     return;
                 }
@@ -79,7 +79,7 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingPassword);
                 SendString(browser, Password);
-            } while (!GetValueById("formLoginPas").Equals(Password));
+            } while (!GetValueBy(ElementAttribute.Name, "password").Equals(Password));
 
             SendKey(browser, Keys.Tab);
             OnProgress(Properties.Resources.MessageLoggingIn);
@@ -96,11 +96,11 @@ namespace BetHelper {
                     "document.getElementsByClassName('footer')[0].children[0].children[2].style.display = 'none';");
             }
 
-            Sleep(250);
+            Sleep(500);
             if (decimal.MinValue.Equals(GetBalance())) {
                 OnProgress(Properties.Resources.MessageDisplayingBalance);
-                if (ElementExists(browser, "document.getElementsByClassName('money')[0]", false)) {
-                    browser.ExecuteScriptAsync("document.getElementsByClassName('money')[0].click();");
+                if (ElementExists(browser, "document.getElementsByClassName('logged')[0].getElementsByTagName('small')[0]", false)) {
+                    browser.ExecuteScriptAsync("document.getElementsByClassName('logged')[0].getElementsByTagName('small')[0].click();");
                 }
             }
 
@@ -124,8 +124,8 @@ namespace BetHelper {
             }
 
             if (decimal.MinValue.Equals(GetBalance())) {
-                if (ElementExists(browser, "document.getElementsByClassName('money')[0]", false)) {
-                    browser.ExecuteScriptAsync("document.getElementsByClassName('money')[0].click();");
+                if (ElementExists(browser, "document.getElementsByClassName('logged')[0].getElementsByTagName('small')[0]", false)) {
+                    browser.ExecuteScriptAsync("document.getElementsByClassName('logged')[0].getElementsByTagName('small')[0].click();");
                 }
             }
         }
@@ -142,8 +142,8 @@ namespace BetHelper {
             }
 
             if (decimal.MinValue.Equals(GetBalance())) {
-                if (ElementExists(browser, "document.getElementsByClassName('money')[0]", false)) {
-                    browser.ExecuteScriptAsync("document.getElementsByClassName('money')[0].click();");
+                if (ElementExists(browser, "document.getElementsByClassName('logged')[0].getElementsByTagName('small')[0]", false)) {
+                    browser.ExecuteScriptAsync("document.getElementsByClassName('logged')[0].getElementsByTagName('small')[0].click();");
                 }
             }
         }
