@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.15.1
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System.Text;
 
 namespace BetHelper {
     public class WebInfo16 : WebInfo {
@@ -39,13 +40,13 @@ namespace BetHelper {
             }
 
             OnProgress(Properties.Resources.MessageDisplayingLoginBlock);
-            if (ElementExists(browser, "document.getElementById('ctr-hamburger-1')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('ctr-hamburger-1').click();");
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append("document.evaluate(\"//a[text()='Login']\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)")
+                .Append(".singleNodeValue");
+            if (ElementExists(browser, stringBuilder.ToString(), false)) {
+                browser.ExecuteScriptAsync(stringBuilder.Append(".click();").ToString());
+                Wait(browser);
             }
-            if (ElementExists(browser, "document.getElementsByClassName('open-login-modal')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('open-login-modal')[0].click();");
-            }
-            Wait(browser);
 
             do {
                 Sleep(50);
@@ -108,8 +109,10 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser,
                     "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]", false)) {
 
-                browser.ExecuteScriptAsync(
-                    "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1].style.visibility = 'hidden';");
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]")
+                    .Append(".style.visibility = 'hidden';")
+                    .ToString());
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mem--btn-seemore-slider')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('mem--btn-seemore-slider')[0].click();");
@@ -117,6 +120,16 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.querySelector('[id^=\"edit-\"]').children[4].children[1]", false)) {
                 browser.ExecuteScriptAsync("document.querySelector('[id^=\"edit-\"]').children[4].children[1].style.display = 'none';");
             }
+        }
+
+        public override bool IsLoggedIn() {
+            if (string.IsNullOrEmpty(Script) || !frameInitialLoadEnded) {
+                return false;
+            }
+            return ElementExists(Browser, new StringBuilder()
+                .Append("document.evaluate(\"//div[text()='Logout']\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)")
+                .Append(".singleNodeValue")
+                .ToString(), false);
         }
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
@@ -132,8 +145,10 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser,
                     "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]", false)) {
 
-                browser.ExecuteScriptAsync(
-                    "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1].style.visibility = 'hidden';");
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]")
+                    .Append(".style.visibility = 'hidden';")
+                    .ToString());
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mem--btn-seemore-slider')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('mem--btn-seemore-slider')[0].click();");

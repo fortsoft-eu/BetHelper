@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.15.1
  */
 
 using CefSharp;
@@ -73,18 +73,24 @@ namespace BetHelper {
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingUserNameBox);
-                browser.ExecuteScriptAsync(
-                    "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username').value = '';");
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+                    .Append(".getElementById('username').value = '';")
+                    .ToString());
                 Wait(browser);
                 Sleep(50);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (ElementExists(browser,
-                        "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username')",
+                if (ElementExists(browser, new StringBuilder()
+                        .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+                        .Append(".getElementById('username')")
+                        .ToString(),
                         true)) {
 
-                    browser.ExecuteScriptAsync(
-                        "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('username').focus();");
+                    browser.ExecuteScriptAsync(new StringBuilder()
+                        .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+                        .Append(".getElementById('username').focus();")
+                        .ToString());
                     Sleep(250);
                 } else {
                     OnError();
@@ -102,18 +108,24 @@ namespace BetHelper {
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingPasswordBox);
-                browser.ExecuteScriptAsync(
-                    "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('password').value = '';");
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+                    .Append(".getElementById('password').value = '';")
+                    .ToString());
                 Wait(browser);
                 Sleep(50);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (ElementExists(browser,
-                        "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('password')",
+                if (ElementExists(browser, new StringBuilder()
+                            .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+                            .Append(".getElementById('password')")
+                            .ToString(),
                         true)) {
 
-                    browser.ExecuteScriptAsync(
-                        "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document.getElementById('password').focus();");
+                    browser.ExecuteScriptAsync(new StringBuilder()
+                        .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+                        .Append(".getElementById('password').focus();")
+                        .ToString());
                     Sleep(250);
                 } else {
                     OnError();
@@ -170,8 +182,8 @@ namespace BetHelper {
                     "document.getElementsByClassName('sb-header__header__navigation')[0].children[1].children[0].children[2].remove();");
             }
             browser.ExecuteScriptAsync(new StringBuilder()
-                .Append("for (let i = 0; i < document.getElementsByClassName('casino-banners').length; i++)")
-                .Append(" document.getElementsByClassName('casino-banners')[i].style.display = 'none';")
+                .Append("for (let i = 0; i < document.getElementsByClassName('casino-banners').length; i++) ")
+                .Append("document.getElementsByClassName('casino-banners')[i].style.display = 'none';")
                 .ToString());
 
             if (ElementExists(browser, "document.getElementsByClassName('mini-banners')[0]", false)) {

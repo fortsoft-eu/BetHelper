@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.15.1
  */
 
 using CefSharp;
@@ -200,8 +200,8 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('footer-social')[0].style.display = 'none';");
             }
             browser.ExecuteScriptAsync(new StringBuilder()
-                .Append("for (let i = 2; i < 7; i++) ")
-                .Append("document.getElementsByClassName('sports-bets-menu')[0].children[0].children[1].children[i].style.display = 'none';")
+                .Append("for (let i = 2; i < 7; i++) document")
+                .Append(".getElementsByClassName('sports-bets-menu')[0].children[0].children[1].children[i].style.display = 'none';")
                 .ToString());
             if (ElementExists(browser, "document.getElementsByClassName('sazka-notification__close')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('sazka-notification__close')[0].click();");

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.15.1
  */
 
 using CefSharp;
@@ -218,7 +218,8 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser,
                     "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1]", false)) {
 
-                browser.ExecuteScriptAsync("document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1].click();");
+                browser.ExecuteScriptAsync(
+                    "document.getElementsByClassName('cookie-consents__modal')[0].children[1].children[1].click();");
             }
         }
 
@@ -248,13 +249,13 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync("document.getElementById('hp-carousel').style.display = 'none';");
             }
             browser.ExecuteScriptAsync(new StringBuilder()
-                .Append("for (let i = 2; i < 7; i++) if (i != 5) ")
-                .Append("document.getElementsByClassName('main-navigation')[0].children[1].children[0].children[i].style.display = 'none';")
+                .Append("for (let i = 2; i < 7; i++) if (i != 5) document")
+                .Append(".getElementsByClassName('main-navigation')[0].children[1].children[0].children[i].style.display = 'none';")
                 .ToString());
 
             browser.ExecuteScriptAsync(new StringBuilder()
-                .Append("for (let i = 3; i < 8; i++) if (i != 6) ")
-                .Append("document.getElementsByClassName('top_panel')[0].children[0].children[0].children[i].style.display = 'none';")
+                .Append("for (let i = 3; i < 8; i++) if (i != 6) document")
+                .Append(".getElementsByClassName('top_panel')[0].children[0].children[0].children[i].style.display = 'none';")
                 .ToString());
         }
 
