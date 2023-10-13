@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.15.0
+ * Version 1.1.15.2
  */
 
 using CefSharp;
@@ -126,7 +126,7 @@ namespace BetHelper {
             OnProgress(Properties.Resources.MessageLoggingIn);
             SendKey(browser, Keys.Space);
             Wait(browser);
-            Sleep(1000);
+            Sleep(1500);
 
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('modal__window')[0]", false)
                     || ElementExistsAndVisible(browser, "document.getElementsByClassName('ui-processResult')[0]", false)) {

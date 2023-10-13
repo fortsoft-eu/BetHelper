@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.11.2
+ * Version 1.1.15.2
  */
 
 using CefSharp;
@@ -33,7 +33,14 @@ namespace BetHelper {
     public class WebInfo18 : WebInfo {
 
         protected override void LogIn(ChromiumWebBrowser browser) {
-            OnStarted(7);
+            OnStarted(8);
+
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('cmplz-accept')[0]", false)) {
+                OnProgress(Properties.Resources.MessageClosingCookieConsent);
+                browser.ExecuteScriptAsync("document.getElementsByClassName('cmplz-accept')[0].click();");
+                Wait(browser);
+                Sleep(30);
+            }
 
             if (IsLoggedIn()) {
                 OnFinished();

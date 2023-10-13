@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.15.2
  */
 
 using CefSharp;
@@ -235,6 +235,8 @@ namespace BetHelper {
         public int PopUpTop { get; set; }
 
         public string IetfLanguageTag { get; set; }
+
+        public bool Show { get; set; } = true;
 
         public bool TabNavigation { get; set; }
 

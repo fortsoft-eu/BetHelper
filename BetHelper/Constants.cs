@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.15.2
  */
 
 namespace BetHelper {
@@ -446,6 +446,7 @@ namespace BetHelper {
         public const string ConfigScript = "SCRIPT";
         public const string ConfigSearchFileName = "ConfigSearch.dat";
         public const string ConfigService = "SERVICE";
+        public const string ConfigShow = "SHOW";
         public const string ConfigTabNavigation = "TAB_NAV";
         public const string ConfigTitle = "TITLE";
         public const string ConfigUrl = "URL";

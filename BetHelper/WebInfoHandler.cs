@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.15.0
+ * Version 1.1.15.2
  */
 
 using CefSharp;
@@ -130,6 +130,7 @@ namespace BetHelper {
             index = -1;
             pingIndex = -1;
             ParseConfig(((MainForm)form).Settings.Config);
+            NumberTheWebInfos();
             SetBalances(balances);
             SubscribeEvents();
             getTimer = new System.Timers.Timer();
@@ -224,84 +225,108 @@ namespace BetHelper {
                     switch (configLine[0].Trim()) {
                         case Constants.ConfigTitle:
                             if (!string.IsNullOrEmpty(webInfo.Title)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Title = value;
                             break;
                         case Constants.ConfigUrl:
                             if (!string.IsNullOrEmpty(webInfo.Url)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Url = value;
                             break;
                         case Constants.ConfigUrlLive:
                             if (!string.IsNullOrEmpty(webInfo.UrlLive)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.UrlLive = value;
                             break;
                         case Constants.ConfigUrlToLoad:
                             if (!string.IsNullOrEmpty(webInfo.UrlToLoad)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.UrlNext = value;
                             break;
                         case Constants.ConfigUrlTips:
                             if (!string.IsNullOrEmpty(webInfo.UrlTips)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.UrlTips = value;
                             break;
                         case Constants.ConfigUserName:
                             if (!string.IsNullOrEmpty(webInfo.UserName)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.UserName = value;
                             break;
                         case Constants.ConfigPassword:
                             if (!string.IsNullOrEmpty(webInfo.Password)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Password = value;
                             break;
                         case Constants.ConfigScript:
                             if (!string.IsNullOrEmpty(webInfo.Script)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Script = value;
                             break;
                         case Constants.ConfigPattern:
                             if (!string.IsNullOrEmpty(webInfo.Pattern)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Pattern = value;
                             break;
                         case Constants.ConfigIetfLanguageTag:
                             if (!string.IsNullOrEmpty(webInfo.IetfLanguageTag)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.IetfLanguageTag = value;
                             break;
                         case Constants.ConfigFields:
                             if (!string.IsNullOrEmpty(webInfo.Fields)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.Fields = value;
                             break;
                         case Constants.ConfigDisplayName:
                             if (!string.IsNullOrEmpty(webInfo.DisplayName)) {
-                                WebInfos.Add(webInfo);
+                                if (webInfo.Show) {
+                                    WebInfos.Add(webInfo);
+                                }
                                 webInfo = GetWebInfo();
                             }
                             webInfo.DisplayName = value;
@@ -346,6 +371,11 @@ namespace BetHelper {
                                 .Compare(value, Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
                                 .Equals(0);
                             break;
+                        case Constants.ConfigShow:
+                            webInfo.Show = string
+                                .Compare(value, Constants.ConfigYes, StringComparison.OrdinalIgnoreCase)
+                                .Equals(0);
+                            break;
                         case Constants.ConfigBackNavigation:
                             webInfo.BackNavigation = (WebInfo.BackNavigationType)Enum
                                 .Parse(typeof(WebInfo.BackNavigationType), value, true);
@@ -366,7 +396,15 @@ namespace BetHelper {
                 }
             }
             if (webInfo != null && !string.IsNullOrEmpty(webInfo.Title)) {
-                WebInfos.Add(webInfo);
+                if (webInfo.Show) {
+                    WebInfos.Add(webInfo);
+                }
+            }
+        }
+
+        private void NumberTheWebInfos() {
+            for (int i = 0; i < WebInfos.Count; i++) {
+                WebInfos[i].Ordinal = i + 1;
             }
         }
 
@@ -653,45 +691,45 @@ namespace BetHelper {
         private WebInfo GetWebInfo() {
             switch (ordinal++) {
                 case 0:
-                    return new WebInfo01() { Ordinal = ordinal };
+                    return new WebInfo01();
                 case 1:
-                    return new WebInfo02() { Ordinal = ordinal };
+                    return new WebInfo02();
                 case 2:
-                    return new WebInfo03() { Ordinal = ordinal };
+                    return new WebInfo03();
                 case 3:
-                    return new WebInfo04() { Ordinal = ordinal };
+                    return new WebInfo04();
                 case 4:
-                    return new WebInfo05() { Ordinal = ordinal };
+                    return new WebInfo05();
                 case 5:
-                    return new WebInfo06() { Ordinal = ordinal };
+                    return new WebInfo06();
                 case 6:
-                    return new WebInfo07() { Ordinal = ordinal };
+                    return new WebInfo07();
                 case 7:
-                    return new WebInfo08() { Ordinal = ordinal };
+                    return new WebInfo08();
                 case 8:
-                    return new WebInfo09() { Ordinal = ordinal };
+                    return new WebInfo09();
                 case 9:
-                    return new WebInfo10() { Ordinal = ordinal };
+                    return new WebInfo10();
                 case 10:
-                    return new WebInfo11() { Ordinal = ordinal };
+                    return new WebInfo11();
                 case 11:
-                    return new WebInfo12() { Ordinal = ordinal };
+                    return new WebInfo12();
                 case 12:
-                    return new WebInfo13() { Ordinal = ordinal };
+                    return new WebInfo13();
                 case 13:
-                    return new WebInfo14() { Ordinal = ordinal };
+                    return new WebInfo14();
                 case 14:
-                    return new WebInfo15() { Ordinal = ordinal };
+                    return new WebInfo15();
                 case 15:
-                    return new WebInfo16() { Ordinal = ordinal };
+                    return new WebInfo16();
                 case 16:
-                    return new WebInfo17() { Ordinal = ordinal };
+                    return new WebInfo17();
                 case 17:
-                    return new WebInfo18() { Ordinal = ordinal };
+                    return new WebInfo18();
                 case 18:
-                    return new WebInfo19() { Ordinal = ordinal };
+                    return new WebInfo19();
                 case 19:
-                    return new WebInfo20() { Ordinal = ordinal };
+                    return new WebInfo20();
                 default:
                     throw new NotImplementedException();
             }
