@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.15.2
+ * Version 1.1.16.1
  */
 
 namespace BetHelper {
@@ -175,7 +175,7 @@ namespace BetHelper {
         /// The time interval in milliseconds to get balances and tips displayed
         /// at right pane.
         /// </summary>
-        public const int RightPaneInterval = 20000;
+        public const int RightPaneInterval = 10000;
 
         /// <summary>
         /// The time delay in milliseconds after which the window area will be

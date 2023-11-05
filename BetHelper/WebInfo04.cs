@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.15.1
+ * Version 1.1.16.1
  */
 
 using CefSharp;
@@ -34,7 +34,7 @@ using System.Windows.Forms;
 
 namespace BetHelper {
     public class WebInfo04 : WebInfo {
-        protected List<string> matchingGameIds;
+        protected List<string> matchingGameIds = new List<string>();
 
         protected override void LogIn(ChromiumWebBrowser browser) {
             if (BrowserAddress.StartsWith(UrlLive, StringComparison.OrdinalIgnoreCase)) {
@@ -267,7 +267,8 @@ namespace BetHelper {
             try {
                 if (browser.CanExecuteJavascriptInMainFrame) {
                     JavascriptResponse javascriptResponse = browser
-                        .EvaluateScriptAsync("document.getElementsByClassName('sport--FOOTBALL')[0].innerHTML")
+                        .EvaluateScriptAsync(
+                            string.Format("document.getElementsByClassName('sport--{0}')[0].innerHTML", Constants.FOSport))
                         .GetAwaiter()
                         .GetResult();
                     if (javascriptResponse.Success) {

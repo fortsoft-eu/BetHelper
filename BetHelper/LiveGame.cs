@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.16.1
  */
+
+using System.Text;
 
 namespace BetHelper {
 
@@ -41,6 +43,35 @@ namespace BetHelper {
             this.match = match;
             this.score = score;
             this.time = time;
+        }
+
+        public override string ToString() {
+            StringBuilder stringBuilder = new StringBuilder()
+                .Append("Id")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(id)
+                .Append("Sport")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(sport)
+                .Append("League")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(league)
+                .Append("Match")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(match)
+                .Append("Score")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .AppendLine(score)
+                .Append("Time")
+                .Append(Constants.Colon)
+                .Append(Constants.Space)
+                .Append(time);
+            return stringBuilder.ToString();
         }
     }
 }
