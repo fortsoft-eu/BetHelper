@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.16.2
  */
 
 using FortSoft.Tools;
@@ -52,6 +52,7 @@ namespace BetHelper {
         public event EventHandler AltF10Pressed;
         public event EventHandler AltF11Pressed;
         public event EventHandler AltF12Pressed;
+        public event EventHandler AltF5Pressed;
         public event EventHandler AltF7Pressed;
         public event EventHandler AltF8Pressed;
         public event EventHandler AltF9Pressed;
@@ -85,7 +86,6 @@ namespace BetHelper {
         public event EventHandler F12Pressed;
         public event EventHandler F2Pressed;
         public event EventHandler F3Pressed;
-        public event EventHandler F4Pressed;
         public event EventHandler F5Pressed;
         public event EventHandler F7Pressed;
         public event EventHandler F8Pressed;
@@ -190,6 +190,7 @@ namespace BetHelper {
             tipForm.AltF10Pressed += new EventHandler((sender, e) => AltF10Pressed?.Invoke(sender, e));
             tipForm.AltF11Pressed += new EventHandler((sender, e) => AltF11Pressed?.Invoke(sender, e));
             tipForm.AltF12Pressed += new EventHandler((sender, e) => AltF12Pressed?.Invoke(sender, e));
+            tipForm.AltF5Pressed += new EventHandler((sender, e) => AltF5Pressed?.Invoke(sender, e));
             tipForm.AltF7Pressed += new EventHandler((sender, e) => AltF7Pressed?.Invoke(sender, e));
             tipForm.AltF8Pressed += new EventHandler((sender, e) => AltF8Pressed?.Invoke(sender, e));
             tipForm.AltF9Pressed += new EventHandler((sender, e) => AltF9Pressed?.Invoke(sender, e));
@@ -224,7 +225,6 @@ namespace BetHelper {
             tipForm.F12Pressed += new EventHandler((sender, e) => F12Pressed?.Invoke(sender, e));
             tipForm.F2Pressed += new EventHandler((sender, e) => F2Pressed?.Invoke(sender, e));
             tipForm.F3Pressed += new EventHandler((sender, e) => F3Pressed?.Invoke(sender, e));
-            tipForm.F4Pressed += new EventHandler((sender, e) => F4Pressed?.Invoke(sender, e));
             tipForm.F5Pressed += new EventHandler((sender, e) => F5Pressed?.Invoke(sender, e));
             tipForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
             tipForm.F8Pressed += new EventHandler((sender, e) => F8Pressed?.Invoke(sender, e));

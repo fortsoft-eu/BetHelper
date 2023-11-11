@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.16.1
+ * Version 1.1.16.2
  */
 
 namespace BetHelper {
@@ -562,6 +562,7 @@ namespace BetHelper {
         public const string ShortcutAltF10 = "\tAlt+F10";
         public const string ShortcutAltF11 = "\tAlt+F11";
         public const string ShortcutAltF12 = "\tAlt+F12";
+        public const string ShortcutAltF5 = "\tAlt+F5";
         public const string ShortcutAltF6 = "\tAlt+F6";
         public const string ShortcutAltF7 = "\tAlt+F7";
         public const string ShortcutAltF8 = "\tAlt+F8";
@@ -598,7 +599,6 @@ namespace BetHelper {
         public const string ShortcutF12 = "\tF12";
         public const string ShortcutF2 = "\tF2";
         public const string ShortcutF3 = "\tF3";
-        public const string ShortcutF4 = "\tF4";
         public const string ShortcutF5 = "\tF5";
         public const string ShortcutF7 = "\tF7";
         public const string ShortcutF8 = "\tF8";

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.16.2
  */
 
 using CefSharp;
@@ -248,7 +248,7 @@ namespace BetHelper {
                     new EventHandler(GoHome)));
                 menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemStopLoad + Constants.ShortcutEsc,
                     new EventHandler(StopLoad)));
-                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUnload + Constants.ShortcutF4,
+                menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemUnload + Constants.ShortcutAltF5,
                     new EventHandler(UnloadPage)));
                 menuItemView.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemReload + Constants.ShortcutF5,
                     new EventHandler(Reload)));
@@ -984,6 +984,7 @@ namespace BetHelper {
             webInfoHandler.AltF10Pressed += new EventHandler(OpenBetCalculator);
             webInfoHandler.AltF11Pressed += new EventHandler(LaunchCalculator);
             webInfoHandler.AltF12Pressed += new EventHandler(LaunchNotepad);
+            webInfoHandler.AltF5Pressed += new EventHandler(UnloadPage);
             webInfoHandler.AltF7Pressed += new EventHandler(TestBell);
             webInfoHandler.AltF8Pressed += new EventHandler(LogInAtInitialPage);
             webInfoHandler.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
@@ -1017,7 +1018,6 @@ namespace BetHelper {
             webInfoHandler.F12Pressed += new EventHandler(OpenDevTools);
             webInfoHandler.F2Pressed += new EventHandler(FocusTrustDegrees);
             webInfoHandler.F3Pressed += new EventHandler(FindNext);
-            webInfoHandler.F4Pressed += new EventHandler(UnloadPage);
             webInfoHandler.F5Pressed += new EventHandler(Reload);
             webInfoHandler.F7Pressed += new EventHandler(StopRinging);
             webInfoHandler.F8Pressed += new EventHandler(LogIn);
@@ -1566,6 +1566,7 @@ namespace BetHelper {
                 findForm.AltF10Pressed += new EventHandler(OpenBetCalculator);
                 findForm.AltF11Pressed += new EventHandler(LaunchCalculator);
                 findForm.AltF12Pressed += new EventHandler(LaunchNotepad);
+                findForm.AltF5Pressed += new EventHandler(UnloadPage);
                 findForm.AltF7Pressed += new EventHandler(TestBell);
                 findForm.AltF8Pressed += new EventHandler(LogInAtInitialPage);
                 findForm.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
@@ -1599,7 +1600,6 @@ namespace BetHelper {
                 findForm.F11Pressed += new EventHandler(TurnOffMonitors);
                 findForm.F12Pressed += new EventHandler(OpenDevTools);
                 findForm.F2Pressed += new EventHandler(FocusTrustDegrees);
-                findForm.F4Pressed += new EventHandler(UnloadPage);
                 findForm.F5Pressed += new EventHandler(Reload);
                 findForm.F7Pressed += new EventHandler(StopRinging);
                 findForm.F8Pressed += new EventHandler(LogIn);
@@ -2954,6 +2954,7 @@ namespace BetHelper {
             tip.AltF10Pressed += new EventHandler(OpenBetCalculator);
             tip.AltF11Pressed += new EventHandler(LaunchCalculator);
             tip.AltF12Pressed += new EventHandler(LaunchNotepad);
+            tip.AltF5Pressed += new EventHandler(UnloadPage);
             tip.AltF7Pressed += new EventHandler(TestBell);
             tip.AltF8Pressed += new EventHandler(LogInAtInitialPage);
             tip.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
@@ -2988,7 +2989,6 @@ namespace BetHelper {
             tip.F12Pressed += new EventHandler(OpenDevTools);
             tip.F2Pressed += new EventHandler(FocusTrustDegrees);
             tip.F3Pressed += new EventHandler(FindNext);
-            tip.F4Pressed += new EventHandler(UnloadPage);
             tip.F5Pressed += new EventHandler(Reload);
             tip.F7Pressed += new EventHandler(StopRinging);
             tip.F8Pressed += new EventHandler(LogIn);
@@ -3091,6 +3091,7 @@ namespace BetHelper {
             service.AltF10Pressed += new EventHandler(OpenBetCalculator);
             service.AltF11Pressed += new EventHandler(LaunchCalculator);
             service.AltF12Pressed += new EventHandler(LaunchNotepad);
+            service.AltF5Pressed += new EventHandler(UnloadPage);
             service.AltF7Pressed += new EventHandler(TestBell);
             service.AltF8Pressed += new EventHandler(LogInAtInitialPage);
             service.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
@@ -3125,7 +3126,6 @@ namespace BetHelper {
             service.F12Pressed += new EventHandler(OpenDevTools);
             service.F2Pressed += new EventHandler(FocusTrustDegrees);
             service.F3Pressed += new EventHandler(FindNext);
-            service.F4Pressed += new EventHandler(UnloadPage);
             service.F5Pressed += new EventHandler(Reload);
             service.F7Pressed += new EventHandler(StopRinging);
             service.F8Pressed += new EventHandler(LogIn);
@@ -3988,6 +3988,7 @@ namespace BetHelper {
             tipForm.AltF10Pressed += new EventHandler(OpenBetCalculator);
             tipForm.AltF11Pressed += new EventHandler(LaunchCalculator);
             tipForm.AltF12Pressed += new EventHandler(LaunchNotepad);
+            tipForm.AltF5Pressed += new EventHandler(UnloadPage);
             tipForm.AltF7Pressed += new EventHandler(TestBell);
             tipForm.AltF8Pressed += new EventHandler(LogInAtInitialPage);
             tipForm.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
@@ -4022,7 +4023,6 @@ namespace BetHelper {
             tipForm.F12Pressed += new EventHandler(OpenDevTools);
             tipForm.F2Pressed += new EventHandler(FocusTrustDegrees);
             tipForm.F3Pressed += new EventHandler(FindNext);
-            tipForm.F4Pressed += new EventHandler(UnloadPage);
             tipForm.F5Pressed += new EventHandler(Reload);
             tipForm.F7Pressed += new EventHandler(StopRinging);
             tipForm.F8Pressed += new EventHandler(LogIn);
@@ -4109,6 +4109,7 @@ namespace BetHelper {
             serviceForm.AltF10Pressed += new EventHandler(OpenBetCalculator);
             serviceForm.AltF11Pressed += new EventHandler(LaunchCalculator);
             serviceForm.AltF12Pressed += new EventHandler(LaunchNotepad);
+            serviceForm.AltF5Pressed += new EventHandler(UnloadPage);
             serviceForm.AltF7Pressed += new EventHandler(TestBell);
             serviceForm.AltF8Pressed += new EventHandler(LogInAtInitialPage);
             serviceForm.AltF9Pressed += new EventHandler(ToggleRightPanetWidth);
@@ -4143,7 +4144,6 @@ namespace BetHelper {
             serviceForm.F12Pressed += new EventHandler(OpenDevTools);
             serviceForm.F2Pressed += new EventHandler(FocusTrustDegrees);
             serviceForm.F3Pressed += new EventHandler(FindNext);
-            serviceForm.F4Pressed += new EventHandler(UnloadPage);
             serviceForm.F5Pressed += new EventHandler(Reload);
             serviceForm.F7Pressed += new EventHandler(StopRinging);
             serviceForm.F8Pressed += new EventHandler(LogIn);

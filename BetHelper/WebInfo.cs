@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.15.2
+ * Version 1.1.16.2
  */
 
 using CefSharp;
@@ -97,6 +97,7 @@ namespace BetHelper {
         public event EventHandler AltF10Pressed;
         public event EventHandler AltF11Pressed;
         public event EventHandler AltF12Pressed;
+        public event EventHandler AltF5Pressed;
         public event EventHandler AltF7Pressed;
         public event EventHandler AltF8Pressed;
         public event EventHandler AltF9Pressed;
@@ -129,7 +130,6 @@ namespace BetHelper {
         public event EventHandler F12Pressed;
         public event EventHandler F2Pressed;
         public event EventHandler F3Pressed;
-        public event EventHandler F4Pressed;
         public event EventHandler F5Pressed;
         public event EventHandler F7Pressed;
         public event EventHandler F8Pressed;
@@ -368,6 +368,7 @@ namespace BetHelper {
             webInfoForm.AltF10Pressed += new EventHandler((sender, e) => AltF10Pressed?.Invoke(sender, e));
             webInfoForm.AltF11Pressed += new EventHandler((sender, e) => AltF11Pressed?.Invoke(sender, e));
             webInfoForm.AltF12Pressed += new EventHandler((sender, e) => AltF12Pressed?.Invoke(sender, e));
+            webInfoForm.AltF5Pressed += new EventHandler((sender, e) => AltF5Pressed?.Invoke(sender, e));
             webInfoForm.AltF7Pressed += new EventHandler((sender, e) => AltF7Pressed?.Invoke(sender, e));
             webInfoForm.AltF8Pressed += new EventHandler((sender, e) => AltF8Pressed?.Invoke(sender, e));
             webInfoForm.AltF9Pressed += new EventHandler((sender, e) => AltF9Pressed?.Invoke(sender, e));
@@ -401,7 +402,6 @@ namespace BetHelper {
             webInfoForm.F12Pressed += new EventHandler((sender, e) => F12Pressed?.Invoke(sender, e));
             webInfoForm.F2Pressed += new EventHandler((sender, e) => F2Pressed?.Invoke(sender, e));
             webInfoForm.F3Pressed += new EventHandler((sender, e) => F3Pressed?.Invoke(sender, e));
-            webInfoForm.F4Pressed += new EventHandler((sender, e) => F4Pressed?.Invoke(sender, e));
             webInfoForm.F5Pressed += new EventHandler((sender, e) => F5Pressed?.Invoke(sender, e));
             webInfoForm.F7Pressed += new EventHandler((sender, e) => F7Pressed?.Invoke(sender, e));
             webInfoForm.F8Pressed += new EventHandler((sender, e) => F8Pressed?.Invoke(sender, e));

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.16.2
  */
 
 using FortSoft.Tools;
@@ -205,13 +205,6 @@ namespace BetHelper {
                         FindNext?.Invoke(this, EventArgs.Empty);
                     }
                 }));
-            keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F4,
-                new Action(() => {
-                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
-                        Shortcut?.Invoke(this, EventArgs.Empty);
-                        UnloadPage?.Invoke(this, EventArgs.Empty);
-                    }
-                }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F5,
                 new Action(() => {
                     if (!form.WindowState.Equals(FormWindowState.Minimized)) {
@@ -273,6 +266,13 @@ namespace BetHelper {
                     if (!form.WindowState.Equals(FormWindowState.Minimized)) {
                         Shortcut?.Invoke(this, EventArgs.Empty);
                         LaunchNotepad?.Invoke(this, EventArgs.Empty);
+                    }
+                }));
+            keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F5,
+                new Action(() => {
+                    if (!form.WindowState.Equals(FormWindowState.Minimized)) {
+                        Shortcut?.Invoke(this, EventArgs.Empty);
+                        UnloadPage?.Invoke(this, EventArgs.Empty);
                     }
                 }));
             keyboardHookManager.RegisterHotkey(ModifierKeys.Alt, (int)VirtualKeyCode.F6,

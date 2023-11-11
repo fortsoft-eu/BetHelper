@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.9.0
+ * Version 1.1.16.2
  */
 
 using FortSoft.Tools;
@@ -53,6 +53,7 @@ namespace BetHelper {
         public event EventHandler AltF10Pressed;
         public event EventHandler AltF11Pressed;
         public event EventHandler AltF12Pressed;
+        public event EventHandler AltF5Pressed;
         public event EventHandler AltF7Pressed;
         public event EventHandler AltF8Pressed;
         public event EventHandler AltF9Pressed;
@@ -86,7 +87,6 @@ namespace BetHelper {
         public event EventHandler F12Pressed;
         public event EventHandler F2Pressed;
         public event EventHandler F3Pressed;
-        public event EventHandler F4Pressed;
         public event EventHandler F5Pressed;
         public event EventHandler F7Pressed;
         public event EventHandler F8Pressed;
@@ -297,6 +297,8 @@ namespace BetHelper {
                 AltCtrlShiftEPressed?.Invoke(this, EventArgs.Empty);
             } else if (e.Alt && e.Control && e.Shift && e.KeyCode.Equals(Keys.P)) {
                 AltCtrlShiftPPressed?.Invoke(this, EventArgs.Empty);
+            } else if (e.Alt && e.KeyCode.Equals(Keys.F5)) {
+                AltF5Pressed?.Invoke(this, EventArgs.Empty);
             } else if (e.Alt && e.KeyCode.Equals(Keys.F7)) {
                 AltF7Pressed?.Invoke(this, EventArgs.Empty);
             } else if (e.Alt && e.KeyCode.Equals(Keys.F8)) {
@@ -381,8 +383,6 @@ namespace BetHelper {
                 F2Pressed?.Invoke(this, EventArgs.Empty);
             } else if (e.KeyCode.Equals(Keys.F3)) {
                 F3Pressed?.Invoke(this, EventArgs.Empty);
-            } else if (e.KeyCode.Equals(Keys.F4)) {
-                F4Pressed?.Invoke(this, EventArgs.Empty);
             } else if (e.KeyCode.Equals(Keys.F5)) {
                 F5Pressed?.Invoke(this, EventArgs.Empty);
             } else if (e.KeyCode.Equals(Keys.F7)) {
