@@ -21,26 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.15.2
+ * Version 1.1.17.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace BetHelper {
     public class WebInfo18 : WebInfo {
 
         protected override void LogIn(ChromiumWebBrowser browser) {
-            OnStarted(8);
-
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('cmplz-accept')[0]", false)) {
-                OnProgress(Properties.Resources.MessageClosingCookieConsent);
-                browser.ExecuteScriptAsync("document.getElementsByClassName('cmplz-accept')[0].click();");
-                Wait(browser);
-                Sleep(30);
-            }
+            OnStarted(7);
 
             if (IsLoggedIn()) {
                 OnFinished();
@@ -50,93 +48,174 @@ namespace BetHelper {
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingUserNameBox);
-                browser.ExecuteScriptAsync("document.getElementById('user_login').value = '';");
+                browser.ExecuteScriptAsync("document.getElementById('username-133').value = '';");
                 Wait(browser);
                 Sleep(50);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (!ClickElement(browser, "document.getElementById('user_login')")) {
-                    OnError(Properties.Resources.MessageLogInCannotSetFocusError);
+                if (!ClickElement(browser, "document.getElementById('username-133')")) {
+                    OnError();
                     return;
                 }
-                Sleep(50);
+                Sleep(100);
 
                 OnProgress(Properties.Resources.MessageSendingUserName);
                 SendString(browser, UserName);
-            } while (!GetValueById("user_login").Equals(UserName));
-
-            SendKey(browser, Keys.Tab);
+            } while (!GetValueById("username-133").Equals(UserName));
 
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingPasswordBox);
-                browser.ExecuteScriptAsync("document.getElementById('user_pass').value = '';");
+                browser.ExecuteScriptAsync("document.getElementById('user_password-133').value = '';");
                 Wait(browser);
                 Sleep(50);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (!ClickElement(browser, "document.getElementById('user_pass')")) {
-                    OnError(Properties.Resources.MessageLogInCannotSetFocusError);
+                if (!ClickElement(browser, "document.getElementById('user_password-133')")) {
+                    OnError();
                     return;
                 }
-                Sleep(50);
+                Sleep(100);
 
                 OnProgress(Properties.Resources.MessageSendingPassword);
                 SendString(browser, Password);
-            } while (!GetValueById("user_pass").Equals(Password));
+            } while (!GetValueById("user_password-133").Equals(Password));
 
+            SendKey(browser, Keys.Tab);
+            SendKey(browser, Keys.Tab);
             OnProgress(Properties.Resources.MessageLoggingIn);
-            browser.ExecuteScriptAsync("document.getElementsByClassName('sazkyPreLogin')[0].click();");
+            SendKey(browser, Keys.Space);
             Wait(browser);
-            Sleep(2000);
-            if (!ElementExistsAndVisible(browser, "document.getElementsByClassName('sazkyHeaderAccountName')[0]", true)) {
-                OnError();
-                return;
+
+            if (ElementExists(browser, "document.getElementById('dolniban')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('dolniban').remove();");
+            }
+            if (ElementExists(browser, "document.getElementById('dolnibanmobil')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('dolnibanmobil').remove();");
+            }
+            if (ElementExists(browser, "document.getElementById('dolniban')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('dolniban').remove();");
             }
 
             OnFinished();
         }
 
         protected override void NoLogIn(ChromiumWebBrowser browser) {
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mediad')[0]", false)) {
-                browser.ExecuteScriptAsync(new StringBuilder()
-                    .Append("Array.from(document.getElementsByClassName('mediad')).forEach(function(element, index, array)")
-                    .Append("{ element.style.display = 'none'; });")
-                    .ToString());
+            if (ElementExists(browser, "document.getElementById('dolniban')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('dolniban').remove();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementById('footerNewsletterWrap')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('footerNewsletterWrap').style.display = 'none';");
+            if (ElementExists(browser, "document.getElementById('dolnibanmobil')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('dolnibanmobil').remove();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementById('newsletterButton')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('newsletterButton').style.visibility = 'hidden';");
-            }
-            if (ElementExistsAndVisible(browser, "document.getElementById('wpadminbar')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('wpadminbar').style.visibility = 'hidden';");
-            }
-            if (ElementExistsAndVisible(browser, "document.querySelector('[id^=\"brave_popup_\"]')", false)) {
-                browser.ExecuteScriptAsync("document.querySelector('[id^=\"brave_popup_\"]').remove();");
+            if (ElementExists(browser, "document.getElementById('dolniban')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('dolniban').remove();");
             }
         }
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mediad')[0]", false)) {
-                browser.ExecuteScriptAsync(new StringBuilder()
-                    .Append("Array.from(document.getElementsByClassName('mediad')).forEach(function(element, index, array)")
-                    .Append("{ element.style.display = 'none'; });")
-                    .ToString());
+            if (ElementExists(browser, "document.getElementById('dolniban')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('dolniban').remove();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementById('footerNewsletterWrap')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('footerNewsletterWrap').style.display = 'none';");
+            if (ElementExists(browser, "document.getElementById('dolnibanmobil')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('dolnibanmobil').remove();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementById('newsletterButton')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('newsletterButton').style.visibility = 'hidden';");
+            if (ElementExists(browser, "document.getElementById('dolniban')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('dolniban').remove();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementById('wpadminbar')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('wpadminbar').style.visibility = 'hidden';");
+        }
+
+        protected override Tip[] GetTips(ChromiumWebBrowser browser) {
+            if (BrowserAddress != UrlTips) {
+                return null;
             }
-            if (ElementExistsAndVisible(browser, "document.querySelector('[id^=\"brave_popup_\"]')", false)) {
-                browser.ExecuteScriptAsync("document.querySelector('[id^=\"brave_popup_\"]').remove();");
+            string response = null;
+            try {
+                if (browser.CanExecuteJavascriptInMainFrame) {
+                    JavascriptResponse javascriptResponse = browser
+                        .EvaluateScriptAsync("document.getElementsByClassName('tips')[0].innerHTML")
+                        .GetAwaiter()
+                        .GetResult();
+                    if (javascriptResponse.Success) {
+                        response = (string)javascriptResponse.Result;
+                    }
+                }
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
             }
+            List<Tip> list = new List<Tip>();
+            if (!string.IsNullOrWhiteSpace(response)) {
+                DateTime dateTimeNow = DateTime.Now;
+                Regex bookmakerRegex = new Regex("^.*<img\\s+style.*\"([^\"]*)\"\\s*></a></div>.*$",
+                    RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                Regex dateTimeSplitRegex = new Regex("^(.*)\\((.*)\\)$");
+                Regex endHtmlTagRegex = new Regex("(\\s+\\?)?</.*>$");
+                Regex lineRegex = new Regex("\\s*(</[^>]+>)*\\s*<\\w+[^>]+>\\s*");
+                int i = 0;
+                foreach (string rawTipLine in Regex.Split(response, "<li\\s+class=\"reason\"[^>]+>", RegexOptions.IgnoreCase)) {
+                    if (i++ == 0) {
+                        continue;
+                    }
+                    string bookmaker = bookmakerRegex.Replace(rawTipLine, Constants.ReplaceFirst);
+                    string[] splitRawTipLine = lineRegex.Split(rawTipLine);
+                    List<string> tipLineItems = new List<string>(splitRawTipLine.Length);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    foreach (string rawItem in splitRawTipLine) {
+                        string item = rawItem.Replace("</span>", string.Empty);
+                        if (string.IsNullOrEmpty(item)) {
+                            continue;
+                        }
+                        if (item.Equals("</div>")) {
+                            if (stringBuilder.Length > 0) {
+                                tipLineItems.Add(endHtmlTagRegex.Replace(stringBuilder.ToString().TrimEnd(), string.Empty));
+                                stringBuilder = new StringBuilder();
+                            }
+                            continue;
+                        }
+                        if (stringBuilder.Length.Equals(0)) {
+                            stringBuilder.Append(item);
+                            stringBuilder.Append(Constants.Space);
+                        } else {
+                            stringBuilder.Append(item);
+                        }
+                    }
+                    if (stringBuilder.Length > 0) {
+                        tipLineItems.Add(endHtmlTagRegex.Replace(stringBuilder.ToString().TrimEnd(), string.Empty));
+                    }
+                    try {
+                        DateTime dateTime = new DateTime(
+                            int.Parse(tipLineItems[6].Substring(7, 4)),
+                            int.Parse(tipLineItems[6].Substring(3, 2)),
+                            int.Parse(tipLineItems[6].Substring(0, 2)),
+                            int.Parse(tipLineItems[7].Substring(0, 2)),
+                            int.Parse(tipLineItems[7].Substring(3, 2)),
+                            0);
+                        if (dateTime > dateTimeNow) {
+                            CultureInfo cultureInfo = CultureInfo.GetCultureInfoByIetfLanguageTag(IetfLanguageTag);
+                            Game game = new Game(
+                                dateTime,
+                                StaticMethods.UppercaseFirst(tipLineItems[0], cultureInfo),
+                                StaticMethods.UppercaseFirst(tipLineItems[5], cultureInfo),
+                                StaticMethods.UppercaseFirst(dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceFirst),
+                                    cultureInfo).TrimEnd(),
+                                new StringBuilder()
+                                    .Append(StaticMethods.UppercaseFirst(
+                                        dateTimeSplitRegex.Replace(tipLineItems[1], Constants.ReplaceSecond),
+                                        cultureInfo))
+                                    .Append(Constants.Space)
+                                    .Append(tipLineItems[3])
+                                    .ToString());
+                            list.Add(new Tip(DateTime.Now, new Game[] { game }, bookmaker.Length < 30 ? bookmaker : null,
+                                float.Parse(tipLineItems[2], NumberStyles.Float, CultureInfo.InvariantCulture), 10f,
+                                StaticMethods.UppercaseFirst(Title, cultureInfo), Tip.TipStatus.Received));
+                        }
+                    } catch (Exception exception) {
+                        Debug.WriteLine(exception);
+                        ErrorLog.WriteLine(exception);
+                    }
+                }
+            }
+            return list.ToArray();
         }
     }
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.16.2
+ * Version 1.1.17.0
  */
 
 using CefSharp;
@@ -730,6 +730,8 @@ namespace BetHelper {
                     return new WebInfo19();
                 case 19:
                     return new WebInfo20();
+                case 20:
+                    return new WebInfo21();
                 default:
                     throw new NotImplementedException();
             }

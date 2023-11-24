@@ -26,19 +26,28 @@
 
 using CefSharp;
 using CefSharp.WinForms;
-using System.Text;
 
 namespace BetHelper {
-    public class WebInfo20 : WebInfo {
+    public class WebInfo21 : WebInfo {
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
-            browser.ExecuteScriptAsync(new StringBuilder()
-                .Append("for (let i = 0; i < document.getElementsByClassName('ad').length; i++) ")
-                .Append("document.getElementsByClassName('ad')[i].remove();")
-                .ToString());
+            if (ElementExistsAndVisible(browser,
+                    "document.getElementById('wrapper-footer').children[0].children[0].children[1]", false)) {
 
-            if (ElementExists(browser, "document.getElementById('content').getElementsByClassName('block')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('content').getElementsByClassName('block')[0].remove();");
+                browser.ExecuteScriptAsync(
+                    "document.getElementById('wrapper-footer').children[0].children[0].children[1].style.display = 'none';");
+            }
+
+            if (ElementExistsAndVisible(browser, "document.getElementById('wrapper-navbar').children[0]", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('wrapper-navbar').children[0].remove();");
+            }
+
+            Wait(browser);
+
+            Sleep(1200);
+
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('gdpr-fbo-0')[0]", false)) {
+                browser.ExecuteScriptAsync("document.getElementsByClassName('gdpr-fbo-0')[0].click();");
             }
         }
     }

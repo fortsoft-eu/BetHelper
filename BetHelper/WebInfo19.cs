@@ -21,24 +21,121 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.0.0
+ * Version 1.1.17.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
 using System.Text;
+using System.Windows.Forms;
 
 namespace BetHelper {
     public class WebInfo19 : WebInfo {
 
-        public override void HeartBeat(ChromiumWebBrowser browser) {
-            browser.ExecuteScriptAsync(new StringBuilder()
-                .Append("for (let i = 0; i < document.getElementsByClassName('ad').length; i++) ")
-                .Append("document.getElementsByClassName('ad')[i].remove();")
-                .ToString());
+        protected override void LogIn(ChromiumWebBrowser browser) {
+            OnStarted(8);
 
-            if (ElementExists(browser, "document.getElementById('content').getElementsByClassName('block')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('content').getElementsByClassName('block')[0].remove();");
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('cmplz-accept')[0]", false)) {
+                OnProgress(Properties.Resources.MessageClosingCookieConsent);
+                browser.ExecuteScriptAsync("document.getElementsByClassName('cmplz-accept')[0].click();");
+                Wait(browser);
+                Sleep(30);
+            }
+
+            if (IsLoggedIn()) {
+                OnFinished();
+                return;
+            }
+
+            do {
+                Sleep(50);
+                OnProgress(Properties.Resources.MessageClearingUserNameBox);
+                browser.ExecuteScriptAsync("document.getElementById('user_login').value = '';");
+                Wait(browser);
+                Sleep(50);
+
+                OnProgress(Properties.Resources.MessageSettingInputFocus);
+                if (!ClickElement(browser, "document.getElementById('user_login')")) {
+                    OnError(Properties.Resources.MessageLogInCannotSetFocusError);
+                    return;
+                }
+                Sleep(50);
+
+                OnProgress(Properties.Resources.MessageSendingUserName);
+                SendString(browser, UserName);
+            } while (!GetValueById("user_login").Equals(UserName));
+
+            SendKey(browser, Keys.Tab);
+
+            do {
+                Sleep(50);
+                OnProgress(Properties.Resources.MessageClearingPasswordBox);
+                browser.ExecuteScriptAsync("document.getElementById('user_pass').value = '';");
+                Wait(browser);
+                Sleep(50);
+
+                OnProgress(Properties.Resources.MessageSettingInputFocus);
+                if (!ClickElement(browser, "document.getElementById('user_pass')")) {
+                    OnError(Properties.Resources.MessageLogInCannotSetFocusError);
+                    return;
+                }
+                Sleep(50);
+
+                OnProgress(Properties.Resources.MessageSendingPassword);
+                SendString(browser, Password);
+            } while (!GetValueById("user_pass").Equals(Password));
+
+            OnProgress(Properties.Resources.MessageLoggingIn);
+            browser.ExecuteScriptAsync("document.getElementsByClassName('sazkyPreLogin')[0].click();");
+            Wait(browser);
+            Sleep(2000);
+            if (!ElementExistsAndVisible(browser, "document.getElementsByClassName('sazkyHeaderAccountName')[0]", true)) {
+                OnError();
+                return;
+            }
+
+            OnFinished();
+        }
+
+        protected override void NoLogIn(ChromiumWebBrowser browser) {
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mediad')[0]", false)) {
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("Array.from(document.getElementsByClassName('mediad')).forEach(function(element, index, array)")
+                    .Append("{ element.style.display = 'none'; });")
+                    .ToString());
+            }
+            if (ElementExistsAndVisible(browser, "document.getElementById('footerNewsletterWrap')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('footerNewsletterWrap').style.display = 'none';");
+            }
+            if (ElementExistsAndVisible(browser, "document.getElementById('newsletterButton')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('newsletterButton').style.visibility = 'hidden';");
+            }
+            if (ElementExistsAndVisible(browser, "document.getElementById('wpadminbar')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('wpadminbar').style.visibility = 'hidden';");
+            }
+            if (ElementExistsAndVisible(browser, "document.querySelector('[id^=\"brave_popup_\"]')", false)) {
+                browser.ExecuteScriptAsync("document.querySelector('[id^=\"brave_popup_\"]').remove();");
+            }
+        }
+
+        public override void HeartBeat(ChromiumWebBrowser browser) {
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mediad')[0]", false)) {
+                browser.ExecuteScriptAsync(new StringBuilder()
+                    .Append("Array.from(document.getElementsByClassName('mediad')).forEach(function(element, index, array)")
+                    .Append("{ element.style.display = 'none'; });")
+                    .ToString());
+            }
+            if (ElementExistsAndVisible(browser, "document.getElementById('footerNewsletterWrap')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('footerNewsletterWrap').style.display = 'none';");
+            }
+            if (ElementExistsAndVisible(browser, "document.getElementById('newsletterButton')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('newsletterButton').style.visibility = 'hidden';");
+            }
+            if (ElementExistsAndVisible(browser, "document.getElementById('wpadminbar')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('wpadminbar').style.visibility = 'hidden';");
+            }
+            if (ElementExistsAndVisible(browser, "document.querySelector('[id^=\"brave_popup_\"]')", false)) {
+                browser.ExecuteScriptAsync("document.querySelector('[id^=\"brave_popup_\"]').remove();");
             }
         }
     }

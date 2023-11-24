@@ -21,42 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.15.1
+ * Version 1.1.17.0
  */
 
 using CefSharp;
 using CefSharp.WinForms;
-using System.Text;
+using System.Windows.Forms;
 
 namespace BetHelper {
     public class WebInfo16 : WebInfo {
 
         protected override void LogIn(ChromiumWebBrowser browser) {
-            OnStarted(9);
+            OnStarted(10);
+
+            if (ElementExistsAndVisible(browser, "document.getElementById('CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll')", false)) {
+                OnProgress(Properties.Resources.MessageClosingCookieConsent);
+                browser.ExecuteScriptAsync("document.getElementById('CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll').click();");
+                Sleep(100);
+            }
 
             if (IsLoggedIn()) {
                 OnFinished();
                 return;
             }
 
-            OnProgress(Properties.Resources.MessageDisplayingLoginBlock);
-            StringBuilder stringBuilder = new StringBuilder()
-                .Append("document.evaluate(\"//a[text()='Login']\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)")
-                .Append(".singleNodeValue");
-            if (ElementExists(browser, stringBuilder.ToString(), false)) {
-                browser.ExecuteScriptAsync(stringBuilder.Append(".click();").ToString());
-                Wait(browser);
+            if (!ElementExistsAndVisible(browser, new string[] {
+                        "document.getElementsByClassName('header__login-button')[0]",
+                        "document.getElementsByClassName('js-header__toggler')[0]"
+                    }, true)) {
+
+                OnError();
+                return;
             }
+
+            Sleep(50);
+            OnProgress(Properties.Resources.MessageDisplayingLoginBlock);
+            browser.ExecuteScriptAsync("document.getElementsByClassName('header__login-button')[0].click();");
+            Wait(browser);
 
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingUserNameBox);
-                browser.ExecuteScriptAsync("document.getElementById('login-email').value = '';");
+                browser.ExecuteScriptAsync("document.getElementById('frm-signInForm-form-email').value = '';");
                 Wait(browser);
                 Sleep(30);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (!ClickElement(browser, "document.getElementById('login-email')")) {
+                if (!ClickElement(browser, "document.getElementById('frm-signInForm-form-email')")) {
                     OnError();
                     return;
                 }
@@ -64,21 +75,17 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingUserName);
                 SendString(browser, UserName);
-            } while (!GetValueById("login-email").Equals(UserName));
-
-            OnProgress(Properties.Resources.MessageLoggingIn);
-            browser.ExecuteScriptAsync("document.getElementById('login-btn').click();");
-            Wait(browser);
+            } while (!GetValueById("frm-signInForm-form-email").Equals(UserName));
 
             do {
                 Sleep(50);
                 OnProgress(Properties.Resources.MessageClearingPasswordBox);
-                browser.ExecuteScriptAsync("document.getElementById('login-password').value = '';");
+                browser.ExecuteScriptAsync("document.getElementById('frm-signInForm-form-password').value = '';");
                 Wait(browser);
                 Sleep(30);
 
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
-                if (!ClickElement(browser, "document.getElementById('login-password')")) {
+                if (!ClickElement(browser, "document.getElementById('frm-signInForm-form-password')")) {
                     OnError();
                     return;
                 }
@@ -86,75 +93,49 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingPassword);
                 SendString(browser, Password);
-            } while (!GetValueById("login-password").Equals(Password));
+            } while (!GetValueById("frm-signInForm-form-password").Equals(Password));
 
+            SendKey(browser, Keys.Tab);
             OnProgress(Properties.Resources.MessageLoggingIn);
-            browser.ExecuteScriptAsync("document.getElementById('login-btn').click();");
+            SendKey(browser, Keys.Space);
             Wait(browser);
-            Sleep(1800);
-            LoadInitialPage(browser);
+            Sleep(100);
+
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('highlight')[0]", false)) {
+                browser.ExecuteScriptAsync("document.getElementsByClassName('highlight')[0].remove();");
+            }
+            if (RemoveChat) {
+                if (ElementExistsAndVisible(browser, "document.getElementById('chat-application')", false)) {
+                    browser.ExecuteScriptAsync("document.getElementById('chat-application').remove();");
+                }
+            }
+
             OnFinished();
         }
 
         protected override void NoLogIn(ChromiumWebBrowser browser) {
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('tw-bg-customTheme01')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('tw-bg-customTheme01')[0].remove();");
+            if (ElementExistsAndVisible(browser, "document.getElementById('CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll').click();");
+                Sleep(100);
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('ctr-img-w-h')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('ctr-img-w-h')[0].remove();");
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('highlight')[0]", false)) {
+                browser.ExecuteScriptAsync("document.getElementsByClassName('highlight')[0].remove();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementById('support-section')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('support-section').remove();");
+            if (RemoveChat) {
+                if (ElementExistsAndVisible(browser, "document.getElementById('chat-application')", false)) {
+                    browser.ExecuteScriptAsync("document.getElementById('chat-application').remove();");
+                }
             }
-            if (ElementExistsAndVisible(browser,
-                    "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]", false)) {
-
-                browser.ExecuteScriptAsync(new StringBuilder()
-                    .Append("document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]")
-                    .Append(".style.visibility = 'hidden';")
-                    .ToString());
-            }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mem--btn-seemore-slider')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('mem--btn-seemore-slider')[0].click();");
-            }
-            if (ElementExistsAndVisible(browser, "document.querySelector('[id^=\"edit-\"]').children[4].children[1]", false)) {
-                browser.ExecuteScriptAsync("document.querySelector('[id^=\"edit-\"]').children[4].children[1].style.display = 'none';");
-            }
-        }
-
-        public override bool IsLoggedIn() {
-            if (string.IsNullOrEmpty(Script) || !frameInitialLoadEnded) {
-                return false;
-            }
-            return ElementExists(Browser, new StringBuilder()
-                .Append("document.evaluate(\"//div[text()='Logout']\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)")
-                .Append(".singleNodeValue")
-                .ToString(), false);
         }
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('tw-bg-customTheme01')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('tw-bg-customTheme01')[0].remove();");
+            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('highlight')[0]", false)) {
+                browser.ExecuteScriptAsync("document.getElementsByClassName('highlight')[0].remove();");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('ctr-img-w-h')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('ctr-img-w-h')[0].remove();");
-            }
-            if (ElementExistsAndVisible(browser, "document.getElementById('support-section')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('support-section').remove();");
-            }
-            if (ElementExistsAndVisible(browser,
-                    "document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]", false)) {
-
-                browser.ExecuteScriptAsync(new StringBuilder()
-                    .Append("document.getElementsByClassName('header-r-sec')[0].getElementsByClassName('scaleOnHover')[1]")
-                    .Append(".style.visibility = 'hidden';")
-                    .ToString());
-            }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mem--btn-seemore-slider')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('mem--btn-seemore-slider')[0].click();");
-            }
-            if (ElementExistsAndVisible(browser, "document.querySelector('[id^=\"edit-\"]').children[4].children[1]", false)) {
-                browser.ExecuteScriptAsync("document.querySelector('[id^=\"edit-\"]').children[4].children[1].style.display = 'none';");
+            if (RemoveChat) {
+                if (ElementExistsAndVisible(browser, "document.getElementById('chat-application')", false)) {
+                    browser.ExecuteScriptAsync("document.getElementById('chat-application').remove();");
+                }
             }
         }
     }
