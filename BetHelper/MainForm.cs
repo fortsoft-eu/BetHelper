@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.16.2
+ * Version 1.1.17.2
  */
 
 using CefSharp;
@@ -3134,7 +3134,7 @@ namespace BetHelper {
             service.PageDownPressed += new EventHandler(OnPageDownPressed);
             service.PageUpPressed += new EventHandler(OnPageUpPressed);
             service.ShiftF3Pressed += new EventHandler(FindPrevious);
-            service.Update += new EventHandler(OnTipUpdate);
+            service.Update += new EventHandler(OnServiceUpdate);
             service.UpPressed += new EventHandler(OnUpPressed);
             service.ListViewItem = listViewItem;
             listViewItem.Tag = service;

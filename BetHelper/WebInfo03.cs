@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.15.1
+ * Version 1.1.17.2
  */
 
 using CefSharp;
@@ -75,7 +75,7 @@ namespace BetHelper {
                 OnProgress(Properties.Resources.MessageClearingUserNameBox);
                 browser.ExecuteScriptAsync(new StringBuilder()
                     .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
-                    .Append(".getElementById('username').value = '';")
+                    .Append(".getElementsByName('Username')[0].value = '';")
                     .ToString());
                 Wait(browser);
                 Sleep(50);
@@ -83,13 +83,13 @@ namespace BetHelper {
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
                 if (ElementExists(browser, new StringBuilder()
                         .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
-                        .Append(".getElementById('username')")
+                        .Append(".getElementsByName('Username')[0]")
                         .ToString(),
                         true)) {
 
                     browser.ExecuteScriptAsync(new StringBuilder()
                         .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
-                        .Append(".getElementById('username').focus();")
+                        .Append(".getElementsByName('Username')[0].focus();")
                         .ToString());
                     Sleep(250);
                 } else {
@@ -99,7 +99,8 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingUserName);
                 SendString(browser, UserName);
-            } while (!GetValueById("username", "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+            } while (!GetValueBy(ElementAttribute.Name, "Username", 0,
+                    "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
                 .Equals(UserName));
 
             Wait(browser);
@@ -110,7 +111,7 @@ namespace BetHelper {
                 OnProgress(Properties.Resources.MessageClearingPasswordBox);
                 browser.ExecuteScriptAsync(new StringBuilder()
                     .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
-                    .Append(".getElementById('password').value = '';")
+                    .Append(".getElementsByName('Password')[0].value = '';")
                     .ToString());
                 Wait(browser);
                 Sleep(50);
@@ -118,13 +119,13 @@ namespace BetHelper {
                 OnProgress(Properties.Resources.MessageSettingInputFocus);
                 if (ElementExists(browser, new StringBuilder()
                             .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
-                            .Append(".getElementById('password')")
+                            .Append(".getElementsByName('Password')[0]")
                             .ToString(),
                         true)) {
 
                     browser.ExecuteScriptAsync(new StringBuilder()
                         .Append("document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
-                        .Append(".getElementById('password').focus();")
+                        .Append(".getElementsByName('Password')[0].focus();")
                         .ToString());
                     Sleep(250);
                 } else {
@@ -134,7 +135,8 @@ namespace BetHelper {
 
                 OnProgress(Properties.Resources.MessageSendingPassword);
                 SendString(browser, Password);
-            } while (!GetValueById("password", "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
+            } while (!GetValueBy(ElementAttribute.Name, "Password", 0,
+                    "document.getElementById('iframe-modal').children[0].children[0].contentWindow.document")
                 .Equals(Password));
 
             SendKey(browser, Keys.Tab);
