@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.2
+ * Version 1.1.17.3
  */
 
 using CefSharp;
@@ -59,14 +59,17 @@ namespace BetHelper {
             }
             Sleep(1000);
 
-            if (!ElementExistsAndVisible(browser, "document.getElementsByClassName('GTM-login')[0]", true)) {
+            if (!ElementExists(browser, "document.querySelector('kaizen-header').shadowRoot.querySelector('aside')", true)) {
                 OnError();
                 return;
             }
             Sleep(30);
 
             OnProgress(Properties.Resources.MessageDisplayingLoginBlock);
-            browser.ExecuteScriptAsync("document.getElementsByClassName('GTM-login')[0].click();");
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("document.querySelector('kaizen-header').shadowRoot.querySelector('aside').children[0].children[1].children[1]")
+                .Append(".click();")
+                .ToString());
             Wait(browser);
             Sleep(1000);
 
