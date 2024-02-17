@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.16.2
+ * Version 1.1.17.4
  */
 
 using CefSharp;
@@ -259,6 +259,8 @@ namespace BetHelper {
         public bool CanReload { get; private set; }
 
         public bool IsLoading { get; private set; }
+
+        public bool IsTornDown { get; private set; }
 
         public int ConsoleLine { get; private set; }
 
@@ -662,6 +664,30 @@ namespace BetHelper {
             heartBeatTimer.Interval = Constants.WebInfoInitialHeartBeatInterval;
             heartBeatTimer.Enabled = true;
             Find?.Invoke(this, findEventArgs);
+        }
+
+        public void Teardown() {
+            if (!IsTornDown) {
+                try {
+                    if (popUpThread != null && popUpThread.IsAlive) {
+                        popUpThread.Abort();
+                        popUpThread = null;
+                    }
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+                IsTornDown = true;
+                try {
+                    if (Browser != null) {
+                        Browser.Stop();
+                        Browser.GetBrowser().CloseBrowser(true);
+                    }
+                } catch (Exception exception) {
+                    Debug.WriteLine(exception);
+                    ErrorLog.WriteLine(exception);
+                }
+            }
         }
 
         public bool CanNavigate(string targetUrl) {

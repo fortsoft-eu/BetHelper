@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.2
+ * Version 1.1.17.4
  */
 
 using CefSharp;
@@ -2375,7 +2375,7 @@ namespace BetHelper {
             } else {
                 if (dialog != null && dialog.Visible) {
                     if (suppressDialogs || !e.CloseReason.Equals(CloseReason.UserClosing)) {
-                        if (!webInfoHandler.IsSuspended && !(dialog is ProgressBarFormEx)) {
+                        if (!webInfoHandler.IsTornDown && !(dialog is ProgressBarFormEx)) {
                             dialog.Close();
                         }
                     } else {
@@ -2436,8 +2436,8 @@ namespace BetHelper {
                     ((Service)listViewItem.Tag).Close();
                 }
                 webInfoHandler.CloseInfos();
-                webInfoHandler.Suspend();
-                if (webInfoHandler.IsSuspended) {
+                webInfoHandler.Teardown();
+                if (webInfoHandler.IsTornDown) {
                     StatusStripHandler.SetMessage(StatusStripHandler.StatusMessageType.PersistentA, Properties.Resources.MessageClosing);
                     if (SuppressSaveData) {
                         persistWindowState.SavingOptions = PersistWindowState.PersistWindowStateSavingOptions.None;
@@ -4390,12 +4390,7 @@ namespace BetHelper {
             location = e.Location;
             if (textBoxClicks.Equals(3)) {
                 textBoxClicks = 0;
-                NativeMethods.MouseEvent(
-                    Constants.MOUSEEVENTF_LEFTUP,
-                    Convert.ToUInt32(Cursor.Position.X),
-                    Convert.ToUInt32(Cursor.Position.Y),
-                    0,
-                    0);
+                NativeMethods.MouseEvent(Constants.MOUSEEVENTF_LEFTUP, Cursor.Position.X, Cursor.Position.Y, 0, 0);
                 Application.DoEvents();
                 if (textBox.Multiline) {
                     char[] chars = textBox.Text.ToCharArray();

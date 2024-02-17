@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.3
+ * Version 1.1.17.4
  */
 
 using CefSharp;
@@ -53,10 +53,10 @@ namespace BetHelper {
                 return;
             }
 
-            if (ReloadIfRequired(browser)) {
-                OnProgress(Properties.Resources.MessageReloading);
-                Wait(browser);
-            }
+            //if (ReloadIfRequired(browser)) {
+            //    OnProgress(Properties.Resources.MessageReloading);
+            //    Wait(browser);
+            //}
             Sleep(1000);
 
             if (!ElementExists(browser, "document.querySelector('kaizen-header').shadowRoot.querySelector('aside')", true)) {
@@ -152,8 +152,11 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync(
                     "document.getElementsByClassName('sb-header__user-verification-banner')[0].style.display = 'none';");
             }
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('sb-header__timers')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('sb-header__timers')[0].remove();");
+            if (ElementExistsAndVisible(browser,
+                    "document.querySelector('kaizen-header').shadowRoot.querySelector('header').children[0]", false)) {
+
+                browser.ExecuteScriptAsync(
+                    "document.querySelector('kaizen-header').shadowRoot.querySelector('header').children[0].style.display = 'none';");
             }
 
             OnFinished();
@@ -221,8 +224,11 @@ namespace BetHelper {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('GTM-footer')[0].children[1].remove();");
             }
             Wait(browser);
-            if (ElementExistsAndVisible(browser, "document.getElementsByClassName('sb-header__timers')[0]", false)) {
-                browser.ExecuteScriptAsync("document.getElementsByClassName('sb-header__timers')[0].remove();");
+            if (ElementExistsAndVisible(browser,
+                    "document.querySelector('kaizen-header').shadowRoot.querySelector('header').children[0]", false)) {
+
+                browser.ExecuteScriptAsync(
+                    "document.querySelector('kaizen-header').shadowRoot.querySelector('header').children[0].style.display = 'none';");
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('top-notification')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('top-notification')[0].remove();");

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.0
+ * Version 1.1.17.4
  */
 
 using CefSharp;
@@ -42,7 +42,7 @@ namespace BetHelper {
         private string assemblyName;
         private System.Timers.Timer getTimer;
         private System.Timers.Timer pingTimer;
-        private System.Timers.Timer suspendTimer;
+        private System.Timers.Timer teardownTimer;
 
         private delegate void WebInfoHandlerCallback();
 
@@ -150,14 +150,14 @@ namespace BetHelper {
                     WebInfos[i].Browser.GetBrowser().Reload();
                 }
             });
-            suspendTimer = new System.Timers.Timer();
-            suspendTimer.Interval = Constants.WebInfoHeartBeatInterval * 2;
-            suspendTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
+            teardownTimer = new System.Timers.Timer();
+            teardownTimer.Interval = Constants.WebInfoHeartBeatInterval * 2;
+            teardownTimer.Elapsed += new System.Timers.ElapsedEventHandler((sender, e) => {
                 if (n++ < 1) {
                     CloseBrowsers();
                 } else if (stopped) {
-                    suspendTimer.Stop();
-                    IsSuspended = true;
+                    teardownTimer.Stop();
+                    IsTornDown = true;
                     Suspended?.Invoke(this, EventArgs.Empty);
                 } else {
                     foreach (WebInfo webInfo in WebInfos) {
@@ -176,7 +176,7 @@ namespace BetHelper {
 
         public bool HasFastOpportunity { get; private set; }
 
-        public bool IsSuspended { get; private set; }
+        public bool IsTornDown { get; private set; }
 
         public decimal Balance { get; private set; }
 
@@ -193,14 +193,8 @@ namespace BetHelper {
                 Form.Invoke(new WebInfoHandlerCallback(CloseBrowsers));
             } else {
                 foreach (WebInfo webInfo in WebInfos) {
-                    if (webInfo != null && webInfo.Browser != null) {
-                        try {
-                            webInfo.Browser.Stop();
-                            webInfo.Browser.GetBrowser().CloseBrowser(true);
-                        } catch (Exception exception) {
-                            Debug.WriteLine(exception);
-                            ErrorLog.WriteLine(exception);
-                        }
+                    if (webInfo != null) {
+                        webInfo.Teardown();
                     }
                 }
             }
@@ -500,7 +494,7 @@ namespace BetHelper {
             getTimer.Dispose();
             pingTimer.Stop();
             pingTimer.Dispose();
-            suspendTimer.Dispose();
+            teardownTimer.Dispose();
         }
 
         private void GetAlertableNT() {
@@ -671,10 +665,12 @@ namespace BetHelper {
             getTimer.Start();
         }
 
-        public void Suspend() {
-            getTimer.Stop();
-            pingTimer.Stop();
-            suspendTimer.Start();
+        public void Teardown() {
+            if (!IsTornDown) {
+                getTimer.Stop();
+                pingTimer.Stop();
+                teardownTimer.Start();
+            }
         }
 
         private string GetAssemblyName() {
@@ -1061,7 +1057,7 @@ namespace BetHelper {
         }
 
         public void PingReset() {
-            if (!IsSuspended && Current != null) {
+            if (!IsTornDown && Current != null) {
                 Current.PingReset();
             }
         }
