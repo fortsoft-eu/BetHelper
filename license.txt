@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
 Copyright (c) 2022 Guilherme Ribeiro [NonInvasiveKeyboardHookLibrary 2.1.2]
 Copyright (c) 2018-2021 Kfir Eichenblat [NonInvasiveKeyboardHookLibrary 2.1.1]
 Copyright (c) 2020-2021 Jose M. Piñeiro [WebPWrapper.cs]
@@ -27,9 +27,9 @@ SOFTWARE.
 
 BSD License
 
-Copyright (c) 2012-2023 The CefSharp Authors [CefSharp]
-Copyright (c) 2006-2023 The Chromium Authors [Chromium]
-Copyright (c) 2008-2023 Marshall A. Greenblatt. Portions Copyright (c)
+Copyright (c) 2012-2024 The CefSharp Authors [CefSharp]
+Copyright (c) 2006-2024 The Chromium Authors [Chromium]
+Copyright (c) 2008-2024 Marshall A. Greenblatt. Portions Copyright (c)
 2006-2009 Google Inc. All rights reserved. [Chromium Embedded Framework]
 Copyright (c) 2014-2021 Google Inc. [WebP]
 
