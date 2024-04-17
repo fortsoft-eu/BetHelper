@@ -2654,6 +2654,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error: Cannot open login block..
+        /// </summary>
+        internal static string MessageLogInCannotOpenLoginBlockError {
+            get {
+                return ResourceManager.GetString("MessageLogInCannotOpenLoginBlockError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error: Cannot set input focus..
         /// </summary>
         internal static string MessageLogInCannotSetFocusError {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.4
+ * Version 1.1.17.8
  */
 
 using CefSharp;
@@ -53,23 +53,16 @@ namespace BetHelper {
                 return;
             }
 
-            //if (ReloadIfRequired(browser)) {
-            //    OnProgress(Properties.Resources.MessageReloading);
-            //    Wait(browser);
-            //}
-            Sleep(1000);
-
-            if (!ElementExists(browser, "document.querySelector('kaizen-header').shadowRoot.querySelector('aside')", true)) {
-                OnError();
-                return;
-            }
             Sleep(30);
 
             OnProgress(Properties.Resources.MessageDisplayingLoginBlock);
-            browser.ExecuteScriptAsync(new StringBuilder()
-                .Append("document.querySelector('kaizen-header').shadowRoot.querySelector('aside').children[0].children[1].children[1]")
-                .Append(".click();")
-                .ToString());
+            if (!ClickElement(browser,
+                    "document.querySelector('kaizen-header').shadowRoot.querySelector('[data-qa=\"login-button\"]')")) {
+
+                OnError(Properties.Resources.MessageLogInCannotOpenLoginBlockError);
+                return;
+            }
+
             Wait(browser);
             Sleep(1000);
 

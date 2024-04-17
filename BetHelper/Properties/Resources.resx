@@ -1123,4 +1123,7 @@
   <data name="LabelTrimSearchString" xml:space="preserve">
     <value>Trim &amp;search string</value>
   </data>
+  <data name="MessageLogInCannotOpenLoginBlockError" xml:space="preserve">
+    <value>Error: Cannot open login block.</value>
+  </data>
 </root>
