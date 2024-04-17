@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.17.7
  */
 
 using CefSharp;
@@ -291,7 +291,7 @@ namespace BetHelper {
         private static void InitializeCef(Settings settings) {
             CefSettings cefSettings = new CefSettings();
             if (settings.EnableDrmContent) {
-                cefSettings.CefCommandLineArgs.Add(Constants.CefCLiArgEmableCdmKey, Constants.CefCLiArgEmableCdmVal);
+                cefSettings.CefCommandLineArgs.Add(Constants.CefCLiArgEnableCdmKey, Constants.CefCLiArgEnableCdmVal);
             }
             if (!settings.EnableAudio) {
                 cefSettings.CefCommandLineArgs.Add(Constants.CefCLiArgMuteAudioKey, Constants.CefCLiArgMuteAudioVal);

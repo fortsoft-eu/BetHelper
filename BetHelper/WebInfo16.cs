@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2023-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,22 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.1
+ * Version 1.1.17.7
  */
 
 using CefSharp;
 using CefSharp.WinForms;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BetHelper {
     public class WebInfo16 : WebInfo {
+        private string consentElement = "document.getElementById('CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll')";
 
         protected override void LogIn(ChromiumWebBrowser browser) {
             OnStarted(9);
 
-            if (ElementExistsAndVisible(browser, "document.getElementById('CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll')", false)) {
+            if (ElementExistsAndVisible(browser, consentElement, false)) {
                 OnProgress(Properties.Resources.MessageClosingCookieConsent);
-                browser.ExecuteScriptAsync("document.getElementById('CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll').click();");
+                browser.ExecuteScriptAsync(consentElement + ".click();");
                 Sleep(100);
             }
 
@@ -114,8 +116,8 @@ namespace BetHelper {
         }
 
         protected override void NoLogIn(ChromiumWebBrowser browser) {
-            if (ElementExistsAndVisible(browser, "document.getElementById('CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll')", false)) {
-                browser.ExecuteScriptAsync("document.getElementById('CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll').click();");
+            if (ElementExistsAndVisible(browser, consentElement, false)) {
+                browser.ExecuteScriptAsync(consentElement + ".click();");
                 Sleep(100);
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('highlight')[0]", false)) {
@@ -129,6 +131,10 @@ namespace BetHelper {
         }
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
+            browser.ExecuteScriptAsync(new StringBuilder()
+                .Append("var closeButtons = document.getElementsByClassName('alert-close'); ")
+                .Append("for (let i = 0; i < closeButtons.length; i++) closeButtons[i].click()")
+                .ToString());
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('highlight')[0]", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('highlight')[0].remove();");
             }

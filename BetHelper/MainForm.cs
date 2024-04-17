@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.4
+ * Version 1.1.17.7
  */
 
 using CefSharp;
@@ -846,7 +846,7 @@ namespace BetHelper {
         private static void InitializeCef(Settings settings) {
             CefSettings cefSettings = new CefSettings();
             if (settings.EnableDrmContent) {
-                cefSettings.CefCommandLineArgs.Add(Constants.CefCLiArgEmableCdmKey, Constants.CefCLiArgEmableCdmVal);
+                cefSettings.CefCommandLineArgs.Add(Constants.CefCLiArgEnableCdmKey, Constants.CefCLiArgEnableCdmVal);
             }
             if (!settings.EnableAudio) {
                 cefSettings.CefCommandLineArgs.Add(Constants.CefCLiArgMuteAudioKey, Constants.CefCLiArgMuteAudioVal);

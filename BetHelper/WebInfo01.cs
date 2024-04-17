@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.17.7
  */
 
 using CefSharp;
@@ -35,12 +35,10 @@ namespace BetHelper {
         protected override void LogIn(ChromiumWebBrowser browser) {
             OnStarted(9);
 
-            if (ElementExistsAndVisible(browser,
-                    "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1]", false)) {
-
+            ReduceMenu(browser);
+            if (ElementExistsAndVisible(browser, "document.querySelector('[data-atid=\"consent-button-accept-all\"]')", false)) {
                 OnProgress(Properties.Resources.MessageClosingCookieConsent);
-                browser.ExecuteScriptAsync(
-                    "document.getElementById('js-LayersReact').children[1].children[0].children[2].children[1].click();");
+                browser.ExecuteScriptAsync("document.querySelector('[data-atid=\"consent-button-accept-all\"]').click();");
                 Wait(browser);
                 Sleep(50);
             }
@@ -51,10 +49,7 @@ namespace BetHelper {
             }
 
             OnProgress(Properties.Resources.MessageDisplayingLoginBlock);
-            browser.ExecuteScriptAsync(new StringBuilder()
-                .Append("document.getElementById('js-app').children[1].children[1].children[0].children[1].children[2].children[0]")
-                .Append(".children[1].children[0].click();")
-                .ToString());
+            browser.ExecuteScriptAsync("document.querySelector('[data-atid=\"headerLogin\"]').click();");
             Wait(browser);
             Sleep(150);
 
@@ -129,36 +124,7 @@ namespace BetHelper {
         }
 
         public override void HeartBeat(ChromiumWebBrowser browser) {
-            if (ElementExistsAndVisible(browser, new StringBuilder()
-                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
-                    .Append(".children[1]")
-                    .ToString(), false)) {
-
-                browser.ExecuteScriptAsync(new StringBuilder()
-                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
-                    .Append(".children[1].style.display = 'none';")
-                    .ToString());
-            }
-            if (ElementExistsAndVisible(browser, new StringBuilder()
-                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
-                    .Append(".children[2]")
-                    .ToString(), false)) {
-
-                browser.ExecuteScriptAsync(new StringBuilder()
-                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
-                    .Append(".children[2].style.display = 'none';")
-                    .ToString());
-            }
-            if (ElementExistsAndVisible(browser, new StringBuilder()
-                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
-                    .Append(".children[3]")
-                    .ToString(), false)) {
-
-                browser.ExecuteScriptAsync(new StringBuilder()
-                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
-                    .Append(".children[3].style.display = 'none';")
-                    .ToString());
-            }
+            ReduceMenu(browser);
             if (ElementExistsAndVisible(browser, "document.getElementById('promoWrapId')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('promoWrapId').style.display = 'none';");
             }
@@ -181,6 +147,18 @@ namespace BetHelper {
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('a-ticketBanner')[0].parentElement", false)) {
                 browser.ExecuteScriptAsync("document.getElementsByClassName('a-ticketBanner')[0].parentElement.style.display = 'none';");
+            }
+        }
+
+        private void ReduceMenu(ChromiumWebBrowser browser) {
+            for (int i = 1; i < 5; i++) {
+                StringBuilder stringBuilder = new StringBuilder()
+                    .Append("document.getElementById('js-app').children[2].children[1].children[0].children[0].children[1].children[0]")
+                    .Append(".children[{0}]");
+                if (ElementExistsAndVisible(browser, string.Format(stringBuilder.ToString(), i), false)) {
+                    stringBuilder.Append(".style.display = 'none';");
+                    browser.ExecuteScriptAsync(string.Format(stringBuilder.ToString(), i));
+                }
             }
         }
     }

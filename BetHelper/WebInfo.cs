@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.4
+ * Version 1.1.17.7
  */
 
 using CefSharp;
@@ -856,10 +856,6 @@ namespace BetHelper {
                 TitleChanged?.Invoke(this, e);
             });
             Initialized?.Invoke(this, new FocusEventArgs(this, Ordinal - 1));
-        }
-
-        private void Browser_MouseMove(object sender, MouseEventArgs e) {
-            throw new NotImplementedException();
         }
 
         public async void LogInAsync(bool initialPage) {
