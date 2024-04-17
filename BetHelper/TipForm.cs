@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.4
+ * Version 1.1.17.9
  */
 
 using FortSoft.Tools;
@@ -670,7 +670,7 @@ namespace BetHelper {
         }
 
         private string ShowOdd(float price) {
-            return price.ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo);
+            return price.ToString(Constants.TwoDecimalPlaces, settings.NumberFormat.cultureInfo);
         }
 
         private string ShowTrustDegree(float trustDegree) {

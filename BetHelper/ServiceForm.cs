@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.4
+ * Version 1.1.17.9
  */
 
 using FortSoft.Tools;
@@ -596,7 +596,7 @@ namespace BetHelper {
 
         private string ShowPrice(decimal price) {
             StringBuilder stringBuilder = new StringBuilder()
-                .Append(price.ToString(Constants.TwoDecimalDigitsFormat, settings.NumberFormat.cultureInfo))
+                .Append(price.ToString(Constants.TwoDecimalPlaces, settings.NumberFormat.cultureInfo))
                 .Append(Constants.Space)
                 .Append(Properties.Resources.LabelCurrencySymbol);
             return stringBuilder.ToString();

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.7
+ * Version 1.1.17.9
  */
 
 using CefSharp;
@@ -2773,7 +2773,7 @@ namespace BetHelper {
 
         private string FormatBalance(decimal balance) {
             StringBuilder stringBuilder = new StringBuilder()
-                .Append(balance.ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
+                .Append(balance.ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo))
                 .Replace(Constants.Hyphen, Constants.MinusSign)
                 .Append(Constants.Space)
                 .Append(Properties.Resources.LabelCurrencySymbol);
@@ -2920,7 +2920,7 @@ namespace BetHelper {
                         Tag = tip.Bookmaker
                     },
                     new ListViewItem.ListViewSubItem() {
-                        Text = tip.Odd.ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo),
+                        Text = tip.Odd.ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo),
                         Tag = tip.Odd
                     },
                     new ListViewItem.ListViewSubItem() {
@@ -3034,7 +3034,7 @@ namespace BetHelper {
             listViewItem.SubItems[5].Tag = opportunity;
             listViewItem.SubItems[6].Text = tip.Bookmaker;
             listViewItem.SubItems[6].Tag = tip.Bookmaker;
-            listViewItem.SubItems[7].Text = tip.Odd.ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo);
+            listViewItem.SubItems[7].Text = tip.Odd.ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo);
             listViewItem.SubItems[7].Tag = tip.Odd;
             listViewItem.SubItems[8].Text = new StringBuilder()
                 .Append(tip.TrustDegree.ToString(Constants.ZeroDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
@@ -3182,7 +3182,7 @@ namespace BetHelper {
 
         private string ShowPrice(decimal price) {
             StringBuilder stringBuilder = new StringBuilder()
-                .Append(price.ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
+                .Append(price.ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo))
                 .Append(Constants.Space)
                 .Append(Properties.Resources.LabelCurrencySymbol);
             return stringBuilder.ToString();
@@ -3770,11 +3770,11 @@ namespace BetHelper {
         private void OnButton10Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox10.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees10();
                 textBox10.Focus();
                 textBox10.Select(0, trustDegrees[9]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3784,11 +3784,11 @@ namespace BetHelper {
         private void OnButton9Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox9.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees9();
                 textBox9.Focus();
                 textBox9.Select(0, trustDegrees[8]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3798,11 +3798,11 @@ namespace BetHelper {
         private void OnButton8Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox8.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees8();
                 textBox8.Focus();
                 textBox8.Select(0, trustDegrees[7]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3812,11 +3812,11 @@ namespace BetHelper {
         private void OnButton7Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox7.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees7();
                 textBox7.Focus();
                 textBox7.Select(0, trustDegrees[6]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3826,11 +3826,11 @@ namespace BetHelper {
         private void OnButton6Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox6.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees6();
                 textBox6.Focus();
                 textBox6.Select(0, trustDegrees[5]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3840,11 +3840,11 @@ namespace BetHelper {
         private void OnButton5Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox5.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees5();
                 textBox5.Focus();
                 textBox5.Select(0, trustDegrees[4]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3854,11 +3854,11 @@ namespace BetHelper {
         private void OnButton4Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox4.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees4();
                 textBox4.Focus();
                 textBox4.Select(0, trustDegrees[3]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3868,11 +3868,11 @@ namespace BetHelper {
         private void OnButton3Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox3.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees3();
                 textBox3.Focus();
                 textBox3.Select(0, trustDegrees[2]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3882,11 +3882,11 @@ namespace BetHelper {
         private void OnButton2Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox2.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees2();
                 textBox2.Focus();
                 textBox2.Select(0, trustDegrees[1]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3896,11 +3896,11 @@ namespace BetHelper {
         private void OnButton1Click(object sender, EventArgs e) {
             try {
                 Clipboard.SetText(ParseTrustDegree(textBox1.Text)
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo));
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
                 UpdateTrustDegrees1();
                 textBox1.Focus();
                 textBox1.Select(0, trustDegrees[0]
-                    .ToString(Constants.TwoDecimalDigitsFormat, Settings.NumberFormat.cultureInfo).Length);
+                    .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);

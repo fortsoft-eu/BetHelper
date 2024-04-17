@@ -1126,4 +1126,10 @@
   <data name="MessageLogInCannotOpenLoginBlockError" xml:space="preserve">
     <value>Error: Cannot open login block.</value>
   </data>
+  <data name="MessageCreatingInstanceError" xml:space="preserve">
+    <value>Error creating instance of {0}.</value>
+  </data>
+  <data name="MessageMissingClassError" xml:space="preserve">
+    <value>Error: No class found with the name {0}.</value>
+  </data>
 </root>

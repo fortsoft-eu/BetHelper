@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.7
+ * Version 1.1.17.9
  */
 
 namespace BetHelper {
@@ -486,22 +486,22 @@ namespace BetHelper {
         public const string ExtensionWebP = ".webp";
         public const string ExternalEditorApplicationName = "Notepad++";
         public const string ExternalEditorFileName = "notepad++.exe";
-        public const string FieldBalance = "Balance";
-        public const string FieldDisplayName = "DisplayName";
-        public const string FieldUserName = "UserName";
         public const string FOLeague = "ESPORT";
-        public const string ForbiddenHostContents = "casino,poker,vegas";
-        public const string ForbiddenPathContents = "priloha";
-        public const string ForeignUrlsLogFileName = "ForeignUrls.log";
         public const string FOScore = "0:0";
         public const string FOSport = "FOOTBALL";
         public const string FOTime = "2. pol.";
+        public const string FieldBalance = "Balance";
+        public const string FieldDisplayName = "DisplayName";
+        public const string FieldUserName = "UserName";
+        public const string ForbiddenHostContents = "casino,poker,vegas";
+        public const string ForbiddenPathContents = "priloha";
+        public const string ForeignUrlsLogFileName = "ForeignUrls.log";
         public const string GenericProgramFilesDirName = "Program Files";
         public const string GenericProgramFilesX86DirName = "Program Files (x86)";
         public const string GetSelectorPattern = "^.*'(.*)'.*$";
-        public const string IetfLanguageTagEnUs = "en-US";
         public const string IPv4Pattern = "^\\d{1,4}\\.\\d{1,4}\\.\\d{1,4}\\.\\d{1,4}$";
         public const string IPv6SimplifiedPattern = "^([a-f0-9]{1,4}::?){1,7}[a-f0-9]{1,4}$";
+        public const string IetfLanguageTagEnUs = "en-US";
         public const string JSBalancePattern = "[^-\\.,\\d]";
         public const string JSGetBoundingClientRect = ".getBoundingClientRect();";
         public const string JSGetElementByIdFormat = "{0}.getElementById('{1}').value";
@@ -559,14 +559,14 @@ namespace BetHelper {
         public const string SendKeysTab = "{TAB}";
         public const string SendKeysUp = "{UP}";
         public const string Settings = "Settings";
-        public const string ShortcutAltF10 = "\tAlt+F10";
-        public const string ShortcutAltF11 = "\tAlt+F11";
-        public const string ShortcutAltF12 = "\tAlt+F12";
         public const string ShortcutAltF5 = "\tAlt+F5";
         public const string ShortcutAltF6 = "\tAlt+F6";
         public const string ShortcutAltF7 = "\tAlt+F7";
         public const string ShortcutAltF8 = "\tAlt+F8";
         public const string ShortcutAltF9 = "\tAlt+F9";
+        public const string ShortcutAltF10 = "\tAlt+F10";
+        public const string ShortcutAltF11 = "\tAlt+F11";
+        public const string ShortcutAltF12 = "\tAlt+F12";
         public const string ShortcutAltHome = "\tAlt+Home";
         public const string ShortcutAltL = "\tAlt+L";
         public const string ShortcutAltLeft = "\tAlt+←";
@@ -577,8 +577,8 @@ namespace BetHelper {
         public const string ShortcutCtrlC = "\tCtrl+C";
         public const string ShortcutCtrlD = "\tCtrl+D";
         public const string ShortcutCtrlE = "\tCtrl+E";
-        public const string ShortcutCtrlF = "\tCtrl+F";
         public const string ShortcutCtrlF5 = "\tCtrl+F5";
+        public const string ShortcutCtrlF = "\tCtrl+F";
         public const string ShortcutCtrlG = "\tCtrl+G";
         public const string ShortcutCtrlI = "\tCtrl+I";
         public const string ShortcutCtrlM = "\tCtrl+M";
@@ -595,14 +595,14 @@ namespace BetHelper {
         public const string ShortcutDelete = "\tDelete";
         public const string ShortcutEsc = "\tEsc";
         public const string ShortcutF1 = "\tF1";
-        public const string ShortcutF11 = "\tF11";
-        public const string ShortcutF12 = "\tF12";
         public const string ShortcutF2 = "\tF2";
         public const string ShortcutF3 = "\tF3";
         public const string ShortcutF5 = "\tF5";
         public const string ShortcutF7 = "\tF7";
         public const string ShortcutF8 = "\tF8";
         public const string ShortcutF9 = "\tF9";
+        public const string ShortcutF11 = "\tF11";
+        public const string ShortcutF12 = "\tF12";
         public const string ShortcutShiftCtrlDelete = "\tShift+Ctrl+Delete";
         public const string ShortcutShiftCtrlE = "\tShift+Ctrl+E";
         public const string ShortcutShiftCtrlL = "\tShift+Ctrl+L";
@@ -646,7 +646,8 @@ namespace BetHelper {
         public const string ToStringTimeFormat = "yyyy-MM-dd HH:mm:ss";
         public const string TrimBookmarkPattern = "^\\s*(.+)\\s*-.*$";
         public const string TrustDegreePattern = "^[^\\d]*(\\d+)[^\\d]*.*$";
-        public const string TwoDecimalDigitsFormat = "f2";
+        public const string TwoDecimalPlaces = "f2";
+        public const string TwoDigitPad = "d2";
         public const string TypedUrlsFileName = "TypedUrls.dat";
         public const string UnitPrefixBinary = "Binary";
         public const string UnitPrefixDecimal = "Decimal";
@@ -661,6 +662,7 @@ namespace BetHelper {
         public const string UriUserName = "User Name";
         public const string UriVariables = "Variables";
         public const string VersionRegexPattern = "^\\d+\\.\\d+\\.\\d+\\.\\d$";
+        public const string WebInfo = "WebInfo";
         public const string WordPadFileName = "write.exe";
         public const string XmlAttributeHref = "href";
         public const string XmlAttributeLId = "leagueid";

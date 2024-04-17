@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.4
+ * Version 1.1.17.9
  */
 
 using CefSharp;
@@ -31,6 +31,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 
 namespace BetHelper {
     public sealed class WebInfoHandler : IDisposable {
@@ -685,51 +686,22 @@ namespace BetHelper {
         }
 
         private WebInfo GetWebInfo() {
-            switch (ordinal++) {
-                case 0:
-                    return new WebInfo01();
-                case 1:
-                    return new WebInfo02();
-                case 2:
-                    return new WebInfo03();
-                case 3:
-                    return new WebInfo04();
-                case 4:
-                    return new WebInfo05();
-                case 5:
-                    return new WebInfo06();
-                case 6:
-                    return new WebInfo07();
-                case 7:
-                    return new WebInfo08();
-                case 8:
-                    return new WebInfo09();
-                case 9:
-                    return new WebInfo10();
-                case 10:
-                    return new WebInfo11();
-                case 11:
-                    return new WebInfo12();
-                case 12:
-                    return new WebInfo13();
-                case 13:
-                    return new WebInfo14();
-                case 14:
-                    return new WebInfo15();
-                case 15:
-                    return new WebInfo16();
-                case 16:
-                    return new WebInfo17();
-                case 17:
-                    return new WebInfo18();
-                case 18:
-                    return new WebInfo19();
-                case 19:
-                    return new WebInfo20();
-                case 20:
-                    return new WebInfo21();
-                default:
-                    throw new NotImplementedException();
+            StringBuilder className = new StringBuilder()
+                .Append(GetAssemblyName())
+                .Append(Constants.Period)
+                .Append(Constants.WebInfo)
+                .Append((ordinal++ + 1).ToString(Constants.TwoDigitPad));
+            try {
+                Type type = Type.GetType(className.ToString());
+                if (type == null) {
+                    throw new ApplicationException(string.Format(Properties.Resources.MessageMissingClassError, className));
+                }
+                return (WebInfo)Activator.CreateInstance(type);
+            } catch (Exception exception) {
+                Debug.WriteLine(exception);
+                ErrorLog.WriteLine(exception);
+                throw new InvalidOperationException(string.Format(Properties.Resources.MessageCreatingInstanceError, className),
+                    exception);
             }
         }
 

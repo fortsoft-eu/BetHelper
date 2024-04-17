@@ -2456,6 +2456,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error creating instance of {0}..
+        /// </summary>
+        internal static string MessageCreatingInstanceError {
+            get {
+                return ResourceManager.GetString("MessageCreatingInstanceError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete the selected bookmark?.
         /// </summary>
         internal static string MessageDeleteBookmark {
@@ -2695,6 +2704,15 @@ namespace BetHelper.Properties {
         internal static string MessageMatchEmptyError {
             get {
                 return ResourceManager.GetString("MessageMatchEmptyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error: No class found with the name {0}..
+        /// </summary>
+        internal static string MessageMissingClassError {
+            get {
+                return ResourceManager.GetString("MessageMissingClassError", resourceCulture);
             }
         }
         

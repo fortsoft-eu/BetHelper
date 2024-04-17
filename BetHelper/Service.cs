@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.16.2
+ * Version 1.1.17.9
  */
 
 using FortSoft.Tools;
@@ -265,7 +265,7 @@ namespace BetHelper {
                 .Append("Price")
                 .Append(Constants.Colon)
                 .Append(Constants.Space)
-                .AppendLine(Price.ToString(Constants.TwoDecimalDigitsFormat, CultureInfo.InvariantCulture))
+                .AppendLine(Price.ToString(Constants.TwoDecimalPlaces, CultureInfo.InvariantCulture))
                 .Append("Span")
                 .Append(Constants.Colon)
                 .Append(Constants.Space)
