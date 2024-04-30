@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.9
+ * Version 1.1.17.10
  */
 
 namespace BetHelper {
@@ -53,8 +53,8 @@ namespace BetHelper {
             this.textBoxBookmaker = new System.Windows.Forms.TextBox();
             this.labelOdd = new System.Windows.Forms.Label();
             this.textBoxOdd = new System.Windows.Forms.TextBox();
-            this.labelTrustDegree = new System.Windows.Forms.Label();
-            this.textBoxTrustDegree = new System.Windows.Forms.TextBox();
+            this.labelMoneyMgmt = new System.Windows.Forms.Label();
+            this.textBoxMoneyMgmt = new System.Windows.Forms.TextBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.buttonAddGame = new System.Windows.Forms.Button();
             this.buttonRemoveGame = new System.Windows.Forms.Button();
@@ -110,26 +110,26 @@ namespace BetHelper {
             this.textBoxOdd.Leave += new System.EventHandler(this.OnTextBoxOddLeave);
             this.textBoxOdd.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
             // 
-            // labelTrustDegree
+            // labelMoneyMgmt
             // 
-            this.labelTrustDegree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelTrustDegree.AutoSize = true;
-            this.labelTrustDegree.Location = new System.Drawing.Point(22, 210);
-            this.labelTrustDegree.Name = "labelTrustDegree";
-            this.labelTrustDegree.Size = new System.Drawing.Size(70, 13);
-            this.labelTrustDegree.TabIndex = 7;
-            this.labelTrustDegree.Text = "Trust &degree:";
+            this.labelMoneyMgmt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelMoneyMgmt.AutoSize = true;
+            this.labelMoneyMgmt.Location = new System.Drawing.Point(22, 210);
+            this.labelMoneyMgmt.Name = "labelMoneyMgmt";
+            this.labelMoneyMgmt.Size = new System.Drawing.Size(70, 13);
+            this.labelMoneyMgmt.TabIndex = 7;
+            this.labelMoneyMgmt.Text = "&Money mgmt:";
             // 
-            // textBoxTrustDegree
+            // textBoxMoneyMgmt
             // 
-            this.textBoxTrustDegree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.textBoxTrustDegree.Location = new System.Drawing.Point(108, 207);
-            this.textBoxTrustDegree.Name = "textBoxTrustDegree";
-            this.textBoxTrustDegree.Size = new System.Drawing.Size(50, 20);
-            this.textBoxTrustDegree.TabIndex = 8;
-            this.textBoxTrustDegree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            this.textBoxTrustDegree.Leave += new System.EventHandler(this.OnTextBoxTrustDegreeLeave);
-            this.textBoxTrustDegree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
+            this.textBoxMoneyMgmt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.textBoxMoneyMgmt.Location = new System.Drawing.Point(108, 207);
+            this.textBoxMoneyMgmt.Name = "textBoxMoneyMgmt";
+            this.textBoxMoneyMgmt.Size = new System.Drawing.Size(50, 20);
+            this.textBoxMoneyMgmt.TabIndex = 8;
+            this.textBoxMoneyMgmt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            this.textBoxMoneyMgmt.Leave += new System.EventHandler(this.OnTextBoxMoneyMgmtLeave);
+            this.textBoxMoneyMgmt.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnTextBoxMouseDown);
             // 
             // tabControl
             // 
@@ -274,8 +274,8 @@ namespace BetHelper {
             this.Controls.Add(this.buttonRemoveGame);
             this.Controls.Add(this.buttonAddGame);
             this.Controls.Add(this.tabControl);
-            this.Controls.Add(this.textBoxTrustDegree);
-            this.Controls.Add(this.labelTrustDegree);
+            this.Controls.Add(this.textBoxMoneyMgmt);
+            this.Controls.Add(this.labelMoneyMgmt);
             this.Controls.Add(this.textBoxOdd);
             this.Controls.Add(this.labelOdd);
             this.Controls.Add(this.textBoxBookmaker);
@@ -297,8 +297,8 @@ namespace BetHelper {
         private System.Windows.Forms.TextBox textBoxBookmaker;
         private System.Windows.Forms.Label labelOdd;
         private System.Windows.Forms.TextBox textBoxOdd;
-        private System.Windows.Forms.Label labelTrustDegree;
-        private System.Windows.Forms.TextBox textBoxTrustDegree;
+        private System.Windows.Forms.Label labelMoneyMgmt;
+        private System.Windows.Forms.TextBox textBoxMoneyMgmt;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.Button buttonAddGame;
         private System.Windows.Forms.Button buttonRemoveGame;

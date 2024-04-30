@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.9
+ * Version 1.1.17.10
  */
 
 namespace BetHelper {
@@ -59,7 +59,7 @@ namespace BetHelper {
             this.groupBoxMovements = new System.Windows.Forms.GroupBox();
             this.buttonAddMovement = new System.Windows.Forms.Button();
             this.pictureBoxMovements = new System.Windows.Forms.PictureBox();
-            this.groupBoxTrustDegrees = new System.Windows.Forms.GroupBox();
+            this.groupBoxMoneyMgmt = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -118,7 +118,7 @@ namespace BetHelper {
             this.groupBoxNotes.SuspendLayout();
             this.groupBoxMovements.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMovements)).BeginInit();
-            this.groupBoxTrustDegrees.SuspendLayout();
+            this.groupBoxMoneyMgmt.SuspendLayout();
             this.groupBoxBalance.SuspendLayout();
             this.tabPageServices.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerServices)).BeginInit();
@@ -173,7 +173,7 @@ namespace BetHelper {
             this.tabPageDashboard.AutoScroll = true;
             this.tabPageDashboard.Controls.Add(this.groupBoxNotes);
             this.tabPageDashboard.Controls.Add(this.groupBoxMovements);
-            this.tabPageDashboard.Controls.Add(this.groupBoxTrustDegrees);
+            this.tabPageDashboard.Controls.Add(this.groupBoxMoneyMgmt);
             this.tabPageDashboard.Controls.Add(this.groupBoxBalance);
             this.tabPageDashboard.Location = new System.Drawing.Point(4, 22);
             this.tabPageDashboard.Name = "tabPageDashboard";
@@ -256,46 +256,46 @@ namespace BetHelper {
             this.pictureBoxMovements.TabIndex = 0;
             this.pictureBoxMovements.TabStop = false;
             // 
-            // groupBoxTrustDegrees
+            // groupBoxMoneyMgmt
             // 
-            this.groupBoxTrustDegrees.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxMoneyMgmt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxTrustDegrees.Controls.Add(this.button1);
-            this.groupBoxTrustDegrees.Controls.Add(this.button2);
-            this.groupBoxTrustDegrees.Controls.Add(this.button3);
-            this.groupBoxTrustDegrees.Controls.Add(this.button4);
-            this.groupBoxTrustDegrees.Controls.Add(this.button5);
-            this.groupBoxTrustDegrees.Controls.Add(this.button6);
-            this.groupBoxTrustDegrees.Controls.Add(this.button7);
-            this.groupBoxTrustDegrees.Controls.Add(this.button8);
-            this.groupBoxTrustDegrees.Controls.Add(this.button9);
-            this.groupBoxTrustDegrees.Controls.Add(this.button10);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox1);
-            this.groupBoxTrustDegrees.Controls.Add(this.label1);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox2);
-            this.groupBoxTrustDegrees.Controls.Add(this.label2);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox3);
-            this.groupBoxTrustDegrees.Controls.Add(this.label3);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox4);
-            this.groupBoxTrustDegrees.Controls.Add(this.label4);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox5);
-            this.groupBoxTrustDegrees.Controls.Add(this.label5);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox6);
-            this.groupBoxTrustDegrees.Controls.Add(this.label6);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox7);
-            this.groupBoxTrustDegrees.Controls.Add(this.label7);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox8);
-            this.groupBoxTrustDegrees.Controls.Add(this.label8);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox9);
-            this.groupBoxTrustDegrees.Controls.Add(this.label9);
-            this.groupBoxTrustDegrees.Controls.Add(this.textBox10);
-            this.groupBoxTrustDegrees.Controls.Add(this.label10);
-            this.groupBoxTrustDegrees.Location = new System.Drawing.Point(0, 68);
-            this.groupBoxTrustDegrees.Name = "groupBoxTrustDegrees";
-            this.groupBoxTrustDegrees.Size = new System.Drawing.Size(348, 343);
-            this.groupBoxTrustDegrees.TabIndex = 1;
-            this.groupBoxTrustDegrees.TabStop = false;
-            this.groupBoxTrustDegrees.Text = "Trust Degrees";
+            this.groupBoxMoneyMgmt.Controls.Add(this.button1);
+            this.groupBoxMoneyMgmt.Controls.Add(this.button2);
+            this.groupBoxMoneyMgmt.Controls.Add(this.button3);
+            this.groupBoxMoneyMgmt.Controls.Add(this.button4);
+            this.groupBoxMoneyMgmt.Controls.Add(this.button5);
+            this.groupBoxMoneyMgmt.Controls.Add(this.button6);
+            this.groupBoxMoneyMgmt.Controls.Add(this.button7);
+            this.groupBoxMoneyMgmt.Controls.Add(this.button8);
+            this.groupBoxMoneyMgmt.Controls.Add(this.button9);
+            this.groupBoxMoneyMgmt.Controls.Add(this.button10);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox1);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label1);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox2);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label2);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox3);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label3);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox4);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label4);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox5);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label5);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox6);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label6);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox7);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label7);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox8);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label8);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox9);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label9);
+            this.groupBoxMoneyMgmt.Controls.Add(this.textBox10);
+            this.groupBoxMoneyMgmt.Controls.Add(this.label10);
+            this.groupBoxMoneyMgmt.Location = new System.Drawing.Point(0, 68);
+            this.groupBoxMoneyMgmt.Name = "groupBoxMoneyMgmt";
+            this.groupBoxMoneyMgmt.Size = new System.Drawing.Size(348, 343);
+            this.groupBoxMoneyMgmt.TabIndex = 1;
+            this.groupBoxMoneyMgmt.TabStop = false;
+            this.groupBoxMoneyMgmt.Text = "Money Management";
             // 
             // button1
             // 
@@ -860,8 +860,8 @@ namespace BetHelper {
             this.groupBoxNotes.PerformLayout();
             this.groupBoxMovements.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMovements)).EndInit();
-            this.groupBoxTrustDegrees.ResumeLayout(false);
-            this.groupBoxTrustDegrees.PerformLayout();
+            this.groupBoxMoneyMgmt.ResumeLayout(false);
+            this.groupBoxMoneyMgmt.PerformLayout();
             this.groupBoxBalance.ResumeLayout(false);
             this.groupBoxBalance.PerformLayout();
             this.tabPageServices.ResumeLayout(false);
@@ -884,7 +884,7 @@ namespace BetHelper {
         private System.Windows.Forms.TabPage tabPageServices;
         private System.Windows.Forms.TextBox textBoxBalance;
         private System.Windows.Forms.Label labelBalance;
-        private System.Windows.Forms.GroupBox groupBoxTrustDegrees;
+        private System.Windows.Forms.GroupBox groupBoxMoneyMgmt;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBox8;

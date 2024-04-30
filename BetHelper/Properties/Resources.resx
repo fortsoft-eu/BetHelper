@@ -754,8 +754,8 @@
   <data name="MessageOutOfMemoryError" xml:space="preserve">
     <value>Error: Out of memory.</value>
   </data>
-  <data name="MenuItemTrustDegrees" xml:space="preserve">
-    <value>Tr&amp;ust Degrees</value>
+  <data name="MenuItemMoneyMgmt" xml:space="preserve">
+    <value>&amp;Money management</value>
   </data>
   <data name="MenuItemMuteAudio" xml:space="preserve">
     <value>&amp;Mute Audio</value>
@@ -1069,8 +1069,8 @@
   <data name="CaptionTitle" xml:space="preserve">
     <value>Title</value>
   </data>
-  <data name="CaptionTrustDegree" xml:space="preserve">
-    <value>Trust Degree</value>
+  <data name="CaptionMoneyMgmt" xml:space="preserve">
+    <value>Money Management</value>
   </data>
   <data name="CaptionUrl" xml:space="preserve">
     <value>URL</value>

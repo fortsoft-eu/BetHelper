@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.17.10
  */
 
 using System;
@@ -35,7 +35,7 @@ namespace BetHelper {
     public struct Data {
         public decimal balance;
         public decimal[] balances;
-        public decimal[] trustDegrees;
+        public decimal[] moneyMgmt;
         public Dictionary<DateTime, decimal> movements;
         public int sortColumnServices;
         public int sortColumnTips;
@@ -48,7 +48,7 @@ namespace BetHelper {
         public Data(
                 decimal balance,
                 decimal[] balances,
-                decimal[] trustDegrees,
+                decimal[] moneyMgmt,
                 Dictionary<DateTime, decimal> movements,
                 string notes,
                 Tip[] tips,
@@ -68,7 +68,7 @@ namespace BetHelper {
             this.sortOrderServices = sortOrderServices;
             this.sortOrderTips = sortOrderTips;
             this.tips = tips;
-            this.trustDegrees = trustDegrees;
+            this.moneyMgmt = moneyMgmt;
         }
 
         private Data(SerializationInfo info, StreamingContext ctxt) {
@@ -78,7 +78,7 @@ namespace BetHelper {
             notes = (string)info.GetValue("Notes", typeof(string));
             services = (Service[])info.GetValue("Services", typeof(Service[]));
             tips = (Tip[])info.GetValue("Tips", typeof(Tip[]));
-            trustDegrees = (decimal[])info.GetValue("TrustDegrees", typeof(decimal[]));
+            moneyMgmt = (decimal[])info.GetValue("MoneyManagement", typeof(decimal[]));
             sortColumnServices = (int)info.GetValue("SortColumnServices", typeof(int));
             sortOrderServices = (SortOrder)info.GetValue("SortOrderServices", typeof(SortOrder));
             sortColumnTips = (int)info.GetValue("SortColumnTips", typeof(int));
@@ -92,7 +92,7 @@ namespace BetHelper {
             info.AddValue("Notes", notes);
             info.AddValue("Services", services);
             info.AddValue("Tips", tips);
-            info.AddValue("TrustDegrees", trustDegrees);
+            info.AddValue("MoneyManagement", moneyMgmt);
             info.AddValue("SortColumnServices", sortColumnServices);
             info.AddValue("SortOrderServices", sortOrderServices);
             info.AddValue("SortColumnTips", sortColumnTips);

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.7
+ * Version 1.1.17.10
  */
 
 using FortSoft.Tools;
@@ -64,6 +64,13 @@ namespace BetHelper {
         /// </summary>
         public Settings() {
             userAgents = new string[] {
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/124.0.6367.88 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (iPad; CPU OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/124.0.6367.88 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (iPod; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/124.0.6367.88 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.6367.82 Mobile Safari/537.36",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
@@ -326,7 +333,7 @@ namespace BetHelper {
                 "sk-SK, en-US;q=0.8, en-GB;q=0.6",
                 "sk-SK, en-US;q=0.9, en-GB;q=0.7, en;q=0.5",
                 "en-US, de-DE;q=0.8",
-                "de-DE, en-US;q=0.8",
+                "de-DE, en-US;q=0.8"
             };
 
             allowedAddrHandler = new AllowedAddrHandler();
@@ -795,7 +802,7 @@ namespace BetHelper {
         public string LastExportDirectory { get; set; }
 
         /// <summary>
-        /// Full path to the Telegram Desktop executable. The default value is
+        /// Full path to the Telegram Desktop directory. The default value is
         /// null.
         /// </summary>
         public string TelegramAppDirectory { get; set; }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.9
+ * Version 1.1.17.10
  */
 
 using FortSoft.Tools;
@@ -101,7 +101,7 @@ namespace BetHelper {
                 Game[] games,
                 string bookmaker,
                 float odd,
-                float trustDegree,
+                float moneyMgmt,
                 string service,
                 TipStatus tipStatus) {
 
@@ -111,7 +111,7 @@ namespace BetHelper {
             Odd = odd;
             Service = service;
             this.tipStatus = tipStatus;
-            TrustDegree = trustDegree;
+            MoneyMgmt = moneyMgmt;
             SetUid();
         }
 
@@ -122,7 +122,7 @@ namespace BetHelper {
             Odd = (float)info.GetValue("Odd", typeof(float));
             Service = (string)info.GetValue("Service", typeof(string));
             tipStatus = (TipStatus)info.GetValue("Status", typeof(TipStatus));
-            TrustDegree = (float)info.GetValue("TrustDegree", typeof(float));
+            MoneyMgmt = (float)info.GetValue("MoneyManagement", typeof(float));
             Uid = (string)info.GetValue("Uid", typeof(string));
         }
 
@@ -132,7 +132,7 @@ namespace BetHelper {
 
         public float Odd { get; set; }
 
-        public float TrustDegree { get; set; }
+        public float MoneyMgmt { get; set; }
 
         public Game[] Games { get; set; }
 
@@ -249,7 +249,7 @@ namespace BetHelper {
             info.AddValue("Odd", Odd);
             info.AddValue("Service", Service);
             info.AddValue("Status", tipStatus);
-            info.AddValue("TrustDegree", TrustDegree);
+            info.AddValue("MoneyManagement", MoneyMgmt);
             info.AddValue("Uid", Uid);
         }
 
@@ -262,7 +262,7 @@ namespace BetHelper {
             StringBuilder stringBuilder = new StringBuilder(string.Join(string.Empty, gameUids));
             stringBuilder.Append(Bookmaker);
             stringBuilder.Append(Odd.ToString(Constants.TwoDecimalPlaces, CultureInfo.InvariantCulture));
-            stringBuilder.Append(TrustDegree.ToString(Constants.TwoDecimalPlaces, CultureInfo.InvariantCulture));
+            stringBuilder.Append(MoneyMgmt.ToString(Constants.TwoDecimalPlaces, CultureInfo.InvariantCulture));
             stringBuilder.Append(Service);
             Uid = Hash.MD5(stringBuilder.ToString(), Encoding.UTF8);
         }
@@ -281,10 +281,10 @@ namespace BetHelper {
                 .Append(Constants.Colon)
                 .Append(Constants.Space)
                 .AppendLine(Odd.ToString(Constants.TwoDecimalPlaces, CultureInfo.InvariantCulture))
-                .Append("TrustDegree")
+                .Append("MoneyManagement")
                 .Append(Constants.Colon)
                 .Append(Constants.Space)
-                .AppendLine(TrustDegree.ToString(Constants.TwoDecimalPlaces, CultureInfo.InvariantCulture))
+                .AppendLine(MoneyMgmt.ToString(Constants.TwoDecimalPlaces, CultureInfo.InvariantCulture))
                 .Append("Service")
                 .Append(Constants.Colon)
                 .Append(Constants.Space)

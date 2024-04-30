@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.9
+ * Version 1.1.17.10
  */
 
 using CefSharp;
@@ -59,7 +59,7 @@ namespace BetHelper {
         private CalculatorHandler calculatorHandler;
         private ControlInfo controlInfo;
         private CountDownForm countDownForm;
-        private decimal[] trustDegrees;
+        private decimal[] moneyMgmt;
         private FileExtensionFilter fileExtensionFilter;
         private FindForm findForm;
         private Form dialog;
@@ -111,7 +111,7 @@ namespace BetHelper {
             telephoneBellFO = new TelephoneBell();
 
             Settings = settings;
-            trustDegrees = new decimal[10];
+            moneyMgmt = new decimal[10];
 
             Icon = Properties.Resources.Icon;
             Text = Program.GetTitle();
@@ -219,8 +219,8 @@ namespace BetHelper {
                 menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemSelectAll + Constants.ShortcutCtrlA,
                     new EventHandler(BrowserSelectAll)));
                 menuItemEdit.MenuItems.Add(Constants.Hyphen.ToString());
-                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemTrustDegrees + Constants.ShortcutF2,
-                    new EventHandler(FocusTrustDegrees)));
+                menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemMoneyMgmt + Constants.ShortcutF2,
+                    new EventHandler(FocusMoneyMgmt)));
                 menuItemEdit.MenuItems.Add(Constants.Hyphen.ToString());
                 menuItemEdit.MenuItems.Add(new MenuItem(Properties.Resources.MenuItemFind + Constants.ShortcutCtrlF,
                     new EventHandler(Find)));
@@ -508,7 +508,7 @@ namespace BetHelper {
                         ErrorLog.WriteLine(exception);
                     }
                 });
-                foreach (Control control in groupBoxTrustDegrees.Controls) {
+                foreach (Control control in groupBoxMoneyMgmt.Controls) {
                     if (control is TextBox) {
                         control.ContextMenu = contextMenu;
                     }
@@ -641,7 +641,7 @@ namespace BetHelper {
                         TextAlign = HorizontalAlignment.Right
                     },
                     new ColumnHeader() {
-                        Text = Properties.Resources.CaptionTrustDegree,
+                        Text = Properties.Resources.CaptionMoneyMgmt,
                         TextAlign = HorizontalAlignment.Right
                     },
                     new ColumnHeader() {
@@ -885,7 +885,7 @@ namespace BetHelper {
             shortcutManager.Find += new EventHandler(Find);
             shortcutManager.FindNext += new EventHandler(FindNext);
             shortcutManager.FindPrevious += new EventHandler(FindPrevious);
-            shortcutManager.FocusTrustDegrees += new EventHandler(FocusTrustDegrees);
+            shortcutManager.FocusMoneyMgmt += new EventHandler(FocusMoneyMgmt);
             shortcutManager.GoBack += new EventHandler(GoBack);
             shortcutManager.GoForward += new EventHandler(GoForward);
             shortcutManager.GoHome += new EventHandler(GoHome);
@@ -1016,7 +1016,7 @@ namespace BetHelper {
             webInfoHandler.EndPressed += new EventHandler(OnEndPressed);
             webInfoHandler.F11Pressed += new EventHandler(TurnOffMonitors);
             webInfoHandler.F12Pressed += new EventHandler(OpenDevTools);
-            webInfoHandler.F2Pressed += new EventHandler(FocusTrustDegrees);
+            webInfoHandler.F2Pressed += new EventHandler(FocusMoneyMgmt);
             webInfoHandler.F3Pressed += new EventHandler(FindNext);
             webInfoHandler.F5Pressed += new EventHandler(Reload);
             webInfoHandler.F7Pressed += new EventHandler(StopRinging);
@@ -1527,9 +1527,9 @@ namespace BetHelper {
             }
         }
 
-        private void FocusTrustDegrees(object sender, EventArgs e) {
+        private void FocusMoneyMgmt(object sender, EventArgs e) {
             if (InvokeRequired) {
-                Invoke(new EventHandler(FocusTrustDegrees), sender, e);
+                Invoke(new EventHandler(FocusMoneyMgmt), sender, e);
             } else {
                 Activate();
                 Settings.RightPaneCollapsed = false;
@@ -1599,7 +1599,7 @@ namespace BetHelper {
                 findForm.EndPressed += new EventHandler(OnEndPressed);
                 findForm.F11Pressed += new EventHandler(TurnOffMonitors);
                 findForm.F12Pressed += new EventHandler(OpenDevTools);
-                findForm.F2Pressed += new EventHandler(FocusTrustDegrees);
+                findForm.F2Pressed += new EventHandler(FocusMoneyMgmt);
                 findForm.F5Pressed += new EventHandler(Reload);
                 findForm.F7Pressed += new EventHandler(StopRinging);
                 findForm.F8Pressed += new EventHandler(LogIn);
@@ -1956,7 +1956,7 @@ namespace BetHelper {
                     webInfoHandler.SetPingTimer();
                     bookmarkManager.Populate();
                     SetTabControlsAppearance();
-                    UpdateTrustDegrees();
+                    UpdateMoneyMgmt();
                     ShowBellNTStatus();
                     ShowBellFOStatus();
                     StatusStripHandler.SetMessage(
@@ -2925,11 +2925,11 @@ namespace BetHelper {
                     },
                     new ListViewItem.ListViewSubItem() {
                         Text = new StringBuilder()
-                            .Append(tip.TrustDegree.ToString(Constants.ZeroDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
+                            .Append(tip.MoneyMgmt.ToString(Constants.ZeroDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
                             .Append(Constants.Slash)
                             .Append(10)
                             .ToString(),
-                        Tag = tip.TrustDegree
+                        Tag = tip.MoneyMgmt
                     },
                     new ListViewItem.ListViewSubItem() {
                         Text = new StringBuilder()
@@ -2987,7 +2987,7 @@ namespace BetHelper {
             tip.EndPressed += new EventHandler(OnEndPressed);
             tip.F11Pressed += new EventHandler(TurnOffMonitors);
             tip.F12Pressed += new EventHandler(OpenDevTools);
-            tip.F2Pressed += new EventHandler(FocusTrustDegrees);
+            tip.F2Pressed += new EventHandler(FocusMoneyMgmt);
             tip.F3Pressed += new EventHandler(FindNext);
             tip.F5Pressed += new EventHandler(Reload);
             tip.F7Pressed += new EventHandler(StopRinging);
@@ -3037,11 +3037,11 @@ namespace BetHelper {
             listViewItem.SubItems[7].Text = tip.Odd.ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo);
             listViewItem.SubItems[7].Tag = tip.Odd;
             listViewItem.SubItems[8].Text = new StringBuilder()
-                .Append(tip.TrustDegree.ToString(Constants.ZeroDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
+                .Append(tip.MoneyMgmt.ToString(Constants.ZeroDecimalDigitsFormat, Settings.NumberFormat.cultureInfo))
                 .Append(Constants.Slash)
                 .Append(10)
                 .ToString();
-            listViewItem.SubItems[8].Tag = tip.TrustDegree;
+            listViewItem.SubItems[8].Tag = tip.MoneyMgmt;
             listViewItem.SubItems[9].Text = new StringBuilder()
                 .Append(tip.DateTime.ToString(Settings.NumberFormat.cultureInfo.DateTimeFormat.ShortDatePattern))
                 .Append(Constants.Space)
@@ -3124,7 +3124,7 @@ namespace BetHelper {
             service.EndPressed += new EventHandler(OnEndPressed);
             service.F11Pressed += new EventHandler(TurnOffMonitors);
             service.F12Pressed += new EventHandler(OpenDevTools);
-            service.F2Pressed += new EventHandler(FocusTrustDegrees);
+            service.F2Pressed += new EventHandler(FocusMoneyMgmt);
             service.F3Pressed += new EventHandler(FindNext);
             service.F5Pressed += new EventHandler(Reload);
             service.F7Pressed += new EventHandler(StopRinging);
@@ -3298,7 +3298,7 @@ namespace BetHelper {
             }));
         }
 
-        private static decimal ParseTrustDegree(string str) {
+        private static decimal ParseMoneyMgmt(string str) {
             return decimal.Parse(
                 Regex.Replace(
                     str.Replace(Constants.Comma, Constants.Period),
@@ -3309,33 +3309,33 @@ namespace BetHelper {
 
         private void OnTextBox10KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees10();
+                UpdateMoneyMgmt10();
             }
         }
 
-        private void UpdateTrustDegrees10() {
+        private void UpdateMoneyMgmt10() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[9] = ParseTrustDegree(textBox10.Text);
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                trustDegrees[8] = trustDegrees[9] * 9m / 10m;
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                trustDegrees[7] = trustDegrees[9] * 8m / 10m;
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                trustDegrees[6] = trustDegrees[9] * 7m / 10m;
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                trustDegrees[5] = trustDegrees[9] * 6m / 10m;
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                trustDegrees[4] = trustDegrees[9] * 5m / 10m;
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                trustDegrees[3] = trustDegrees[9] * 4m / 10m;
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                trustDegrees[2] = trustDegrees[9] * 3m / 10m;
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                trustDegrees[1] = trustDegrees[9] * 2m / 10m;
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                trustDegrees[0] = trustDegrees[9] / 10m;
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[9] = ParseMoneyMgmt(textBox10.Text);
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                moneyMgmt[8] = moneyMgmt[9] * 9m / 10m;
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                moneyMgmt[7] = moneyMgmt[9] * 8m / 10m;
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                moneyMgmt[6] = moneyMgmt[9] * 7m / 10m;
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                moneyMgmt[5] = moneyMgmt[9] * 6m / 10m;
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                moneyMgmt[4] = moneyMgmt[9] * 5m / 10m;
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                moneyMgmt[3] = moneyMgmt[9] * 4m / 10m;
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                moneyMgmt[2] = moneyMgmt[9] * 3m / 10m;
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                moneyMgmt[1] = moneyMgmt[9] * 2m / 10m;
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                moneyMgmt[0] = moneyMgmt[9] / 10m;
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox10.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3347,33 +3347,33 @@ namespace BetHelper {
 
         private void OnTextBox9KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees9();
+                UpdateMoneyMgmt9();
             }
         }
 
-        private void UpdateTrustDegrees9() {
+        private void UpdateMoneyMgmt9() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[8] = ParseTrustDegree(textBox9.Text);
-                trustDegrees[9] = trustDegrees[8] * 10m / 9m;
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                trustDegrees[7] = trustDegrees[8] * 8m / 9m;
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                trustDegrees[6] = trustDegrees[8] * 7m / 9m;
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                trustDegrees[5] = trustDegrees[8] * 6m / 9m;
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                trustDegrees[4] = trustDegrees[8] * 5m / 9m;
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                trustDegrees[3] = trustDegrees[8] * 4m / 9m;
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                trustDegrees[2] = trustDegrees[8] * 3m / 9m;
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                trustDegrees[1] = trustDegrees[8] * 2m / 9m;
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                trustDegrees[0] = trustDegrees[8] / 9m;
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[8] = ParseMoneyMgmt(textBox9.Text);
+                moneyMgmt[9] = moneyMgmt[8] * 10m / 9m;
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                moneyMgmt[7] = moneyMgmt[8] * 8m / 9m;
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                moneyMgmt[6] = moneyMgmt[8] * 7m / 9m;
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                moneyMgmt[5] = moneyMgmt[8] * 6m / 9m;
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                moneyMgmt[4] = moneyMgmt[8] * 5m / 9m;
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                moneyMgmt[3] = moneyMgmt[8] * 4m / 9m;
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                moneyMgmt[2] = moneyMgmt[8] * 3m / 9m;
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                moneyMgmt[1] = moneyMgmt[8] * 2m / 9m;
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                moneyMgmt[0] = moneyMgmt[8] / 9m;
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox9.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3385,33 +3385,33 @@ namespace BetHelper {
 
         private void OnTextBox8KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees8();
+                UpdateMoneyMgmt8();
             }
         }
 
-        private void UpdateTrustDegrees8() {
+        private void UpdateMoneyMgmt8() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[7] = ParseTrustDegree(textBox8.Text);
-                trustDegrees[9] = trustDegrees[7] * 10m / 8m;
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                trustDegrees[8] = trustDegrees[7] * 9m / 8m;
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                trustDegrees[6] = trustDegrees[7] * 7m / 8m;
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                trustDegrees[5] = trustDegrees[7] * 6m / 8m;
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                trustDegrees[4] = trustDegrees[7] * 5m / 8m;
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                trustDegrees[3] = trustDegrees[7] * 4m / 8m;
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                trustDegrees[2] = trustDegrees[7] * 3m / 8m;
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                trustDegrees[1] = trustDegrees[7] * 2m / 8m;
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                trustDegrees[0] = trustDegrees[7] / 8m;
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[7] = ParseMoneyMgmt(textBox8.Text);
+                moneyMgmt[9] = moneyMgmt[7] * 10m / 8m;
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                moneyMgmt[8] = moneyMgmt[7] * 9m / 8m;
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                moneyMgmt[6] = moneyMgmt[7] * 7m / 8m;
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                moneyMgmt[5] = moneyMgmt[7] * 6m / 8m;
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                moneyMgmt[4] = moneyMgmt[7] * 5m / 8m;
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                moneyMgmt[3] = moneyMgmt[7] * 4m / 8m;
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                moneyMgmt[2] = moneyMgmt[7] * 3m / 8m;
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                moneyMgmt[1] = moneyMgmt[7] * 2m / 8m;
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                moneyMgmt[0] = moneyMgmt[7] / 8m;
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox8.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3423,33 +3423,33 @@ namespace BetHelper {
 
         private void OnTextBox7KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees7();
+                UpdateMoneyMgmt7();
             }
         }
 
-        private void UpdateTrustDegrees7() {
+        private void UpdateMoneyMgmt7() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[6] = ParseTrustDegree(textBox7.Text);
-                trustDegrees[9] = trustDegrees[6] * 10m / 7m;
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                trustDegrees[8] = trustDegrees[6] * 9m / 7m;
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                trustDegrees[7] = trustDegrees[6] * 8m / 7m;
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                trustDegrees[5] = trustDegrees[6] * 6m / 7m;
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                trustDegrees[4] = trustDegrees[6] * 5m / 7m;
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                trustDegrees[3] = trustDegrees[6] * 4m / 7m;
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                trustDegrees[2] = trustDegrees[6] * 3m / 7m;
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                trustDegrees[1] = trustDegrees[6] * 2m / 7m;
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                trustDegrees[0] = trustDegrees[6] / 7m;
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[6] = ParseMoneyMgmt(textBox7.Text);
+                moneyMgmt[9] = moneyMgmt[6] * 10m / 7m;
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                moneyMgmt[8] = moneyMgmt[6] * 9m / 7m;
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                moneyMgmt[7] = moneyMgmt[6] * 8m / 7m;
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                moneyMgmt[5] = moneyMgmt[6] * 6m / 7m;
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                moneyMgmt[4] = moneyMgmt[6] * 5m / 7m;
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                moneyMgmt[3] = moneyMgmt[6] * 4m / 7m;
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                moneyMgmt[2] = moneyMgmt[6] * 3m / 7m;
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                moneyMgmt[1] = moneyMgmt[6] * 2m / 7m;
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                moneyMgmt[0] = moneyMgmt[6] / 7m;
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox7.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3461,33 +3461,33 @@ namespace BetHelper {
 
         private void OnTextBox6KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees6();
+                UpdateMoneyMgmt6();
             }
         }
 
-        private void UpdateTrustDegrees6() {
+        private void UpdateMoneyMgmt6() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[5] = ParseTrustDegree(textBox6.Text);
-                trustDegrees[9] = trustDegrees[5] * 10m / 6m;
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                trustDegrees[8] = trustDegrees[5] * 9m / 6m;
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                trustDegrees[7] = trustDegrees[5] * 8m / 6m;
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                trustDegrees[6] = trustDegrees[5] * 7m / 6m;
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                trustDegrees[4] = trustDegrees[5] * 5m / 6m;
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                trustDegrees[3] = trustDegrees[5] * 4m / 6m;
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                trustDegrees[2] = trustDegrees[5] * 3m / 6m;
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                trustDegrees[1] = trustDegrees[5] * 2m / 6m;
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                trustDegrees[0] = trustDegrees[5] / 6m;
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[5] = ParseMoneyMgmt(textBox6.Text);
+                moneyMgmt[9] = moneyMgmt[5] * 10m / 6m;
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                moneyMgmt[8] = moneyMgmt[5] * 9m / 6m;
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                moneyMgmt[7] = moneyMgmt[5] * 8m / 6m;
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                moneyMgmt[6] = moneyMgmt[5] * 7m / 6m;
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                moneyMgmt[4] = moneyMgmt[5] * 5m / 6m;
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                moneyMgmt[3] = moneyMgmt[5] * 4m / 6m;
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                moneyMgmt[2] = moneyMgmt[5] * 3m / 6m;
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                moneyMgmt[1] = moneyMgmt[5] * 2m / 6m;
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                moneyMgmt[0] = moneyMgmt[5] / 6m;
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox6.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3499,33 +3499,33 @@ namespace BetHelper {
 
         private void OnTextBox5KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees5();
+                UpdateMoneyMgmt5();
             }
         }
 
-        private void UpdateTrustDegrees5() {
+        private void UpdateMoneyMgmt5() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[4] = ParseTrustDegree(textBox5.Text);
-                trustDegrees[9] = trustDegrees[4] * 10m / 5m;
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                trustDegrees[8] = trustDegrees[4] * 9m / 5m;
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                trustDegrees[7] = trustDegrees[4] * 8m / 5m;
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                trustDegrees[6] = trustDegrees[4] * 7m / 5m;
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                trustDegrees[5] = trustDegrees[4] * 6m / 5m;
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                trustDegrees[3] = trustDegrees[4] * 4m / 5m;
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                trustDegrees[2] = trustDegrees[4] * 3m / 5m;
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                trustDegrees[1] = trustDegrees[4] * 2m / 5m;
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                trustDegrees[0] = trustDegrees[4] / 5m;
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[4] = ParseMoneyMgmt(textBox5.Text);
+                moneyMgmt[9] = moneyMgmt[4] * 10m / 5m;
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                moneyMgmt[8] = moneyMgmt[4] * 9m / 5m;
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                moneyMgmt[7] = moneyMgmt[4] * 8m / 5m;
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                moneyMgmt[6] = moneyMgmt[4] * 7m / 5m;
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                moneyMgmt[5] = moneyMgmt[4] * 6m / 5m;
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                moneyMgmt[3] = moneyMgmt[4] * 4m / 5m;
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                moneyMgmt[2] = moneyMgmt[4] * 3m / 5m;
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                moneyMgmt[1] = moneyMgmt[4] * 2m / 5m;
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                moneyMgmt[0] = moneyMgmt[4] / 5m;
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox5.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3537,33 +3537,33 @@ namespace BetHelper {
 
         private void OnTextBox4KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees4();
+                UpdateMoneyMgmt4();
             }
         }
 
-        private void UpdateTrustDegrees4() {
+        private void UpdateMoneyMgmt4() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[3] = ParseTrustDegree(textBox4.Text);
-                trustDegrees[9] = trustDegrees[3] * 10m / 4m;
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                trustDegrees[8] = trustDegrees[3] * 9m / 4m;
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                trustDegrees[7] = trustDegrees[3] * 8m / 4m;
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                trustDegrees[6] = trustDegrees[3] * 7m / 4m;
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                trustDegrees[5] = trustDegrees[3] * 6m / 4m;
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                trustDegrees[4] = trustDegrees[3] * 5m / 4m;
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                trustDegrees[2] = trustDegrees[3] * 3m / 4m;
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                trustDegrees[1] = trustDegrees[3] * 2m / 4m;
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                trustDegrees[0] = trustDegrees[3] / 4m;
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[3] = ParseMoneyMgmt(textBox4.Text);
+                moneyMgmt[9] = moneyMgmt[3] * 10m / 4m;
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                moneyMgmt[8] = moneyMgmt[3] * 9m / 4m;
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                moneyMgmt[7] = moneyMgmt[3] * 8m / 4m;
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                moneyMgmt[6] = moneyMgmt[3] * 7m / 4m;
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                moneyMgmt[5] = moneyMgmt[3] * 6m / 4m;
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                moneyMgmt[4] = moneyMgmt[3] * 5m / 4m;
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                moneyMgmt[2] = moneyMgmt[3] * 3m / 4m;
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                moneyMgmt[1] = moneyMgmt[3] * 2m / 4m;
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                moneyMgmt[0] = moneyMgmt[3] / 4m;
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox4.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3575,33 +3575,33 @@ namespace BetHelper {
 
         private void OnTextBox3KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees3();
+                UpdateMoneyMgmt3();
             }
         }
 
-        private void UpdateTrustDegrees3() {
+        private void UpdateMoneyMgmt3() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[2] = ParseTrustDegree(textBox3.Text);
-                trustDegrees[9] = trustDegrees[2] * 10m / 3m;
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                trustDegrees[8] = trustDegrees[2] * 9m / 3m;
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                trustDegrees[7] = trustDegrees[2] * 8m / 3m;
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                trustDegrees[6] = trustDegrees[2] * 7m / 3m;
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                trustDegrees[5] = trustDegrees[2] * 6m / 3m;
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                trustDegrees[4] = trustDegrees[2] * 5m / 3m;
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                trustDegrees[3] = trustDegrees[2] * 4m / 3m;
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                trustDegrees[1] = trustDegrees[2] * 2m / 3m;
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                trustDegrees[0] = trustDegrees[2] / 3m;
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[2] = ParseMoneyMgmt(textBox3.Text);
+                moneyMgmt[9] = moneyMgmt[2] * 10m / 3m;
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                moneyMgmt[8] = moneyMgmt[2] * 9m / 3m;
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                moneyMgmt[7] = moneyMgmt[2] * 8m / 3m;
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                moneyMgmt[6] = moneyMgmt[2] * 7m / 3m;
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                moneyMgmt[5] = moneyMgmt[2] * 6m / 3m;
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                moneyMgmt[4] = moneyMgmt[2] * 5m / 3m;
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                moneyMgmt[3] = moneyMgmt[2] * 4m / 3m;
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                moneyMgmt[1] = moneyMgmt[2] * 2m / 3m;
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                moneyMgmt[0] = moneyMgmt[2] / 3m;
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox3.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3613,33 +3613,33 @@ namespace BetHelper {
 
         private void OnTextBox2KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees2();
+                UpdateMoneyMgmt2();
             }
         }
 
-        private void UpdateTrustDegrees2() {
+        private void UpdateMoneyMgmt2() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[1] = ParseTrustDegree(textBox2.Text);
-                trustDegrees[9] = trustDegrees[1] * 10m / 2m;
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                trustDegrees[8] = trustDegrees[1] * 9m / 2m;
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                trustDegrees[7] = trustDegrees[1] * 8m / 2m;
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                trustDegrees[6] = trustDegrees[1] * 7m / 2m;
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                trustDegrees[5] = trustDegrees[1] * 6m / 2m;
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                trustDegrees[4] = trustDegrees[1] * 5m / 2m;
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                trustDegrees[3] = trustDegrees[1] * 4m / 2m;
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                trustDegrees[2] = trustDegrees[1] * 3m / 2m;
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                trustDegrees[0] = trustDegrees[1] / 2m;
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[1] = ParseMoneyMgmt(textBox2.Text);
+                moneyMgmt[9] = moneyMgmt[1] * 10m / 2m;
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                moneyMgmt[8] = moneyMgmt[1] * 9m / 2m;
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                moneyMgmt[7] = moneyMgmt[1] * 8m / 2m;
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                moneyMgmt[6] = moneyMgmt[1] * 7m / 2m;
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                moneyMgmt[5] = moneyMgmt[1] * 6m / 2m;
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                moneyMgmt[4] = moneyMgmt[1] * 5m / 2m;
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                moneyMgmt[3] = moneyMgmt[1] * 4m / 2m;
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                moneyMgmt[2] = moneyMgmt[1] * 3m / 2m;
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                moneyMgmt[0] = moneyMgmt[1] / 2m;
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox2.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3651,33 +3651,33 @@ namespace BetHelper {
 
         private void OnTextBox1KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode.Equals(Keys.Enter)) {
-                UpdateTrustDegrees1();
+                UpdateMoneyMgmt1();
             }
         }
 
-        private void UpdateTrustDegrees1() {
+        private void UpdateMoneyMgmt1() {
             try {
                 UnsubscribeOnTBTextChanged();
-                trustDegrees[0] = ParseTrustDegree(textBox1.Text);
-                trustDegrees[9] = trustDegrees[0] * 10m;
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                trustDegrees[8] = trustDegrees[0] * 9m;
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                trustDegrees[7] = trustDegrees[0] * 8m;
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                trustDegrees[6] = trustDegrees[0] * 7m;
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                trustDegrees[5] = trustDegrees[0] * 6m;
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                trustDegrees[4] = trustDegrees[0] * 5m;
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                trustDegrees[3] = trustDegrees[0] * 4m;
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                trustDegrees[2] = trustDegrees[0] * 3m;
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                trustDegrees[1] = trustDegrees[0] * 2m;
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                moneyMgmt[0] = ParseMoneyMgmt(textBox1.Text);
+                moneyMgmt[9] = moneyMgmt[0] * 10m;
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                moneyMgmt[8] = moneyMgmt[0] * 9m;
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                moneyMgmt[7] = moneyMgmt[0] * 8m;
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                moneyMgmt[6] = moneyMgmt[0] * 7m;
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                moneyMgmt[5] = moneyMgmt[0] * 6m;
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                moneyMgmt[4] = moneyMgmt[0] * 5m;
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                moneyMgmt[3] = moneyMgmt[0] * 4m;
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                moneyMgmt[2] = moneyMgmt[0] * 3m;
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                moneyMgmt[1] = moneyMgmt[0] * 2m;
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
                 textBox1.BackColor = SystemColors.Window;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3687,19 +3687,19 @@ namespace BetHelper {
             }
         }
 
-        private void UpdateTrustDegrees() {
+        private void UpdateMoneyMgmt() {
             try {
                 UnsubscribeOnTBTextChanged();
-                textBox10.Text = ShowPrice(trustDegrees[9]);
-                textBox9.Text = ShowPrice(trustDegrees[8]);
-                textBox8.Text = ShowPrice(trustDegrees[7]);
-                textBox7.Text = ShowPrice(trustDegrees[6]);
-                textBox6.Text = ShowPrice(trustDegrees[5]);
-                textBox5.Text = ShowPrice(trustDegrees[4]);
-                textBox4.Text = ShowPrice(trustDegrees[3]);
-                textBox3.Text = ShowPrice(trustDegrees[2]);
-                textBox2.Text = ShowPrice(trustDegrees[1]);
-                textBox1.Text = ShowPrice(trustDegrees[0]);
+                textBox10.Text = ShowPrice(moneyMgmt[9]);
+                textBox9.Text = ShowPrice(moneyMgmt[8]);
+                textBox8.Text = ShowPrice(moneyMgmt[7]);
+                textBox7.Text = ShowPrice(moneyMgmt[6]);
+                textBox6.Text = ShowPrice(moneyMgmt[5]);
+                textBox5.Text = ShowPrice(moneyMgmt[4]);
+                textBox4.Text = ShowPrice(moneyMgmt[3]);
+                textBox3.Text = ShowPrice(moneyMgmt[2]);
+                textBox2.Text = ShowPrice(moneyMgmt[1]);
+                textBox1.Text = ShowPrice(moneyMgmt[0]);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -3709,7 +3709,7 @@ namespace BetHelper {
         }
 
         private void SubscribeOnTBTextChanged() {
-            foreach (Control control in groupBoxTrustDegrees.Controls) {
+            foreach (Control control in groupBoxMoneyMgmt.Controls) {
                 if (control is TextBox) {
                     control.TextChanged += new EventHandler(OnTBTextChanged);
                 }
@@ -3717,7 +3717,7 @@ namespace BetHelper {
         }
 
         private void UnsubscribeOnTBTextChanged() {
-            foreach (Control control in groupBoxTrustDegrees.Controls) {
+            foreach (Control control in groupBoxMoneyMgmt.Controls) {
                 if (control is TextBox) {
                     control.BackColor = SystemColors.Window;
                     control.TextChanged -= new EventHandler(OnTBTextChanged);
@@ -3726,7 +3726,7 @@ namespace BetHelper {
         }
 
         private void OnTBTextChanged(object sender, EventArgs e) {
-            foreach (Control control in groupBoxTrustDegrees.Controls) {
+            foreach (Control control in groupBoxMoneyMgmt.Controls) {
                 if (control is TextBox) {
                     if (control.Equals(sender)) {
                         control.BackColor = Color.FromArgb(255, 230, 204);
@@ -3738,7 +3738,7 @@ namespace BetHelper {
         }
 
         private void SetTBErrorBgColor(TextBox sender) {
-            foreach (Control control in groupBoxTrustDegrees.Controls) {
+            foreach (Control control in groupBoxMoneyMgmt.Controls) {
                 if (control is TextBox) {
                     control.BackColor = SystemColors.Window;
                     if (!control.Equals(sender)) {
@@ -3769,11 +3769,11 @@ namespace BetHelper {
 
         private void OnButton10Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox10.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox10.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees10();
+                UpdateMoneyMgmt10();
                 textBox10.Focus();
-                textBox10.Select(0, trustDegrees[9]
+                textBox10.Select(0, moneyMgmt[9]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3783,11 +3783,11 @@ namespace BetHelper {
 
         private void OnButton9Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox9.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox9.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees9();
+                UpdateMoneyMgmt9();
                 textBox9.Focus();
-                textBox9.Select(0, trustDegrees[8]
+                textBox9.Select(0, moneyMgmt[8]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3797,11 +3797,11 @@ namespace BetHelper {
 
         private void OnButton8Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox8.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox8.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees8();
+                UpdateMoneyMgmt8();
                 textBox8.Focus();
-                textBox8.Select(0, trustDegrees[7]
+                textBox8.Select(0, moneyMgmt[7]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3811,11 +3811,11 @@ namespace BetHelper {
 
         private void OnButton7Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox7.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox7.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees7();
+                UpdateMoneyMgmt7();
                 textBox7.Focus();
-                textBox7.Select(0, trustDegrees[6]
+                textBox7.Select(0, moneyMgmt[6]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3825,11 +3825,11 @@ namespace BetHelper {
 
         private void OnButton6Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox6.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox6.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees6();
+                UpdateMoneyMgmt6();
                 textBox6.Focus();
-                textBox6.Select(0, trustDegrees[5]
+                textBox6.Select(0, moneyMgmt[5]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3839,11 +3839,11 @@ namespace BetHelper {
 
         private void OnButton5Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox5.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox5.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees5();
+                UpdateMoneyMgmt5();
                 textBox5.Focus();
-                textBox5.Select(0, trustDegrees[4]
+                textBox5.Select(0, moneyMgmt[4]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3853,11 +3853,11 @@ namespace BetHelper {
 
         private void OnButton4Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox4.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox4.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees4();
+                UpdateMoneyMgmt4();
                 textBox4.Focus();
-                textBox4.Select(0, trustDegrees[3]
+                textBox4.Select(0, moneyMgmt[3]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3867,11 +3867,11 @@ namespace BetHelper {
 
         private void OnButton3Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox3.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox3.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees3();
+                UpdateMoneyMgmt3();
                 textBox3.Focus();
-                textBox3.Select(0, trustDegrees[2]
+                textBox3.Select(0, moneyMgmt[2]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3881,11 +3881,11 @@ namespace BetHelper {
 
         private void OnButton2Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox2.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox2.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees2();
+                UpdateMoneyMgmt2();
                 textBox2.Focus();
-                textBox2.Select(0, trustDegrees[1]
+                textBox2.Select(0, moneyMgmt[1]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -3895,11 +3895,11 @@ namespace BetHelper {
 
         private void OnButton1Click(object sender, EventArgs e) {
             try {
-                Clipboard.SetText(ParseTrustDegree(textBox1.Text)
+                Clipboard.SetText(ParseMoneyMgmt(textBox1.Text)
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo));
-                UpdateTrustDegrees1();
+                UpdateMoneyMgmt1();
                 textBox1.Focus();
-                textBox1.Select(0, trustDegrees[0]
+                textBox1.Select(0, moneyMgmt[0]
                     .ToString(Constants.TwoDecimalPlaces, Settings.NumberFormat.cultureInfo).Length);
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
@@ -4021,7 +4021,7 @@ namespace BetHelper {
             tipForm.EndPressed += new EventHandler(OnEndPressed);
             tipForm.F11Pressed += new EventHandler(TurnOffMonitors);
             tipForm.F12Pressed += new EventHandler(OpenDevTools);
-            tipForm.F2Pressed += new EventHandler(FocusTrustDegrees);
+            tipForm.F2Pressed += new EventHandler(FocusMoneyMgmt);
             tipForm.F3Pressed += new EventHandler(FindNext);
             tipForm.F5Pressed += new EventHandler(Reload);
             tipForm.F7Pressed += new EventHandler(StopRinging);
@@ -4142,7 +4142,7 @@ namespace BetHelper {
             serviceForm.EndPressed += new EventHandler(OnEndPressed);
             serviceForm.F11Pressed += new EventHandler(TurnOffMonitors);
             serviceForm.F12Pressed += new EventHandler(OpenDevTools);
-            serviceForm.F2Pressed += new EventHandler(FocusTrustDegrees);
+            serviceForm.F2Pressed += new EventHandler(FocusMoneyMgmt);
             serviceForm.F3Pressed += new EventHandler(FindNext);
             serviceForm.F5Pressed += new EventHandler(Reload);
             serviceForm.F7Pressed += new EventHandler(StopRinging);
@@ -4421,8 +4421,8 @@ namespace BetHelper {
                     using (FileStream fileStream = File.OpenRead(dataFilePath)) {
                         Data data = (Data)new BinaryFormatter().Deserialize(fileStream);
                         textBoxBalance.Text = FormatBalance(data.balance);
-                        trustDegrees = data.trustDegrees ?? new decimal[10];
-                        UpdateTrustDegrees();
+                        moneyMgmt = data.moneyMgmt ?? new decimal[10];
+                        UpdateMoneyMgmt();
                         textBoxNotes.Text = data.notes;
                         if (data.sortOrderTips.Equals(SortOrder.None)) {
                             listViewTipsSorter.SortColumn = Constants.TipsDefaultSortColumn;
@@ -4462,7 +4462,7 @@ namespace BetHelper {
             Data = new Data(
                 webInfoHandler.Balance,
                 webInfoHandler.GetBalances(),
-                trustDegrees,
+                moneyMgmt,
                 new Dictionary<DateTime, decimal>(),
                 textBoxNotes.Text,
                 tips.ToArray(),

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.9
+ * Version 1.1.17.10
  */
 
 namespace BetHelper {
@@ -522,6 +522,7 @@ namespace BetHelper {
         public const string LoadErrorLogFileName = "LoadErrors.log";
         public const string LogFileExtension = "*.log";
         public const string LogSearchFileName = "LogSearch.dat";
+        public const string MoneyMgmtPattern = "^[^\\d]*(\\d+)[^\\d]*.*$";
         public const string MonospaceFontName = "Consolas";
         public const string NotepadFileName = "notepad.exe";
         public const string NumberFormatSystem = "[system]";
@@ -645,7 +646,6 @@ namespace BetHelper {
         public const string TimeFormatForUid = "yyyyMMddHH";
         public const string ToStringTimeFormat = "yyyy-MM-dd HH:mm:ss";
         public const string TrimBookmarkPattern = "^\\s*(.+)\\s*-.*$";
-        public const string TrustDegreePattern = "^[^\\d]*(\\d+)[^\\d]*.*$";
         public const string TwoDecimalPlaces = "f2";
         public const string TwoDigitPad = "d2";
         public const string TypedUrlsFileName = "TypedUrls.dat";

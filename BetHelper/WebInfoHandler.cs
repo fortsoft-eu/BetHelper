@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.9
+ * Version 1.1.17.10
  */
 
 using CefSharp;
@@ -690,7 +690,7 @@ namespace BetHelper {
                 .Append(GetAssemblyName())
                 .Append(Constants.Period)
                 .Append(Constants.WebInfo)
-                .Append((ordinal++ + 1).ToString(Constants.TwoDigitPad));
+                .Append((++ordinal).ToString(Constants.TwoDigitPad));
             try {
                 Type type = Type.GetType(className.ToString());
                 if (type == null) {

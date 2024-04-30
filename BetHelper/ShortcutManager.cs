@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022-2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.16.2
+ * Version 1.1.17.10
  */
 
 using FortSoft.Tools;
@@ -51,7 +51,7 @@ namespace BetHelper {
         public event EventHandler Find;
         public event EventHandler FindNext;
         public event EventHandler FindPrevious;
-        public event EventHandler FocusTrustDegrees;
+        public event EventHandler FocusMoneyMgmt;
         public event EventHandler GoBack;
         public event EventHandler GoForward;
         public event EventHandler GoHome;
@@ -195,7 +195,7 @@ namespace BetHelper {
                 new Action(() => {
                     if (!form.WindowState.Equals(FormWindowState.Minimized)) {
                         Shortcut?.Invoke(this, EventArgs.Empty);
-                        FocusTrustDegrees?.Invoke(this, EventArgs.Empty);
+                        FocusMoneyMgmt?.Invoke(this, EventArgs.Empty);
                     }
                 }));
             keyboardHookManager.RegisterHotkey((int)VirtualKeyCode.F3,

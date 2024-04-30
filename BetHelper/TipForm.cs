@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.9
+ * Version 1.1.17.10
  */
 
 using FortSoft.Tools;
@@ -37,7 +37,7 @@ using System.Windows.Forms;
 
 namespace BetHelper {
     public partial class TipForm : Form {
-        private float odd, trustDegree;
+        private float odd, moneyMgmt;
         private Form dialog;
         private int matchOrdinal, textBoxClicks;
         private MatchControl matchControl;
@@ -139,7 +139,7 @@ namespace BetHelper {
             BuildContextMenuAsync();
 
             textBoxOdd.Text = ShowOdd(1);
-            textBoxTrustDegree.Text = ShowTrustDegree(10);
+            textBoxMoneyMgmt.Text = ShowMoneyMgmt(10);
             comboBoxStatus.DataSource = Enum.GetValues(typeof(Tip.TipStatus));
 
             MouseWheel += new MouseEventHandler(OnMouseWheel);
@@ -162,8 +162,8 @@ namespace BetHelper {
                 odd = tip.Odd;
                 textBoxOdd.Text = ShowOdd(tip.Odd);
                 textBoxBookmaker.Text = tip.Bookmaker;
-                trustDegree = tip.TrustDegree;
-                textBoxTrustDegree.Text = ShowTrustDegree(tip.TrustDegree);
+                moneyMgmt = tip.MoneyMgmt;
+                textBoxMoneyMgmt.Text = ShowMoneyMgmt(tip.MoneyMgmt);
                 textBoxService.Text = tip.Service;
                 comboBoxStatus.SelectedIndex = (int)tip.Status;
                 foreach (Game game in tip.Games) {
@@ -240,7 +240,7 @@ namespace BetHelper {
                 textBoxBookmaker.ContextMenu = contextMenu;
                 textBoxOdd.ContextMenu = contextMenu;
                 textBoxService.ContextMenu = contextMenu;
-                textBoxTrustDegree.ContextMenu = contextMenu;
+                textBoxMoneyMgmt.ContextMenu = contextMenu;
             }));
         }
 
@@ -499,13 +499,13 @@ namespace BetHelper {
             textBoxOdd.Text = ShowOdd(odd);
         }
 
-        private void OnTextBoxTrustDegreeLeave(object sender, EventArgs e) {
+        private void OnTextBoxMoneyMgmtLeave(object sender, EventArgs e) {
             float.TryParse(
-                Regex.Replace(textBoxTrustDegree.Text, Constants.TrustDegreePattern, Constants.ReplaceFirst),
+                Regex.Replace(textBoxMoneyMgmt.Text, Constants.MoneyMgmtPattern, Constants.ReplaceFirst),
                 NumberStyles.None,
                 CultureInfo.InvariantCulture,
-                out trustDegree);
-            textBoxTrustDegree.Text = ShowTrustDegree(trustDegree);
+                out moneyMgmt);
+            textBoxMoneyMgmt.Text = ShowMoneyMgmt(moneyMgmt);
         }
 
         private void OnTopMostCheckedChanged(object sender, EventArgs e) {
@@ -545,8 +545,8 @@ namespace BetHelper {
                 CultureInfo.InvariantCulture);
         }
 
-        private static float ParseTrustDegree(string str) {
-            return float.Parse(Regex.Replace(str, Constants.TrustDegreePattern, Constants.ReplaceFirst));
+        private static float ParseMoneyMgmt(string str) {
+            return float.Parse(Regex.Replace(str, Constants.MoneyMgmtPattern, Constants.ReplaceFirst));
         }
 
         private void RemoveGame(object sender, EventArgs e) {
@@ -624,11 +624,11 @@ namespace BetHelper {
                 textBoxOdd.SelectAll();
             }
             try {
-                trustDegree = ParseTrustDegree(textBoxTrustDegree.Text);
+                moneyMgmt = ParseMoneyMgmt(textBoxMoneyMgmt.Text);
             } catch (Exception exception) {
                 ShowException(exception);
-                textBoxTrustDegree.Focus();
-                textBoxTrustDegree.SelectAll();
+                textBoxMoneyMgmt.Focus();
+                textBoxMoneyMgmt.SelectAll();
             }
             if (tip == null) {
                 tip = new Tip(
@@ -636,14 +636,14 @@ namespace BetHelper {
                     list.ToArray(),
                     textBoxBookmaker.Text,
                     odd,
-                    trustDegree,
+                    moneyMgmt,
                     textBoxService.Text,
                     (Tip.TipStatus)comboBoxStatus.SelectedValue);
             } else {
                 tip.Games = list.ToArray();
                 tip.Bookmaker = textBoxBookmaker.Text;
                 tip.Odd = odd;
-                tip.TrustDegree = trustDegree;
+                tip.MoneyMgmt = moneyMgmt;
                 tip.Service = textBoxService.Text;
                 tip.Status = (Tip.TipStatus)comboBoxStatus.SelectedValue;
             }
@@ -673,9 +673,9 @@ namespace BetHelper {
             return price.ToString(Constants.TwoDecimalPlaces, settings.NumberFormat.cultureInfo);
         }
 
-        private string ShowTrustDegree(float trustDegree) {
+        private string ShowMoneyMgmt(float moneyMgmt) {
             return new StringBuilder()
-                .Append(trustDegree.ToString(Constants.ZeroDecimalDigitsFormat, settings.NumberFormat.cultureInfo))
+                .Append(moneyMgmt.ToString(Constants.ZeroDecimalDigitsFormat, settings.NumberFormat.cultureInfo))
                 .Append(Constants.Slash)
                 .Append(10)
                 .ToString();

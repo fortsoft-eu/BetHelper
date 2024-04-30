@@ -398,6 +398,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Money Management.
+        /// </summary>
+        internal static string CaptionMoneyMgmt {
+            get {
+                return ResourceManager.GetString("CaptionMoneyMgmt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string CaptionName {
@@ -583,15 +592,6 @@ namespace BetHelper.Properties {
         internal static string CaptionTitle {
             get {
                 return ResourceManager.GetString("CaptionTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Trust Degree.
-        /// </summary>
-        internal static string CaptionTrustDegree {
-            get {
-                return ResourceManager.GetString("CaptionTrustDegree", resourceCulture);
             }
         }
         
@@ -1574,6 +1574,15 @@ namespace BetHelper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;Money management.
+        /// </summary>
+        internal static string MenuItemMoneyMgmt {
+            get {
+                return ResourceManager.GetString("MenuItemMoneyMgmt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Mute Audio.
         /// </summary>
         internal static string MenuItemMuteAudio {
@@ -2038,15 +2047,6 @@ namespace BetHelper.Properties {
         internal static string MenuItemTruncateLog {
             get {
                 return ResourceManager.GetString("MenuItemTruncateLog", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tr&amp;ust Degrees.
-        /// </summary>
-        internal static string MenuItemTrustDegrees {
-            get {
-                return ResourceManager.GetString("MenuItemTrustDegrees", resourceCulture);
             }
         }
         

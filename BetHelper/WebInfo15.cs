@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2023-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.14.0
+ * Version 1.1.17.10
  */
 
 using CefSharp;
@@ -321,9 +321,9 @@ namespace BetHelper {
                                 if (tipList.Count < 12) {
                                     continue;
                                 }
-                                float trustDegree = float.Parse(
+                                float moneyMgmt = float.Parse(
                                     Regex.Replace(tipList[8],
-                                    Constants.TrustDegreePattern,
+                                    Constants.MoneyMgmtPattern,
                                     Constants.ReplaceFirst));
                                 float odd = float.Parse(
                                     Regex.Replace(tipList[9].Replace(Constants.Comma, Constants.Period), Constants.OddPattern,
@@ -360,7 +360,7 @@ namespace BetHelper {
                                         endHtmlTagRegex.Replace(tipList[7 + k * 8], string.Empty)));
                                 }
                                 if (toBePlayed) {
-                                    list.Add(new Tip(dateTimeNow, games.ToArray(), bookmaker, odd, trustDegree, service,
+                                    list.Add(new Tip(dateTimeNow, games.ToArray(), bookmaker, odd, moneyMgmt, service,
                                         Tip.TipStatus.Received));
                                 }
                             }

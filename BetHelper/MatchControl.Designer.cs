@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.4
+ * Version 1.1.17.10
  */
 
 namespace BetHelper {
@@ -99,7 +99,7 @@ namespace BetHelper {
             this.labelDateTime.Name = "labelDateTime";
             this.labelDateTime.Size = new System.Drawing.Size(76, 13);
             this.labelDateTime.TabIndex = 6;
-            this.labelDateTime.Text = "Date and ti&me:";
+            this.labelDateTime.Text = "&Date and time:";
             // 
             // textBoxLeague
             // 
