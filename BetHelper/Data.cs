@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.10
+ * Version 1.1.17.11
  */
 
 using System;
@@ -32,7 +32,7 @@ using System.Windows.Forms;
 namespace BetHelper {
 
     [Serializable]
-    public struct Data {
+    public struct Data : ISerializable {
         public decimal balance;
         public decimal[] balances;
         public decimal[] moneyMgmt;

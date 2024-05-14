@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2023 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2023-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  * Copyright (c) 2022 Guilherme Ribeiro [Version 2.1.2]
  * Copyright (c) 2018-2021 Kfir Eichenblat [Version 2.1.1]
  *
@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 2.1.3.0
+ * Version 2.1.3.1
  */
 
 using System;
@@ -34,12 +34,12 @@ using System.Threading;
 
 namespace NonInvasiveKeyboardHookLibrary {
     internal class KeyboardHookManager {
-        private readonly Dictionary<KeybindStruct, Action> _registeredCallbacks;
-        private readonly HashSet<ModifierKeys> _downModifierKeys;
-        private readonly HashSet<int> _downKeys;
-        private readonly object _modifiersLock = new object();
-        private LowLevelKeyboardProc _hook;
-        private bool _isStarted;
+        private readonly Dictionary<KeybindStruct, Action> registeredCallbacks;
+        private readonly HashSet<ModifierKeys> downModifierKeys;
+        private readonly HashSet<int> downKeys;
+        private readonly object modifiersLock = new object();
+        private LowLevelKeyboardProc hook;
+        private bool isStarted;
 
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 256;
@@ -50,26 +50,26 @@ namespace NonInvasiveKeyboardHookLibrary {
         private static IntPtr _hookId = IntPtr.Zero;
 
         internal KeyboardHookManager() {
-            _registeredCallbacks = new Dictionary<KeybindStruct, Action>();
-            _downModifierKeys = new HashSet<ModifierKeys>();
-            _downKeys = new HashSet<int>();
+            registeredCallbacks = new Dictionary<KeybindStruct, Action>();
+            downModifierKeys = new HashSet<ModifierKeys>();
+            downKeys = new HashSet<int>();
         }
 
         internal void Start() {
-            if (_isStarted) {
+            if (isStarted) {
                 return;
             }
-            _hook = new LowLevelKeyboardProc(HookCallback);
-            _hookId = SetHook(_hook);
-            _isStarted = true;
+            hook = new LowLevelKeyboardProc(HookCallback);
+            _hookId = SetHook(hook);
+            isStarted = true;
         }
 
         internal void Stop() {
-            if (!_isStarted) {
+            if (!isStarted) {
                 return;
             }
             UnhookWindowsHookEx(_hookId);
-            _isStarted = false;
+            isStarted = false;
         }
 
         internal Guid RegisterHotkey(int virtualKeyCode, Action action) => RegisterHotkey(new ModifierKeys[0], virtualKeyCode, action);
@@ -83,35 +83,35 @@ namespace NonInvasiveKeyboardHookLibrary {
         internal Guid RegisterHotkey(ModifierKeys[] modifiers, int virtualKeyCode, Action action) {
             Guid guid = Guid.NewGuid();
             KeybindStruct key = new KeybindStruct(modifiers, virtualKeyCode, new Guid?(guid));
-            if (_registeredCallbacks.ContainsKey(key)) {
+            if (registeredCallbacks.ContainsKey(key)) {
                 throw new HotkeyAlreadyRegisteredException();
             }
-            _registeredCallbacks[key] = action;
+            registeredCallbacks[key] = action;
             return guid;
         }
 
-        internal void UnregisterAll() => _registeredCallbacks.Clear();
+        internal void UnregisterAll() => registeredCallbacks.Clear();
 
         internal void UnregisterHotkey(int virtualKeyCode) => UnregisterHotkey(new ModifierKeys[0], virtualKeyCode);
 
         internal void UnregisterHotkey(ModifierKeys[] modifiers, int virtualKeyCode) {
-            if (!_registeredCallbacks.Remove(new KeybindStruct(modifiers, virtualKeyCode))) {
+            if (!registeredCallbacks.Remove(new KeybindStruct(modifiers, virtualKeyCode))) {
                 throw new HotkeyNotRegisteredException();
             }
         }
 
         internal void UnregisterHotkey(Guid keybindIdentity) {
-            KeybindStruct key = _registeredCallbacks.Keys.FirstOrDefault(new Func<KeybindStruct, bool>(
+            KeybindStruct key = registeredCallbacks.Keys.FirstOrDefault(new Func<KeybindStruct, bool>(
                 keybind => keybind.Identifier.HasValue && keybind.Identifier.Value.Equals(keybindIdentity)));
-            if (key == null || !_registeredCallbacks.Remove(key)) {
+            if (key == null || !registeredCallbacks.Remove(key)) {
                 throw new HotkeyNotRegisteredException();
             }
         }
 
         private void HandleKeyPress(int virtualKeyCode) {
-            KeybindStruct key = new KeybindStruct(_downModifierKeys, virtualKeyCode);
+            KeybindStruct key = new KeybindStruct(downModifierKeys, virtualKeyCode);
             Action action;
-            if (!_registeredCallbacks.ContainsKey(key) || !_registeredCallbacks.TryGetValue(key, out action)) {
+            if (!registeredCallbacks.ContainsKey(key) || !registeredCallbacks.TryGetValue(key, out action)) {
                 return;
             }
             action();
@@ -137,24 +137,24 @@ namespace NonInvasiveKeyboardHookLibrary {
             ModifierKeys? modifierKeyFromCode = ModifierKeysUtilities.GetModifierKeyFromCode(vkCode);
             if (wParam == (IntPtr)256 || wParam == (IntPtr)260) {
                 if (modifierKeyFromCode.HasValue) {
-                    lock (_modifiersLock) {
-                        _downModifierKeys.Add(modifierKeyFromCode.Value);
+                    lock (modifiersLock) {
+                        downModifierKeys.Add(modifierKeyFromCode.Value);
                     }
                 }
-                if (!_downKeys.Contains(vkCode)) {
+                if (!downKeys.Contains(vkCode)) {
                     HandleKeyPress(vkCode);
-                    _downKeys.Add(vkCode);
+                    downKeys.Add(vkCode);
                 }
             }
             if (wParam != (IntPtr)257 && wParam != (IntPtr)261) {
                 return;
             }
             if (modifierKeyFromCode.HasValue) {
-                lock (_modifiersLock) {
-                    _downModifierKeys.Remove(modifierKeyFromCode.Value);
+                lock (modifiersLock) {
+                    downModifierKeys.Remove(modifierKeyFromCode.Value);
                 }
             }
-            _downKeys.Remove(vkCode);
+            downKeys.Remove(vkCode);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]

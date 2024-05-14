@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.4.0
+ * Version 1.1.17.11
  */
 
 using System;
@@ -30,7 +30,7 @@ using System.Runtime.Serialization;
 namespace BetHelper {
 
     [Serializable]
-    public struct Search {
+    public struct Search : ISerializable {
         public string searchString;
         public bool caseSensitive;
         public bool backward;

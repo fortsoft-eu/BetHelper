@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.10
+ * Version 1.1.17.11
  */
 
 using CefSharp;
@@ -1129,7 +1129,7 @@ namespace BetHelper {
         private void Open(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(Open), sender, e);
-            } else {
+            } else if (dialog == null || !dialog.Visible) {
                 OpenForm openForm = new OpenForm(webInfoHandler);
                 openForm.F7Pressed += new EventHandler(StopRinging);
                 openForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
@@ -1296,7 +1296,7 @@ namespace BetHelper {
         private void PrintImagePreview(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(PrintImagePreview), sender, e);
-            } else {
+            } else if (dialog == null || !dialog.Visible) {
                 try {
                     ControlInfo controlInfo = GetControlEntered();
                     if (controlInfo != null && controlInfo.Browser != null) {
@@ -1353,7 +1353,7 @@ namespace BetHelper {
         private void PrintWindowPreview(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(PrintWindowPreview), sender, e);
-            } else {
+            } else if (dialog == null || !dialog.Visible) {
                 try {
                     Thread.Sleep(Constants.ScreenFormCaptureDelay);
                     bitmap = new Bitmap(
@@ -1795,7 +1795,7 @@ namespace BetHelper {
         private void RemoveBookmark(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(RemoveBookmark), sender, e);
-            } else {
+            } else if (dialog == null || !dialog.Visible) {
                 MessageForm messageForm = new MessageForm(this, Properties.Resources.MessageRemoveBookmark, null,
                     MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question);
                 messageForm.F7Pressed += new EventHandler(StopRinging);
@@ -1852,7 +1852,7 @@ namespace BetHelper {
         private void ClearBrowserCache(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(ClearBrowserCache), sender, e);
-            } else {
+            } else if (dialog == null || !dialog.Visible) {
                 StringBuilder message = new StringBuilder()
                     .Append(Properties.Resources.MessageClearBrowserCache)
                     .Append(Environment.NewLine)
@@ -1872,7 +1872,7 @@ namespace BetHelper {
         private void ClearBrowserCacheInclUserData(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(ClearBrowserCacheInclUserData), sender, e);
-            } else {
+            } else if (dialog == null || !dialog.Visible) {
                 StringBuilder message = new StringBuilder()
                     .Append(Properties.Resources.MessageClearBrowserCache)
                     .Append(Environment.NewLine)
@@ -1896,7 +1896,7 @@ namespace BetHelper {
         private void ApplicationReset(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(ApplicationReset), sender, e);
-            } else {
+            } else if (dialog == null || !dialog.Visible) {
                 StringBuilder message = new StringBuilder()
                     .Append(Properties.Resources.MessageResetWarningLine1)
                     .Append(Environment.NewLine)
@@ -1943,14 +1943,14 @@ namespace BetHelper {
         private void ShowPreferences(object sender, EventArgs e) {
             if (InvokeRequired) {
                 Invoke(new EventHandler(ShowPreferences), sender, e);
-            } else {
+            } else if (dialog == null || !dialog.Visible) {
                 PreferencesForm preferencesForm = new PreferencesForm(telephoneBellNT);
                 preferencesForm.F7Pressed += new EventHandler(StopRinging);
                 preferencesForm.HelpButtonClicked += new CancelEventHandler(OpenHelp);
                 preferencesForm.HelpRequested += new HelpEventHandler(OpenHelp);
                 preferencesForm.BookmarkManager = bookmarkManager;
-                preferencesForm.Settings = Settings;
                 dialog = preferencesForm;
+                preferencesForm.Settings = Settings;
 
                 if (preferencesForm.ShowDialog(this).Equals(DialogResult.OK)) {
                     webInfoHandler.SetPingTimer();
@@ -2309,11 +2309,13 @@ namespace BetHelper {
         private void CheckUpdates(object sender, EventArgs e) => updateChecker.Check(UpdateChecker.CheckType.User);
 
         private void ShowAbout(object sender, EventArgs e) {
-            AboutForm aboutForm = new AboutForm();
-            aboutForm.HelpRequested += new HelpEventHandler(OpenHelp);
-            aboutForm.F7Pressed += new EventHandler(StopRinging);
-            dialog = aboutForm;
-            aboutForm.ShowDialog(this);
+            if (dialog == null || !dialog.Visible) {
+                AboutForm aboutForm = new AboutForm();
+                aboutForm.HelpRequested += new HelpEventHandler(OpenHelp);
+                aboutForm.F7Pressed += new EventHandler(StopRinging);
+                dialog = aboutForm;
+                aboutForm.ShowDialog(this);
+            }
         }
 
         private void OnCurrentSet(object sender, FocusEventArgs e) {
@@ -2374,7 +2376,7 @@ namespace BetHelper {
                 Invoke(new FormClosingEventHandler(OnFormClosing), sender, e);
             } else {
                 if (dialog != null && dialog.Visible) {
-                    if (suppressDialogs || !e.CloseReason.Equals(CloseReason.UserClosing)) {
+                    if (suppressDialogs || e.CloseReason.Equals(CloseReason.WindowsShutDown)) {
                         if (!webInfoHandler.IsTornDown && !(dialog is ProgressBarFormEx)) {
                             dialog.Close();
                         }
@@ -2389,7 +2391,7 @@ namespace BetHelper {
                         countDownForm.SafeClose();
                     }
                 }
-                if (!suppressDialogs && Settings.DisplayPromptBeforeClosing && e.CloseReason.Equals(CloseReason.UserClosing)) {
+                if (!suppressDialogs && Settings.DisplayPromptBeforeClosing && !e.CloseReason.Equals(CloseReason.WindowsShutDown)) {
                     MessageForm messageForm = new MessageForm(this, Properties.Resources.MessageQuestionBeforeClosing,
                         Properties.Resources.CaptionQuestion, MessageForm.Buttons.YesNo, MessageForm.BoxIcon.Question);
                     messageForm.F7Pressed += new EventHandler(StopRinging);
@@ -2616,10 +2618,10 @@ namespace BetHelper {
                 e.Bounds.Left + (e.Bounds.Width - sizeF.Width) / 2,
                 e.Bounds.Top + (e.Bounds.Height - sizeF.Height) / 2);
             if (tabControl.Appearance.Equals(TabAppearance.Normal)) {
-                pointF.Y = pointF.Y + 1;
+                pointF.Y = pointF.Y + (e.State.Equals(DrawItemState.Selected) ? -1 : 2);
             } else if (e.State.Equals(DrawItemState.Selected)) {
-                pointF.X = pointF.X + 1;
-                pointF.Y = pointF.Y + 1;
+                pointF.X += 1;
+                pointF.Y += 1;
             }
             e.Graphics.DrawString(tabControl.TabPages[e.Index].Text, e.Font, Brushes.Black, pointF);
             e.DrawFocusRectangle();
