@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.8
+ * Version 1.1.17.14
  */
 
 using CefSharp;
@@ -53,7 +53,7 @@ namespace BetHelper {
                 return;
             }
 
-            Sleep(30);
+            Sleep(1000);
 
             OnProgress(Properties.Resources.MessageDisplayingLoginBlock);
             if (!ClickElement(browser,
