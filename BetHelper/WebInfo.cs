@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.7
+ * Version 1.1.17.12
  */
 
 using CefSharp;
@@ -191,6 +191,8 @@ namespace BetHelper {
             heartBeatSemaphore.Release(1);
             loadingBeforeLogInSemaphore.Release(1);
         }
+
+        public int Index { get; set; }
 
         public int Ordinal { get; set; }
 
@@ -855,7 +857,7 @@ namespace BetHelper {
                 BrowserTitle = e.Title;
                 TitleChanged?.Invoke(this, e);
             });
-            Initialized?.Invoke(this, new FocusEventArgs(this, Ordinal - 1));
+            Initialized?.Invoke(this, new FocusEventArgs(this, Index));
         }
 
         public async void LogInAsync(bool initialPage) {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.10
+ * Version 1.1.17.12
  */
 
 using CefSharp;
@@ -131,7 +131,7 @@ namespace BetHelper {
             index = -1;
             pingIndex = -1;
             ParseConfig(((MainForm)form).Settings.Config);
-            NumberTheWebInfos();
+            SetWebInfoIndex();
             SetBalances(balances);
             SubscribeEvents();
             getTimer = new System.Timers.Timer();
@@ -397,9 +397,9 @@ namespace BetHelper {
             }
         }
 
-        private void NumberTheWebInfos() {
+        private void SetWebInfoIndex() {
             for (int i = 0; i < WebInfos.Count; i++) {
-                WebInfos[i].Ordinal = i + 1;
+                WebInfos[i].Index = i;
             }
         }
 
@@ -696,7 +696,9 @@ namespace BetHelper {
                 if (type == null) {
                     throw new ApplicationException(string.Format(Properties.Resources.MessageMissingClassError, className));
                 }
-                return (WebInfo)Activator.CreateInstance(type);
+                WebInfo webInfo = (WebInfo)Activator.CreateInstance(type);
+                webInfo.Ordinal = ordinal;
+                return webInfo;
             } catch (Exception exception) {
                 Debug.WriteLine(exception);
                 ErrorLog.WriteLine(exception);
@@ -783,7 +785,7 @@ namespace BetHelper {
             }
         }
 
-        private void OnFocus(object sender, EventArgs e) => SetCurrent(((WebInfo)sender).Ordinal - 1);
+        private void OnFocus(object sender, EventArgs e) => SetCurrent(((WebInfo)sender).Index);
 
         private void OnInitialized(object sender, FocusEventArgs e) {
             if (Current.Equals(sender)) {
