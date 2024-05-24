@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.12
+ * Version 1.1.17.13
  */
 
 using CefSharp;
@@ -33,11 +33,17 @@ namespace BetHelper {
     public class WebInfo19 : WebInfo {
 
         protected override void LogIn(ChromiumWebBrowser browser) {
-            OnStarted(9);
+            OnStarted(10);
 
             if (ElementExistsAndVisible(browser, "document.getElementById('header_reklama')", false)) {
                 OnProgress(Properties.Resources.MessageClosingAdvertisement);
                 browser.ExecuteScriptAsync("document.getElementById('header_reklama').remove();");
+                Wait(browser);
+                Sleep(30);
+            }
+            if (ElementExistsAndVisible(browser, "document.getElementById('footer_reklama')", false)) {
+                OnProgress(Properties.Resources.MessageClosingAdvertisement);
+                browser.ExecuteScriptAsync("document.getElementById('footer_reklama').remove();");
                 Wait(browser);
                 Sleep(30);
             }
@@ -107,6 +113,9 @@ namespace BetHelper {
             if (ElementExistsAndVisible(browser, "document.getElementById('header_reklama')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('header_reklama').remove();");
             }
+            if (ElementExistsAndVisible(browser, "document.getElementById('footer_reklama')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('footer_reklama').remove();");
+            }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mediad')[0]", false)) {
                 browser.ExecuteScriptAsync(new StringBuilder()
                     .Append("Array.from(document.getElementsByClassName('mediad')).forEach(function(element, index, array)")
@@ -130,6 +139,9 @@ namespace BetHelper {
         public override void HeartBeat(ChromiumWebBrowser browser) {
             if (ElementExistsAndVisible(browser, "document.getElementById('header_reklama')", false)) {
                 browser.ExecuteScriptAsync("document.getElementById('header_reklama').remove();");
+            }
+            if (ElementExistsAndVisible(browser, "document.getElementById('footer_reklama')", false)) {
+                browser.ExecuteScriptAsync("document.getElementById('footer_reklama').remove();");
             }
             if (ElementExistsAndVisible(browser, "document.getElementsByClassName('mediad')[0]", false)) {
                 browser.ExecuteScriptAsync(new StringBuilder()
