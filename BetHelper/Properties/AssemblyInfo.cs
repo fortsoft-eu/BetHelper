@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("FortSoft")]
 [assembly: AssemblyProduct("BetHelper")]
-[assembly: AssemblyCopyright("Copyright © Petr Červinka — FortSoft 2022—2024")]
+[assembly: AssemblyCopyright("Copyright © Petr Červinka — FortSoft 2022—2026")]
 [assembly: AssemblyTrademark("FortSoft")]
 [assembly: AssemblyCulture("")]
 
@@ -33,7 +33,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.17.14")]
-[assembly: AssemblyFileVersion("1.1.17.14")]
+[assembly: AssemblyVersion("1.1.18.2")]
+[assembly: AssemblyFileVersion("1.1.18.2")]
 [assembly: NeutralResourcesLanguage("en")]
 

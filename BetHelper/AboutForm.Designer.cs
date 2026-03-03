@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2026 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.5
+ * Version 1.1.18.2
  */
 
 namespace BetHelper {
@@ -118,8 +118,8 @@ namespace BetHelper {
             // 
             // panelProductInfo
             // 
-            this.panelProductInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.panelProductInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelProductInfo.AutoSize = true;
             this.panelProductInfo.Controls.Add(this.pictureBox);
@@ -131,7 +131,7 @@ namespace BetHelper {
             // 
             // panelWebsite
             // 
-            this.panelWebsite.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.panelWebsite.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelWebsite.Controls.Add(this.labelWebsite);
             this.panelWebsite.Controls.Add(this.linkLabel);
@@ -142,7 +142,7 @@ namespace BetHelper {
             // 
             // textBox
             // 
-            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBox.Location = new System.Drawing.Point(12, 86);

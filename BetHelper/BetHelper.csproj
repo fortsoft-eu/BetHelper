@@ -341,6 +341,7 @@
     <Compile Include="WebInfo19.cs" />
     <Compile Include="WebInfo20.cs" />
     <Compile Include="WebInfo21.cs" />
+    <Compile Include="WebInfo22.cs" />
     <Compile Include="WebInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>

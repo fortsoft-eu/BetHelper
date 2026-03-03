@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2026 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.10
+ * Version 1.1.18.2
  */
 
 using FortSoft.Tools;
@@ -64,6 +64,20 @@ namespace BetHelper {
         /// </summary>
         public Settings() {
             userAgents = new string[] {
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/126.0.6478.54 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/126.0.6478.54 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (iPod; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/126.0.6478.54 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.6478.110 Mobile Safari/537.36",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/125.0.6478.54 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/125.0.6478.54 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (iPod; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/125.0.6478.54 Mobile/15E148 Safari/604.1",
+                "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.6478.110 Mobile Safari/537.36",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
                 "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
@@ -458,10 +472,36 @@ namespace BetHelper {
         public bool EnablePrintPreview { get; set; }
 
         /// <summary>
-        /// Represents the setting if the proxy server for the embedded Chromium
-        /// browser will be enabled. The default value is false.
+        /// Represents the setting if the HTTP proxy server will be used for all
+        /// protocols. The default value is false.
         /// </summary>
-        public bool EnableProxy { get; set; }
+        public bool ProxyForAllProtocols { get; set; }
+
+        /// <summary>
+        /// Represents the setting if the SOCKS version 4 will ber used. The
+        /// default value is false.
+        /// </summary>
+        public bool SocksV4ProxyEnabled { get; set; }
+
+        public ushort ProxyHTTPPort { get; set; }
+
+        public ushort ProxyHTTPSPort { get; set; }
+
+        public ushort ProxyFTPPort { get; set; }
+
+        public ushort ProxySOCKSPort { get; set; }
+
+        public string ProxyHTTPHost { get; set; }
+
+        public string ProxyHTTPSHost { get; set; }
+
+        public string ProxyFTPHost { get; set; }
+
+        public string ProxySOCKSHost { get; set; }
+
+        public string ProxyConfigURL { get; set; }
+
+        public string ProxyBypassList { get; set; }
 
         /// <summary>
         /// Represents the setting if F3 pressed at the MainForm gives the focus
@@ -991,7 +1031,7 @@ namespace BetHelper {
             PersistUserPreferences = bitSettings[--i];
             PersistSessionCookies = bitSettings[--i];
             EnableCache = bitSettings[--i];
-            EnableProxy = bitSettings[--i];
+            ProxyForAllProtocols = bitSettings[--i];
             F3MainFormFocusesFindForm = bitSettings[--i];
             OutlineSearchResults = bitSettings[--i];
             TruncateBookmarkTitles = bitSettings[--i];
@@ -1030,7 +1070,7 @@ namespace BetHelper {
                 .Append(PersistUserPreferences ? 1 : 0)
                 .Append(PersistSessionCookies ? 1 : 0)
                 .Append(EnableCache ? 1 : 0)
-                .Append(EnableProxy ? 1 : 0)
+                .Append(ProxyForAllProtocols ? 1 : 0)
                 .Append(F3MainFormFocusesFindForm ? 1 : 0)
                 .Append(OutlineSearchResults ? 1 : 0)
                 .Append(TruncateBookmarkTitles ? 1 : 0)
@@ -1055,7 +1095,7 @@ namespace BetHelper {
             BitArray bitArray = new BitArray(new int[] { i });
             bool[] bitSettings = new bool[bitArray.Count];
             bitArray.CopyTo(bitSettings, 0);
-            i = bitSettings.Length - 26;
+            i = bitSettings.Length - 25;
 
             BoldBellStatus = bitSettings[--i];
             EnableOpportunityBell = bitSettings[--i];
@@ -1063,19 +1103,21 @@ namespace BetHelper {
             AutoAdjustRightPaneWidth = bitSettings[--i];
             RightPaneWidth = bitSettings[--i];
             RightPaneCollapsed = bitSettings[--i];
+            SocksV4ProxyEnabled = bitSettings[--i];
         }
 
         /// <summary>
         /// Compacts some boolean settings into an integer value.
         /// </summary>
         private int BitSettings2ToInt() {
-            StringBuilder stringBuilder = new StringBuilder(string.Empty.PadRight(26, Constants.Zero))
+            StringBuilder stringBuilder = new StringBuilder(string.Empty.PadRight(25, Constants.Zero))
                 .Append(BoldBellStatus ? 1 : 0)
                 .Append(EnableOpportunityBell ? 1 : 0)
                 .Append(EnableTipArrivalBell ? 1 : 0)
                 .Append(AutoAdjustRightPaneWidth ? 1 : 0)
                 .Append(RightPaneWidth ? 1 : 0)
-                .Append(RightPaneCollapsed ? 1 : 0);
+                .Append(RightPaneCollapsed ? 1 : 0)
+                .Append(SocksV4ProxyEnabled ? 1 : 0);
             return Convert.ToInt32(stringBuilder.ToString(), 2);
         }
 

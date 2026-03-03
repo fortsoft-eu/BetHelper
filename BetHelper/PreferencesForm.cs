@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2026 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.4
+ * Version 1.1.18.2
  */
 
 using FortSoft.Tools;
@@ -203,7 +203,7 @@ namespace BetHelper {
                 checkBoxEnablePrintPreview.Checked = settings.EnablePrintPreview;
                 checkBoxEnableDrmContent.Checked = settings.EnableDrmContent;
                 checkBoxEnableAudio.Checked = settings.EnableAudio;
-                checkBoxEnableProxy.Checked = settings.EnableProxy;
+                //checkBoxEnableProxy.Checked = settings.EnableProxy;
                 checkBoxOutlineSearchResults.Checked = settings.OutlineSearchResults;
                 checkBoxF3MainFormFind.Checked = settings.F3MainFormFocusesFindForm;
                 checkBoxLogForeignUrls.Checked = settings.LogForeignUrls;
@@ -467,7 +467,7 @@ namespace BetHelper {
             try {
                 Process.Start(Application.ExecutablePath, Constants.CommandLineSwitchWE);
             } catch (Exception exception) {
-                ShowException(exception);
+                HandleException(exception);
             }
         }
 
@@ -478,6 +478,22 @@ namespace BetHelper {
                 }
             }
             return Color.Empty;
+        }
+
+        private void HandleException(Exception exception) {
+            Debug.WriteLine(exception);
+            ErrorLog.WriteLine(exception);
+            StringBuilder title = new StringBuilder()
+                .Append(Program.GetTitle())
+                .Append(Constants.Space)
+                .Append(Constants.EnDash)
+                .Append(Constants.Space)
+                .Append(Properties.Resources.CaptionError);
+            MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
+                MessageForm.BoxIcon.Error);
+            messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
+            dialog = messageForm;
+            messageForm.ShowDialog(this);
         }
 
         private void OnAllowedClientsClick(object sender, EventArgs e) {
@@ -520,7 +536,7 @@ namespace BetHelper {
                     textBoxExternalEditor.Text = openFileDialog.FileName;
                 }
             } catch (Exception exception) {
-                ShowException(exception);
+                HandleException(exception);
             }
         }
 
@@ -600,23 +616,20 @@ namespace BetHelper {
             ComboBox comboBox = (ComboBox)sender;
             if (e.Index >= 0) {
                 Color color;
-                Pen pen;
                 if (comboBox.DroppedDown) {
                     if ((e.State & DrawItemState.Selected).Equals(DrawItemState.Selected)
                             || (e.State & DrawItemState.HotLight).Equals(DrawItemState.HotLight)) {
 
                         color = SystemColors.HighlightText;
-                        pen = SystemPens.HighlightText;
                     } else {
                         color = comboBox.ForeColor;
-                        pen = Pens.Black;
                     }
                 } else if ((e.State & DrawItemState.Focus).Equals(DrawItemState.Focus)) {
                     color = SystemColors.HighlightText;
-                    pen = SystemPens.HighlightText;
+                } else if ((e.State & DrawItemState.Disabled).Equals(DrawItemState.Disabled)) {
+                    color = comboBox.BackColor;
                 } else {
                     color = comboBox.ForeColor;
-                    pen = Pens.Black;
                 }
                 string text = comboBox.GetItemText(comboBox.Items[e.Index]);
                 TextRenderer.DrawText(e.Graphics, text, comboBox.Font, e.Bounds, color,
@@ -659,11 +672,7 @@ namespace BetHelper {
             SetWarning();
         }
 
-        private void OnFormActivated(object sender, EventArgs e) {
-            if (dialog != null) {
-                dialog.Activate();
-            }
-        }
+        private void OnFormActivated(object sender, EventArgs e) => dialog?.Activate();
 
         private void OnFormClosing(object sender, FormClosingEventArgs e) => textBoxClicksTimer.Dispose();
 
@@ -687,7 +696,7 @@ namespace BetHelper {
             try {
                 Process.Start(Application.ExecutablePath, Constants.CommandLineSwitchWL);
             } catch (Exception exception) {
-                ShowException(exception);
+                HandleException(exception);
             }
         }
 
@@ -813,7 +822,7 @@ namespace BetHelper {
             settings.EnablePrintPreview = checkBoxEnablePrintPreview.Checked;
             settings.EnableDrmContent = checkBoxEnableDrmContent.Checked;
             settings.EnableAudio = checkBoxEnableAudio.Checked;
-            settings.EnableProxy = checkBoxEnableProxy.Checked;
+            //settings.EnableProxy = checkBoxEnableProxy.Checked;
             settings.OutlineSearchResults = checkBoxOutlineSearchResults.Checked;
             settings.F3MainFormFocusesFindForm = checkBoxF3MainFormFind.Checked;
             settings.LogForeignUrls = checkBoxLogForeignUrls.Checked;
@@ -880,7 +889,7 @@ namespace BetHelper {
                     || !settings.AcceptLanguage.Equals(comboBoxAcceptLanguage.Text)
                     || !settings.EnableDrmContent.Equals(checkBoxEnableDrmContent.Checked)
                     || !settings.EnableAudio.Equals(checkBoxEnableAudio.Checked)
-                    || !settings.EnableProxy.Equals(checkBoxEnableProxy.Checked)
+                    //|| !settings.EnableProxy.Equals(checkBoxEnableProxy.Checked)
                     || !settings.EnablePrintPreview.Equals(checkBoxEnablePrintPreview.Checked)
                     || !settings.EnableCache.Equals(checkBoxEnableCache.Checked)
                     || !settings.PersistSessionCookies.Equals(checkBoxPersistSessionCookies.Checked)
@@ -898,22 +907,6 @@ namespace BetHelper {
         }
 
         private void SetWarning(object sender, EventArgs e) => SetWarning();
-
-        private void ShowException(Exception exception) {
-            Debug.WriteLine(exception);
-            ErrorLog.WriteLine(exception);
-            StringBuilder title = new StringBuilder()
-                .Append(Program.GetTitle())
-                .Append(Constants.Space)
-                .Append(Constants.EnDash)
-                .Append(Constants.Space)
-                .Append(Properties.Resources.CaptionError);
-            MessageForm messageForm = new MessageForm(this, exception.Message, title.ToString(), MessageForm.Buttons.OK,
-                MessageForm.BoxIcon.Error);
-            messageForm.F7Pressed += new EventHandler((s, t) => F7Pressed?.Invoke(s, t));
-            dialog = messageForm;
-            messageForm.ShowDialog(this);
-        }
 
         private void TabSettingControlsSetEnable() {
             labelBookmakerDColor.Enabled = checkBoxBackgroundColor.Checked;

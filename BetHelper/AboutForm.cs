@@ -1,7 +1,7 @@
 ﻿/**
  * This is open-source software licensed under the terms of the MIT License.
  *
- * Copyright (c) 2022-2024 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
+ * Copyright (c) 2022-2026 Petr Červinka - FortSoft <cervinka@fortsoft.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  **
- * Version 1.1.17.5
+ * Version 1.1.18.2
  */
 
 using CefSharp;
@@ -190,11 +190,7 @@ namespace BetHelper {
             }
         }
 
-        private void OnFormActivated(object sender, EventArgs e) {
-            if (dialog != null) {
-                dialog.Activate();
-            }
-        }
+        private void OnFormActivated(object sender, EventArgs e) => dialog?.Activate();
 
         private void OnFormClosing(object sender, FormClosingEventArgs e) => textBoxClicksTimer.Dispose();
 
